@@ -1,14 +1,13 @@
 # views/favorites.py - YANGI FAYL
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, View
-from django.http import JsonResponse
 from django.contrib.contenttypes.models import ContentType
-from django.views.decorators.http import require_http_methods
+from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from apps.models import Favorite, Exercise, Workout
-import json
+from django.views.generic import TemplateView, View
+
+from apps.models import Favorite
 
 
 class FavoritesView(LoginRequiredMixin, TemplateView):

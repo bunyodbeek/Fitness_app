@@ -12,6 +12,8 @@ dependencies = [
     "django-rest-framework>=0.1.0",
     "djangorestframework>=3.14.0",
     "drf-spectacular>=0.26.0",
+    "flake8>=7.3.0",
+    "isort>=7.0.0",
     "pillow>=10.0.0",
     "psycopg2-binary>=2.9.5",
     "python-dateutil>=2.8.2",
@@ -20,3 +22,8 @@ dependencies = [
     "python-telegram-bot>=20.0",
     "requests>=2.31.0",
 ]
+
+[tool.isort]
+profile = "hug"
+skip = "build,.tox,.venv"
+src_paths="isort,test"

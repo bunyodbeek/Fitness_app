@@ -126,9 +126,11 @@ class ClickMerchant:
                 "error_note": "Sign check failed"
             }
 
-        from .models import Payment
-        from users.models import Subscription
         from datetime import datetime, timedelta
+
+        from users.models import Subscription
+
+        from .models import Payment
 
         merchant_trans_id = params.get('merchant_trans_id')
 

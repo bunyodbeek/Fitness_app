@@ -1,12 +1,5 @@
+from apps.models import Exercise, ExerciseInstruction
 from django.contrib import admin
-
-from apps.models import MuscleGroup, Exercise, ExerciseInstruction
-
-
-@admin.register(MuscleGroup)
-class MuscleGroupAdmin(admin.ModelAdmin):
-    list_display = ['name', 'name_uz', 'order']
-    list_editable = ['order']
 
 
 class ExerciseInstructionInline(admin.TabularInline):

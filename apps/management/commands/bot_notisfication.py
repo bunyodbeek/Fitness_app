@@ -1,9 +1,8 @@
 import logging
 
+from root.settings import BOT_TOKEN
 from telegram import Bot
 from telegram.error import TelegramError
-
-from root.settings import BOT_TOKEN
 
 logger = logging.getLogger(__name__)
 

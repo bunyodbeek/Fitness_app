@@ -1,14 +1,13 @@
 import logging
 
+from apps.click_merchant import ClickMerchant
+from apps.models import Payment, PaymentMethod
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-
-from apps.click_merchant import ClickMerchant
-from apps.models import Payment, PaymentMethod
 
 logger = logging.getLogger(__name__)
 

@@ -1,16 +1,15 @@
-
 from django.urls import path
-from apps.views import exercises, favorite, payments, users, workouts, api_views
 
+from apps.views import api_views, exercises, favorite, payments, users, workouts
 
 urlpatterns = [
     # Exercises
-    path('exercises/', exercises.MuscleGroupListView.as_view(), name='muscle_groups'),
     path('exercises/muscle/<int:muscle_id>/', exercises.ExercisesByMuscleView.as_view(), name='exercises_by_muscle'),
     path('exercises/all/', exercises.AllExercisesView.as_view(), name='all_exercises'),
     path('exercises/<int:exercise_id>/', exercises.ExerciseDetailView.as_view(), name='exercise_detail'),
     path('favorites/', favorite.FavoritesView.as_view(), name='favorites'),
-    path('favorites/toggle/<str:content_type>/<int:object_id>/', favorite.ToggleFavoriteView.as_view(), name='toggle_favorite'),
+    path('favorites/toggle/<str:content_type>/<int:object_id>/', favorite.ToggleFavoriteView.as_view(),
+         name='toggle_favorite'),
     path('favorites/remove/<int:favorite_id>/', favorite.RemoveFavoriteView.as_view(), name='remove_favorite'),
 
     path('click/prepare/', payments.click_prepare, name='click_prepare'),

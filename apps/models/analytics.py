@@ -1,4 +1,4 @@
-from django.db.models import JSONField, DateTimeField, Model, ForeignKey, CharField, CASCADE
+from django.db.models import CASCADE, CharField, DateTimeField, ForeignKey, JSONField, Model
 
 
 class UserActivity(Model):

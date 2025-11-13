@@ -43,9 +43,9 @@ def process_auto_renewal(self, subscription_id, attempt=1):
         subscription_id: Subscription ID
         attempt: Urinish raqami (1, 2, 3)
     """
-    from payments.models import Subscription, Payment, PaymentMethod
-    from payments.click_merchant import ClickAutoPayment
     from bot.notifications import send_notification  # ← Sizning bot kodingiz
+    from payments.click_merchant import ClickAutoPayment
+    from payments.models import Payment, PaymentMethod, Subscription
 
     try:
         subscription = Subscription.objects.get(id=subscription_id)
@@ -170,8 +170,8 @@ def send_expiry_reminders():
     Obuna tugashidan 3 kun oldin eslatma
     Cron: Har kuni soat 9:00 da
     """
-    from payments.models import Subscription
     from bot.notifications import send_notification
+    from payments.models import Subscription
 
     three_days_later = timezone.now() + timedelta(days=3)
 
@@ -211,8 +211,8 @@ def deactivate_expired_subscriptions():
     Muddati o'tgan obunalarni deaktiv qilish
     Cron: Har soat
     """
-    from payments.models import Subscription
     from bot.notifications import send_notification
+    from payments.models import Subscription
 
     expired_subscriptions = Subscription.objects.filter(
         end_date__lt=timezone.now(),

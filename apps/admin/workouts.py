@@ -1,6 +1,5 @@
+from apps.models import Edition, Program, Workout
 from django.contrib import admin
-
-from apps.models import Program, Edition, Workout, WorkoutExercise
 
 
 class EditionInline(admin.TabularInline):
@@ -31,24 +30,5 @@ class EditionAdmin(admin.ModelAdmin):
     inlines = [WorkoutInline]
 
 
-class WorkoutExerciseInline(admin.TabularInline):
-    model = WorkoutExercise
-    extra = 1
-    fields = ['order', 'exercise', 'sets', 'reps', 'duration_type', 'duration_seconds', 'rest_seconds']
-    autocomplete_fields = ['exercise']
 
 
-@admin.register(Workout)
-class WorkoutAdmin(admin.ModelAdmin):
-    list_display = ['edition', 'day_number', 'title', 'total_exercises']
-    list_filter = ['edition__program', 'edition']
-    search_fields = ['title']
-    inlines = [WorkoutExerciseInline]
-
-
-@admin.register(WorkoutExercise)
-class WorkoutExerciseAdmin(admin.ModelAdmin):
-    list_display = ['workout', 'exercise', 'order', 'sets', 'reps', 'rest_seconds']
-    list_filter = ['workout__edition__program']
-    search_fields = ['exercise__name', 'workout__title']
-    autocomplete_fields = ['exercise']

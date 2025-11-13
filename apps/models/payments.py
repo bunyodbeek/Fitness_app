@@ -2,11 +2,13 @@ from datetime import datetime
 
 from django.conf import settings
 from django.db import models
-from django.db.models import (
-    Model, OneToOneField, ForeignKey, CASCADE, SET_NULL, JSONField
-)
+from django.db.models import CASCADE, SET_NULL, ForeignKey, JSONField, Model, OneToOneField
 from django.db.models.fields import (
-    DateTimeField, BooleanField, DecimalField, IntegerField, CharField
+    BooleanField,
+    CharField,
+    DateTimeField,
+    DecimalField,
+    IntegerField,
 )
 from django.utils.translation import gettext_lazy as _
 
@@ -219,7 +221,7 @@ class Payment(Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"{self.user.username} - {self.amount} UZS - {self.get_payment_type_display()}"
+        return f"{self.user.name} - {self.amount} UZS - {self.get_payment_type_display()}"
 
     def mark_as_completed(self):
         """To'lovni bajarilgan deb belgilash"""

@@ -1,9 +1,15 @@
-from django.db.models import Model, CharField, ForeignKey, FloatField, ImageField, BooleanField, DateTimeField, CASCADE, \
-    TextChoices
+from django.db.models import (
+    CASCADE,
+    BooleanField,
+    CharField,
+    DateTimeField,
+    ForeignKey,
+    ImageField,
+    Model,
+)
 
 
 class Program(Model):
-    """Asosiy dastur - 'Get In Shape'"""
     title = CharField(max_length=200)
     description = CharField()
     image = ImageField(upload_to='programs/')
@@ -18,7 +24,6 @@ class Program(Model):
 
 
 class Edition(Model):
-    """Dastur ichidagi variantlar - 'Machine focus', 'Adding dumbbells'"""
     program = ForeignKey(Program, on_delete=CASCADE, related_name='editions')
     title = CharField(max_length=200)
     order = CharField(default=0)
@@ -36,11 +41,11 @@ class Edition(Model):
 
 
 class Workout(Model):
-    """Bitta workout kunlik mashg'ulot"""
     edition = ForeignKey(Edition, on_delete=CASCADE, related_name='workouts')
     title = CharField(max_length=200)
     day_number = CharField(help_text="Edition ichida nechanchi kun")
     order = CharField(default=0)
+
     class Meta:
         ordering = ['order']
         unique_together = ['edition', 'day_number']
@@ -48,41 +53,6 @@ class Workout(Model):
     def __str__(self):
         return f"Day {self.day_number}: {self.title}"
 
-    def total_exercises(self):
-        return self.workout_exercises.count()
 
 
-class WorkoutExercise(Model):
-    """Workout ichidagi exercise"""
 
-    class DurationType(TextChoices):
-        REPS = 'reps', 'Reps'
-        TIME = 'time', 'Time'
-
-    DURATION_TYPE_CHOICES = [
-        ('reps', 'Reps'),
-        ('time', 'Time'),
-    ]
-
-    workout = ForeignKey(Workout, on_delete=CASCADE, related_name='workout_exercises')
-    exercise = ForeignKey('apps.Exercise', on_delete=CASCADE)
-    order = CharField(default=0)
-
-    # Exercise parametrlari
-    sets = CharField(default=3)
-    reps = CharField(default=12, null=True, blank=True)
-    duration_seconds = CharField(null=True, blank=True, help_text="Cardio uchun (sekundlarda)")
-    duration_type = CharField(max_length=10, choices=DurationType.choices, default=DurationType.REPS)
-
-    recommended_weight = FloatField(null=True, blank=True, help_text="Tavsiya etiladigan og'irlik (kg)")
-    rest_seconds = CharField(default=60, help_text="Dam olish vaqti (sekundlarda)")
-
-    notes = CharField(blank=True)
-
-    class Meta:
-        ordering = ['order']
-
-    def __str__(self):
-        if self.duration_type == 'time':
-            return f"{self.exercise.name} - {self.duration_seconds}s"
-        return f"{self.exercise.name} - {self.sets}x{self.reps}"

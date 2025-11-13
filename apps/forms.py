@@ -1,4 +1,4 @@
-from apps.models import UserProfile, UserProfile
+from apps.models import UserProfile
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from django.utils.translation import gettext_lazy as _

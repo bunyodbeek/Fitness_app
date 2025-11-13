@@ -1,7 +1,6 @@
+from apps.models import Payment, PaymentMethod, Subscription
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-
-from apps.models import Subscription, PaymentMethod, Payment
 
 
 @admin.register(Subscription)

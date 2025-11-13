@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.translation import activate
@@ -16,7 +16,7 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
-from apps.models import User, UserProfile, PaymentHistory, UserMotivation
+from apps.models import PaymentHistory, User, UserMotivation, UserProfile
 
 
 # ===== API ENDPOINTS =====

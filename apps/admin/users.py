@@ -1,6 +1,5 @@
+from apps.models import PaymentHistory, UserProfile
 from django.contrib import admin
-
-from apps.models import UserProfile, PaymentHistory
 
 
 @admin.register(UserProfile)

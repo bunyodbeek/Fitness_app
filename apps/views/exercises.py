@@ -1,20 +1,9 @@
-
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.views.generic import DetailView, ListView
 
-from apps.models import MuscleGroup, Exercise, BodyPart, Favorite
-
-
-class MuscleGroupListView(ListView):
-    model = BodyPart
-    template_name = 'exercises/body_parts.html'
-    context_object_name = 'body_parts'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['muscle_groups'] = MuscleGroup.objects.all()
-        return context
+from apps.models import Exercise, Favorite
+from apps.models.exercises import MuscleGroup
 
 
 class ExercisesByMuscleView(ListView):
