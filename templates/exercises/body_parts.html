@@ -3,533 +3,537 @@
 {% block title %}Exercises - Body Parts{% endblock %}
 
 {% block extra_css %}
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        min-height: 100vh;
-        position: relative;
-        overflow-x: hidden;
-    }
-
-    /* Diagonal pattern background */
-    body::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 10px,
-            rgba(255,255,255,0.02) 10px,
-            rgba(255,255,255,0.02) 20px
-        );
-        pointer-events: none;
-        z-index: 0;
-    }
-
-    /* Header */
-    .page-header {
-        background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
-        padding: 15px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    }
-
-    .back-btn {
-        background: none;
-        border: none;
-        color: #ffd700;
-        font-size: 32px;
-        cursor: pointer;
-        padding: 0;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: transform 0.3s ease;
-        visibility: hidden;
-    }
-
-    .page-title {
-        color: white;
-        font-size: 20px;
-        font-weight: 700;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        flex: 1;
-        text-align: center;
-    }
-
-    .action-btn {
-        background: none;
-        border: none;
-        color: #ffd700;
-        font-size: 24px;
-        cursor: pointer;
-        padding: 0;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-    }
-
-    .action-btn:hover {
-        transform: scale(1.2) rotate(10deg);
-    }
-
-    /* Body Container */
-    .body-container {
-        position: relative;
-        max-width: 500px;
-        margin: 30px auto 120px auto;
-        width: 90%;
-        padding: 20px;
-        z-index: 1;
-    }
-
-    .body-image-wrapper {
-        position: relative;
-        width: 100%;
-        background: rgba(255,255,255,0.03);
-        border-radius: 30px;
-        border: 2px solid rgba(255,255,255,0.1);
-        padding: 20px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        overflow: hidden;
-        transition: all 0.4s ease;
-    }
-
-    .body-image-wrapper:hover {
-        border-color: rgba(255,215,0,0.3);
-        box-shadow: 0 15px 50px rgba(255,215,0,0.2);
-    }
-
-    .body-image {
-        width: 100%;
-        height: auto;
-        display: block;
-        transition: opacity 0.6s ease;
-        filter: drop-shadow(0 4px 20px rgba(0,0,0,0.3));
-    }
-
-    /* Dots */
-    .body-part-dot {
-        position: absolute;
-        width: 22px;
-        height: 22px;
-        background: linear-gradient(135deg, #ffd700, #f39c12);
-        border: 3px solid rgba(255,255,255,0.9);
-        border-radius: 50%;
-        cursor: pointer;
-        box-shadow: 0 4px 15px rgba(255,215,0,0.5),
-                    0 0 20px rgba(255,215,0,0.3);
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        z-index: 10;
-        text-decoration: none;
-        animation: pulse-dot 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse-dot {
-        0%, 100% {
-            transform: scale(1);
-            box-shadow: 0 4px 15px rgba(255,215,0,0.5),
-                        0 0 20px rgba(255,215,0,0.3);
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        50% {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(255,215,0,0.7),
-                        0 0 30px rgba(255,215,0,0.5);
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
-    }
 
-    .body-part-dot:hover {
-        transform: scale(1.5);
-        background: linear-gradient(135deg, #ffed4e, #ffd700);
-        box-shadow: 0 8px 25px rgba(255,215,0,0.8),
-                    0 0 40px rgba(255,215,0,0.6);
-        z-index: 15;
-    }
-
-    .body-part-dot::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 100%;
-        height: 100%;
-        background: rgba(255,215,0,0.3);
-        border-radius: 50%;
-        animation: ripple 2s ease-out infinite;
-    }
-
-    @keyframes ripple {
-        0% {
-            width: 100%;
-            height: 100%;
-            opacity: 1;
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 255, 0.02) 10px, rgba(255, 255, 255, 0.02) 20px);
+            pointer-events: none;
+            z-index: 0;
         }
-        100% {
-            width: 250%;
-            height: 250%;
-            opacity: 0;
+
+        .page-header {
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
-    }
 
-    /* Labels */
-    .body-part-label {
-        position: absolute;
-        font-size: 13px;
-        color: white;
-        font-weight: 700;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.8),
-                     0 0 10px rgba(255,215,0,0.5);
-        pointer-events: none;
-        white-space: nowrap;
-        background: rgba(0,0,0,0.6);
-        backdrop-filter: blur(5px);
-        padding: 4px 10px;
-        border-radius: 12px;
-        border: 1px solid rgba(255,215,0,0.3);
-        z-index: 11;
-        transition: all 0.3s ease;
-    }
-
-    .body-part-dot:hover + .body-part-label {
-        background: rgba(255,215,0,0.3);
-        border-color: #ffd700;
-        transform: scale(1.1) translateY(-5px);
-    }
-
-    /* Rotate Button */
-    .rotate-btn {
-        position: fixed;
-        bottom: 100px;
-        right: 20px;
-        width: 70px;
-        height: 70px;
-        background: linear-gradient(135deg, #ffd700, #f39c12);
-        border-radius: 50%;
-        border: 3px solid rgba(255,255,255,0.3);
-        cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        font-size: 22px;
-        font-weight: 900;
-        color: #1a1a2e;
-        box-shadow: 0 8px 25px rgba(255,215,0,0.5);
-        z-index: 50;
-        transition: all 0.3s ease;
-    }
-
-    .rotate-btn:hover {
-        transform: scale(1.1) rotate(180deg);
-        box-shadow: 0 12px 35px rgba(255,215,0,0.7);
-        background: linear-gradient(135deg, #ffed4e, #ffd700);
-    }
-
-    .rotate-btn:active {
-        transform: scale(0.95) rotate(180deg);
-    }
-
-    .rotate-arrow {
-        font-size: 32px;
-        line-height: 1;
-        margin-bottom: -5px;
-    }
-
-    .rotate-text {
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 1px;
-    }
-
-    /* Bottom Navigation */
-    .bottom-nav {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: linear-gradient(to top, #0f3460, #16213e);
-        display: flex;
-        justify-content: space-around;
-        padding: 8px 0;
-        box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
-        z-index: 100;
-        border-top: 1px solid rgba(255,215,0,0.1);
-    }
-
-    .nav-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 3px;
-        padding: 6px 12px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        border-radius: 12px;
-        text-decoration: none;
-        position: relative;
-    }
-
-    .nav-item::before {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 0;
-        height: 2px;
-        background: #ffd700;
-        transition: width 0.3s ease;
-        border-radius: 2px 2px 0 0;
-    }
-
-    .nav-item:hover::before,
-    .nav-item.active::before {
-        width: 80%;
-    }
-
-    .nav-item:hover {
-        background: rgba(255,255,255,0.1);
-    }
-
-    .nav-icon {
-        font-size: 20px;
-        color: #7f8c8d;
-        transition: all 0.3s ease;
-    }
-
-    .nav-label {
-        font-size: 10px;
-        color: #7f8c8d;
-        font-weight: 500;
-        transition: all 0.3s ease;
-    }
-
-    .nav-item:hover .nav-icon,
-    .nav-item.active .nav-icon {
-        color: #ffd700;
-        transform: translateY(-3px) scale(1.1);
-    }
-
-    .nav-item:hover .nav-label,
-    .nav-item.active .nav-label {
-        color: #ffd700;
-        font-weight: 600;
-    }
-
-    /* Animations */
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: scale(0.9);
+        .back-btn, .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
         }
-        to {
-            opacity: 1;
-            transform: scale(1);
+
+        .back-btn {
+            color: #ffd700;
+            font-size: 32px;
+            width: 40px;
+            height: 40px;
+            visibility: hidden;
         }
-    }
 
-    @keyframes slideUp {
-        from {
-            opacity: 0;
-            transform: translateY(50px);
+        .action-btn {
+            color: #ffd700;
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
         }
-        to {
-            opacity: 1;
-            transform: translateY(0);
+
+        .action-btn:hover {
+            transform: scale(1.2) rotate(10deg);
         }
-    }
 
-    .body-container {
-        animation: fadeIn 0.8s ease;
-    }
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            flex: 1;
+            text-align: center;
+        }
 
-    .rotate-btn {
-        animation: slideUp 0.6s ease 0.3s backwards;
-    }
-
-    /* Responsive */
-    @media (max-width: 600px) {
         .body-container {
-            margin: 20px auto 110px auto;
+            position: relative;
+            max-width: 500px;
+            margin: 30px auto 120px auto;
+            width: 90%;
+            padding: 20px;
+            z-index: 1;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .body-image-wrapper {
+            position: relative;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            overflow: visible;
+            transition: all 0.4s ease;
+        }
+
+        .body-image-wrapper:hover {
+            border-color: rgba(255, 215, 0, 0.3);
+            box-shadow: 0 15px 50px rgba(255, 215, 0, 0.2);
+        }
+
+        .body-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: opacity 0.6s ease;
+            filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.3));
+        }
+
+        .body-part-container {
+            position: absolute;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+        }
+
+        .body-part-container.left-side {
+            flex-direction: row;
+        }
+
+        .body-part-container.right-side {
+            flex-direction: row-reverse;
         }
 
         .body-part-dot {
-            width: 18px;
-            height: 18px;
-            border-width: 2px;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #ffd700, #f39c12);
+            border: 4px solid rgba(255, 255, 255, 1);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.7), 0 0 25px rgba(255, 215, 0, 0.5);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 12;
+            animation: pulse-dot 2s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 4px 20px rgba(255, 215, 0, 0.7), 0 0 25px rgba(255, 215, 0, 0.5);
+            }
+            50% {
+                transform: scale(1.15);
+                box-shadow: 0 6px 25px rgba(255, 215, 0, 0.9), 0 0 35px rgba(255, 215, 0, 0.7);
+            }
+        }
+
+        .body-part-dot:hover {
+            transform: scale(1.6);
+            background: linear-gradient(135deg, #ffed4e, #ffd700);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 1), 0 0 50px rgba(255, 215, 0, 0.8);
+            z-index: 15;
+            border-width: 5px;
+        }
+
+        .dotted-line {
+            height: 2px;
+            background: linear-gradient(to right, rgba(255, 215, 0, 0.3), rgba(255, 215, 0, 0.3));
+            box-shadow: 0 0 5px rgba(255, 215, 0, 0.2);
+            pointer-events: none;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .body-part-container:hover .dotted-line {
+            background: linear-gradient(to right, rgba(255, 215, 0, 0.5), rgba(255, 215, 0, 0.5));
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            opacity: 0.7;
         }
 
         .body-part-label {
-            font-size: 11px;
-            padding: 3px 8px;
+            font-size: 14px;
+            color: white;
+            font-weight: 800;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 1), 0 0 15px rgba(255, 215, 0, 0.7);
+            pointer-events: none;
+            white-space: nowrap;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            padding: 6px 14px;
+            border-radius: 14px;
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            z-index: 13;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+
+        .body-part-container:hover .body-part-label {
+            background: rgba(255, 215, 0, 0.4);
+            border-color: #ffd700;
+            border-width: 3px;
+            transform: scale(1.15);
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 1), 0 0 20px rgba(255, 215, 0, 1);
         }
 
         .rotate-btn {
-            width: 60px;
-            height: 60px;
-            bottom: 90px;
-            right: 15px;
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #ffd700, #f39c12);
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 900;
+            color: #1a1a2e;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
+            z-index: 50;
+            transition: all 0.3s ease;
+            animation: slideUp 0.6s ease 0.3s backwards;
+        }
+
+        .rotate-btn:hover {
+            transform: scale(1.1) rotate(180deg);
+            box-shadow: 0 12px 35px rgba(255, 215, 0, 0.7);
+            background: linear-gradient(135deg, #ffed4e, #ffd700);
+        }
+
+        .rotate-btn:active {
+            transform: scale(0.95) rotate(180deg);
         }
 
         .rotate-arrow {
-            font-size: 28px;
+            font-size: 32px;
+            line-height: 1;
+            margin-bottom: -5px;
         }
 
         .rotate-text {
-            font-size: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
-    }
 
-    /* Hide dots/labels by default */
-    .front-dots,
-    .back-dots {
-        transition: opacity 0.3s ease;
-    }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, #0f3460, #16213e);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            border-top: 1px solid rgba(255, 215, 0, 0.1);
+        }
 
-    .back-dots {
-        display: none;
-    }
-</style>
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: #ffd700;
+            transition: width 0.3s ease;
+            border-radius: 2px 2px 0 0;
+        }
+
+        .nav-item:hover::before, .nav-item.active::before {
+            width: 80%;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            color: #7f8c8d;
+            transition: all 0.3s ease;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            color: #7f8c8d;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover .nav-icon, .nav-item.active .nav-icon {
+            color: #ffd700;
+            transform: translateY(-3px) scale(1.1);
+        }
+
+        .nav-item:hover .nav-label, .nav-item.active .nav-label {
+            color: #ffd700;
+            font-weight: 600;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .body-container {
+                margin: 20px auto 110px auto;
+            }
+
+            .body-part-dot {
+                width: 20px;
+                height: 20px;
+                border-width: 3px;
+            }
+
+            .dotted-line {
+                height: 2px;
+            }
+
+            .body-part-label {
+                font-size: 12px;
+                padding: 5px 10px;
+                border-width: 2px;
+            }
+
+            .rotate-btn {
+                width: 60px;
+                height: 60px;
+                bottom: 90px;
+                right: 15px;
+            }
+
+            .rotate-arrow {
+                font-size: 28px;
+            }
+
+            .rotate-text {
+                font-size: 10px;
+            }
+        }
+
+        .front-dots, .back-dots {
+            transition: opacity 0.3s ease;
+        }
+
+        .back-dots {
+            display: none;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
-<!-- Header -->
-<div class="page-header">
-    <button class="back-btn">‹</button>
-    <h1 class="page-title">EXERCISES</h1>
-    <button class="action-btn">⭐</button>
-</div>
+    <div class="page-header">
+        <button class="back-btn">‹</button>
+        <h1 class="page-title">EXERCISES</h1>
+        <button class="action-btn">⭐</button>
+    </div>
 
-<div class="body-container">
+    <div class="body-container">
     <div class="body-image-wrapper">
-        <!-- FRONT IMAGE -->
-        <img src="/media/body/model_man_frontside.png" alt="Body Front" class="body-image" id="frontImage">
+    <!-- FRONT IMAGE -->
+    <img src="/media/body/model_man_frontside.png" alt="Body Front" class="body-image" id="frontImage">
+    <!-- BACK IMAGE -->
+    <img src="/media/body/model_man_backside.png" alt="Body Back" class="body-image" id="backImage"
+         style="opacity:0; position:absolute; top:20px; left:20px; width:calc(100%-40px);">
 
-        <!-- BACK IMAGE -->
-        <img src="/media/body/model_man_backside.png" alt="Body Back" class="body-image" id="backImage"
-             style="opacity: 0; position: absolute; top: 20px; left: 20px; width: calc(100% - 40px);">
-
-        <!-- FRONT DOTS -->
-        <div class="front-dots">
-            {% for body_part in body_parts %}
-                {% if body_part.side == 'front' or body_part.side == 'both' %}
-                    <a href="{% url 'exercises:exercises_by_body_part' body_part.id %}"
-                       class="body-part-dot"
-                       style="top: {{ body_part.position_top }}%; left: {{ body_part.position_left }}%;"></a>
-                    <span class="body-part-label"
-                          style="top: {% if body_part.label_top %}{{ body_part.label_top }}{% else %}{{ body_part.position_top }}{% endif %}%;
-                                 left: {% if body_part.label_left %}{{ body_part.label_left }}{% else %}{{ body_part.position_left|add:'5' }}{% endif %}%;">
-                        {{ body_part.name }}
-                    </span>
-                {% endif %}
-            {% endfor %}
+    <div class="front-dots">
+        <!-- Chest -->
+        <div class="body-part-container left-side" style="top:28%; left:35%;">
+            <a href="#" class="body-part-dot"></a>
+            <div class="dotted-line" style="width:40px;"></div>
+            <span class="body-part-label">Chest</span>
         </div>
-
-        <!-- BACK DOTS -->
-        <div class="back-dots">
-            {% for body_part in body_parts %}
-                {% if body_part.side == 'back' or body_part.side == 'both' %}
-                    <a href="{% url 'exercises:exercises_by_body_part' body_part.id %}"
-                       class="body-part-dot"
-                       style="top: {% if body_part.back_position_top %}{{ body_part.back_position_top }}{% else %}{{ body_part.position_top }}{% endif %}%;
-                              left: {% if body_part.back_position_left %}{{ body_part.back_position_left }}{% else %}{{ body_part.position_left }}{% endif %}%;"></a>
-                    <span class="body-part-label"
-                          style="top: {% if body_part.back_label_top %}{{ body_part.back_label_top }}{% elif body_part.label_top %}{{ body_part.label_top }}{% else %}{{ body_part.position_top }}{% endif %}%;
-                                 left: {% if body_part.back_label_left %}{{ body_part.back_label_left }}{% elif body_part.label_left %}{{ body_part.label_left }}{% else %}{{ body_part.position_left }}{% endif %}%;">
-                        {{ body_part.name }}
-                    </span>
-                {% endif %}
-            {% endfor %}
+        <!-- Biceps -->
+        <div class="body-part-container right-side" style="top:32%; right:15%;">
+            <span class="body-part-label">Biceps</span>
+            <div class="dotted-line" style="width:35px;"></div>
+            <a href="#" class="body-part-dot"></a>
+        </div>
+        <!-- Abs -->
+        <div class="body-part-container right-side" style="top:42%; right:22%;">
+            <span class="body-part-label">Abs</span>
+            <div class="dotted-line" style="width:35px;"></div>
+            <a href="#" class="body-part-dot"></a>
+        </div>
+        <!-- Shoulders -->
+        <div class="body-part-container left-side" style="top:20%; left:25%;">
+            <a href="#" class="body-part-dot"></a>
+            <div class="dotted-line" style="width:30px;"></div>
+            <span class="body-part-label">Shoulders</span>
+        </div>
+        <!-- Quads -->
+        <div class="body-part-container left-side" style="top:60%; left:40%;">
+            <a href="#" class="body-part-dot"></a>
+            <div class="dotted-line" style="width:35px;"></div>
+            <span class="body-part-label">Quads</span>
+        </div>
+        <!-- Calves -->
+        <div class="body-part-container left-side" style="top:75%; left:45%;">
+            <a href="#" class="body-part-dot"></a>
+            <div class="dotted-line" style="width:35px;"></div>
+            <span class="body-part-label">Calves</span>
+        </div>
+        <!-- Forearms -->
+        <div class="body-part-container right-side" style="top:45%; right:18%;">
+            <span class="body-part-label">Forearms</span>
+            <div class="dotted-line" style="width:30px;"></div>
+            <a href="#" class="body-part-dot"></a>
         </div>
     </div>
-</div>
 
-<!-- 180° Rotate Button -->
-<button class="rotate-btn" onclick="rotateBody()">
-    <span class="rotate-arrow">↻</span>
-    <span class="rotate-text">180°</span>
-</button>
+    <!-- BACK DOTS -->
+    <div class="back-dots">
+        <!-- Lats -->
+        <div class="body-part-container right-side" style="top:32%; right:18%;">
+            <span class="body-part-label">Lats</span>
+            <div class="dotted-line" style="width:40px;"></div>
+            <a href="#" class="body-part-dot"></a>
+        </div>
+        <!-- Traps -->
+        <div class="body-part-container left-side" style="top:18%; left:30%;">
+            <a href="#" class="body-part-dot"></a>
+            <div class="dotted-line" style="width:35px;"></div>
+            <span class="body-part-label">Traps</span>
+        </div>
+        <!-- Triceps -->
+        <div class="body-part-container left-side" style="top:30%; left:10%;">
+            <a href="#" class="body-part-dot"></a>
+            <div class="dotted-line" style="width:40px;"></div>
+            <span class="body-part-label">Triceps</span>
+        </div>
+        <!-- Lower Back -->
+        <div class="body-part-container right-side" style="top:45%; right:25%;">
+            <span class="body-part-label">Lower Back</span>
+            <div class="dotted-line" style="width:40px;"></div>
+            <a href="#" class="body-part-dot"></a>
+        </div>
+        <!-- Glutes -->
+        <div class="body-part-container left-side" style="top:60%; left:35%;">
+            <a href="#" class="body-part-dot"></a>
+            <div class="dotted-line" style="width:35px;"></div>
+            <span class="body-part-label">Glutes</span>
+        </div>
+        <!-- Hamstrings -->
+        <div class="body-part-container right-side" style="top:70%; right:30%;">
+            <span class="body-part-label">Hamstrings</span>
+            <div class="dotted-line" style="width:35px;"></div>
+            <a href="#" class="body-part-dot"></a>
+        </div>
+        <!-- Calves -->
+        <div class="body-part-container left-side" style="top:80%; left:40%;">
+            <a href="#" class="body-part-dot"></a>
+            <div class="dotted-line" style="width:30px;"></div>
+            <span class="body-part-label">Calves</span>
+        </div>
+    </div>
 
-{#<!-- Bottom Navigation -->#}
-{#<div class="bottom-nav">#}
-{#    <a href="{% url 'exercises' %}" class="nav-item active">#}
-{#        <div class="nav-icon">🏋️</div>#}
-{#        <div class="nav-label">Exercises</div>#}
-{#    </a>#}
-{#    <a href="{% url 'workouts' %}" class="nav-item">#}
-{#        <div class="nav-icon">📋</div>#}
-{#        <div class="nav-label">Workouts</div>#}
-{#    </a>#}
-{#    <a href="{% url 'my_trainer' %}" class="nav-item">#}
-{#        <div class="nav-icon">👤</div>#}
-{#        <div class="nav-label">My Trainer</div>#}
-{#    </a>#}
-{#    <a href="{% url 'tips' %}" class="nav-item">#}
-{#        <div class="nav-icon">💡</div>#}
-{#        <div class="nav-label">Tips</div>#}
-{#    </a>#}
-{#    <a href="{% url 'profile' %}" class="nav-item">#}
-{#        <div class="nav-icon">👤</div>#}
-{#        <div class="nav-label">Profile</div>#}
-{#    </a>#}
-{#</div>#}
+
+    <button class="rotate-btn" onclick="rotateBody()">
+        <span class="rotate-arrow">↻</span>
+        <span class="rotate-text">180°</span>
+    </button>
+
+
 {% endblock %}
 
 {% block extra_js %}
-<script>
-let showingFront = true;
+    <script>
+        let showingFront = true;
 
-function rotateBody() {
-    const frontImg = document.getElementById('frontImage');
-    const backImg = document.getElementById('backImage');
-    const frontDots = document.querySelector('.front-dots');
-    const backDots = document.querySelector('.back-dots');
+        function rotateBody() {
+            const frontImg = document.getElementById('frontImage');
+            const backImg = document.getElementById('backImage');
+            const frontDots = document.querySelector('.front-dots');
+            const backDots = document.querySelector('.back-dots');
 
-    if (showingFront) {
-        // Switch to back
-        frontImg.style.opacity = '0';
-        backImg.style.opacity = '1';
-        frontDots.style.display = 'none';
-        backDots.style.display = 'block';
-    } else {
-        // Switch to front
-        frontImg.style.opacity = '1';
-        backImg.style.opacity = '0';
-        frontDots.style.display = 'block';
-        backDots.style.display = 'none';
-    }
-    showingFront = !showingFront;
-}
+            if (showingFront) {
+                frontImg.style.opacity = '0';
+                backImg.style.opacity = '1';
+                frontDots.style.display = 'none';
+                backDots.style.display = 'block';
+            } else {
+                frontImg.style.opacity = '1';
+                backImg.style.opacity = '0';
+                frontDots.style.display = 'block';
+                backDots.style.display = 'none';
+            }
+            showingFront = !showingFront;
+        }
 
-// Add hover effect to action button
-document.querySelector('.action-btn').addEventListener('click', function() {
-    this.style.transform = 'scale(1.2) rotate(360deg)';
-    setTimeout(() => {
-        this.style.transform = '';
-    }, 300);
-});
-</script>
+        document.querySelector('.action-btn').addEventListener('click', function () {
+            this.style.transform = 'scale(1.2) rotate(360deg)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 300);
+        });
+    </script>
 {% endblock %}
