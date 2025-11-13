@@ -146,6 +146,18 @@ wheels = [
 ]
 
 [[package]]
+name = "django-jazzmin"
+version = "3.0.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/84/96/21b6255e90d92a3eb4e93bea9376635d54258e0353ebb913a55e40ae9254/django_jazzmin-3.0.1.tar.gz", hash = "sha256:67ae148bade41267a09ca8e4352ddefa6121795ebbac238bb9a6564ff841eb1b", size = 2053550, upload-time = "2024-10-08T17:40:59.771Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ad/5b/2f8c4b168e6c41bf1e4b14d787deb23d80f618f0693db913bbe208a4a907/django_jazzmin-3.0.1-py3-none-any.whl", hash = "sha256:12a0a4c1d4fd09c2eef22acf6a1f03112b515ba695c59faa8ea80efc81c1f21b", size = 2125957, upload-time = "2024-10-08T17:40:57.359Z" },
+]
+
+[[package]]
 name = "django-rest-framework"
 version = "0.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -192,6 +204,7 @@ dependencies = [
     { name = "django" },
     { name = "django-cors-headers" },
     { name = "django-filter" },
+    { name = "django-jazzmin" },
     { name = "django-rest-framework" },
     { name = "djangorestframework" },
     { name = "drf-spectacular" },
@@ -210,6 +223,7 @@ requires-dist = [
     { name = "django", specifier = ">=6.0a1" },
     { name = "django-cors-headers", specifier = ">=4.0.0" },
     { name = "django-filter", specifier = ">=25.2" },
+    { name = "django-jazzmin", specifier = ">=3.0.1" },
     { name = "django-rest-framework", specifier = ">=0.1.0" },
     { name = "djangorestframework", specifier = ">=3.14.0" },
     { name = "drf-spectacular", specifier = ">=0.26.0" },
