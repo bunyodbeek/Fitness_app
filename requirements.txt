@@ -1,0 +1,31 @@
+# requirements.txt
+# Fitness App - Barcha kerakli kutubxonalar
+
+# Django
+Django>=6.0a1
+djangorestframework>=3.14.0
+drf-spectacular>=0.26.0
+django-cors-headers>=4.0.0
+
+# Database
+psycopg2-binary>=2.9.5  # PostgreSQL uchun
+# yoki
+# mysqlclient>=2.1.1  # MySQL uchun
+
+# Telegram Bot
+python-telegram-bot>=20.0
+python-dotenv>=1.0.0
+
+# Click Merchant (to'lov)
+requests>=2.31.0
+
+# Celery (avtomatik to'lovlar uchun - keyinroq)
+# celery>=5.3.0
+# redis>=4.5.0
+# django-celery-beat>=2.5.0
+
+# Image processing
+Pillow>=10.0.0
+
+# Utils
+python-dateutil>=2.8.2

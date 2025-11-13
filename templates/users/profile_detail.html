@@ -1,0 +1,563 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Profile{% endblock %}
+
+{% block extra_css %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        min-height: 100vh;
+        position: relative;
+    }
+
+    /* Diagonal pattern background */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(255,255,255,0.02) 10px,
+            rgba(255,255,255,0.02) 20px
+        );
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    /* Header */
+    .page-header {
+        background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        position: relative;
+        z-index: 10;
+    }
+
+    .page-title {
+        color: white;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+    }
+
+    /* Avatar Section */
+    .avatar-section {
+        padding: 50px 20px 30px;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    .avatar-container {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 25px;
+    }
+
+    .avatar-circle {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 5px solid rgba(255,215,0,0.3);
+        overflow: hidden;
+        background: linear-gradient(135deg, #2c3e50, #34495e);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 40px rgba(255,215,0,0.2);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .avatar-circle::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,215,0,0.3), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .avatar-circle:hover::before {
+        left: 100%;
+    }
+
+    .avatar-circle:hover {
+        transform: scale(1.05) rotate(2deg);
+        border-color: #ffd700;
+        box-shadow: 0 15px 50px rgba(255,215,0,0.4);
+    }
+
+    .avatar-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .avatar-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 60px;
+    }
+
+    .avatar-placeholder svg {
+        width: 70%;
+        height: 70%;
+        fill: #95a5a6;
+    }
+
+    .user-name {
+        font-size: 26px;
+        font-weight: 900;
+        color: white;
+        margin-bottom: 10px;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        transition: all 0.3s ease;
+    }
+
+    .user-name:hover {
+        color: #ffd700;
+        transform: scale(1.05);
+    }
+
+    /* Menu Section */
+    .menu-section {
+        padding: 18px;
+        padding-bottom: 100px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .menu-card {
+        background: rgba(255,255,255,0.05);
+        border: 2px solid rgba(255,255,255,0.1);
+        border-radius: 20px;
+        padding: 18px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Animated gradient overlay */
+    .menu-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,215,0,0.15), transparent);
+        transition: left 0.6s ease;
+    }
+
+    .menu-card:hover::before {
+        left: 100%;
+    }
+
+    /* Glowing effect on hover */
+    .menu-card::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255,215,0,0.2), transparent);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s ease, height 0.6s ease;
+    }
+
+    .menu-card:hover::after {
+        width: 400px;
+        height: 400px;
+    }
+
+    .menu-card:hover {
+        background: rgba(255,255,255,0.08);
+        border-color: rgba(255,215,0,0.5);
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 15px 40px rgba(255,215,0,0.3);
+    }
+
+    .menu-card:active {
+        transform: translateY(-4px) scale(0.98);
+    }
+
+    .menu-content {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .menu-icon-wrapper {
+        width: 55px;
+        height: 55px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, rgba(255,215,0,0.25), rgba(255,215,0,0.08));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 4px 15px rgba(255,215,0,0.2);
+    }
+
+    .menu-card:hover .menu-icon-wrapper {
+        background: linear-gradient(135deg, rgba(255,215,0,0.4), rgba(255,215,0,0.15));
+        transform: scale(1.15) rotate(10deg);
+        box-shadow: 0 8px 25px rgba(255,215,0,0.4);
+    }
+
+    .menu-icon {
+        font-size: 28px;
+        transition: transform 0.4s ease;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    }
+
+    .menu-card:hover .menu-icon {
+        transform: scale(1.1);
+    }
+
+    .menu-text-wrapper {
+        flex: 1;
+    }
+
+    .menu-text {
+        font-size: 17px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .menu-card:hover .menu-text {
+        color: #ffd700;
+        transform: translateX(5px);
+    }
+
+    .menu-subtitle {
+        font-size: 14px;
+        color: #7f8c8d;
+        transition: all 0.3s ease;
+    }
+
+    .menu-card:hover .menu-subtitle {
+        color: #95a5a6;
+        transform: translateX(5px);
+    }
+
+    .menu-arrow {
+        font-size: 32px;
+        color: #7f8c8d;
+        transition: all 0.4s ease;
+        font-weight: 700;
+    }
+
+    .menu-card:hover .menu-arrow {
+        color: #ffd700;
+        transform: translateX(10px) scale(1.2);
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, #0f3460, #16213e);
+        display: flex;
+        justify-content: space-around;
+        padding: 12px 0;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+        z-index: 100;
+        border-top: 1px solid rgba(255,215,0,0.1);
+    }
+
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        padding: 8px 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-radius: 12px;
+        text-decoration: none;
+        position: relative;
+    }
+
+    .nav-item::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 3px;
+        background: #ffd700;
+        transition: width 0.3s ease;
+        border-radius: 2px 2px 0 0;
+    }
+
+    .nav-item:hover::before,
+    .nav-item.active::before {
+        width: 80%;
+    }
+
+    .nav-item:hover {
+        background: rgba(255,255,255,0.1);
+    }
+
+    .nav-icon {
+        font-size: 24px;
+        color: #7f8c8d;
+        transition: all 0.3s ease;
+    }
+
+    .nav-label {
+        font-size: 11px;
+        color: #7f8c8d;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .nav-item:hover .nav-icon,
+    .nav-item.active .nav-icon {
+        color: #ffd700;
+        transform: translateY(-3px) scale(1.1);
+    }
+
+    .nav-item:hover .nav-label,
+    .nav-item.active .nav-label {
+        color: #ffd700;
+        font-weight: 600;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes scaleIn {
+        from {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .menu-card {
+        animation: slideInLeft 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        opacity: 0;
+    }
+
+    .menu-card:nth-child(1) { animation-delay: 0.1s; }
+    .menu-card:nth-child(2) { animation-delay: 0.2s; }
+    .menu-card:nth-child(3) { animation-delay: 0.3s; }
+
+    .avatar-section {
+        animation: scaleIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* Pulse animation for active state */
+    @keyframes pulse {
+        0%, 100% {
+            box-shadow: 0 10px 40px rgba(255,215,0,0.2);
+        }
+        50% {
+            box-shadow: 0 10px 40px rgba(255,215,0,0.4);
+        }
+    }
+
+    .avatar-circle {
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .avatar-circle {
+            width: 130px;
+            height: 130px;
+        }
+
+        .user-name {
+            font-size: 28px;
+        }
+
+        .menu-text {
+            font-size: 18px;
+        }
+
+        .menu-icon-wrapper {
+            width: 60px;
+            height: 60px;
+        }
+
+        .menu-icon {
+            font-size: 30px;
+        }
+    }
+
+    /* Loading shimmer effect */
+    @keyframes shimmer {
+        0% {
+            background-position: -1000px 0;
+        }
+        100% {
+            background-position: 1000px 0;
+        }
+    }
+
+    .menu-card {
+        background-image: linear-gradient(
+            90deg,
+            rgba(255,255,255,0.05) 0px,
+            rgba(255,215,0,0.1) 50%,
+            rgba(255,255,255,0.05) 100%
+        );
+        background-size: 1000px 100%;
+        background-position: -1000px 0;
+        animation: slideInLeft 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+                   shimmer 3s ease-in-out infinite;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="page-header">
+    <h1 class="page-title">PROFILE</h1>
+</div>
+
+<!-- Avatar Section -->
+<div class="avatar-section">
+    <div class="avatar-container">
+        <div class="avatar-circle" onclick="window.location.href='{% url 'personal_info' %}'">
+            {% if user.profile.avatar %}
+                <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" class="avatar-image">
+            {% else %}
+                <div class="avatar-placeholder">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <h2 class="user-name">{{ user.username|default:"Bunyod" }}</h2>
+</div>
+
+<!-- Menu Items -->
+<div class="menu-section">
+    <div class="menu-card" onclick="window.location.href='{% url 'personal_info' %}'">
+        <div class="menu-content">
+            <div class="menu-icon-wrapper">
+                <div class="menu-icon">ℹ️</div>
+            </div>
+            <div class="menu-text-wrapper">
+                <div class="menu-text">Personal info</div>
+                <div class="menu-subtitle">Manage your profile details</div>
+            </div>
+            <div class="menu-arrow">›</div>
+        </div>
+    </div>
+
+    <div class="menu-card" onclick="window.location.href='{% url 'user_progress' %}'">
+        <div class="menu-content">
+            <div class="menu-icon-wrapper">
+                <div class="menu-icon">📊</div>
+            </div>
+            <div class="menu-text-wrapper">
+                <div class="menu-text">Progress</div>
+                <div class="menu-subtitle">Track your fitness journey</div>
+            </div>
+            <div class="menu-arrow">›</div>
+        </div>
+    </div>
+
+    <div class="menu-card" onclick="window.location.href='{% url 'settings' %}'">
+        <div class="menu-content">
+            <div class="menu-icon-wrapper">
+                <div class="menu-icon">⚙️</div>
+            </div>
+            <div class="menu-text-wrapper">
+                <div class="menu-text">Settings</div>
+                <div class="menu-subtitle">App preferences and more</div>
+            </div>
+            <div class="menu-arrow">›</div>
+        </div>
+    </div>
+</div>
+{##}
+{#<!-- Bottom Navigation -->#}
+{#<div class="bottom-nav">#}
+{#    <a href="{% url 'exercises' %}" class="nav-item">#}
+{#        <div class="nav-icon">🏋️</div>#}
+{#        <div class="nav-label">Exercises</div>#}
+{#    </a>#}
+{#    <a href="{% url 'workouts' %}" class="nav-item">#}
+{#        <div class="nav-icon">📋</div>#}
+{#        <div class="nav-label">Workouts</div>#}
+{#    </a>#}
+{#    <a href="{% url 'my_trainer' %}" class="nav-item">#}
+{#        <div class="nav-icon">👤</div>#}
+{#        <div class="nav-label">My Trainer</div>#}
+{#    </a>#}
+{#    <a href="{% url 'tips' %}" class="nav-item">#}
+{#        <div class="nav-icon">💡</div>#}
+{#        <div class="nav-label">Tips</div>#}
+{#    </a>#}
+{#    <a href="{% url 'profile' %}" class="nav-item active">#}
+{#        <div class="nav-icon">👤</div>#}
+{#        <div class="nav-label">Profile</div>#}
+{#    </a>#}
+{#</div>#}
+{% endblock %}

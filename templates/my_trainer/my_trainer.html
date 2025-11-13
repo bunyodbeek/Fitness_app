@@ -1,0 +1,601 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Trainer - Fitness App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a1f35 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(30, 36, 51, 0.95);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #00FF88;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        .back-btn:active {
+            transform: scale(0.95);
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* Main Content */
+        .container {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 60px 20px;
+            min-height: 60vh;
+        }
+
+        .empty-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #00FF88 0%, #00D4FF 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            margin-bottom: 24px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        .empty-state h2 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: #00FF88;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #00FF88 0%, #00D4FF 100%);
+            color: #0f1419;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 24px rgba(0, 255, 136, 0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0, 255, 136, 0.4);
+        }
+
+        .cta-button:active {
+            transform: translateY(0);
+        }
+
+        /* Active Program */
+        .program-card {
+            background: rgba(30, 36, 51, 0.8);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 24px;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .program-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            position: relative;
+        }
+
+        .program-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .program-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: linear-gradient(135deg, #00FF88 0%, #00D4FF 100%);
+            color: #0f1419;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .program-content {
+            padding: 24px;
+        }
+
+        .program-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #00FF88;
+        }
+
+        .program-subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 20px;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            margin-bottom: 24px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .progress-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+        }
+
+        .progress-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #00FF88;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00FF88 0%, #00D4FF 100%);
+            border-radius: 50px;
+            transition: width 1s ease-out;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { opacity: 1; }
+            50% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #00FF88;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Today's Workout */
+        .today-section {
+            background: rgba(30, 36, 51, 0.6);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-icon {
+            font-size: 24px;
+        }
+
+        .workout-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .workout-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .workout-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #00FF88 0%, #00D4FF 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .workout-info {
+            flex: 1;
+        }
+
+        .workout-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .workout-details {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn-primary {
+            flex: 1;
+            background: linear-gradient(135deg, #00FF88 0%, #00D4FF 100%);
+            color: #0f1419;
+            border: none;
+            padding: 18px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 24px rgba(0, 255, 136, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            flex: 1;
+            background: transparent;
+            color: #00FF88;
+            border: 2px solid #00FF88;
+            padding: 18px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:active {
+            transform: scale(0.98);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(30, 36, 51, 0.98);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            transition: all 0.3s;
+            padding: 8px 16px;
+        }
+
+        .nav-item.active {
+            color: #00FF88;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            transition: transform 0.2s;
+        }
+
+        .nav-item.active .nav-icon {
+            transform: scale(1.1);
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .container {
+                padding: 32px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 18px;
+            }
+
+            .program-title {
+                font-size: 20px;
+            }
+
+            .stat-value {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <button class="back-btn" onclick="history.back()">←</button>
+        <h1>MY TRAINER</h1>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- EMPTY STATE (ko'rsatiladi agar program yo'q bo'lsa) -->
+        <div class="empty-state" id="emptyState">
+            <div class="empty-icon">💪</div>
+            <h2>No Active Program</h2>
+            <p>Start your fitness journey by choosing a program that matches your goals!</p>
+            <a href="/workouts" class="cta-button">Browse Programs</a>
+        </div>
+
+        <!-- ACTIVE PROGRAM (ko'rsatiladi agar program tanlangan bo'lsa) -->
+        <div id="activeProgram" style="display: none;">
+            <!-- Program Card -->
+            <div class="program-card">
+                <div class="program-image" style="position: relative;">
+                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600" alt="Program">
+                    <span class="program-badge" style="position: absolute;">ACTIVE</span>
+                </div>
+                <div class="program-content">
+                    <h2 class="program-title">Full Body Strength</h2>
+                    <p class="program-subtitle">12 Week Program • Intermediate</p>
+
+                    <!-- Progress -->
+                    <div class="progress-section">
+                        <div class="progress-header">
+                            <span class="progress-label">Overall Progress</span>
+                            <span class="progress-value">42% Complete</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 42%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-value">5</span>
+                            <span class="stat-label">Days Done</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">7</span>
+                            <span class="stat-label">Remaining</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">3</span>
+                            <span class="stat-label">Streak 🔥</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Today's Workout -->
+            <div class="today-section">
+                <h3 class="section-title">
+                    <span class="section-icon">🎯</span>
+                    Today's Workout
+                </h3>
+
+                <div class="workout-item">
+                    <div class="workout-icon">🏋️</div>
+                    <div class="workout-info">
+                        <div class="workout-name">Bench Press</div>
+                        <div class="workout-details">4 sets × 8-10 reps</div>
+                    </div>
+                </div>
+
+                <div class="workout-item">
+                    <div class="workout-icon">💪</div>
+                    <div class="workout-info">
+                        <div class="workout-name">Squats</div>
+                        <div class="workout-details">4 sets × 10-12 reps</div>
+                    </div>
+                </div>
+
+                <div class="workout-item">
+                    <div class="workout-icon">🎯</div>
+                    <div class="workout-info">
+                        <div class="workout-name">Deadlifts</div>
+                        <div class="workout-details">3 sets × 6-8 reps</div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn-primary" onclick="startWorkout()">
+                        ▶ Start Workout
+                    </button>
+                    <button class="btn-secondary" onclick="viewProgram()">
+                        View Full Program
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{#    <!-- Bottom Navigation -->#}
+{#    <div class="bottom-nav">#}
+{#        <a href="/exercises" class="nav-item">#}
+{#            <span class="nav-icon">💪</span>#}
+{#            <span class="nav-label">Exercises</span>#}
+{#        </a>#}
+{#        <a href="/workouts" class="nav-item">#}
+{#            <span class="nav-icon">✅</span>#}
+{#            <span class="nav-label">Workouts</span>#}
+{#        </a>#}
+{#        <a href="/my-trainer" class="nav-item active">#}
+{#            <span class="nav-icon">👤</span>#}
+{#            <span class="nav-label">My Trainer</span>#}
+{#        </a>#}
+{#        <a href="/favorites" class="nav-item">#}
+{#            <span class="nav-icon">⭐</span>#}
+{#            <span class="nav-label">Favorites</span>#}
+{#        </a>#}
+{#        <a href="/profile" class="nav-item">#}
+{#            <span class="nav-icon">😊</span>#}
+{#            <span class="nav-label">Profile</span>#}
+{#        </a>#}
+{#    </div>#}
+
+    <script>
+        // Demo: Toggle between empty and active state
+        // Production da backend dan ma'lumot keladi
+
+        function startWorkout() {
+            alert('Starting workout...');
+            // Bu yerda workout session boshlash logikasi bo'ladi
+        }
+
+        function viewProgram() {
+            alert('Viewing full program...');
+            // Bu yerda full program detailsga o'tish
+        }
+
+        // Test uchun: 3 sekunddan keyin active program ko'rsatish
+        setTimeout(() => {
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('activeProgram').style.display = 'block';
+        }, 3000);
+    </script>
+</body>
+</html>

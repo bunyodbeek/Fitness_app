@@ -1,0 +1,688 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ workout.title }} - Workout Session{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background: #2c3e50;
+    }
+
+    /* Header */
+    .workout-session-header {
+        background: #34495e;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .exit-btn {
+        color: #ffd700;
+        font-size: 14px;
+        font-weight: 600;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .workout-progress {
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .menu-btn {
+        color: #ffd700;
+        font-size: 24px;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    /* Current Exercise */
+    .current-exercise {
+        padding: 30px 20px;
+        text-align: center;
+        color: white;
+    }
+
+    .exercise-image-container {
+        max-width: 300px;
+        margin: 0 auto 20px;
+    }
+
+    .exercise-image {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    }
+
+    .exercise-image-placeholder {
+        width: 100%;
+        height: 250px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 80px;
+    }
+
+    .exercise-name {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    /* Timer */
+    .timer-container {
+        margin: 30px 0;
+    }
+
+    .timer-circle {
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .timer-display {
+        font-size: 56px;
+        font-weight: 700;
+        color: #ffd700;
+    }
+
+    .timer-label {
+        font-size: 14px;
+        color: #95a5a6;
+        margin-top: 10px;
+    }
+
+    /* Rest Timer */
+    .rest-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.95);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 200;
+        flex-direction: column;
+    }
+
+    .rest-overlay.active {
+        display: flex;
+    }
+
+    .rest-title {
+        font-size: 32px;
+        color: #ffd700;
+        margin-bottom: 20px;
+    }
+
+    .rest-timer {
+        font-size: 72px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 30px;
+    }
+
+    .skip-rest-btn {
+        background: none;
+        border: 2px solid #ffd700;
+        color: #ffd700;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .skip-rest-btn:hover {
+        background: #ffd700;
+        color: #2c3e50;
+    }
+
+    /* Sets Tracker */
+    .sets-tracker {
+        padding: 20px;
+        background: #34495e;
+        border-radius: 12px;
+        margin: 20px;
+    }
+
+    .set-row {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px 0;
+        border-bottom: 1px solid #2c3e50;
+    }
+
+    .set-row:last-child {
+        border-bottom: none;
+    }
+
+    .set-number {
+        font-size: 18px;
+        font-weight: 700;
+        color: #95a5a6;
+        min-width: 60px;
+    }
+
+    .set-input {
+        flex: 1;
+        background: #2c3e50;
+        border: 2px solid #445566;
+        color: white;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 16px;
+        text-align: center;
+    }
+
+    .set-input:focus {
+        outline: none;
+        border-color: #ffd700;
+    }
+
+    .set-input::placeholder {
+        color: #7f8c8d;
+    }
+
+    .set-done-btn {
+        width: 50px;
+        height: 50px;
+        background: #2c3e50;
+        border: 2px solid #445566;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .set-done-btn.completed {
+        background: #ffd700;
+        border-color: #ffd700;
+        color: #2c3e50;
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+        padding: 20px;
+        display: flex;
+        gap: 15px;
+    }
+
+    .pause-btn {
+        flex: 1;
+        background: #34495e;
+        border: 2px solid #445566;
+        color: white;
+        padding: 18px;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .did-it-btn {
+        flex: 2;
+        background: #ffd700;
+        border: none;
+        color: #2c3e50;
+        padding: 18px;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .did-it-btn:hover {
+        background: #ffed4e;
+        transform: scale(1.02);
+    }
+
+    .did-it-btn:disabled {
+        background: #7f8c8d;
+        cursor: not-allowed;
+    }
+
+    /* Up Next */
+    .up-next {
+        background: #34495e;
+        margin: 20px;
+        padding: 15px 20px;
+        border-radius: 12px;
+    }
+
+    .up-next-title {
+        font-size: 14px;
+        color: #ffd700;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .up-next-content {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .up-next-thumbnail {
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    .up-next-info {
+        flex: 1;
+        color: white;
+    }
+
+    .up-next-name {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .up-next-sets {
+        font-size: 13px;
+        color: #95a5a6;
+    }
+
+    /* Finish Modal */
+    .finish-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.95);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 300;
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .finish-modal.active {
+        display: flex;
+    }
+
+    .finish-icon {
+        font-size: 80px;
+        margin-bottom: 20px;
+    }
+
+    .finish-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 10px;
+    }
+
+    .finish-message {
+        font-size: 16px;
+        color: #95a5a6;
+        margin-bottom: 30px;
+    }
+
+    .finish-buttons {
+        display: flex;
+        gap: 15px;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .finish-save-btn {
+        flex: 1;
+        background: #ffd700;
+        border: none;
+        color: #2c3e50;
+        padding: 15px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .finish-exit-btn {
+        flex: 1;
+        background: none;
+        border: 2px solid #7f8c8d;
+        color: #7f8c8d;
+        padding: 15px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .exercise-name {
+            font-size: 20px;
+        }
+
+        .timer-display {
+            font-size: 48px;
+        }
+
+        .set-input {
+            font-size: 14px;
+            padding: 10px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Session Header -->
+<div class="workout-session-header">
+    <button class="exit-btn" onclick="showFinishModal()">Exit</button>
+    <div class="workout-progress">
+        <span id="currentExercise">1</span>/{{ total_exercises }}
+    </div>
+    <button class="menu-btn">☰</button>
+</div>
+
+<!-- Current Exercise -->
+<div class="current-exercise" id="exerciseContainer">
+    <div class="exercise-image-container">
+        <img src="" alt="" class="exercise-image" id="exerciseImage" style="display: none;">
+        <div class="exercise-image-placeholder" id="exercisePlaceholder">💪</div>
+    </div>
+
+    <h2 class="exercise-name" id="exerciseName">Loading...</h2>
+
+    <!-- Timer (for cardio or timed exercises) -->
+    <div class="timer-container" id="timerContainer" style="display: none;">
+        <div class="timer-circle">
+            <div class="timer-display" id="timerDisplay">10:00</div>
+        </div>
+        <div class="timer-label">Tap to skip</div>
+    </div>
+
+    <!-- Sets Tracker -->
+    <div class="sets-tracker" id="setsTracker">
+        <!-- Sets will be dynamically added here -->
+    </div>
+</div>
+
+<!-- Action Buttons -->
+<div class="action-buttons">
+    <button class="pause-btn" onclick="togglePause()">
+        <span id="pauseIcon">⏸</span>
+        <span id="pauseText">Pause</span>
+    </button>
+    <button class="did-it-btn" id="didItBtn" onclick="completeExercise()">
+        Did it
+    </button>
+</div>
+
+<!-- Up Next -->
+<div class="up-next" id="upNext" style="display: none;">
+    <div class="up-next-title">Up Next</div>
+    <div class="up-next-content">
+        <img src="" alt="" class="up-next-thumbnail" id="upNextImage">
+        <div class="up-next-info">
+            <div class="up-next-name" id="upNextName">Next Exercise</div>
+            <div class="up-next-sets" id="upNextSets">3 × 12 reps</div>
+        </div>
+    </div>
+</div>
+
+<!-- Rest Overlay -->
+<div class="rest-overlay" id="restOverlay">
+    <div class="rest-title">Rest</div>
+    <div class="rest-timer" id="restTimer">00:58</div>
+    <button class="skip-rest-btn" onclick="skipRest()">Tap to skip</button>
+</div>
+
+<!-- Finish Modal -->
+<div class="finish-modal" id="finishModal">
+    <div class="finish-icon">🎉</div>
+    <div class="finish-title">Finish Workout?</div>
+    <div class="finish-message">You did not complete all the exercises.</div>
+    <div class="finish-buttons">
+        <button class="finish-save-btn" onclick="saveAndExit()">Save and Exit</button>
+        <button class="finish-exit-btn" onclick="exitWithoutSaving()">Exit without Saving</button>
+    </div>
+    <button class="skip-rest-btn" onclick="hideFinishModal()" style="margin-top: 20px;">
+        Return to workout
+    </button>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Workout data
+    const exercises = {{ exercises|safe }};
+    let currentExerciseIndex = 0;
+    let isPaused = false;
+    let restInterval = null;
+    let workoutData = [];
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+        loadExercise(0);
+    });
+
+    // Load exercise
+    function loadExercise(index) {
+        if (index >= exercises.length) {
+            completeWorkout();
+            return;
+        }
+
+        currentExerciseIndex = index;
+        const exercise = exercises[index];
+
+        // Update progress
+        document.getElementById('currentExercise').textContent = index + 1;
+
+        // Update image
+        if (exercise.image) {
+            document.getElementById('exerciseImage').src = exercise.image;
+            document.getElementById('exerciseImage').style.display = 'block';
+            document.getElementById('exercisePlaceholder').style.display = 'none';
+        } else {
+            document.getElementById('exerciseImage').style.display = 'none';
+            document.getElementById('exercisePlaceholder').style.display = 'flex';
+        }
+
+        // Update name
+        document.getElementById('exerciseName').textContent = exercise.name;
+
+        // Load sets
+        loadSets(exercise);
+
+        // Show up next
+        if (index < exercises.length - 1) {
+            const nextExercise = exercises[index + 1];
+            document.getElementById('upNext').style.display = 'block';
+            document.getElementById('upNextName').textContent = nextExercise.name;
+            document.getElementById('upNextSets').textContent = `${nextExercise.sets} × ${nextExercise.reps} reps`;
+        } else {
+            document.getElementById('upNext').style.display = 'none';
+        }
+    }
+
+    // Load sets
+    function loadSets(exercise) {
+        const tracker = document.getElementById('setsTracker');
+        tracker.innerHTML = '';
+
+        for (let i = 0; i < exercise.sets; i++) {
+            const setRow = document.createElement('div');
+            setRow.className = 'set-row';
+            setRow.innerHTML = `
+                <div class="set-number">Set ${i + 1}</div>
+                <input type="number" class="set-input" placeholder="-- kg" data-set="${i}" data-type="weight">
+                <input type="number" class="set-input" placeholder="${exercise.reps} Reps" data-set="${i}" data-type="reps" value="${exercise.reps}">
+                <button class="set-done-btn" onclick="toggleSet(${i})" id="setBtn${i}">✓</button>
+            `;
+            tracker.appendChild(setRow);
+        }
+    }
+
+    // Toggle set
+    function toggleSet(setIndex) {
+        const btn = document.getElementById(`setBtn${setIndex}`);
+        btn.classList.toggle('completed');
+        checkAllSetsCompleted();
+    }
+
+    // Check if all sets completed
+    function checkAllSetsCompleted() {
+        const buttons = document.querySelectorAll('.set-done-btn');
+        const allCompleted = Array.from(buttons).every(btn => btn.classList.contains('completed'));
+        document.getElementById('didItBtn').disabled = !allCompleted;
+    }
+
+    // Complete exercise
+    function completeExercise() {
+        // Save data
+        const exercise = exercises[currentExerciseIndex];
+        const sets = [];
+        document.querySelectorAll('.set-row').forEach((row, index) => {
+            sets.push({
+                weight: row.querySelector('[data-type="weight"]').value || 0,
+                reps: row.querySelector('[data-type="reps"]').value || 0
+            });
+        });
+
+        workoutData.push({
+            exercise: exercise.name,
+            sets: sets
+        });
+
+        // Start rest or next exercise
+        if (currentExerciseIndex < exercises.length - 1) {
+            startRest();
+        } else {
+            completeWorkout();
+        }
+    }
+
+    // Start rest
+    function startRest() {
+        const restTime = exercises[currentExerciseIndex].rest_seconds || 60;
+        let timeLeft = restTime;
+
+        document.getElementById('restOverlay').classList.add('active');
+        document.getElementById('restTimer').textContent = formatTime(timeLeft);
+
+        restInterval = setInterval(() => {
+            timeLeft--;
+            document.getElementById('restTimer').textContent = formatTime(timeLeft);
+
+            if (timeLeft <= 0) {
+                skipRest();
+            }
+        }, 1000);
+    }
+
+    // Skip rest
+    function skipRest() {
+        clearInterval(restInterval);
+        document.getElementById('restOverlay').classList.remove('active');
+        loadExercise(currentExerciseIndex + 1);
+    }
+
+    // Format time
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    // Toggle pause
+    function togglePause() {
+        isPaused = !isPaused;
+        const icon = document.getElementById('pauseIcon');
+        const text = document.getElementById('pauseText');
+
+        if (isPaused) {
+            icon.textContent = '▶';
+            text.textContent = 'Resume';
+        } else {
+            icon.textContent = '⏸';
+            text.textContent = 'Pause';
+        }
+    }
+
+    // Show finish modal
+    function showFinishModal() {
+        document.getElementById('finishModal').classList.add('active');
+    }
+
+    // Hide finish modal
+    function hideFinishModal() {
+        document.getElementById('finishModal').classList.remove('active');
+    }
+
+    // Save and exit
+    function saveAndExit() {
+        // Save workout data to backend
+        console.log('Workout data:', workoutData);
+        window.location.href = '/workouts/';
+    }
+
+    // Exit without saving
+    function exitWithoutSaving() {
+        if (confirm('Are you sure? Your progress will be lost.')) {
+            window.location.href = '/workouts/';
+        }
+    }
+
+    // Complete workout
+    function completeWorkout() {
+        document.getElementById('finishModal').querySelector('.finish-title').textContent = 'Great job!';
+        document.getElementById('finishModal').querySelector('.finish-message').textContent = 'You completed all exercises!';
+        document.getElementById('finishModal').classList.add('active');
+    }
+</script>
+
+<!-- Pass exercises data from Django -->
+<script>
+    // Convert Django data to JavaScript
+    const exercisesData = [
+        {% for workout_exercise in exercises %}
+        {
+            name: "{{ workout_exercise.exercise.name }}",
+            image: "{% if workout_exercise.exercise.image %}{{ workout_exercise.exercise.image.url }}{% endif %}",
+            sets: {{ workout_exercise.sets }},
+            reps: {{ workout_exercise.reps }},
+            rest_seconds: {{ workout_exercise.rest_seconds }}
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+    
+    // Replace placeholder
+    exercises = exercisesData;
+</script>
+{% endblock %}

@@ -1,0 +1,284 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ exercise.name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Exercise Title */
+    .exercise-title {
+        text-align: center;
+        padding: 20px;
+        font-size: 24px;
+        font-weight: 500;
+        color: #2c3e50;
+        background: white;
+    }
+
+    /* Media Container */
+    .media-container {
+        background: white;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .exercise-video {
+        width: 100%;
+        max-height: 500px;
+        border-radius: 10px;
+        background: #000;
+    }
+
+    .exercise-image {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 10px;
+    }
+
+    .media-placeholder {
+        width: 100%;
+        height: 400px;
+        background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 80px;
+        color: #999;
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        padding: 30px 20px;
+        background: white;
+        margin-bottom: 20px;
+    }
+
+    .action-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #666;
+        transition: transform 0.2s;
+    }
+
+    .action-btn:hover {
+        transform: scale(1.1);
+    }
+
+    .action-icon {
+        width: 60px;
+        height: 60px;
+        background: #f0f0f0;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        margin-bottom: 8px;
+        border: 2px solid #ddd;
+    }
+
+    .action-label {
+        font-size: 12px;
+        color: #666;
+    }
+
+    /* Description */
+    .description-section {
+        background: white;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 15px;
+    }
+
+    .description-text {
+        font-size: 15px;
+        line-height: 1.6;
+        color: #555;
+    }
+
+    /* Info Cards */
+    .info-cards {
+        padding: 0 20px 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 15px;
+    }
+
+    .info-card {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .info-icon {
+        font-size: 32px;
+        margin-bottom: 10px;
+    }
+
+    .info-label {
+        font-size: 12px;
+        color: #999;
+        margin-bottom: 5px;
+    }
+
+    .info-value {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .exercise-title {
+            font-size: 20px;
+            padding: 15px;
+        }
+
+        .action-buttons {
+            gap: 20px;
+            padding: 20px 10px;
+        }
+
+        .action-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 28px;
+        }
+
+        .info-cards {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Top Navigation -->
+<div class="top-nav">
+    <button class="back-btn" onclick="goBack()">‹</button>
+    <h1>EXERCISE</h1>
+    <button class="action-btn" onclick="toggleFavorite()">⭐</button>
+</div>
+
+<!-- Exercise Title -->
+<div class="exercise-title">
+    {{ exercise.name }}
+</div>
+
+<!-- Media Container -->
+<div class="media-container">
+    {% if exercise.video %}
+        <video class="exercise-video" controls>
+            <source src="{{ exercise.video.url }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    {% elif exercise.image %}
+        <img src="{{ exercise.image.url }}" alt="{{ exercise.name }}" class="exercise-image">
+    {% else %}
+        <div class="media-placeholder">💪</div>
+    {% endif %}
+</div>
+
+<!-- Action Buttons -->
+<div class="action-buttons">
+    <button class="action-btn" onclick="viewImage()">
+        <div class="action-icon">🖼️</div>
+        <span class="action-label">Image</span>
+    </button>
+    <button class="action-btn" onclick="playVideo()">
+        <div class="action-icon">▶️</div>
+        <span class="action-label">Video</span>
+    </button>
+    <button class="action-btn" onclick="viewInstructions()">
+        <div class="action-icon">📋</div>
+        <span class="action-label">Instructions</span>
+    </button>
+    <button class="action-btn favorite-toggle" onclick="toggleFavorite()">
+        <div class="action-icon" id="favoriteIcon">⭐</div>
+        <span class="action-label">Favorite</span>
+    </button>
+</div>
+
+<!-- Description -->
+{% if exercise.description %}
+<div class="description-section">
+    <h2 class="section-title">Ta'rif</h2>
+    <p class="description-text">{{ exercise.description }}</p>
+</div>
+{% endif %}
+
+<!-- Info Cards -->
+<div class="info-cards">
+    <div class="info-card">
+        <div class="info-icon">🎯</div>
+        <div class="info-label">Tana qismi</div>
+        <div class="info-value">{{ exercise.bodypart.name }}</div>
+    </div>
+    <div class="info-card">
+        <div class="info-icon">📅</div>
+        <div class="info-label">Qo'shilgan</div>
+        <div class="info-value">{{ exercise.created_at|date:"d.m.Y" }}</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function viewImage() {
+        {% if exercise.image %}
+            window.open('{{ exercise.image.url }}', '_blank');
+        {% else %}
+            alert('Rasm mavjud emas');
+        {% endif %}
+    }
+
+    function playVideo() {
+        {% if exercise.video %}
+            const video = document.querySelector('.exercise-video');
+            if (video) {
+                video.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                video.play();
+            }
+        {% else %}
+            alert('Video mavjud emas');
+        {% endif %}
+    }
+
+    function viewInstructions() {
+        {% if exercise.description %}
+            document.querySelector('.description-section').scrollIntoView({ behavior: 'smooth' });
+        {% else %}
+            alert('Ta\'rif mavjud emas');
+        {% endif %}
+    }
+
+    function toggleFavorite() {
+        const icon = document.getElementById('favoriteIcon');
+        if (icon.textContent === '⭐') {
+            icon.textContent = '★';
+            console.log('Added to favorites: {{ exercise.id }}');
+            // Keyinroq AJAX orqali backend'ga yuboramiz
+        } else {
+            icon.textContent = '⭐';
+            console.log('Removed from favorites: {{ exercise.id }}');
+            // Keyinroq AJAX orqali backend'ga yuboramiz
+        }
+    }
+</script>
+{% endblock %}

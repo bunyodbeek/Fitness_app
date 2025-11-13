@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+
+{% block title %}Workout Complete{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background: linear-gradient(135deg, #2c3e50 0%, #1a1a2e 100%);
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .complete-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+        text-align: center;
+    }
+
+    .complete-title {
+        font-size: 48px;
+        font-weight: 900;
+        color: white;
+        margin-bottom: 40px;
+    }
+
+    .stats-section {
+        width: 100%;
+        max-width: 400px;
+        margin-bottom: 50px;
+    }
+
+    .stats-header {
+        color: #ffd700;
+        font-size: 16px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 30px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #ffd700;
+    }
+
+    .stat-item {
+        margin-bottom: 35px;
+    }
+
+    .stat-value {
+        font-size: 42px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 5px;
+    }
+
+    .stat-label {
+        font-size: 16px;
+        color: #ffd700;
+        font-weight: 500;
+    }
+
+    .stat-time {
+        font-size: 56px;
+        font-weight: 700;
+        color: white;
+    }
+
+    .stat-time-unit {
+        font-size: 24px;
+        color: #ffd700;
+        margin-left: 5px;
+    }
+
+    .divider {
+        height: 1px;
+        background: linear-gradient(to right, transparent, #ffd700, transparent);
+        margin: 40px 0;
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        gap: 0;
+        background: #16213e;
+    }
+
+    .done-btn {
+        flex: 2;
+        background: #ffd700;
+        border: none;
+        color: #2c3e50;
+        padding: 20px;
+        font-size: 20px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .done-btn:hover {
+        background: #ffed4e;
+    }
+
+    .share-btn {
+        flex: 1;
+        background: #2c3e50;
+        border: none;
+        color: white;
+        padding: 20px;
+        font-size: 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+    }
+
+    .share-btn:hover {
+        background: #34495e;
+    }
+
+    /* Confetti Animation */
+    @keyframes confetti-fall {
+        0% {
+            transform: translateY(-100vh) rotate(0deg);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(100vh) rotate(720deg);
+            opacity: 0;
+        }
+    }
+
+    .confetti {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        background: #ffd700;
+        top: -10px;
+        animation: confetti-fall 3s linear infinite;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .complete-title {
+            font-size: 36px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+        }
+
+        .stat-time {
+            font-size: 48px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="complete-container">
+    <h1 class="complete-title">Great job!</h1>
+
+    <div class="stats-section">
+        <div class="stats-header">Your total workout</div>
+
+        <div class="stat-item">
+            <div class="stat-value">{{ total_reps }}</div>
+            <div class="stat-label">Reps</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="stat-item">
+            <div class="stat-value">{{ total_weight }}</div>
+            <div class="stat-label">kg</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="stat-item">
+            <div class="stat-time">
+                {{ workout_duration_minutes }}:{{ workout_duration_seconds }}
+                <span class="stat-time-unit">H</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="action-buttons">
+    <button class="done-btn" onclick="window.location.href='{% url 'workouts_home' %}'">
+        Done
+    </button>
+    <button class="share-btn" onclick="shareWorkout()">
+        🔗
+    </button>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Share workout
+    function shareWorkout() {
+        if (navigator.share) {
+            navigator.share({
+                title: 'My Workout',
+                text: `I just completed a workout! ${{{ total_reps }}} reps, ${{{ total_weight }}} kg in ${{{ workout_duration_minutes }}}:${{{ workout_duration_seconds }}} minutes! 💪`,
+                url: window.location.href
+            }).catch(err => console.log('Error sharing:', err));
+        } else {
+            alert('Share feature not available');
+        }
+    }
+
+    // Create confetti
+    function createConfetti() {
+        const colors = ['#ffd700', '#00ff00', '#00d2a0', '#667eea', '#ff6b35'];
+        for (let i = 0; i < 50; i++) {
+            setTimeout(() => {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(confetti);
+
+                setTimeout(() => confetti.remove(), 5000);
+            }, i * 30);
+        }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+        createConfetti();
+    });
+</script>
+{% endblock %}

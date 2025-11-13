@@ -1,0 +1,918 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Progress{% endblock %}
+
+{% block extra_css %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        min-height: 100vh;
+        position: relative;
+    }
+
+    /* Diagonal pattern background */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(255,255,255,0.02) 10px,
+            rgba(255,255,255,0.02) 20px
+        );
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    /* Header */
+    .page-header {
+        background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .back-btn {
+        background: none;
+        border: none;
+        color: #ffd700;
+        font-size: 32px;
+        cursor: pointer;
+        padding: 0;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s ease;
+    }
+
+    .back-btn:hover {
+        transform: translateX(-5px);
+    }
+
+    .page-title {
+        color: white;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        flex: 1;
+        text-align: center;
+        margin-right: 40px;
+    }
+
+    /* Content */
+    .progress-content {
+        padding: 20px;
+        padding-bottom: 100px;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Time Period Selector */
+    .period-selector {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 25px;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+
+    .period-selector::-webkit-scrollbar {
+        height: 3px;
+    }
+
+    .period-selector::-webkit-scrollbar-thumb {
+        background: #ffd700;
+        border-radius: 2px;
+    }
+
+    .period-btn {
+        padding: 10px 25px;
+        background: rgba(255,255,255,0.1);
+        border: 2px solid rgba(255,255,255,0.2);
+        color: #95a5a6;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 25px;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+    }
+
+    .period-btn.active {
+        background: #ffd700;
+        border-color: #ffd700;
+        color: #1a1a2e;
+    }
+
+    .period-btn:hover:not(.active) {
+        background: rgba(255,255,255,0.15);
+        border-color: rgba(255,255,255,0.3);
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .stat-card {
+        background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,215,0,0.05) 100%);
+        border: 2px solid rgba(255,215,0,0.2);
+        border-radius: 16px;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, transparent 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        border-color: #ffd700;
+        box-shadow: 0 10px 30px rgba(255,215,0,0.2);
+    }
+
+    .stat-card:hover::before {
+        opacity: 1;
+    }
+
+    .stat-icon {
+        font-size: 32px;
+        margin-bottom: 10px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .stat-value {
+        font-size: 32px;
+        font-weight: 900;
+        color: #ffd700;
+        margin-bottom: 5px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .stat-label {
+        font-size: 13px;
+        color: #95a5a6;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Chart Section */
+    .chart-section {
+        background: rgba(255,255,255,0.05);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 25px;
+        border: 2px solid rgba(255,255,255,0.1);
+    }
+
+    .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .chart-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: white;
+    }
+
+    .chart-filter {
+        background: rgba(255,215,0,0.2);
+        border: none;
+        color: #ffd700;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .chart-filter:hover {
+        background: rgba(255,215,0,0.3);
+    }
+
+    .chart-container {
+        height: 200px;
+        position: relative;
+    }
+
+    .chart-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-around;
+        gap: 8px;
+        padding: 20px 10px 0;
+    }
+
+    .chart-bar {
+        flex: 1;
+        background: linear-gradient(to top, #ffd700, #ffed4e);
+        border-radius: 8px 8px 0 0;
+        position: relative;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        min-height: 20px;
+    }
+
+    .chart-bar:hover {
+        background: linear-gradient(to top, #ffed4e, #fff176);
+        transform: translateY(-5px);
+    }
+
+    .chart-bar::after {
+        content: attr(data-value);
+        position: absolute;
+        top: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: white;
+        font-size: 12px;
+        font-weight: 700;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .chart-bar:hover::after {
+        opacity: 1;
+    }
+
+    .chart-labels {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 10px;
+    }
+
+    .chart-label {
+        font-size: 11px;
+        color: #7f8c8d;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+
+    /* Body Measurements */
+    .measurements-section {
+        background: rgba(255,255,255,0.05);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 25px;
+        border: 2px solid rgba(255,255,255,0.1);
+    }
+
+    .section-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .section-icon {
+        font-size: 24px;
+    }
+
+    .measurement-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .measurement-item:last-child {
+        border-bottom: none;
+    }
+
+    .measurement-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .measurement-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,215,0,0.1));
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+    }
+
+    .measurement-details {
+        flex: 1;
+    }
+
+    .measurement-name {
+        font-size: 15px;
+        color: white;
+        font-weight: 600;
+        margin-bottom: 3px;
+    }
+
+    .measurement-date {
+        font-size: 12px;
+        color: #7f8c8d;
+    }
+
+    .measurement-value {
+        font-size: 18px;
+        font-weight: 700;
+        color: #ffd700;
+    }
+
+    .measurement-change {
+        font-size: 13px;
+        font-weight: 600;
+        margin-left: 8px;
+    }
+
+    .measurement-change.positive {
+        color: #2ecc71;
+    }
+
+    .measurement-change.negative {
+        color: #e74c3c;
+    }
+
+    /* Achievements */
+    .achievements-section {
+        background: rgba(255,255,255,0.05);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 25px;
+        border: 2px solid rgba(255,255,255,0.1);
+    }
+
+    .achievements-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+
+    .achievement-badge {
+        aspect-ratio: 1;
+        background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,215,0,0.05));
+        border-radius: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid rgba(255,215,0,0.3);
+    }
+
+    .achievement-badge:hover {
+        transform: translateY(-5px);
+        background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,215,0,0.1));
+        border-color: #ffd700;
+        box-shadow: 0 10px 30px rgba(255,215,0,0.2);
+    }
+
+    .achievement-badge.locked {
+        opacity: 0.3;
+        cursor: default;
+    }
+
+    .achievement-badge.locked:hover {
+        transform: none;
+    }
+
+    .achievement-icon {
+        font-size: 36px;
+    }
+
+    .achievement-name {
+        font-size: 11px;
+        color: white;
+        font-weight: 600;
+        text-align: center;
+        line-height: 1.3;
+    }
+
+    /* Workout History */
+    .history-section {
+        background: rgba(255,255,255,0.05);
+        border-radius: 16px;
+        padding: 20px;
+        border: 2px solid rgba(255,255,255,0.1);
+    }
+
+    .history-item {
+        background: rgba(0,0,0,0.2);
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+    .history-item:hover {
+        background: rgba(0,0,0,0.3);
+        border-color: rgba(255,215,0,0.3);
+        transform: translateX(5px);
+    }
+
+    .history-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .history-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .history-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: white;
+    }
+
+    .history-date {
+        font-size: 12px;
+        color: #7f8c8d;
+    }
+
+    .history-stats {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .history-stat {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 13px;
+        color: #95a5a6;
+    }
+
+    .history-stat-value {
+        color: #ffd700;
+        font-weight: 700;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, #0f3460, #16213e);
+        display: flex;
+        justify-content: space-around;
+        padding: 12px 0;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+        z-index: 100;
+        border-top: 1px solid rgba(255,215,0,0.1);
+    }
+
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        padding: 8px 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-radius: 12px;
+        text-decoration: none;
+    }
+
+    .nav-item:hover {
+        background: rgba(255,255,255,0.1);
+    }
+
+    .nav-icon {
+        font-size: 24px;
+        color: #7f8c8d;
+        transition: all 0.3s ease;
+    }
+
+    .nav-label {
+        font-size: 11px;
+        color: #7f8c8d;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .nav-item.active .nav-icon {
+        color: #ffd700;
+        transform: scale(1.1);
+    }
+
+    .nav-item.active .nav-label {
+        color: #ffd700;
+        font-weight: 600;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .stat-card, .chart-section, .measurements-section, 
+    .achievements-section, .history-section {
+        animation: fadeInUp 0.5s ease forwards;
+    }
+
+    .stat-card:nth-child(1) { animation-delay: 0.1s; }
+    .stat-card:nth-child(2) { animation-delay: 0.2s; }
+    .stat-card:nth-child(3) { animation-delay: 0.3s; }
+    .stat-card:nth-child(4) { animation-delay: 0.4s; }
+    .chart-section { animation-delay: 0.5s; }
+    .measurements-section { animation-delay: 0.6s; }
+    .achievements-section { animation-delay: 0.7s; }
+    .history-section { animation-delay: 0.8s; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .achievements-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .stat-value {
+            font-size: 28px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="page-header">
+    <button class="back-btn" onclick="window.history.back()">‹</button>
+    <h1 class="page-title">PROGRESS</h1>
+</div>
+
+<!-- Content -->
+<div class="progress-content">
+    <!-- Period Selector -->
+    <div class="period-selector">
+        <button class="period-btn">Today</button>
+        <button class="period-btn active">This Week</button>
+        <button class="period-btn">This Month</button>
+        <button class="period-btn">This Year</button>
+        <button class="period-btn">All Time</button>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">🏋️</div>
+            <div class="stat-value">{{ total_workouts|default:"24" }}</div>
+            <div class="stat-label">Workouts</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-value">{{ total_calories|default:"5.2k" }}</div>
+            <div class="stat-label">Calories</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">💪</div>
+            <div class="stat-value">{{ total_weight|default:"8.5k" }}</div>
+            <div class="stat-label">Weight (kg)</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">⏱️</div>
+            <div class="stat-value">{{ total_time|default:"18h" }}</div>
+            <div class="stat-label">Training Time</div>
+        </div>
+    </div>
+
+    <!-- Chart Section -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h3 class="chart-title">Weekly Activity</h3>
+            <button class="chart-filter">Workouts</button>
+        </div>
+        <div class="chart-container">
+            <div class="chart-placeholder">
+                <div class="chart-bar" style="height: 45%;" data-value="3"></div>
+                <div class="chart-bar" style="height: 70%;" data-value="5"></div>
+                <div class="chart-bar" style="height: 30%;" data-value="2"></div>
+                <div class="chart-bar" style="height: 85%;" data-value="6"></div>
+                <div class="chart-bar" style="height: 55%;" data-value="4"></div>
+                <div class="chart-bar" style="height: 90%;" data-value="7"></div>
+                <div class="chart-bar" style="height: 40%;" data-value="3"></div>
+            </div>
+        </div>
+        <div class="chart-labels">
+            <span class="chart-label">Mon</span>
+            <span class="chart-label">Tue</span>
+            <span class="chart-label">Wed</span>
+            <span class="chart-label">Thu</span>
+            <span class="chart-label">Fri</span>
+            <span class="chart-label">Sat</span>
+            <span class="chart-label">Sun</span>
+        </div>
+    </div>
+
+    <!-- Body Measurements -->
+    <div class="measurements-section">
+        <h3 class="section-title">
+            <span class="section-icon">📏</span>
+            Body Measurements
+        </h3>
+
+        <div class="measurement-item">
+            <div class="measurement-info">
+                <div class="measurement-icon">⚖️</div>
+                <div class="measurement-details">
+                    <div class="measurement-name">Weight</div>
+                    <div class="measurement-date">Updated today</div>
+                </div>
+            </div>
+            <div>
+                <span class="measurement-value">72.5 kg</span>
+                <span class="measurement-change negative">↓ 2.5 kg</span>
+            </div>
+        </div>
+
+        <div class="measurement-item">
+            <div class="measurement-info">
+                <div class="measurement-icon">💪</div>
+                <div class="measurement-details">
+                    <div class="measurement-name">Muscle Mass</div>
+                    <div class="measurement-date">Updated 2 days ago</div>
+                </div>
+            </div>
+            <div>
+                <span class="measurement-value">45.2 kg</span>
+                <span class="measurement-change positive">↑ 1.8 kg</span>
+            </div>
+        </div>
+
+        <div class="measurement-item">
+            <div class="measurement-info">
+                <div class="measurement-icon">📊</div>
+                <div class="measurement-details">
+                    <div class="measurement-name">Body Fat</div>
+                    <div class="measurement-date">Updated 2 days ago</div>
+                </div>
+            </div>
+            <div>
+                <span class="measurement-value">18.5%</span>
+                <span class="measurement-change negative">↓ 2.1%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievements -->
+    <div class="achievements-section">
+        <h3 class="section-title">
+            <span class="section-icon">🏆</span>
+            Achievements
+        </h3>
+
+        <div class="achievements-grid">
+            <div class="achievement-badge">
+                <div class="achievement-icon">🔥</div>
+                <div class="achievement-name">7 Day Streak</div>
+            </div>
+
+            <div class="achievement-badge">
+                <div class="achievement-icon">💯</div>
+                <div class="achievement-name">100 Workouts</div>
+            </div>
+
+            <div class="achievement-badge">
+                <div class="achievement-icon">⚡</div>
+                <div class="achievement-name">Speed Demon</div>
+            </div>
+
+            <div class="achievement-badge">
+                <div class="achievement-icon">💪</div>
+                <div class="achievement-name">Strength King</div>
+            </div>
+
+            <div class="achievement-badge locked">
+                <div class="achievement-icon">🎯</div>
+                <div class="achievement-name">Goal Master</div>
+            </div>
+
+            <div class="achievement-badge locked">
+                <div class="achievement-icon">👑</div>
+                <div class="achievement-name">Champion</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workout History -->
+    <div class="history-section">
+        <h3 class="section-title">
+            <span class="section-icon">📋</span>
+            Recent Workouts
+        </h3>
+
+        <div class="history-item">
+            <div class="history-header">
+                <div class="history-title">Upper Body Blast</div>
+                <div class="history-date">Today, 10:30 AM</div>
+            </div>
+            <div class="history-stats">
+                <div class="history-stat">
+                    <span>💪</span>
+                    <span class="history-stat-value">12</span> exercises
+                </div>
+                <div class="history-stat">
+                    <span>⏱️</span>
+                    <span class="history-stat-value">45</span> min
+                </div>
+                <div class="history-stat">
+                    <span>🔥</span>
+                    <span class="history-stat-value">320</span> cal
+                </div>
+            </div>
+        </div>
+
+        <div class="history-item">
+            <div class="history-header">
+                <div class="history-title">Leg Day</div>
+                <div class="history-date">Yesterday, 6:00 PM</div>
+            </div>
+            <div class="history-stats">
+                <div class="history-stat">
+                    <span>💪</span>
+                    <span class="history-stat-value">10</span> exercises
+                </div>
+                <div class="history-stat">
+                    <span>⏱️</span>
+                    <span class="history-stat-value">52</span> min
+                </div>
+                <div class="history-stat">
+                    <span>🔥</span>
+                    <span class="history-stat-value">410</span> cal
+                </div>
+            </div>
+        </div>
+
+        <div class="history-item">
+            <div class="history-header">
+                <div class="history-title">Core & Cardio</div>
+                <div class="history-date">2 days ago, 7:30 AM</div>
+            </div>
+            <div class="history-stats">
+                <div class="history-stat">
+                    <span>💪</span>
+                    <span class="history-stat-value">8</span> exercises
+                </div>
+                <div class="history-stat">
+                    <span>⏱️</span>
+                    <span class="history-stat-value">38</span> min
+                </div>
+                <div class="history-stat">
+                    <span>🔥</span>
+                    <span class="history-stat-value">280</span> cal
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{#<!-- Bottom Navigation -->#}
+{#<div class="bottom-nav">#}
+{#    <a href="{% url 'exercises' %}" class="nav-item">#}
+{#        <div class="nav-icon">🏋️</div>#}
+{#        <div class="nav-label">Exercises</div>#}
+{#    </a>#}
+{#    <a href="{% url 'workouts' %}" class="nav-item">#}
+{#        <div class="nav-icon">📋</div>#}
+{#        <div class="nav-label">Workouts</div>#}
+{#    </a>#}
+{#    <a href="{% url 'my_trainer' %}" class="nav-item">#}
+{#        <div class="nav-icon">👤</div>#}
+{#        <div class="nav-label">My Trainer</div>#}
+{#    </a>#}
+{#    <a href="{% url 'tips' %}" class="nav-item">#}
+{#        <div class="nav-icon">💡</div>#}
+{#        <div class="nav-label">Tips</div>#}
+{#    </a>#}
+{#    <a href="{% url 'profile' %}" class="nav-item active">#}
+{#        <div class="nav-icon">👤</div>#}
+{#        <div class="nav-label">Profile</div>#}
+{#    </a>#}
+{#</div>#}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Period selector
+    document.querySelectorAll('.period-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            // Here you can add AJAX call to load data for selected period
+        });
+    });
+
+    // Chart filter
+    document.querySelector('.chart-filter').addEventListener('click', function() {
+        // Toggle between different metrics
+        const metrics = ['Workouts', 'Calories', 'Weight', 'Time'];
+        const current = this.textContent;
+        const nextIndex = (metrics.indexOf(current) + 1) % metrics.length;
+        this.textContent = metrics[nextIndex];
+        // Here you can add logic to update chart data
+    });
+
+    // Achievement badges
+    document.querySelectorAll('.achievement-badge:not(.locked)').forEach(badge => {
+        badge.addEventListener('click', function() {
+            // Show achievement details modal
+            const name = this.querySelector('.achievement-name').textContent;
+            alert(`Achievement: ${name}\n\nCongratulations! You've earned this badge!`);
+        });
+    });
+
+    // History items
+    document.querySelectorAll('.history-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const title = this.querySelector('.history-title').textContent;
+            // Navigate to workout detail page
+            console.log('View workout:', title);
+        });
+    });
+
+    // Animate stats on load
+    document.addEventListener('DOMContentLoaded', function() {
+        const statValues = document.querySelectorAll('.stat-value');
+        statValues.forEach((stat, index) => {
+            setTimeout(() => {
+                stat.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    stat.style.transform = 'scale(1)';
+                }, 300);
+            }, index * 100);
+        });
+    });
+</script>
+{% endblock %}

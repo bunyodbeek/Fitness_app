@@ -1,0 +1,553 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Settings{% endblock %}
+
+{% block extra_css %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Diagonal pattern background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 10px,
+                    rgba(255, 255, 255, 0.02) 10px,
+                    rgba(255, 255, 255, 0.02) 20px
+            );
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #ffd700;
+            font-size: 32px;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+        }
+
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            flex: 1;
+            text-align: center;
+            margin-right: 40px;
+        }
+
+        /* Content */
+        .settings-content {
+            padding: 20px;
+            padding-bottom: 100px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Subscription Card */
+        .subscription-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            text-align: center;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .subscription-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 215, 0, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+        }
+
+        .subscription-label {
+            font-size: 13px;
+            color: #95a5a6;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .subscription-days {
+            font-size: 36px;
+            font-weight: 900;
+            color: #ffd700;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #f39c12);
+            border-radius: 10px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.3),
+                    transparent
+            );
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        /* Settings Groups */
+        .settings-group {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 15px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        .setting-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .setting-item:hover::before {
+            left: 100%;
+        }
+
+        .setting-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(8px);
+            padding-left: 20px;
+        }
+
+        .setting-item:active {
+            transform: translateX(4px) scale(0.98);
+        }
+
+        .setting-icon-wrapper {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.05));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.15);
+        }
+
+        .setting-item:hover .setting-icon-wrapper {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.35), rgba(255, 215, 0, 0.15));
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .setting-icon {
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .setting-item:hover .setting-icon {
+            transform: scale(1.1);
+        }
+
+        .setting-text {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .setting-item:hover .setting-text {
+            color: #ffd700;
+        }
+
+        .setting-arrow {
+            font-size: 24px;
+            color: #7f8c8d;
+            transition: all 0.4s ease;
+            font-weight: 700;
+        }
+
+        .setting-item:hover .setting-arrow {
+            color: #ffd700;
+            transform: translateX(8px) scale(1.2);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, #0f3460, #16213e);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            border-top: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: #ffd700;
+            transition: width 0.3s ease;
+            border-radius: 2px 2px 0 0;
+        }
+
+        .nav-item:hover::before,
+        .nav-item.active::before {
+            width: 80%;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            color: #7f8c8d;
+            transition: all 0.3s ease;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            color: #7f8c8d;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover .nav-icon,
+        .nav-item.active .nav-icon {
+            color: #ffd700;
+            transform: translateY(-3px) scale(1.1);
+        }
+
+        .nav-item:hover .nav-label,
+        .nav-item.active .nav-label {
+            color: #ffd700;
+            font-weight: 600;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .subscription-card {
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .settings-group {
+            animation: slideInLeft 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        .settings-group:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .settings-group:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .settings-group:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .subscription-days {
+                font-size: 32px;
+            }
+
+            .setting-text {
+                font-size: 15px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+<div class="page-header">
+    <button class="back-btn" onclick="window.history.back()">‹</button>
+    <h1 class="page-title">SETTINGS</h1>
+</div>
+
+<!-- Content -->
+<div class="settings-content">
+    <!-- Subscription Card -->
+    <div class="subscription-card">
+        <div class="subscription-label">Obuna tugashiga</div>
+        <div class="subscription-days">{{ days_remaining|default:"19" }} kun</div>
+        <div class="progress-container">
+            <div class="progress-bar" style="width: {{ subscription_progress|default:'63' }}%;"></div>
+        </div>
+    </div>
+
+    <!-- Account Settings Group -->
+    <div class="settings-group">
+        <div class="setting-item" onclick="">
+            <div class="setting-icon-wrapper">
+                <div class="setting-icon">✏️</div>
+            </div>
+            <div class="setting-text">Ma'lumotlarni o'zgartirish</div>
+            <div class="setting-arrow">›</div>
+        </div>
+
+        <div class="setting-item" onclick="">
+            <div class="setting-icon-wrapper">
+                <div class="setting-icon">⚙️</div>
+            </div>
+            <div class="setting-text">Obunani boshqarish</div>
+            <div class="setting-arrow">›</div>
+        </div>
+
+        <div class="setting-item" onclick="window.location.href='{% url 'payment_history' %}'">
+            <div class="setting-icon-wrapper">
+                <div class="setting-icon">💳</div>
+            </div>
+            <div class="setting-text">To'lovlar tarixi</div>
+            <div class="setting-arrow">›</div>
+        </div>
+    </div>
+
+    <!-- Support Group -->
+    <div class="settings-group">
+        <div class="setting-item" onclick="">
+            <div class="setting-icon-wrapper">
+                <div class="setting-icon">📄</div>
+            </div>
+            <div class="setting-text">Shartnoma</div>
+            <div class="setting-arrow">›</div>
+        </div>
+
+        <div class="setting-item" onclick="">
+            <div class="setting-icon-wrapper">
+                <div class="setting-icon">❓</div>
+            </div>
+            <div class="setting-text">FAQ</div>
+            <div class="setting-arrow">›</div>
+        </div>
+
+        <div class="setting-item" onclick="">
+            <div class="setting-icon-wrapper">
+                <div class="setting-icon">💬</div>
+            </div>
+            <div class="setting-text">Aloqa</div>
+            <div class="setting-arrow">›</div>
+        </div>
+
+        <div class="setting-item" onclick="">
+            <div class="setting-icon-wrapper">
+                <div class="setting-icon">🌐</div>
+            </div>
+            <div class="setting-text">Til sozlamalari</div>
+            <div class="setting-arrow">›</div>
+        </div>
+    </div>
+
+    <!-- App Info -->
+    <div class="settings-group" style="animation-delay: 0.4s;">
+        <div class="setting-item" onclick="">
+            <div class="setting-icon-wrapper">
+                <div class="setting-icon">ℹ️</div>
+            </div>
+            <div class="setting-text">Ilova haqida</div>
+            <div class="setting-arrow">›</div>
+        </div>
+
+        <div class="setting-item" onclick="logout()">
+            <div class="setting-icon-wrapper">
+                <div class="setting-icon">🚪</div>
+            </div>
+            <div class="setting-text" style="color: #e74c3c;">Chiqish</div>
+            <div class="setting-arrow">›</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<!-- Bottom Navigation -->
+{#<div class="bottom-nav">#}
+{#    <a href="{% url 'exercises' %}" class="nav-item">#}
+{#        <div class="nav-icon">🏋️</div>#}
+{#        <div class="nav-label">Exercises</div>#}
+{#    </a>#}
+{#    <a href="{% url 'workouts' %}" class="nav-item">#}
+{#        <div class="nav-icon">📋</div>#}
+{#        <div class="nav-label">Workouts</div>#}
+{#    </a>#}
+{#    <a href="{% url 'my_trainer' %}" class="nav-item">#}
+{#        <div class="nav-icon">👤</div>#}
+{#        <div class="nav-label">My Trainer</div>#}
+{#    </a>#}
+{#    <a href="{% url 'tips' %}" class="nav-item">#}
+{#        <div class="nav-icon">💡</div>#}
+{#        <div class="nav-label">Tips</div>#}
+{#    </a>#}
+{#    <a href="{% url 'profile' %}" class="nav-item active">#}
+{#        <div class="nav-icon">👤</div>#}
+{#        <div class="nav-label">Profile</div>#}
+{#    </a>#}
+{#</div>#}
+{#{% endblock %}#}
+
+{% block extra_js %}
+{#    <script>/#}
+        // Logout function
+        {#function logout() {#}
+        {#    if (confirm('Haqiqatan ham chiqmoqchimisiz?')) {#}
+        {#        window.location.href = '{% url "logout" %}';#}
+        {#    }#}
+        }
+
+        // Animate progress bar on load
+        document.addEventListener('DOMContentLoaded', function () {
+            const progressBar = document.querySelector('.progress-bar');
+            if (progressBar) {
+                const targetWidth = progressBar.style.width;
+                progressBar.style.width = '0%';
+                setTimeout(() => {
+                    progressBar.style.width = targetWidth;
+                }, 300);
+            }
+        });
+{#    </script>#}
+{% endblock %}

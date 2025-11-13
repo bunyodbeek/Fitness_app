@@ -1,0 +1,292 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ program.title }} - Editions{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Program Header */
+    .program-header {
+        position: relative;
+        height: 250px;
+        overflow: hidden;
+    }
+
+    .program-header-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .program-header-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        padding: 40px 20px 20px;
+        color: white;
+    }
+
+    .program-logo {
+        font-size: 48px;
+        font-weight: 900;
+        color: #ffd700;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .program-subtitle {
+        font-size: 16px;
+        opacity: 0.9;
+        margin-bottom: 5px;
+    }
+
+    /* Program Info */
+    .program-info {
+        background: white;
+        padding: 20px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .info-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 12px;
+    }
+
+    .info-text {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #666;
+        margin-bottom: 15px;
+    }
+
+    .info-highlight {
+        background: #fff3cd;
+        border-left: 4px solid #ffd700;
+        padding: 12px 15px;
+        border-radius: 4px;
+        font-size: 14px;
+        color: #856404;
+        margin-bottom: 15px;
+    }
+
+    /* Section Title */
+    .section-title {
+        background: white;
+        padding: 20px;
+        font-size: 20px;
+        font-weight: 700;
+        color: #2c3e50;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Editions List */
+    .editions-list {
+        padding: 0;
+    }
+
+    .edition-card {
+        background: white;
+        margin-bottom: 2px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.3s;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .edition-card:hover {
+        background: #f8f9fa;
+        padding-left: 30px;
+    }
+
+    .edition-number {
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        font-weight: 900;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    /* Edition Colors */
+    .edition-1 { background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%); }
+    .edition-2 { background: linear-gradient(135deg, #8B5CF6 0%, #A855F7 100%); }
+    .edition-3 { background: linear-gradient(135deg, #10B981 0%, #059669 100%); }
+    .edition-4 { background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); }
+
+    .edition-content {
+        flex: 1;
+    }
+
+    .edition-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 5px;
+    }
+
+    .edition-meta {
+        font-size: 13px;
+        color: #999;
+    }
+
+    .edition-arrow {
+        font-size: 24px;
+        color: #ccc;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+        background: white;
+        padding: 20px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 5px;
+    }
+
+    .stat-label {
+        font-size: 12px;
+        color: #999;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .program-header {
+            height: 200px;
+        }
+
+        .program-logo {
+            font-size: 36px;
+        }
+
+        .edition-number {
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+        }
+
+        .edition-title {
+            font-size: 16px;
+        }
+
+        .stats-bar {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Top Navigation -->
+<div class="top-nav">
+    <button class="back-btn" onclick="goBack()">‹</button>
+    <h1>EDITIONS</h1>
+    <span></span>
+</div>
+
+<!-- Program Header -->
+<div class="program-header">
+    {% if program.image %}
+        <img src="{{ program.image.url }}" alt="{{ program.title }}" class="program-header-image">
+    {% else %}
+        <div class="placeholder-image">{{ program.title|slice:":3"|upper }}</div>
+    {% endif %}
+    
+    <div class="program-header-overlay">
+        <div class="program-logo">GET IN SHAPE</div>
+        <div class="program-subtitle">{{ program.title }}</div>
+    </div>
+</div>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+    <div class="stat-item">
+        <div class="stat-value">{{ editions.count }}</div>
+        <div class="stat-label">Editions</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-value">{{ program.editions.first.duration_weeks|default:"4-6" }}</div>
+        <div class="stat-label">Weeks</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-value">{{ program.editions.first.days_per_week|default:"3" }}</div>
+        <div class="stat-label">Days/Week</div>
+    </div>
+</div>
+
+<!-- Program Info -->
+<div class="program-info">
+    <h2 class="info-title">About this program</h2>
+    <p class="info-text">{{ program.description }}</p>
+    
+    <div class="info-highlight">
+        💡 <strong>Tip:</strong> Do each workout edition for 4-6 weeks, and then move on to other ones.
+    </div>
+</div>
+
+<!-- Section Title -->
+<div class="section-title">Choose Your Edition</div>
+
+<!-- Editions List -->
+<div class="editions-list">
+    {% for edition in editions %}
+    <a href="{% url 'workouts:edition_detail' edition.id %}" class="edition-card">
+        <div class="edition-number edition-{{ forloop.counter }}">
+            {{ forloop.counter }}
+        </div>
+        <div class="edition-content">
+            <div class="edition-title">{{ edition.title }}</div>
+            <div class="edition-meta">
+                {{ edition.duration_weeks }} weeks • {{ edition.days_per_week }} days/week
+            </div>
+        </div>
+        <div class="edition-arrow">›</div>
+    </a>
+    {% empty %}
+    <div class="empty-state">
+        <div class="icon">📋</div>
+        <h3>No editions available</h3>
+        <p>Check back later for workout editions</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Animation on scroll
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.edition-card');
+        
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 100);
+        });
+    });
+</script>
+{% endblock %}
