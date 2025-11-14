@@ -32,6 +32,7 @@ class Edition(Model):
     description = CharField()
     image = ImageField(upload_to='editions/', null=True, blank=True)
     color = CharField(max_length=7, default='#FF6B35', help_text="Kartochka rangi (hex)")
+    exercise = ForeignKey('apps.Exercise', on_delete=CASCADE, related_name='editions')
 
     class Meta:
         ordering = ['order']

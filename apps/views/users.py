@@ -291,13 +291,13 @@ class PaymentHistoryView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['payments'] = PaymentHistory.objects.filter(user=self.request.user)
+        context['payments'] = PaymentHistory.objects.filter(user=self.request.user.profile)
         return context
 
 
 class CancelSubscriptionView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
-        profile = UserProfile.objects.get(user=request.user)
+        profile = UserProfile.objects.get(user=request.user.profile)
         profile.subscription_end_date = None
         profile.subscription_start_date = None
         profile.save()

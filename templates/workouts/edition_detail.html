@@ -297,7 +297,7 @@
 <!-- Workouts List -->
 {% if workouts %}
     {% for workout in workouts %}
-    <a href="{% url 'workouts:workout_detail' workout.id %}" class="workout-card">
+    <a href="{% url 'workout_detail' workout.id %}" class="workout-card">
         <!-- Workout Header -->
         <div class="workout-header">
             <div class="workout-day">

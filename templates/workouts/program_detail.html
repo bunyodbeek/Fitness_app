@@ -253,7 +253,7 @@
 <!-- Editions List -->
 <div class="editions-list">
     {% for edition in editions %}
-    <a href="{% url 'workouts:edition_detail' edition.id %}" class="edition-card">
+    <a href="{% url 'edition_detail' edition.id %}" class="edition-card">
         <div class="edition-number edition-{{ forloop.counter }}">
             {{ forloop.counter }}
         </div>

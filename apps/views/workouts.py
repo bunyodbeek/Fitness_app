@@ -30,17 +30,17 @@ class ProgramDetailView(DetailView):
         return context
 
 
+
 class EditionDetailView(DetailView):
-    """Edition detali - Workoutlar ro'yxati"""
     model = Edition
     template_name = 'workouts/edition_detail.html'
     context_object_name = 'edition'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['workouts'] = self.object.workouts.prefetch_related(
-            'workout_exercises__exercise'
-        ).all()
+
+        context['workouts'] = self.object.workouts.all().select_related('edition')
+
         return context
 
 

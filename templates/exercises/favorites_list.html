@@ -1,585 +1,374 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}My Favorites{% endblock %}
+{% block title %}Mening Sevimlilarim{% endblock %}
 
 {% block extra_css %}
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        min-height: 100vh;
-        position: relative;
-    }
-
-    body::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 10px,
-            rgba(255,255,255,0.02) 10px,
-            rgba(255,255,255,0.02) 20px
-        );
-        pointer-events: none;
-        z-index: 0;
-    }
-
-    /* Header */
-    .page-header {
-        background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
-        padding: 15px 20px;
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    }
-
-    .back-btn {
-        background: none;
-        border: none;
-        color: #ffd700;
-        font-size: 32px;
-        cursor: pointer;
-        padding: 0;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: transform 0.3s ease;
-    }
-
-    .back-btn:hover {
-        transform: translateX(-5px);
-    }
-
-    .page-title {
-        color: white;
-        font-size: 20px;
-        font-weight: 700;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        flex: 1;
-        text-align: center;
-        margin-right: 40px;
-    }
-
-    /* Content */
-    .favorites-content {
-        padding: 20px;
-        padding-bottom: 100px;
-        position: relative;
-        z-index: 1;
-    }
-
-    /* Tabs */
-    .favorites-tabs {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 25px;
-        overflow-x: auto;
-        padding-bottom: 5px;
-    }
-
-    .favorites-tabs::-webkit-scrollbar {
-        height: 3px;
-    }
-
-    .favorites-tabs::-webkit-scrollbar-thumb {
-        background: #ffd700;
-        border-radius: 2px;
-    }
-
-    .tab-btn {
-        padding: 10px 20px;
-        background: rgba(255,255,255,0.05);
-        border: 2px solid rgba(255,255,255,0.1);
-        color: #95a5a6;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        border-radius: 20px;
-        white-space: nowrap;
-        transition: all 0.3s ease;
-    }
-
-    .tab-btn.active {
-        background: linear-gradient(135deg, #ffd700, #f39c12);
-        border-color: #ffd700;
-        color: #1a1a2e;
-    }
-
-    .tab-btn:hover:not(.active) {
-        background: rgba(255,255,255,0.08);
-        border-color: rgba(255,215,0,0.3);
-    }
-
-    /* Collections Grid */
-    .collections-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-        margin-bottom: 30px;
-    }
-
-    .collection-card {
-        background: rgba(255,255,255,0.05);
-        border: 2px solid rgba(255,255,255,0.1);
-        border-radius: 16px;
-        padding: 20px;
-        cursor: pointer;
-        transition: all 0.4s ease;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .collection-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,215,0,0.1), transparent);
-        transition: left 0.5s ease;
-    }
-
-    .collection-card:hover::before {
-        left: 100%;
-    }
-
-    .collection-card:hover {
-        background: rgba(255,255,255,0.08);
-        border-color: rgba(255,215,0,0.5);
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(255,215,0,0.2);
-    }
-
-    .collection-icon {
-        font-size: 40px;
-        margin-bottom: 10px;
-    }
-
-    .collection-name {
-        font-size: 16px;
-        font-weight: 700;
-        color: white;
-        margin-bottom: 5px;
-    }
-
-    .collection-count {
-        font-size: 13px;
-        color: #ffd700;
-        font-weight: 600;
-    }
-
-    /* Items List */
-    .favorites-list {
-        display: grid;
-        gap: 15px;
-    }
-
-    .favorite-item {
-        background: rgba(255,255,255,0.05);
-        border: 2px solid rgba(255,255,255,0.1);
-        border-radius: 16px;
-        padding: 15px;
-        display: flex;
-        gap: 15px;
-        cursor: pointer;
-        transition: all 0.4s ease;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .favorite-item::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,215,0,0.1), transparent);
-        transition: left 0.5s ease;
-    }
-
-    .favorite-item:hover::before {
-        left: 100%;
-    }
-
-    .favorite-item:hover {
-        background: rgba(255,255,255,0.08);
-        border-color: rgba(255,215,0,0.5);
-        transform: translateX(5px);
-        box-shadow: 0 8px 25px rgba(255,215,0,0.2);
-    }
-
-    .favorite-thumbnail {
-        width: 80px;
-        height: 80px;
-        border-radius: 12px;
-        object-fit: cover;
-        background: linear-gradient(135deg, #2c3e50, #34495e);
-        flex-shrink: 0;
-    }
-
-    .favorite-info {
-        flex: 1;
-        position: relative;
-        z-index: 1;
-    }
-
-    .favorite-title {
-        font-size: 16px;
-        font-weight: 700;
-        color: white;
-        margin-bottom: 5px;
-    }
-
-    .favorite-meta {
-        font-size: 13px;
-        color: #7f8c8d;
-        margin-bottom: 8px;
-    }
-
-    .favorite-tags {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-    }
-
-    .favorite-tag {
-        font-size: 11px;
-        background: rgba(255,215,0,0.1);
-        color: #ffd700;
-        padding: 4px 10px;
-        border-radius: 12px;
-        border: 1px solid rgba(255,215,0,0.2);
-    }
-
-    .unfavorite-btn {
-        width: 40px;
-        height: 40px;
-        background: rgba(255,215,0,0.2);
-        border: 2px solid rgba(255,215,0,0.3);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-        color: #ffd700;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        flex-shrink: 0;
-    }
-
-    .unfavorite-btn:hover {
-        background: rgba(255,215,0,0.3);
-        border-color: #ffd700;
-        transform: scale(1.1) rotate(10deg);
-    }
-
-    /* Empty State */
-    .empty-state {
-        text-align: center;
-        padding: 80px 20px;
-        color: white;
-    }
-
-    .empty-state-icon {
-        font-size: 80px;
-        margin-bottom: 20px;
-        opacity: 0.5;
-    }
-
-    .empty-state h3 {
-        font-size: 24px;
-        font-weight: 700;
-        margin-bottom: 10px;
-        color: #ffd700;
-    }
-
-    .empty-state p {
-        font-size: 16px;
-        color: #95a5a6;
-    }
-
-    /* Bottom Navigation */
-    .bottom-nav {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: linear-gradient(to top, #0f3460, #16213e);
-        display: flex;
-        justify-content: space-around;
-        padding: 8px 0;
-        box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
-        z-index: 100;
-        border-top: 1px solid rgba(255,215,0,0.1);
-    }
-
-    .nav-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 3px;
-        padding: 6px 12px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        border-radius: 12px;
-        text-decoration: none;
-        position: relative;
-    }
-
-    .nav-item::before {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 0;
-        height: 2px;
-        background: #ffd700;
-        transition: width 0.3s ease;
-        border-radius: 2px 2px 0 0;
-    }
-
-    .nav-item:hover::before,
-    .nav-item.active::before {
-        width: 80%;
-    }
-
-    .nav-item:hover {
-        background: rgba(255,255,255,0.1);
-    }
-
-    .nav-icon {
-        font-size: 20px;
-        color: #7f8c8d;
-        transition: all 0.3s ease;
-    }
-
-    .nav-label {
-        font-size: 10px;
-        color: #7f8c8d;
-        font-weight: 500;
-        transition: all 0.3s ease;
-    }
-
-    .nav-item:hover .nav-icon,
-    .nav-item.active .nav-icon {
-        color: #ffd700;
-        transform: translateY(-3px) scale(1.1);
-    }
-
-    .nav-item:hover .nav-label,
-    .nav-item.active .nav-label {
-        color: #ffd700;
-        font-weight: 600;
-    }
-
-    /* Animations */
-    @keyframes slideInLeft {
-        from {
-            opacity: 0;
-            transform: translateX(-50px);
+    <style>
+        /* Global Stillar */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        to {
-            opacity: 1;
-            transform: translateX(0);
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            font-family: 'Poppins', sans-serif; /* Zamonaviy shrift */
+            min-height: 100vh;
+            position: relative;
         }
-    }
 
-    .favorite-item,
-    .collection-card {
-        animation: slideInLeft 0.5s ease;
-        opacity: 0;
-        animation-fill-mode: forwards;
-    }
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
 
-    .favorite-item:nth-child(1),
-    .collection-card:nth-child(1) { animation-delay: 0.1s; }
-    .favorite-item:nth-child(2),
-    .collection-card:nth-child(2) { animation-delay: 0.2s; }
-    .favorite-item:nth-child(3),
-    .collection-card:nth-child(3) { animation-delay: 0.3s; }
-    .favorite-item:nth-child(4),
-    .collection-card:nth-child(4) { animation-delay: 0.4s; }
+        .back-btn {
+            background: none;
+            border: none;
+            color: #ffd700;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-        .collections-grid {
-            grid-template-columns: 1fr;
+        .page-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            flex: 1;
+            text-align: center;
+        }
+
+        /* Content Wrapper */
+        .favorites-content {
+            padding: 20px;
+            padding-bottom: 100px;
+            position: relative;
+            z-index: 1;
+            max-width: 800px; /* List uchun optimal kenglik */
+            margin: 0 auto;
+        }
+
+        /* Statistika Stillari */
+        .favorite-stats {
+            color: #95a5a6;
+            font-size: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .favorite-stats span {
+            color: #ffd700;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        /* Tabs (Minimal) */
+        .favorites-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #95a5a6;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 15px;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #ffd700, #f39c12);
+            border-color: #ffd700;
+            color: #1a1a2e;
+        }
+
+        /* ⭐ FAVORITE LIST (UZUNCHOQ KO'RINISH) ⭐ */
+        .favorites-list {
+            display: flex;
+            flex-direction: column; /* List ko'rinishi uchun */
+            gap: 15px;
+        }
+
+        .favorite-item {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px; /* Kichikroq radius */
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .favorite-item:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,215,0,0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,215,0,0.1);
+        }
+
+        .item-link-wrapper { /* Butun kartochkani o'rab turuvchi link */
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            padding: 15px;
+            width: 100%;
+            color: white;
+            padding-right: 60px; /* Tugma uchun joy */
         }
 
         .favorite-thumbnail {
-            width: 70px;
+            width: 70px; /* Rasm o'lchami */
             height: 70px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            flex-shrink: 0;
+            margin-right: 15px;
         }
-    }
-</style>
+
+        .favorite-info {
+            flex: 1;
+        }
+
+        .favorite-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #ffd700;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .favorite-meta {
+            font-size: 13px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .favorite-tag {
+            font-size: 11px;
+            background: rgba(255,215,0,0.1);
+            color: #ffd700;
+            padding: 3px 8px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,215,0,0.2);
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        /* Unlike Tugmasi (Joylashuv o'zgarmadi, markazda) */
+        .unfavorite-btn {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            width: 35px;
+            height: 35px;
+            background: rgba(255,215,0,0.2);
+            border: 2px solid rgba(255,215,0,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #ffd700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 20;
+        }
+
+        .unfavorite-btn:hover {
+            background: rgba(255,215,0,0.3);
+            border-color: #ffd700;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        .empty-state-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+
+        .empty-state h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        /* O'chirish animatsiyasi */
+        @keyframes slideOutRight {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+                height: auto;
+                margin-bottom: 15px;
+            }
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+                height: 0;
+                padding: 0;
+                margin: 0;
+            }
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
-<!-- Header -->
-<div class="page-header">
-    <button class="back-btn" onclick="window.history.back()">‹</button>
-    <h1 class="page-title">MY FAVORITES</h1>
-</div>
-
-<div class="favorites-content">
-    <!-- Tabs -->
-    <div class="favorites-tabs">
-        <button class="tab-btn active" onclick="showTab('all')">All</button>
-        <button class="tab-btn" onclick="showTab('exercises')">Exercises</button>
-        <button class="tab-btn" onclick="showTab('workouts')">Workouts</button>
-        <button class="tab-btn" onclick="showTab('programs')">Programs</button>
+    <div class="page-header">
+        <button class="back-btn" onclick="window.history.back()"><i class="fas fa-arrow-left"></i></button>
+        <h1 class="page-title">MENING SEVIMLILARIM</h1>
     </div>
 
-    <!-- Collections (ixtiyoriy - Instagram'dagi kabi) -->
-{#    <div class="collections-grid">#}
-{#        <div class="collection-card" onclick="window.location.href='{% url 'favorites' %}'">#}
-{#            <div class="collection-icon">💪</div>#}
-{#            <div class="collection-name">Chest Day</div>#}
-{#            <div class="collection-count">12 exercises</div>#}
-{#        </div>#}
-{##}
-{#        <div class="collection-card" onclick="window.location.href='{% url 'favorites_collection' 'leg' %}'">#}
-{#            <div class="collection-icon">🦵</div>#}
-{#            <div class="collection-name">Leg Day</div>#}
-{#            <div class="collection-count">8 exercises</div>#}
-{#        </div>#}
-{#    </div>#}
+    <div class="favorites-content">
 
-    <!-- Favorites List -->
-    <div class="favorites-list" id="favoritesList">
-        {% if favorites %}
-            {% for favorite in favorites %}
-            <div class="favorite-item" onclick="window.location.href='{{ favorite.get_absolute_url }}'">
-                <img src="{{ favorite.thumbnail_url }}" alt="{{ favorite.title }}" class="favorite-thumbnail">
+        <div class="favorite-stats">
+            Umumiy Sevimlilar: <span id="total-favorites-count">{{ total_count }}</span>
+        </div>
 
-                <div class="favorite-info">
-                    <div class="favorite-title">{{ favorite.title }}</div>
-                    <div class="favorite-meta">
-                        {% if favorite.content_type == 'exercise' %}
-                            Exercise • {{ favorite.muscle_group }}
-                        {% elif favorite.content_type == 'workout' %}
-                            Workout • {{ favorite.duration }} min
-                        {% else %}
-                            Program • {{ favorite.weeks }} weeks
-                        {% endif %}
+        <div class="favorites-tabs">
+            <button class="tab-btn active" onclick="showTab(this, 'all')">Barchasi</button>
+            <button class="tab-btn" onclick="showTab(this, 'exercise')">Mashqlar</button>
+        </div>
+
+        <div class="favorites-list" id="favoritesList">
+            {% if favorites %}
+                {% for fav in favorites %}
+                    <div class="favorite-item" data-id="{{ fav.id }}" data-exercise-id="{{ fav.exercise_id }}">
+
+                        <a href="{% url 'exercise_detail' fav.exercise_id %}" class="item-link-wrapper">
+                            <img src="{{ fav.thumbnail_url|default_if_none:'/static/img/default-thumb.jpg' }}"
+                                 alt="{{ fav.title }}" class="favorite-thumbnail">
+
+                            <div class="favorite-info">
+                                <div class="favorite-title">{{ fav.title }}</div>
+                                <div class="favorite-meta">
+                                    Mashq • **{{ fav.muscle_group }}**
+                                </div>
+                                <div class="favorite-tags">
+                                    <span class="favorite-tag">{{ fav.difficulty }}</span>
+                                    {% if fav.equipment %}
+                                        <span class="favorite-tag">{{ fav.equipment }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </a>
+
+                        <button class="unfavorite-btn" onclick="event.stopPropagation(); unfavorite({{ fav.id }}, this)" title="Sevimlidan o'chirish">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
-                    <div class="favorite-tags">
-                        <span class="favorite-tag">{{ favorite.difficulty }}</span>
-                        <span class="favorite-tag">{{ favorite.equipment }}</span>
-                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">⭐</div>
+                    <h3>Sevimlilar ro'yxati bo'sh</h3>
+                    <p>O'zingizga yoqqan mashqlarni qo'shishni boshlang!</p>
                 </div>
-
-                <button class="unfavorite-btn" onclick="event.stopPropagation(); unfavorite({{ favorite.id }}, this)">
-                    ★
-                </button>
-            </div>
-            {% endfor %}
-        {% else %}
-            <div class="empty-state">
-                <div class="empty-state-icon">⭐</div>
-                <h3>No favorites yet</h3>
-                <p>Start adding your favorite exercises and workouts</p>
-            </div>
-        {% endif %}
+            {% endif %}
+        </div>
     </div>
-</div>
 
-{#<!-- Bottom Navigation -->#}
-{#<div class="bottom-nav">#}
-{#    <a href="{% url 'exercises' %}" class="nav-item">#}
-{#        <div class="nav-icon">🏋️</div>#}
-{#        <div class="nav-label">Exercises</div>#}
-{#    </a>#}
-{#    <a href="{% url 'workouts' %}" class="nav-item">#}
-{#        <div class="nav-icon">📋</div>#}
-{#        <div class="nav-label">Workouts</div>#}
-{#    </a>#}
-{#    <a href="{% url 'my_trainer' %}" class="nav-item">#}
-{#        <div class="nav-icon">👤</div>#}
-{#        <div class="nav-label">My Trainer</div>#}
-{#    </a>#}
-{#    <a href="{% url 'favorites' %}" class="nav-item active">#}
-{#        <div class="nav-icon">⭐</div>#}
-{#        <div class="nav-label">Favorites</div>#}
-{#    </a>#}
-{#    <a href="{% url 'profile' %}" class="nav-item">#}
-{#        <div class="nav-icon">👤</div>#}
-{#        <div class="nav-label">Profile</div>#}
-{#    </a>#}
-{#</div>#}
 {% endblock %}
 
 {% block extra_js %}
-<script>
-    // Tab switching
-    function showTab(tab) {
-        // Update active tab
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
-
-        // Filter favorites
-        console.log('Showing:', tab);
-        // AJAX so'rov yuborib filterlangan natijalarni olish
-    }
-
-    // Unfavorite
-    function unfavorite(id, button) {
-        if (confirm('Remove from favorites?')) {
-            // AJAX so'rov
-            fetch(`/api/favorites/${id}/remove/`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRFToken': getCookie('csrftoken')
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Remove item with animation
-                    const item = button.closest('.favorite-item');
-                    item.style.animation = 'slideOutRight 0.3s ease forwards';
-                    setTimeout(() => item.remove(), 300);
-                }
-            });
+    <script>
+        // Tab switching (Hozircha faqat vizual)
+        function showTab(buttonElement, tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            buttonElement.classList.add('active');
+            // Qolgan elementlarni filtrlash mantiqi keyinchalik qo'shilishi mumkin
         }
-    }
 
-    // Get CSRF token
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
+        // Get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
                 }
             }
+            return cookieValue;
         }
-        return cookieValue;
-    }
-</script>
+
+        // ⭐ UNFAVORITE FUNKSIYASI - To'liq tuzatilgan
+        function unfavorite(id, button) {
+            if (confirm('Bu mashqni sevimlilardan olib tashlashni xohlaysizmi?')) {
+
+                // To'g'ri URL manziliga murojaat: /favorites/remove/ID/
+                const url = `/favorites/remove/${id}/`;
+
+                // AJAX so'rov
+                fetch(url, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                })
+                    .then(response => {
+                        if (response.status !== 200) {
+                            return response.json().then(err => {
+                                throw new Error(err.error || `Server xatosi: ${response.status}`);
+                            }).catch(() => {
+                                throw new Error(`Serverga ulanishda xato: Status ${response.status}`);
+                            });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            // Muvaffaqiyatli o'chirildi: itemni animatsiya bilan o'chirish
+                            const item = button.closest('.favorite-item');
+                            item.style.animation = 'slideOutRight 0.3s ease forwards';
+                            setTimeout(() => item.remove(), 300);
+
+                            // Umumiy sonni yangilash
+                            const totalCountElement = document.getElementById('total-favorites-count');
+                            if (totalCountElement) {
+                                let currentCount = parseInt(totalCountElement.textContent);
+                                totalCountElement.textContent = currentCount > 0 ? currentCount - 1 : 0;
+                            }
+                        } else {
+                            alert("O'chirishda xato: " + (data.error || "Noma'lum xato"));
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Unfavorite AJAX xatoligi:", err);
+                        alert("Sevimlidan o'chirishda kutilmagan xato yuz berdi: " + err.message);
+                    });
+            }
+        }
+    </script>
 {% endblock %}
