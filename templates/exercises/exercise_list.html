@@ -1,166 +1,314 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ body_part.name }} - Exercises{% endblock %}
+{% block title %}{{ body_part.name }} - Mashqlar{% endblock %}
 
 {% block extra_css %}
-<style>
-    /* Exercises Grid */
-    .exercises-grid {
-        padding: 20px;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 15px;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
+    <style>
+        /* Umumiy kontent stillari */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background-color: #2c3e50; /* To'q fon */
+            color: white;
+        }
 
-    .exercise-card {
-        background: white;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        text-decoration: none;
-        color: inherit;
-        display: block;
-        transition: transform 0.2s;
-        position: relative;
-    }
+        .top-nav h1 {
+            font-size: 20px;
+            margin: 0;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
 
-    .exercise-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
+        .back-btn, .action-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.2s;
+        }
 
-    .exercise-image {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-        background: #e0e0e0;
-        display: block;
-    }
+        .back-btn:hover, .action-btn:hover {
+            color: #f1c40f;
+        }
 
-    .exercise-placeholder {
-        width: 100%;
-        height: 200px;
-        background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 48px;
-        color: #999;
-    }
+        /* Qidiruv chizig'i */
+        .search-bar {
+            padding: 15px 20px;
+            background-color: #34495e;
+            border-bottom: 1px solid #2c3e50;
+        }
 
-    .exercise-info {
-        padding: 15px;
-    }
+        #searchInput {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 25px;
+            border: 1px solid #2c3e50;
+            background-color: #ecf0f1;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
 
-    .exercise-name {
-        font-size: 16px;
-        font-weight: 500;
-        color: #2c3e50;
-        margin: 0;
-        line-height: 1.4;
-    }
+        #searchInput:focus {
+            border-color: #f1c40f;
+        }
 
-    .favorite-icon {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: white;
-        width: 35px;
-        height: 35px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        z-index: 10;
-    }
-
-    .favorite-icon:hover {
-        transform: scale(1.1);
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
+        /* Exercises Grid */
         .exercises-grid {
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 10px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .exercise-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); /* Yumshoqroq soya */
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .exercise-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.25);
+        }
+
+        .exercise-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #e0e0e0;
+            display: block;
+        }
+
+        .exercise-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: #999;
+        }
+
+        .exercise-info {
             padding: 15px;
         }
 
-        .exercise-image,
-        .exercise-placeholder {
-            height: 150px;
+        .exercise-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: #2c3e50;
+            margin: 0;
+            line-height: 1.4;
         }
 
-        .exercise-name {
-            font-size: 14px;
+        /* Sevimli Tugmasi Stili */
+        .favorite-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 10;
+            transition: transform 0.2s, background 0.2s, color 0.2s;
         }
-    }
-</style>
+
+        .favorite-icon:hover {
+            transform: scale(1.1);
+        }
+
+        /* Sevimli Holati */
+        .favorite-icon.favorited {
+            background: #E74C3C; /* Qizil rang */
+        }
+
+        /* Ikonka rangi */
+        .favorite-icon span {
+            color: #f1c40f; /* Bo'sh holatda sariq */
+            transition: color 0.2s;
+            display: block;
+            font-size: 18px; /* Yulduzcha o'lchami */
+            line-height: 1;
+        }
+
+        .favorite-icon.favorited span {
+            color: white; /* To'ldirilgan holatda oq */
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .exercises-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 10px;
+                padding: 15px;
+            }
+
+            .exercise-image,
+            .exercise-placeholder {
+                height: 150px;
+            }
+
+            .exercise-name {
+                font-size: 14px;
+            }
+        }
+    </style>
 {% endblock %}
 
 
-
 {% block content %}
-<div class="top-nav">
-    <button class="back-btn" onclick="goBack()">‹</button>
-    <h1>{{ body_part.name }}</h1>
-    <button class="action-btn">⭐</button>
-</div>
+    <div class="top-nav">
+        <button class="back-btn" onclick="history.back()">‹</button>
+        <h1>{{ body_part.name }}</h1>
+        <button class="action-btn">⭐</button>
+    </div>
 
-<!-- Search -->
-<div class="search-bar">
-    <input type="text" placeholder="Mashqni qidirish..." id="searchInput">
-</div>
+    <div class="search-bar">
+        <input type="text" placeholder="Mashqni qidirish..." id="searchInput">
+    </div>
 
-<div class="container">
-    {% if exercises %}
-    <div class="exercises-grid">
-        {% for exercise in exercises %}
-        <a href="{% url 'exercises:exercise_detail' exercise.id %}" class="exercise-card">
-            <div class="favorite-icon" onclick="event.preventDefault(); toggleFavorite({{ exercise.id }})">⭐</div>
-            {% if exercise.image %}
-                <img src="{{ exercise.image.url }}" alt="{{ exercise.name }}" class="exercise-image">
-            {% else %}
-                <div class="exercise-placeholder">💪</div>
-            {% endif %}
-            <div class="exercise-info">
-                <h3 class="exercise-name">{{ exercise.name }}</h3>
+    <div class="container">
+        {% if exercises %}
+            <div class="exercises-grid">
+                {% for exercise in exercises %}
+                    <a href="{% url 'exercise_detail' exercise.id %}" class="exercise-card" id="card-{{ exercise.id }}">
+
+                        <div class="favorite-icon {% if exercise.is_favorited %}favorited{% endif %}"
+                             data-exercise-id="{{ exercise.id }}"
+                             onclick="event.preventDefault(); toggleFavorite(this, {{ exercise.id }})">
+
+                            <span id="fav-icon-{{ exercise.id }}">{% if exercise.is_favorited %}★{% else %}⭐{% endif %}</span>
+                        </div>
+
+                        {% if exercise.thumbnail %}
+                            <img src="{{ exercise.thumbnail.url }}" alt="{{ exercise.name }}" class="exercise-image">
+                        {% else %}
+                            <div class="exercise-placeholder">💪</div>
+                        {% endif %}
+                        <div class="exercise-info">
+                            <h3 class="exercise-name">{{ exercise.name }}</h3>
+                        </div>
+                    </a>
+                {% endfor %}
             </div>
-        </a>
-        {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <div class="icon">😔</div>
+                <h3>Hali mashqlar qo'shilmagan</h3>
+            </div>
+        {% endif %}
     </div>
-    {% else %}
-    <div class="empty-state">
-        <div class="icon">😔</div>
-        <h3>Hali mashqlar qo'shilmagan</h3>
-    </div>
-    {% endif %}
-</div>
 {% endblock %}
 
 
 {% block extra_js %}
-<script>
-    // Search functionality
-    document.getElementById('searchInput').addEventListener('input', function(e) {
-        const searchTerm = e.target.value.toLowerCase();
-        const cards = document.querySelectorAll('.exercise-card');
+    <script>
+        // 1. CSRF tokenini olish funksiyasi
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
 
-        cards.forEach(card => {
-            const name = card.querySelector('.exercise-name').textContent.toLowerCase();
-            card.style.display = name.includes(searchTerm) ? 'block' : 'none';
+
+        // 2. Favorite tugmasi mantig'i
+        function toggleFavorite(buttonElement, exerciseId) {
+
+            const iconSpan = document.getElementById(`fav-icon-${exerciseId}`);
+            // !!! URL manzilini o'zingizning urls.py faylingizga moslang !!!
+            const url = `/exercises/favorite/toggle/${exerciseId}/`;
+
+            // Optimistik UI yangilash (sekin serverlar uchun yaxshi)
+            const isFavorited = buttonElement.classList.contains('favorited');
+            buttonElement.classList.toggle('favorited');
+            iconSpan.textContent = isFavorited ? '⭐' : '★';
+
+
+            // Fetch so'rovini yuborish
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            })
+                .then(response => {
+                    if (response.status === 403) {
+                        alert("Iltimos, sevimlilarga qo'shish uchun avval tizimga kiring.");
+                        // Optimistik yangilanishni qaytarish
+                        buttonElement.classList.toggle('favorited');
+                        iconSpan.textContent = isFavorited ? '★' : '⭐';
+                        return Promise.reject('Login required');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Agar javob kutgan statusga mos kelmasa, optimistik yangilanishni qaytarish
+                    if (data.status === 'error') {
+                        alert("Sevimli holatini o'zgartirishda xato yuz berdi.");
+                        buttonElement.classList.toggle('favorited');
+                        iconSpan.textContent = isFavorited ? '★' : '⭐';
+                    }
+                    // Agar success bo'lsa, UI allaqachon to'g'ri yangilangan.
+                })
+                .catch(err => {
+                    if (err !== 'Login required') {
+                        console.error("AJAX xatoligi:", err);
+                        alert("Serverga ulanishda xato yuz berdi.");
+                        // Optimistik yangilanishni qaytarish
+                        buttonElement.classList.toggle('favorited');
+                        iconSpan.textContent = isFavorited ? '★' : '⭐';
+                    }
+                });
+        }
+
+
+        // 3. Qidiruv funksiyasi
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.exercise-card');
+
+            cards.forEach(card => {
+                const name = card.querySelector('.exercise-name').textContent.toLowerCase();
+                card.style.display = name.includes(searchTerm) ? 'block' : 'none';
+            });
         });
-    });
 
-    // Favorite toggle
-    function toggleFavorite(exerciseId) {
-        console.log('Favorite toggled:', exerciseId);
-        // Keyinroq AJAX orqali backend'ga yuboramiz
-    }
-</script>
+        // 4. Orqaga qaytish funksiyasi
+        function goBack() {
+            history.back();
+        }
+    </script>
 {% endblock %}

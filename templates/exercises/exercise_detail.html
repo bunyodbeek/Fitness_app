@@ -1,284 +1,371 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ exercise.name }}{% endblock %}
+{% block title %}{{ exercise.name|default:"Mashq Tafsilotlari" }}{% endblock %}
 
 {% block extra_css %}
-<style>
-    /* Exercise Title */
-    .exercise-title {
-        text-align: center;
-        padding: 20px;
-        font-size: 24px;
-        font-weight: 500;
-        color: #2c3e50;
-        background: white;
-    }
-
-    /* Media Container */
-    .media-container {
-        background: white;
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-
-    .exercise-video {
-        width: 100%;
-        max-height: 500px;
-        border-radius: 10px;
-        background: #000;
-    }
-
-    .exercise-image {
-        width: 100%;
-        height: auto;
-        display: block;
-        border-radius: 10px;
-    }
-
-    .media-placeholder {
-        width: 100%;
-        height: 400px;
-        background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 80px;
-        color: #999;
-    }
-
-    /* Action Buttons */
-    .action-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 30px;
-        padding: 30px 20px;
-        background: white;
-        margin-bottom: 20px;
-    }
-
-    .action-btn {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        background: none;
-        border: none;
-        cursor: pointer;
-        color: #666;
-        transition: transform 0.2s;
-    }
-
-    .action-btn:hover {
-        transform: scale(1.1);
-    }
-
-    .action-icon {
-        width: 60px;
-        height: 60px;
-        background: #f0f0f0;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 32px;
-        margin-bottom: 8px;
-        border: 2px solid #ddd;
-    }
-
-    .action-label {
-        font-size: 12px;
-        color: #666;
-    }
-
-    /* Description */
-    .description-section {
-        background: white;
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-
-    .section-title {
-        font-size: 18px;
-        font-weight: 600;
-        color: #2c3e50;
-        margin-bottom: 15px;
-    }
-
-    .description-text {
-        font-size: 15px;
-        line-height: 1.6;
-        color: #555;
-    }
-
-    /* Info Cards */
-    .info-cards {
-        padding: 0 20px 20px;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-        gap: 15px;
-    }
-
-    .info-card {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        text-align: center;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .info-icon {
-        font-size: 32px;
-        margin-bottom: 10px;
-    }
-
-    .info-label {
-        font-size: 12px;
-        color: #999;
-        margin-bottom: 5px;
-    }
-
-    .info-value {
-        font-size: 18px;
-        font-weight: 600;
-        color: #2c3e50;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .exercise-title {
-            font-size: 20px;
-            padding: 15px;
+    <style>
+        /* 1. Umumiy va Asosiy Konteyner */
+        body {
+            font-family: 'Poppins', sans-serif; /* Zamonaviy shrift */
+            background: linear-gradient(135deg, #1A1A2E 0%, #0F0C29 100%); /* Chuqurroq, yumshoqroq to'q rang */
+            color: #EAEAEA; /* Yumshoq oq */
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            min-height: 100vh;
         }
 
+        .content-wrapper {
+            max-width: 650px; /* Kenglikni biroz oshiramiz */
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        /* 2. Sarlavha */
+        .exercise-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 25px;
+        }
+
+        .exercise-title {
+            font-size: 32px;
+            font-weight: 900;
+            color: #FFC300; /* Yorqinroq oltin/sariq */
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 5px rgba(255, 195, 0, 0.2);
+        }
+
+        /* 3. Media Konteyneri */
+        .media-container {
+            margin-bottom: 25px;
+            border-radius: 18px; /* Yumaloq burchaklarni oshiramiz */
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Chuqurroq soya */
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Yengil chegarani qo'shamiz */
+        }
+
+        .exercise-image {
+            width: 100%;
+            display: block;
+            object-fit: cover;
+            height: auto;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* 4. Harakat Tugmalari (Action Buttons) */
         .action-buttons {
-            gap: 20px;
-            padding: 20px 10px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.08); /* Yumshoq orqa fon */
+            border-radius: 15px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .action-btn {
+            flex-grow: 1;
+            background: transparent; /* Fonni olib tashlaymiz */
+            border: 2px solid rgba(255, 195, 0, 0.3); /* Yengil sariq chegara */
+            border-radius: 12px;
+            padding: 10px 5px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out; /* Silliq animatsiya */
+            color: #EAEAEA;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 195, 0, 0.1);
+            transform: translateY(-3px) scale(1.02); /* Kichik effekt */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .action-btn.active {
+            background: #FFC300; /* To'liq sariq fon */
+            color: #1A1A2E; /* To'q matn */
+            border-color: #FFC300;
+            box-shadow: 0 0 15px rgba(255, 195, 0, 0.6);
+        }
+
+        .action-btn.active .action-icon {
+            color: #1A1A2E; /* Faol tugmaning ikonkasi ham to'q rangda */
+        }
+
+        /* Sevimli tugmasi stilizatsiyasi */
+        .favorite-toggle.favorited {
+            background: #E74C3C; /* Qizil */
+            color: #fff;
+            border-color: #E74C3C;
+            box-shadow: 0 0 15px rgba(231, 76, 60, 0.6);
+        }
+
+        .favorite-toggle.favorited .action-icon {
+            color: #fff;
         }
 
         .action-icon {
-            width: 50px;
-            height: 50px;
-            font-size: 28px;
+            font-size: 26px;
+            margin-bottom: 5px;
+            color: #FFC300;
+            transition: color 0.3s;
         }
 
-        .info-cards {
-            grid-template-columns: repeat(2, 1fr);
+        .action-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
         }
-    }
-</style>
+
+        /* 5. Ko'rsatmalar va Ma'lumotlar Konteyneri */
+        .instructions-in-media-container {
+            padding: 25px;
+            background: #252540; /* Media konteyneriga nisbatan ozgina to'qroq fon */
+            border-radius: 18px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+            min-height: 280px;
+            overflow-y: auto;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #FFC300;
+            border-bottom: 2px solid rgba(255, 195, 0, 0.4);
+            padding-bottom: 8px;
+        }
+
+        /* 6. Info Bo'limlari Stili (ko'rsatma ichida) */
+        .info-detail {
+            margin-bottom: 18px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.12); /* Kontrastni oshiramiz */
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50; /* Yashil chiziq qo'shamiz */
+        }
+
+        .info-detail .info-label {
+            font-size: 11px;
+            color: #BDC3C7;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .info-detail .info-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #EAEAEA;
+        }
+
+        /* 7. Ko'rsatmalar ro'yxati stili */
+        .instruction-list {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 25px;
+        }
+
+        .instruction-list li {
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 30px;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+            padding-bottom: 5px;
+        }
+
+        .instruction-list li:last-child {
+            border-bottom: none;
+        }
+
+        .instruction-list li:before {
+            content: "⭐"; /* Iconni o'zgartirdik */
+            position: absolute;
+            left: 0;
+            color: #FFC300;
+            font-size: 18px;
+        }
+
+    </style>
 {% endblock %}
 
 {% block content %}
-<!-- Top Navigation -->
-<div class="top-nav">
-    <button class="back-btn" onclick="goBack()">‹</button>
-    <h1>EXERCISE</h1>
-    <button class="action-btn" onclick="toggleFavorite()">⭐</button>
-</div>
+    <div class="content-wrapper">
+        <div class="exercise-header">
+            <h1 class="exercise-title">{{ exercise.name|default:"Seated Dumbbell Overhead Press" }}</h1>
+        </div>
 
-<!-- Exercise Title -->
-<div class="exercise-title">
-    {{ exercise.name }}
-</div>
+        <div class="media-container">
 
-<!-- Media Container -->
-<div class="media-container">
-    {% if exercise.video %}
-        <video class="exercise-video" controls>
-            <source src="{{ exercise.video.url }}" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    {% elif exercise.image %}
-        <img src="{{ exercise.image.url }}" alt="{{ exercise.name }}" class="exercise-image">
-    {% else %}
-        <div class="media-placeholder">💪</div>
-    {% endif %}
-</div>
+            {% if exercise.thumbnail %}
+                <img src="{{ exercise.thumbnail.url|default:'/static/img/seated_dumbbell_press.png' }}"
+                     alt="{{ exercise.name|default:'Seated Dumbbell Overhead Press' }}"
+                     class="exercise-image" id="exerciseImage">
+            {% else %}
+                <div style="height: 250px; background-color: #34495e; display: flex; align-items: center; justify-content: center; color: #fff; border-radius: 15px;"
+                     id="exerciseImage">
+                    Rasm/Video mavjud emas
+                </div>
+            {% endif %}
 
-<!-- Action Buttons -->
-<div class="action-buttons">
-    <button class="action-btn" onclick="viewImage()">
-        <div class="action-icon">🖼️</div>
-        <span class="action-label">Image</span>
-    </button>
-    <button class="action-btn" onclick="playVideo()">
-        <div class="action-icon">▶️</div>
-        <span class="action-label">Video</span>
-    </button>
-    <button class="action-btn" onclick="viewInstructions()">
-        <div class="action-icon">📋</div>
-        <span class="action-label">Instructions</span>
-    </button>
-    <button class="action-btn favorite-toggle" onclick="toggleFavorite()">
-        <div class="action-icon" id="favoriteIcon">⭐</div>
-        <span class="action-label">Favorite</span>
-    </button>
-</div>
+            {% if exercise.video %}
+                <video controls
+                       class="exercise-image hidden"
+                       id="exerciseVideo"
+                       src="{{ exercise.video.url }}"
+                       poster="{{ exercise.thumbnail.url|default:'' }}"
+                       loop muted playsinline>
+                    Sizning brauzeringiz video tegini qo'llab-quvvatlamaydi.
+                </video>
+            {% endif %}
 
-<!-- Description -->
-{% if exercise.description %}
-<div class="description-section">
-    <h2 class="section-title">Ta'rif</h2>
-    <p class="description-text">{{ exercise.description }}</p>
-</div>
-{% endif %}
+            <div class="instructions-in-media-container hidden" id="instructionsDisplay">
+                <h2 class="section-title">📝 Mashq Tafsilotlari</h2>
 
-<!-- Info Cards -->
-<div class="info-cards">
-    <div class="info-card">
-        <div class="info-icon">🎯</div>
-        <div class="info-label">Tana qismi</div>
-        <div class="info-value">{{ exercise.bodypart.name }}</div>
+                <div class="info-detail">
+                    <div class="info-label">Asosiy muskul</div>
+                    <div class="info-value">{{ exercise.muscle_group|default:"Ma'lumot yo'q" }}</div>
+                </div>
+
+                <div class="info-detail">
+                    <div class="info-label">Yordamchi muskullar</div>
+                    <div class="info-value">{{ exercise.secondary_muscle|default:"Ma'lumot yo'q" }}</div>
+                </div>
+
+                <h2 class="section-title" style="margin-top: 25px;">💡 Bajarish Bo'yicha Ko'rsatmalar</h2>
+
+                <ul class="instruction-list">
+                    {% for instruction in instructions_list %}
+                        <li>{{ instruction }}</li>
+                    {% empty %}
+                        <li>Mashq uchun ko'rsatmalar mavjud emas.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="action-buttons">
+
+            <button class="action-btn active" id="imageBtn" onclick="showContent('image')">
+                <div class="action-icon">🖼️</div>
+                <span class="action-label">Rasm</span>
+            </button>
+
+            <button class="action-btn"
+                    id="videoBtn"
+                    onclick="showContent('video')"
+                    {% if not exercise.video %}disabled{% endif %}>
+                <div class="action-icon">▶️</div>
+                <span class="action-label">Video</span>
+            </button>
+
+            <button class="action-btn" id="instructionsBtn" onclick="showContent('instructions')">
+                <div class="action-icon">📋</div>
+                <span class="action-label">Ko'rsatmalar</span>
+            </button>
+
+            <button class="action-btn favorite-toggle {% if is_favorited %}favorited{% endif %}" id="favoriteBtn">
+                <div class="action-icon" id="favoriteIcon">{% if is_favorited %}★{% else %}⭐{% endif %}</div>
+                <span class="action-label">Sevimli</span>
+            </button>
+        </div>
+
     </div>
-    <div class="info-card">
-        <div class="info-icon">📅</div>
-        <div class="info-label">Qo'shilgan</div>
-        <div class="info-value">{{ exercise.created_at|date:"d.m.Y" }}</div>
-    </div>
-</div>
 {% endblock %}
 
 {% block extra_js %}
-<script>
-    function viewImage() {
-        {% if exercise.image %}
-            window.open('{{ exercise.image.url }}', '_blank');
-        {% else %}
-            alert('Rasm mavjud emas');
-        {% endif %}
-    }
+    <script>
+        // Barcha kontent turlarini boshqaruvchi yagona funksiya
+        function showContent(type) {
+            const video = document.getElementById('exerciseVideo');
+            const image = document.getElementById('exerciseImage');
+            const instructionsDisplay = document.getElementById('instructionsDisplay');
 
-    function playVideo() {
-        {% if exercise.video %}
-            const video = document.querySelector('.exercise-video');
-            if (video) {
-                video.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // Tugmalar
+            const imageBtn = document.getElementById('imageBtn');
+            const videoBtn = document.getElementById('videoBtn');
+            const instructionsBtn = document.getElementById('instructionsBtn');
+
+            // Barcha kontent elementlarini vaqtinchalik ro'yxatga olish
+            const allContent = [video, image, instructionsDisplay].filter(el => el !== null);
+            const allBtns = [imageBtn, videoBtn, instructionsBtn].filter(el => el !== null);
+
+            // Barcha elementlarni yashirish (Hamma narsani tozalash)
+            allContent.forEach(el => el.classList.add('hidden'));
+            allBtns.forEach(btn => btn.classList.remove('active'));
+
+            // Videoni to'xtatish (agar mavjud bo'lsa)
+            if (video) video.pause();
+
+            // Tanlangan kontentni ko'rsatish
+            if (type === 'image' && image) {
+                image.classList.remove('hidden');
+                imageBtn.classList.add('active');
+            } else if (type === 'video' && video) {
+                video.classList.remove('hidden');
                 video.play();
+                videoBtn.classList.add('active');
+            } else if (type === 'instructions' && instructionsDisplay) {
+                instructionsDisplay.classList.remove('hidden');
+                instructionsBtn.classList.add('active');
             }
-        {% else %}
-            alert('Video mavjud emas');
-        {% endif %}
-    }
-
-    function viewInstructions() {
-        {% if exercise.description %}
-            document.querySelector('.description-section').scrollIntoView({ behavior: 'smooth' });
-        {% else %}
-            alert('Ta\'rif mavjud emas');
-        {% endif %}
-    }
-
-    function toggleFavorite() {
-        const icon = document.getElementById('favoriteIcon');
-        if (icon.textContent === '⭐') {
-            icon.textContent = '★';
-            console.log('Added to favorites: {{ exercise.id }}');
-            // Keyinroq AJAX orqali backend'ga yuboramiz
-        } else {
-            icon.textContent = '⭐';
-            console.log('Removed from favorites: {{ exercise.id }}');
-            // Keyinroq AJAX orqali backend'ga yuboramiz
         }
-    }
-</script>
+
+        // Ko'rsatmalarga o'tish funksiyasi
+        function viewInstructions() {
+            showContent('instructions');
+        }
+
+
+        // Sevimli tugmasi mantig'i
+        document.getElementById('favoriteBtn').addEventListener('click', function () {
+            const icon = document.getElementById('favoriteIcon');
+            const btn = document.getElementById('favoriteBtn');
+
+            fetch("{% url 'toggle_favorite' exercise.pk %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            }).then(r => r.json()).then(data => {
+
+                if (data.status === 'added') {
+                    icon.textContent = '★';
+                    btn.classList.add('favorited');
+                } else if (data.status === 'removed') {
+                    icon.textContent = '⭐';
+                    btn.classList.remove('favorited');
+                } else if (data.message === 'Login required') {
+                    alert("Iltimos, avval tizimga kiring.");
+                }
+            }).catch(err => console.error("Sevimli funksiyasi xatoligi:", err));
+        });
+
+        // Sahifa yuklanganda, agar rasm bo'lmasa va video bo'lsa, videoni boshlaymiz
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('exerciseVideo');
+            const image = document.getElementById('exerciseImage');
+
+            // Agar video mavjud bo'lsa, lekin rasm yo'q bo'lsa, yoki rasm yashirilgan bo'lsa, videoni ko'rsatamiz.
+            if (video && (image && image.classList.contains('hidden') || !image)) {
+                showContent('video');
+            } else {
+                // Aks holda, (rasm mavjud bo'lsa) rasm holatida boshlaymiz.
+                showContent('image');
+            }
+        });
+    </script>
 {% endblock %}

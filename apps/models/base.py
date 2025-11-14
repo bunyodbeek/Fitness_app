@@ -1,6 +1,6 @@
 import uuid
 
-from django.db.models import Model, DateTimeField, SlugField, UUIDField
+from django.db.models import DateTimeField, Model, SlugField, UUIDField
 
 
 class CreatedBaseModel(Model):

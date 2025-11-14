@@ -2,18 +2,17 @@ import json
 import traceback
 
 import requests
+from apps.models import PaymentHistory, User, UserMotivation, UserProfile
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.base import ContentFile
-from django.http import JsonResponse, HttpResponseNotAllowed
+from django.http import HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import activate
 from django.views import View
 from django.views.generic import TemplateView
-
-from apps.models import PaymentHistory, User, UserMotivation, UserProfile
 
 
 class QuestionnaireSubmitView(View):

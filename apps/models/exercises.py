@@ -1,3 +1,4 @@
+from apps.models.base import CreatedBaseModel
 from django.db.models import (
     CASCADE,
     CharField,
@@ -6,10 +7,9 @@ from django.db.models import (
     ImageField,
     IntegerField,
     Model,
-    TextField, TextChoices,
+    TextChoices,
+    TextField,
 )
-
-from apps.models.base import CreatedBaseModel
 
 
 class MuscleGroup(TextChoices):
@@ -43,6 +43,7 @@ class Exercise(CreatedBaseModel):
     name = CharField(max_length=200, verbose_name="Nomi")
     name_uz = CharField(max_length=200, blank=True, verbose_name="O'zbek nomi")
     muscle_group = CharField(choices=MuscleGroup.choices, default=MuscleGroup.SHOULDERS)
+    secondary_muscle = CharField(choices=MuscleGroup.choices, default=MuscleGroup.SHOULDERS)
     description = TextField(blank=True, verbose_name="Tavsif")
 
     thumbnail = ImageField(upload_to='exercises/thumbnails/', blank=True, null=True, verbose_name="Rasm")
