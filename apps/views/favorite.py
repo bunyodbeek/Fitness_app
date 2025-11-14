@@ -18,21 +18,18 @@ class FavoritesView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # Get all favorites
-        favorites = Favorite.objects.filter(
-            user=self.request.user
-        ).select_related('content_type').order_by('-created_at')
+        favorite = Favorite.objects.filter(
+            user=self.request.user.profile,
+        ).order_by('-created_at')
 
-        # Format for template
         favorites_list = []
-        for fav in favorites:
+        for fav in favorite:
             obj = fav.content_object
             if obj:  # Check if object exists
                 favorites_list.append({
                     'id': fav.id,
                     'title': obj.name if hasattr(obj, 'name') else getattr(obj, 'title', ''),
                     'thumbnail_url': obj.thumbnail.url if hasattr(obj, 'thumbnail') and obj.thumbnail else '',
-                    'content_type': fav.content_type_name,
                     'muscle_group': obj.muscle_group.name if hasattr(obj, 'muscle_group') else '',
                     'difficulty': getattr(obj, 'difficulty', ''),
                     'equipment': getattr(obj, 'equipment', ''),

@@ -4,6 +4,7 @@ from apps.views import api_views, exercises, favorite, payments, users, workouts
 
 urlpatterns = [
     # Exercises
+    path('exercises/', exercises.MuscleGroupListView.as_view(), name='muscle_groups'),
     path('exercises/muscle/<int:muscle_id>/', exercises.ExercisesByMuscleView.as_view(), name='exercises_by_muscle'),
     path('exercises/all/', exercises.AllExercisesView.as_view(), name='all_exercises'),
     path('exercises/<int:exercise_id>/', exercises.ExerciseDetailView.as_view(), name='exercise_detail'),
@@ -23,7 +24,7 @@ urlpatterns = [
     path('failed/', payments.payment_failed, name='failed'),
 
     path('api/questionnaire/submit/', users.QuestionnaireSubmitView.as_view(), name='questionnaire_submit'),
-    path('api/telegram-auth/', users.telegram_auth_view, name='telegram_auth'),
+    path('api/telegram-auth/', users.TelegramAuthView.as_view(), name='telegram_auth'),
     path('miniapp/questionnaire/', users.OnboardingView.as_view(), name='onboarding'),
     path('users/profile/', users.ProfileView.as_view(), name='user_profile'),
     path('user/progress/', users.ProgressView.as_view(), name='user_progress'),

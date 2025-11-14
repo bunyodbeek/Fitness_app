@@ -49,7 +49,7 @@ class UserProfile(CreatedBaseModel):
         GAIN_MUSCLE = 'gain_muscle', 'Gain muscle'
         GET_SHAPE = 'get_shape', 'Get in shape'
 
-    user = OneToOneField('apps.UserProfile', on_delete=CASCADE, related_name='profile')
+    user = OneToOneField('apps.User', on_delete=CASCADE, related_name='profile')
 
     telegram_id = BigIntegerField(unique=True, null=True, blank=True)
     is_premium = BooleanField(default=False)
