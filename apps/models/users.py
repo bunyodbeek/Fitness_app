@@ -1,4 +1,3 @@
-
 from datetime import date
 
 from apps.models.base import CreatedBaseModel
@@ -49,30 +48,20 @@ class UserProfile(CreatedBaseModel):
         GET_SHAPE = 'get_shape', 'Get in shape'
 
     user = OneToOneField('apps.User', on_delete=CASCADE, related_name='profile')
-
     telegram_id = BigIntegerField(unique=True, null=True, blank=True)
     is_premium = BooleanField(default=False)
-
     name = CharField(max_length=100, default='User')
     avatar = ImageField(upload_to='avatars/', blank=True, null=True)
     gender = CharField(max_length=10, choices=Gender.choices, default=Gender.MALE)
     birth_date = DateField(null=True, blank=True)
-
     weight = DecimalField(max_digits=5, decimal_places=1, null=True, blank=True)
     height = DecimalField(max_digits=5, decimal_places=1, null=True, blank=True)
-
     experience_level = CharField(max_length=20, choices=ExperienceLevel.choices, blank=True)
     fitness_goal = CharField(max_length=20, choices=FitnessGoal.choices, blank=True)
     workout_days_per_week = IntegerField(null=True, blank=True)
-
     unit_system = CharField(max_length=10, choices=UnitSystem.choices, default=UnitSystem.METRIC)
     language = CharField(max_length=5, choices=Language.choices, default=Language.UZBEK)
-
     onboarding_completed = BooleanField(default=False)
-
-    subscription_start_date = DateField(null=True, blank=True)
-    subscription_end_date = DateField(null=True, blank=True)
-    subscription_price = DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
     class Meta:
         verbose_name = "User Profile"
@@ -97,17 +86,6 @@ class UserProfile(CreatedBaseModel):
             return round(float(self.weight) / (height_m ** 2), 1)
         return None
 
-    @property
-    def is_subscribed(self):
-        return bool(self.subscription_end_date and self.subscription_end_date >= date.today())
-
-    @property
-    def days_until_renewal(self):
-        if self.subscription_end_date:
-            delta = self.subscription_end_date - date.today()
-            return max(0, delta.days)
-        return 0
-
 
 class UserMotivation(CreatedBaseModel):
     class MotivationType(TextChoices):
@@ -116,7 +94,7 @@ class UserMotivation(CreatedBaseModel):
         GET_STRONGER = 'get_stronger', 'Get stronger every day'
         GOOD_CHALLENGE = 'good_challenge', 'I like a good challenge'
 
-    user = ForeignKey('apps.UserProfile', on_delete=CASCADE, related_name='motivations')
+    user = ForeignKey('apps.UserProfile', CASCADE, related_name='motivations')
     motivation = CharField(max_length=30, choices=MotivationType.choices)
 
     class Meta:
@@ -135,7 +113,7 @@ class PaymentHistory(CreatedBaseModel):
         FAILED = 'failed', 'Muvaffaqiyatsiz'
         REFUNDED = 'refunded', 'Qaytarilgan'
 
-    user = ForeignKey('apps.UserProfile', on_delete=CASCADE, related_name='payment_history')
+    user = ForeignKey('apps.UserProfile', CASCADE, related_name='payment_history')
     amount = DecimalField(max_digits=10, decimal_places=2)
     payment_method = CharField(max_length=50)
     status = CharField(max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.PENDING)

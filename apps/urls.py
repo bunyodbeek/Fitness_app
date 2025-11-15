@@ -1,7 +1,6 @@
-from django.urls import path
-
 from apps.views import api_views, exercises, favorite, payments, users, workouts
 from apps.views.exercises import ExercisesByMuscleView, ToggleFavoriteView
+from django.urls import path
 
 urlpatterns = [
     # Exercises
@@ -16,13 +15,13 @@ urlpatterns = [
 
     path('click/prepare/', payments.click_prepare, name='click_prepare'),
     path('click/complete/', payments.click_complete, name='click_complete'),
-    path('click/card-token/', payments.click_card_token_callback, name='click_card_token'),
+    # path('click/card-token/', payments.click_card_token_callback, name='click_card_token'),
     path('subscribe/', payments.subscribe_view, name='subscribe'),
     path('create-payment/', payments.create_payment, name='create_payment'),
     path('add-card/', payments.add_card_view, name='add_card'),
-    path('remove-card/', payments.remove_card, name='remove_card'),
-    path('success/', payments.payment_success, name='success'),
-    path('failed/', payments.payment_failed, name='failed'),
+    # path('remove-card/', payments.remove_card, name='remove_card'),
+    # path('success/', payments.payment_success, name='success'),
+    # path('failed/', payments.payment_failed, name='failed'),
 
     path('api/questionnaire/submit/', users.QuestionnaireSubmitView.as_view(), name='questionnaire_submit'),
     path('api/telegram-auth/', users.TelegramAuthView.as_view(), name='telegram_auth'),
@@ -48,8 +47,8 @@ urlpatterns = [
     path('program/<int:pk>/', workouts.ProgramDetailView.as_view(), name='program_detail'),
     path('edition/<int:pk>/', workouts.EditionDetailView.as_view(), name='edition_detail'),
     path('workout/<int:pk>/', workouts.WorkoutDetailView.as_view(), name='workout_detail'),
-    path('workout/<int:pk>/start/', workouts.WorkoutStartView.as_view(), name='workout_start'),
-    path('workout/<int:pk>/complete/', workouts.WorkoutCompleteView.as_view(), name='workout_complete'),
+    # path('workout/<int:pk>/start/', workouts.WorkoutStartView.as_view(), name='workout_start'),
+    # path('workout/<int:pk>/complete/', workouts.WorkoutCompleteView.as_view(), name='workout_complete'),
 
     # ApiViews
     path('api/users/auth/', api_views.telegram_auth, name='telegram_auth_api'),

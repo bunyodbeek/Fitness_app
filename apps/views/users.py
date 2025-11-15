@@ -333,9 +333,11 @@ class ProgressView(LoginRequiredMixin, TemplateView):
             'muscle_mass': {'current': 45.2, 'change': 1.8},
             'body_fat': {'current': 18.5, 'change': -2.1},
             'recent_workouts': [
-                {'title': 'Upper Body Blast', 'date': 'Today, 10:30 AM', 'exercises': 12, 'duration': 45, 'calories': 320},
+                {'title': 'Upper Body Blast', 'date': 'Today, 10:30 AM', 'exercises': 12, 'duration': 45,
+                 'calories': 320},
                 {'title': 'Leg Day', 'date': 'Yesterday, 6:00 PM', 'exercises': 10, 'duration': 52, 'calories': 410},
-                {'title': 'Core & Cardio', 'date': '2 days ago, 7:30 AM', 'exercises': 8, 'duration': 38, 'calories': 280},
+                {'title': 'Core & Cardio', 'date': '2 days ago, 7:30 AM', 'exercises': 8, 'duration': 38,
+                 'calories': 280},
             ]
         })
         return context

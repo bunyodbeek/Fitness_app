@@ -1,32 +1,27 @@
-from django.db.models import CASCADE, CharField, DateTimeField, ForeignKey, JSONField, Model
+from apps.models.base import CreatedBaseModel
+from django.db.models import CASCADE, CharField, ForeignKey, JSONField, TextChoices
+from django.utils.translation import gettext_lazy as _
 
 
-class UserActivity(Model):
-    EVENT_CHOICES = [
-        ('bot_start', 'Bot Started'),
-        ('onboarding_started', 'Onboarding Started'),
-        ('onboarding_completed', 'Onboarding Completed'),
-        ('subscription_page_viewed', 'Subscription Page Viewed'),
-        ('payment_initiated', 'Payment Initiated'),
-        ('payment_completed', 'Payment Completed'),
-        ('program_viewed', 'Program Viewed'),
-        ('workout_started', 'Workout Started'),
-        ('workout_completed', 'Workout Completed'),
-        ('exercise_viewed', 'Exercise Viewed'),
-        ('exercise_favourited', 'Exercise Favourited'),
-    ]
+class UserActivity(CreatedBaseModel):
+    class EventChoices(TextChoices):
+        BOT_STARTED = 'bot_started', _('Bot Started')
+        ONBOARDING_COMPLETED = 'onboarding_completed', _('Onboarding Completed')
+        WORKOUT_STARTED = 'workout_started', _('Workout Started')
+        WORKOUT_COMPLETED = 'workout_completed', _('Workout Completed')
+        EXERCISE_VIEWED = 'exercise_viewed', _('Exercise Viewed')
+        EXERCISE_FAVOURITED = 'exercise_favourited', _('Exercise Favourited')
+        SUBSCRIPTION_VIEWED = 'subscription_viewed', _('Subscription Viewed')
+        PAYMENT_COMPLETED = 'payment_completed', _('Payment Completed')
 
     user = ForeignKey('apps.UserProfile', CASCADE, related_name='activities')
-    event = CharField(max_length=50, choices=EVENT_CHOICES)
+    event = CharField(max_length=50, choices=EventChoices.choices, default=EventChoices.BOT_STARTED)
 
-    # Additional data
     metadata = JSONField(default=dict, blank=True)
 
-    created_at = DateTimeField(auto_now_add=True)
-
     class Meta:
-        verbose_name = 'Foydalanuvchi faoliyati'
-        verbose_name_plural = 'Foydalanuvchi faoliyatlari'
+        verbose_name = _('UserActivity')
+        verbose_name_plural = _('UserActivities')
         ordering = ['-created_at']
 
     def __str__(self):

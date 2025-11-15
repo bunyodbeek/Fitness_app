@@ -1,3 +1,5 @@
+from apps.models import Exercise, Favorite
+from apps.models.exercises import MuscleGroup
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.db import IntegrityError
@@ -5,9 +7,6 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views import View
 from django.views.generic import DetailView, ListView
-
-from apps.models import Exercise, Favorite
-from apps.models.exercises import MuscleGroup
 
 
 class MuscleGroupListView(View):

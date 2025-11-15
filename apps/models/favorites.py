@@ -1,38 +1,34 @@
-from django.db import models
-from django.db.models import ForeignKey, Model
+from apps.models.base import CreatedBaseModel
+from django.db.models import CASCADE, CharField, ForeignKey, TextField
+from django.utils.translation import gettext_lazy as _
 
 
-class Favorite(Model):
-    user = models.ForeignKey('apps.UserProfile',on_delete=models.CASCADE,related_name='favorites',verbose_name="Foydalanuvchi")
-    exercise = ForeignKey('apps.Exercise',on_delete=models.CASCADE,related_name='favorites')
-    notes = models.TextField(blank=True, verbose_name="Eslatmalar")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Qo'shilgan sana")
+class Favorite(CreatedBaseModel):
+    user = ForeignKey('apps.UserProfile', CASCADE, related_name='favorites', verbose_name="Users")
+    exercise = ForeignKey('apps.Exercise', CASCADE, related_name='favorites')
+    notes = TextField(_("Notes"), blank=True)
 
     class Meta:
         ordering = ['-created_at']
         unique_together = ('user', 'exercise')
-        verbose_name = "Sevimli"
-        verbose_name_plural = "Sevimlilar"
+        verbose_name = _("Sevimli")
+        verbose_name_plural = _("Sevimlilar")
 
     def __str__(self):
         return f"{self.user.name}"
 
-class FavoriteCollection(models.Model):
-    user = models.ForeignKey('apps.UserProfile',
-        on_delete=models.CASCADE,
-        related_name='favorite_collections',
-        verbose_name="Foydalanuvchi"
-    )
-    name = models.CharField(max_length=100, verbose_name="Nomi")
-    icon = models.CharField(max_length=10, default="⭐", verbose_name="Icon")
-    description = models.TextField(blank=True, verbose_name="Tavsif")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Yaratilgan sana")
+
+class FavoriteCollection(CreatedBaseModel):
+    user = ForeignKey('apps.UserProfile', CASCADE, related_name='favorite_collections', verbose_name="Users")
+    name = CharField(_("Name"), max_length=100)
+    icon = CharField(_("Icon"), max_length=10, default="⭐")
+    description = TextField(_("Description"), blank=True)
 
     class Meta:
         ordering = ['-created_at']
         unique_together = ('user', 'name')
-        verbose_name = "Sevimlilar to'plami"
-        verbose_name_plural = "Sevimlilar to'plamlari"
+        verbose_name = _("Favorite Collection")
+        verbose_name_plural = _("Favorite Collections")
 
     def __str__(self):
         return f"{self.user.name} - {self.name}"

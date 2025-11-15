@@ -1,4 +1,5 @@
-from apps.models import Edition, Program, Workout
+from apps.models import Edition, Program
+from apps.models.workouts import EditionExercise
 from django.contrib import admin
 
 
@@ -16,19 +17,13 @@ class ProgramAdmin(admin.ModelAdmin):
     inlines = [EditionInline]
 
 
-class WorkoutInline(admin.TabularInline):
-    model = Workout
-    extra = 1
-    fields = ['order', 'day_number', 'title']
-
-
 @admin.register(Edition)
 class EditionAdmin(admin.ModelAdmin):
     list_display = ['program', 'title', 'order', 'duration_weeks', 'days_per_week']
     list_filter = ['program']
     search_fields = ['title']
-    inlines = [WorkoutInline]
 
 
-
-
+@admin.register(EditionExercise)
+class EditionExerciseAdmin(admin.ModelAdmin):
+    list_display = ['id', 'exercise', 'edition']
