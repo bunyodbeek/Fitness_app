@@ -5,7 +5,7 @@ from django.db.models import (
     ForeignKey,
     ImageField,
     IntegerField,
-    Model, SET_NULL, DateTimeField, FloatField,
+    Model, SET_NULL, DateTimeField, FloatField, TextField,
 )
 from django.utils.translation import gettext_lazy as _
 
@@ -15,7 +15,7 @@ from apps.models.base import CreatedBaseModel
 
 class Program(CreatedBaseModel):
     title = CharField(max_length=200)
-    description = CharField()
+    description = TextField(blank=True)
     image = ImageField(upload_to='programs/')
     is_active = BooleanField(default=True)
 
@@ -33,7 +33,7 @@ class Edition(Model):
     order = CharField(default=0)
     duration_weeks = CharField(help_text="Dastur davomiyligi (haftalarda)")
     days_per_week = CharField(default=3, help_text="Haftasiga necha kun")
-    description = CharField()
+    description = TextField(blank=True)
     image = ImageField(upload_to='editions/', null=True, blank=True)
     is_premium = BooleanField(_("Premium"), default=True)
 
@@ -45,9 +45,9 @@ class Edition(Model):
 
 
 class EditionExercise(CreatedBaseModel):
-    edition = ForeignKey('apps.Edition', CASCADE, related_name='exercises')
-    exercise = ForeignKey('apps.Exercise', CASCADE, related_name='exercises')
-    order = IntegerField()
+    edition = ForeignKey('apps.Edition', CASCADE, related_name='edition_exercises')
+    exercise = ForeignKey('apps.Exercise', CASCADE, related_name='edition_exercises')
+    order = IntegerField(default=0)
     sets = IntegerField(default=0, null=True, blank=True)
     reps = IntegerField(default=0, null=True, blank=True)
     minutes = IntegerField(default=0, null=True, blank=True)

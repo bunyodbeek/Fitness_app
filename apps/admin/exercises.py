@@ -9,7 +9,7 @@ class ExerciseInstructionInline(admin.TabularInline):
 
 @admin.register(Exercise)
 class ExerciseAdmin(admin.ModelAdmin):
-    list_display = ['name', 'primary_body_part', 'difficulty']
-    list_filter = ['primary_body_part', 'difficulty']
-    search_fields = ['name', 'name_uz']
-    inlines = [ExerciseInstructionInline]
+    list_display = ("id", "name", "primary_body_part")
+    list_filter = ("primary_body_part",)
+    search_fields = ("name",)
+

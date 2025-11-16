@@ -1,6 +1,7 @@
-from apps.views import api_views, exercises, favorite, payments, users, workouts
-from apps.views.exercises import ExercisesByMuscleView, ToggleFavoriteView
 from django.urls import path
+
+from apps.views import api_views, exercises, favorite, users, workouts
+from apps.views.exercises import ExercisesByMuscleView, ToggleFavoriteView
 
 urlpatterns = [
 
