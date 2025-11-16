@@ -1,143 +1,143 @@
-import logging
-
-from apps.click_merchant import ClickMerchant
-from apps.models import Payment
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.shortcuts import redirect, render
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
-
-logger = logging.getLogger(__name__)
-
-
-@csrf_exempt
-@require_POST
-def click_prepare(request):
-    """
-    Click PREPARE callback
-    Click serveridan birinchi so'rov
-    """
-    click = ClickMerchant()
-
-    params = {
-        'click_trans_id': request.POST.get('click_trans_id'),
-        'service_id': request.POST.get('service_id'),
-        'merchant_trans_id': request.POST.get('merchant_trans_id'),
-        'amount': request.POST.get('amount'),
-        'action': request.POST.get('action'),
-        'sign_time': request.POST.get('sign_time'),
-        'sign_string': request.POST.get('sign_string'),
-    }
-
-    logger.info(f"Click PREPARE: {params}")
-
-    response = click.prepare(params)
-    return JsonResponse(response)
-
-
-@csrf_exempt
-@require_POST
-def click_complete(request):
-    """
-    Click COMPLETE callback
-    Click serveridan ikkinchi so'rov - to'lovni yakunlash
-    """
-    click = ClickMerchant()
-
-    params = {
-        'click_trans_id': request.POST.get('click_trans_id'),
-        'service_id': request.POST.get('service_id'),
-        'merchant_trans_id': request.POST.get('merchant_trans_id'),
-        'merchant_prepare_id': request.POST.get('merchant_prepare_id'),
-        'amount': request.POST.get('amount'),
-        'action': request.POST.get('action'),
-        'sign_time': request.POST.get('sign_time'),
-        'sign_string': request.POST.get('sign_string'),
-        'error': request.POST.get('error'),
-        'error_note': request.POST.get('error_note'),
-    }
-
-    logger.info(f"Click COMPLETE: {params}")
-
-    response = click.complete(params)
-    return JsonResponse(response)
-
-
-@login_required
-def subscribe_view(request):
-    """
-    Obuna sotib olish sahifasi
-    """
-    user = request.user
-
-    # Agar allaqachon premium bo'lsa
-    if user.is_premium_active():
-        messages.info(request, "Sizda allaqachon faol obuna bor!")
-        return redirect('users:settings')
-
-    # Premium narxi
-    monthly_price = 67000.00
-
-    context = {
-        'monthly_price': monthly_price,
-    }
-
-    return render(request, 'payments/subscribe.html', context)
-
-
-@login_required
-def create_payment(request):
-    """
-    To'lov yaratish va Click ga yo'naltirish
-    """
-    if request.method == 'POST':
-        user = request.user
-
-        # Payment yaratish
-        payment = Payment.objects.create(
-            user=user,
-            payment_type='subscription_new',
-            amount=67000.00,
-            status='pending'
-        )
-
-        # Click invoice yaratish
-        click = ClickMerchant()
-        response = click.create_invoice(payment)
-
-        if 'invoice_id' in response:
-            # Muvaffaqiyatli - Click ga yo'naltirish
-            payment.transaction_id = response.get('invoice_id')
-            payment.save()
-
-            return redirect(response.get('payment_url'))
-        else:
-            # Xato
-            payment.status = 'failed'
-            payment.save()
-            messages.error(request, "To'lov yaratishda xato yuz berdi!")
-            return redirect('payments:subscribe')
-
-    return redirect('payments:subscribe')
-
-
-@login_required
-def add_card_view(request):
-    """
-    Karta qo'shish sahifasi
-    Click orqali karta tokenizatsiyasi
-    """
-    user = request.user
-
-    # Agar karta allaqachon qo'shilgan bo'lsa
-    if hasattr(user, 'payment_method') and user.payment_method.is_active:
-        messages.info(request, "Sizda allaqachon karta mavjud!")
-        return redirect('users:account_settings')
-
-    return render(request, 'payments/add_card.html')
-
+# import logging
+#
+# from apps.click_merchant import ClickMerchant
+# from apps.models import Payment
+# from django.contrib import messages
+# from django.contrib.auth.decorators import login_required
+# from django.http import JsonResponse
+# from django.shortcuts import redirect, render
+# from django.views.decorators.csrf import csrf_exempt
+# from django.views.decorators.http import require_POST
+#
+# logger = logging.getLogger(__name__)
+#
+#
+# @csrf_exempt
+# @require_POST
+# def click_prepare(request):
+#     """
+#     Click PREPARE callback
+#     Click serveridan birinchi so'rov
+#     """
+#     click = ClickMerchant()
+#
+#     params = {
+#         'click_trans_id': request.POST.get('click_trans_id'),
+#         'service_id': request.POST.get('service_id'),
+#         'merchant_trans_id': request.POST.get('merchant_trans_id'),
+#         'amount': request.POST.get('amount'),
+#         'action': request.POST.get('action'),
+#         'sign_time': request.POST.get('sign_time'),
+#         'sign_string': request.POST.get('sign_string'),
+#     }
+#
+#     logger.info(f"Click PREPARE: {params}")
+#
+#     response = click.prepare(params)
+#     return JsonResponse(response)
+#
+#
+# @csrf_exempt
+# @require_POST
+# def click_complete(request):
+#     """
+#     Click COMPLETE callback
+#     Click serveridan ikkinchi so'rov - to'lovni yakunlash
+#     """
+#     click = ClickMerchant()
+#
+#     params = {
+#         'click_trans_id': request.POST.get('click_trans_id'),
+#         'service_id': request.POST.get('service_id'),
+#         'merchant_trans_id': request.POST.get('merchant_trans_id'),
+#         'merchant_prepare_id': request.POST.get('merchant_prepare_id'),
+#         'amount': request.POST.get('amount'),
+#         'action': request.POST.get('action'),
+#         'sign_time': request.POST.get('sign_time'),
+#         'sign_string': request.POST.get('sign_string'),
+#         'error': request.POST.get('error'),
+#         'error_note': request.POST.get('error_note'),
+#     }
+#
+#     logger.info(f"Click COMPLETE: {params}")
+#
+#     response = click.complete(params)
+#     return JsonResponse(response)
+#
+#
+# @login_required
+# def subscribe_view(request):
+#     """
+#     Obuna sotib olish sahifasi
+#     """
+#     user = request.user
+#
+#     # Agar allaqachon premium bo'lsa
+#     if user.is_premium_active():
+#         messages.info(request, "Sizda allaqachon faol obuna bor!")
+#         return redirect('users:settings')
+#
+#     # Premium narxi
+#     monthly_price = 67000.00
+#
+#     context = {
+#         'monthly_price': monthly_price,
+#     }
+#
+#     return render(request, 'payments/subscribe.html', context)
+#
+#
+# @login_required
+# def create_payment(request):
+#     """
+#     To'lov yaratish va Click ga yo'naltirish
+#     """
+#     if request.method == 'POST':
+#         user = request.user
+#
+#         # Payment yaratish
+#         payment = Payment.objects.create(
+#             user=user,
+#             payment_type='subscription_new',
+#             amount=67000.00,
+#             status='pending'
+#         )
+#
+#         # Click invoice yaratish
+#         click = ClickMerchant()
+#         response = click.create_invoice(payment)
+#
+#         if 'invoice_id' in response:
+#             # Muvaffaqiyatli - Click ga yo'naltirish
+#             payment.transaction_id = response.get('invoice_id')
+#             payment.save()
+#
+#             return redirect(response.get('payment_url'))
+#         else:
+#             # Xato
+#             payment.status = 'failed'
+#             payment.save()
+#             messages.error(request, "To'lov yaratishda xato yuz berdi!")
+#             return redirect('payments:subscribe')
+#
+#     return redirect('payments:subscribe')
+#
+#
+# @login_required
+# def add_card_view(request):
+#     """
+#     Karta qo'shish sahifasi
+#     Click orqali karta tokenizatsiyasi
+#     """
+#     user = request.user
+#
+#     # Agar karta allaqachon qo'shilgan bo'lsa
+#     if hasattr(user, 'payment_method') and user.payment_method.is_active:
+#         messages.info(request, "Sizda allaqachon karta mavjud!")
+#         return redirect('users:account_settings')
+#
+#     return render(request, 'payments/add_card.html')
+#
 #
 # @csrf_exempt
 # @require_POST
@@ -191,7 +191,7 @@ def add_card_view(request):
 #             'error_note': str(e)
 #         })
 #
-
+#
 # @login_required
 # def remove_card(request):
 #     """
@@ -215,8 +215,8 @@ def add_card_view(request):
 #             messages.error(request, "Karta topilmadi!")
 #
 #     return redirect('users:account_settings')
-
-
+#
+#
 # @login_required
 # def payment_success(request):
 #     """

@@ -1,0 +1,180 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="{{ user.language|default:'uz' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Profile Update{% endblock %}</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* Custom styles */
+        .form-field {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-field label {
+            display: block;
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .dark .form-field label {
+            color: #d1d5db;
+        }
+
+        .form-field input,
+        .form-field select,
+        .form-field textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            background-color: #fafafa;
+        }
+
+        .dark .form-field input,
+        .dark .form-field select,
+        .dark .form-field textarea {
+            background-color: #1f2937;
+            border-color: #374151;
+            color: #f3f4f6;
+        }
+
+        .form-field input:focus,
+        .form-field select:focus,
+        .form-field textarea:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        .dark .form-field input:focus,
+        .dark .form-field select:focus,
+        .dark .form-field textarea:focus {
+            background-color: #111827;
+            border-color: #a78bfa;
+        }
+
+        .form-field textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-field .helptext {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            margin-top: 0.25rem;
+            display: block;
+        }
+
+        .dark .form-field .helptext {
+            color: #6b7280;
+        }
+
+        .form-field .errorlist {
+            list-style: none;
+            padding: 0;
+            margin: 0.5rem 0 0 0;
+        }
+
+        .form-field .errorlist li {
+            color: #ef4444;
+            font-size: 0.85rem;
+            background-color: #fef2f2;
+            padding: 0.5rem;
+            border-radius: 8px;
+            border-left: 3px solid #ef4444;
+            margin-top: 0.25rem;
+        }
+
+        .dark .form-field .errorlist li {
+            background-color: #7f1d1d;
+            color: #fca5a5;
+            border-left-color: #ef4444;
+        }
+
+        /* File input styling */
+        .form-field input[type="file"] {
+            padding: 0.5rem;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .dark .form-field input[type="file"] {
+            background-color: #1f2937;
+        }
+
+        /* Checkbox styling */
+        .form-field input[type="checkbox"] {
+            width: auto;
+            margin-right: 0.5rem;
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);" class="min-h-screen">
+<div class="min-h-screen flex items-center justify-center py-8 px-4">
+    <div class="w-full max-w-md">
+        <!-- Card -->
+        <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full mb-4 shadow-lg">
+                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">Profilni yangilash</h1>
+                <p class="text-gray-500 dark:text-gray-400">Ma'lumotlaringizni tahrirlang</p>
+            </div>
+
+            <!-- Form -->
+            <form method="post" enctype="multipart/form-data" class="space-y-5">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4 rounded-lg mb-4">
+                        <div class="text-red-700 dark:text-red-400">
+                            {{ form.non_field_errors }}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="form-field">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.help_text %}
+                            <span class="helptext">{{ field.help_text }}</span>
+                        {% endif %}
+                        {{ field.errors }}
+                    </div>
+                {% endfor %}
+
+                <!-- Buttons -->
+                <div class="flex gap-3 pt-4">
+                    <a href="{% url 'user_profile' %}"
+                       class="flex-1 px-5 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors text-center">
+                        Bekor qilish
+                    </a>
+                    <button type="submit"
+                            class="flex-1 px-5 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-medium hover:from-indigo-600 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl">
+                        Saqlash
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

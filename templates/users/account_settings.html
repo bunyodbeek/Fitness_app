@@ -268,7 +268,7 @@
 <body>
     <div class="top-bar">
         <div class="top-bar-left">
-            <a href="{% url 'users:settings' %}" class="back-button"><i class="fas fa-arrow-left"></i></a>
+            <a href="{% url 'settings' %}" class="back-button"><i class="fas fa-arrow-left"></i></a>
             <h1>{% trans "Obunani boshqarish" %}</h1>
         </div>
         <div class="top-bar-actions">
@@ -300,7 +300,7 @@
                 </div>
                 <div class="profile-name">{{ user.get_full_name|default:user.username }}</div>
             </div>
-            <a href="{% url 'users:profile_edit' %}" class="edit-button">
+            <a href="{% url 'profile_update' %}" class="edit-button">
                 <i class="fas fa-pen"></i>
             </a>
         </div>
@@ -344,7 +344,7 @@
 
         <!-- Actions Card -->
         <div class="action-card">
-            <form method="post" action="{% url 'users:cancel_subscription' %}">
+            <form method="post" action="{% url 'cancel_subscription' %}">
                 {% csrf_token %}
                 <button type="submit" class="action-item" style="width: 100%; border: none; background: none;">
                     <div class="action-left">
@@ -364,7 +364,7 @@
                 </button>
             </form>
 
-            <form method="post" action="{% url 'users:restore_subscription' %}">
+            <form method="post" action="{% url 'restore_subscription' %}">
                 {% csrf_token %}
                 <button type="submit" class="action-item" style="width: 100%; border: none; background: none;">
                     <div class="action-left">
@@ -382,7 +382,7 @@
             </form>
         </div>
 
-        <a href="{% url 'users:settings' %}" class="bottom-button">{% trans "Orqaga" %}</a>
+        <a href="{% url 'settings' %}" class="bottom-button">{% trans "Orqaga" %}</a>
     </div>
 </body>
 </html>

@@ -1,5 +1,3 @@
-from apps.models import Exercise, Favorite
-from apps.models.exercises import MuscleGroup
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.db import IntegrityError
@@ -7,6 +5,9 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views import View
 from django.views.generic import DetailView, ListView
+
+from apps.models import Exercise, Favorite
+from apps.models.exercises import MuscleGroup
 
 
 class MuscleGroupListView(View):
@@ -23,23 +24,16 @@ class MuscleGroupListView(View):
 
 
 class ExercisesByMuscleView(ListView):
-    """
-    URL'dan kelgan primary_body_part nomiga asoslanib mashqlarni ro'yxatlaydi.
-    Har bir mashq uchun foydalanuvchining sevimli holatini tekshiradi.
-    """
     model = Exercise
     template_name = 'exercises/exercise_list.html'
     context_object_name = 'exercises'
 
     def get_queryset(self):
-        """
-        URL'dan kelgan 'muscle' nomiga ko'ra Mashq (Exercise) obyektlarini filtrlaydi.
-        """
 
         muscle_name = self.kwargs['muscle']
 
         queryset = Exercise.objects.filter(
-            muscle_group__iexact=muscle_name
+            primary_body_part__iexact=muscle_name
         ).order_by('name')
 
         self.muscle = muscle_name
@@ -47,9 +41,6 @@ class ExercisesByMuscleView(ListView):
         return queryset
 
     def get_context_data(self, **kwargs):
-        """
-        Template'ga qo'shimcha kontekst ma'lumotlarini (muscle nomi va is_favorited) uzatadi.
-        """
         context = super().get_context_data(**kwargs)
 
         context['muscle'] = self.muscle.capitalize()

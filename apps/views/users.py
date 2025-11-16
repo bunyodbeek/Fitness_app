@@ -2,17 +2,17 @@ import json
 import traceback
 
 import requests
-from apps.models import PaymentHistory, User, UserMotivation, UserProfile
-from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.base import ContentFile
 from django.http import HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import redirect
-from django.urls import reverse
-from django.utils.translation import activate
+from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, UpdateView
+
+from apps.forms import UserProfileForm
+from apps.models import User, UserMotivation, UserProfile
 
 
 class QuestionnaireSubmitView(View):
@@ -32,13 +32,11 @@ class QuestionnaireSubmitView(View):
                     'message': 'User already exists'
                 })
 
-            # 🔹 Foydalanuvchi ma'lumotlari
             first_name = data.get('first_name', 'User')
             last_name = data.get('last_name', '')
             username = data.get('username', '')
             photo_url = data.get('photo_url', '')
 
-            # 🔹 User yaratish yoki topish
             user, created = User.objects.get_or_create(
                 username=f'telegram_{telegram_id}',
                 defaults={'first_name': first_name, 'last_name': last_name}
@@ -49,12 +47,10 @@ class QuestionnaireSubmitView(View):
                 user.last_name = last_name
                 user.save()
 
-            # 🔹 Profil yaratish yoki yangilash
             profile, _ = UserProfile.objects.get_or_create(
                 user=user,
                 defaults={'telegram_id': telegram_id, 'name': first_name}
             )
-
             profile.telegram_id = telegram_id
             profile.telegram_username = username
             profile.name = first_name
@@ -65,7 +61,6 @@ class QuestionnaireSubmitView(View):
             profile.weight = float(data.get('weight', 63))
             profile.onboarding_completed = True
 
-            # 🔹 Avatar yuklash
             if photo_url:
                 try:
                     response = requests.get(photo_url, timeout=5)
@@ -80,7 +75,6 @@ class QuestionnaireSubmitView(View):
 
             profile.save()
 
-            # 🔹 Motivatsiyalarni yangilash
             UserMotivation.objects.filter(user=user).delete()
             for motivation in data.get('motivation', []):
                 UserMotivation.objects.create(user=user, motivation=motivation)
@@ -104,10 +98,6 @@ class QuestionnaireSubmitView(View):
             print(traceback.format_exc())
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
-
-# =======================
-# 🔐 TELEGRAM AUTH
-# =======================
 
 class TelegramAuthView(View):
     """Telegram WebApp orqali avtomatik login"""
@@ -155,21 +145,7 @@ class TelegramAuthView(View):
         return HttpResponseNotAllowed(['POST'])
 
 
-# =======================
-# 🏠 HOME
-# =======================
-
-class HomeView(TemplateView):
-    """Asosiy sahifa"""
-    template_name = 'exercises/body_parts.html'
-
-
-# =======================
-# 🧭 ONBOARDING
-# =======================
-
 class OnboardingView(TemplateView):
-    """Yangi foydalanuvchilar uchun onboarding"""
     template_name = 'miniapp/questionarrie.html'
 
     def dispatch(self, request, *args, **kwargs):
@@ -179,10 +155,6 @@ class OnboardingView(TemplateView):
                 return redirect('/workouts/')
         return super().dispatch(request, *args, **kwargs)
 
-
-# =======================
-# 👤 PROFILE
-# =======================
 
 class ProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'users/profile_detail.html'
@@ -194,46 +166,15 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class PersonalInfoView(LoginRequiredMixin, TemplateView):
-    template_name = 'users/profile_form.html'
+class UpdateProfileView(LoginRequiredMixin, UpdateView):
+    model = UserProfile
+    form_class = UserProfileForm
+    template_name = 'users/profile_update.html'
+    success_url = reverse_lazy('user_profile')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        profile, _ = UserProfile.objects.get_or_create(user=self.request.user)
-        context['user_profile'] = profile
-        return context
+    def get_object(self, queryset=None):
+        return self.request.user.profile
 
-
-class UpdateProfileView(LoginRequiredMixin, View):
-    """Profilni yangilash"""
-
-    def post(self, request, *args, **kwargs):
-        profile, _ = UserProfile.objects.get_or_create(user=request.user)
-
-        fields = ['name', 'gender', 'birth_date', 'weight', 'height', 'unit']
-        for field in fields:
-            val = request.POST.get(field)
-            if val:
-                setattr(profile, field, val)
-
-        if 'avatar' in request.FILES:
-            profile.avatar = request.FILES['avatar']
-
-        try:
-            if profile.weight:
-                profile.weight = float(profile.weight)
-            if profile.height:
-                profile.height = float(profile.height)
-        except ValueError:
-            return JsonResponse({'success': False, 'error': 'Invalid numeric value'}, status=400)
-
-        profile.save()
-        return JsonResponse({'success': True, 'message': 'Profile updated successfully'})
-
-
-# =======================
-# ⚙️ SETTINGS
-# =======================
 
 class SettingsView(LoginRequiredMixin, TemplateView):
     template_name = 'users/settings.html'
@@ -244,76 +185,6 @@ class SettingsView(LoginRequiredMixin, TemplateView):
         context['profile'] = profile
         return context
 
-
-class ChangeLanguageView(LoginRequiredMixin, View):
-    def post(self, request, *args, **kwargs):
-        language = request.POST.get('language')
-        if language in ['uz', 'en', 'ru']:
-            profile = UserProfile.objects.get(user=request.user)
-            profile.language = language
-            profile.save()
-            activate(language)
-            request.session['django_language'] = language
-            messages.success(request, "Til muvaffaqiyatli o‘zgartirildi!")
-        return redirect('users:settings')
-
-
-# =======================
-# 💳 SUBSCRIPTION
-# =======================
-
-class AccountManagementView(LoginRequiredMixin, TemplateView):
-    template_name = 'users/account_settings.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        profile, _ = UserProfile.objects.get_or_create(user=self.request.user)
-        context['profile'] = profile
-        return context
-
-
-class SubscriptionInfoView(LoginRequiredMixin, TemplateView):
-    template_name = 'users/subscription_info.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        profile, _ = UserProfile.objects.get_or_create(user=self.request.user)
-        context.update({
-            'profile': profile,
-            'subscription_active': profile.is_subscribed,
-            'days_left': profile.days_until_renewal
-        })
-        return context
-
-
-class PaymentHistoryView(LoginRequiredMixin, TemplateView):
-    template_name = 'users/payment_history.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['payments'] = PaymentHistory.objects.filter(user=self.request.user.profile)
-        return context
-
-
-class CancelSubscriptionView(LoginRequiredMixin, View):
-    def post(self, request, *args, **kwargs):
-        profile = UserProfile.objects.get(user=request.user.profile)
-        profile.subscription_end_date = None
-        profile.subscription_start_date = None
-        profile.save()
-        messages.success(request, 'Obuna bekor qilindi!')
-        return redirect('users:account_management')
-
-
-class RestoreSubscriptionView(LoginRequiredMixin, View):
-    def post(self, request, *args, **kwargs):
-        messages.success(request, 'Obuna qayta tiklandi!')
-        return redirect('users:account_management')
-
-
-# =======================
-# 📈 PROGRESS
-# =======================
 
 class ProgressView(LoginRequiredMixin, TemplateView):
     template_name = 'users/progress.html'

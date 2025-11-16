@@ -1,9 +1,10 @@
-from apps.models import Favorite
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, View
+
+from apps.models import Favorite
 
 
 class FavoritesView(LoginRequiredMixin, TemplateView):
@@ -42,8 +43,6 @@ class FavoritesView(LoginRequiredMixin, TemplateView):
         return context
 
 
-# apps/views/favorite.py - RemoveFavoriteView
-
 class RemoveFavoriteView(LoginRequiredMixin, View):
     """Favorite o'chirish"""
 
@@ -52,9 +51,9 @@ class RemoveFavoriteView(LoginRequiredMixin, View):
         return super().dispatch(*args, **kwargs)
 
     def delete(self, request, favorite_id):
-        # ⭐ MUHIM TUZATISH: user obyektini Profile obyekti bilan almashtirish
+
         try:
-            # Profile obyekti olinadi
+
             user_profile = request.user.profile
         except AttributeError:
             return JsonResponse({
@@ -65,7 +64,6 @@ class RemoveFavoriteView(LoginRequiredMixin, View):
         try:
             favorite = Favorite.objects.get(
                 id=favorite_id,
-                # ⭐ FAVORITE'ni o'chirayotganda, Profile obyekti orqali solishtiramiz
                 user=user_profile
             )
             favorite.delete()

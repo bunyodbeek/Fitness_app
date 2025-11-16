@@ -1,40 +1,28 @@
-from apps.models import UserProfile
 from django import forms
-from django.contrib.auth.forms import UserChangeForm
-from django.utils.translation import gettext_lazy as _
+from .models import UserProfile
 
-
-class UserProfileForm(UserChangeForm):
+class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['first_name', 'last_name', 'avatar', 'birth_date', 'language']
+        fields = ['name', 'gender', 'birth_date', 'weight', 'height', 'avatar', 'unit_system']
         widgets = {
-            'first_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': _("Ism")
-            }),
-            'last_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': _("Familiya")
-            }),
-            'avatar': forms.FileInput(attrs={
-                'class': 'form-control',
-                'accept': 'image/*'
-            }),
-            'birth_date': forms.DateInput(attrs={
-                'class': 'form-control',
-                'type': 'date'
-            }),
-            'language': forms.Select(attrs={
-                'class': 'form-control'
-            }),
+            'birth_date': forms.DateInput(attrs={'type': 'date', 'class': 'input-field'}),
+            'name': forms.TextInput(attrs={'class': 'input-field'}),
+            'gender': forms.Select(attrs={'class': 'input-field'}),
+            'weight': forms.NumberInput(attrs={'class': 'input-field'}),
+            'height': forms.NumberInput(attrs={'class': 'input-field'}),
+            'unit_system': forms.Select(attrs={'class': 'input-field'}),
+            'avatar': forms.FileInput(attrs={'class': 'input-field'}),
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if 'password' in self.fields:
-            del self.fields['password']
+    def clean_weight(self):
+        weight = self.cleaned_data.get('weight')
+        if weight is not None and weight <= 0:
+            raise forms.ValidationError("Weight must be greater than zero.")
+        return weight
 
-        for field_name in self.fields:
-            if field_name not in ['username', 'email']:
-                self.fields[field_name].required = False
+    def clean_height(self):
+        height = self.cleaned_data.get('height')
+        if height is not None and height <= 0:
+            raise forms.ValidationError("Height must be greater than zero.")
+        return height

@@ -1,7 +1,3 @@
-from django.utils.translation import gettext_lazy as _
-
-from apps.models import Exercise
-from apps.models.base import CreatedBaseModel
 from django.db.models import (
     CASCADE,
     BooleanField,
@@ -9,9 +5,12 @@ from django.db.models import (
     ForeignKey,
     ImageField,
     IntegerField,
-    Model,
+    Model, SET_NULL, DateTimeField, FloatField,
 )
+from django.utils.translation import gettext_lazy as _
 
+from apps.models import Exercise
+from apps.models.base import CreatedBaseModel
 
 
 class Program(CreatedBaseModel):
@@ -29,7 +28,7 @@ class Program(CreatedBaseModel):
 
 
 class Edition(Model):
-    program = ForeignKey(Program, on_delete=CASCADE, related_name='editions')
+    program = ForeignKey('apps.Program', CASCADE, related_name='editions')
     title = CharField(max_length=200)
     order = CharField(default=0)
     duration_weeks = CharField(help_text="Dastur davomiyligi (haftalarda)")
@@ -46,14 +45,36 @@ class Edition(Model):
 
 
 class EditionExercise(CreatedBaseModel):
-    edition = ForeignKey(Edition, on_delete=CASCADE, related_name='exercises')
-    exercise = ForeignKey(Exercise, on_delete=CASCADE, related_name='exercises')
+    edition = ForeignKey('apps.Edition', CASCADE, related_name='exercises')
+    exercise = ForeignKey('apps.Exercise', CASCADE, related_name='exercises')
+    order = IntegerField()
     sets = IntegerField(default=0, null=True, blank=True)
     reps = IntegerField(default=0, null=True, blank=True)
     minutes = IntegerField(default=0, null=True, blank=True)
     day_number = IntegerField(default=1)
 
-
     class Meta:
         verbose_name = "Edition Exercise"
         verbose_name_plural = "Edition Exercises"
+
+
+class Workout(Model):
+    user = ForeignKey('apps.UserProfile', CASCADE, related_name="workouts")
+    edition = ForeignKey('apps.Edition', SET_NULL, null=True, blank=True, related_name="workouts")
+
+    started_at = DateTimeField(auto_now_add=True)
+    finished_at = DateTimeField(null=True, blank=True)
+
+    duration = IntegerField(default=0)
+    calories = IntegerField(default=0)
+
+
+class WorkoutExercise(Model):
+    workout = ForeignKey('apps.Workout', CASCADE, related_name="workout_exercises")
+    exercise = ForeignKey(Exercise, SET_NULL, null=True)
+
+    sets = IntegerField(default=0)
+    reps = IntegerField(default=0)
+    weight = FloatField(default=0)
+
+    order = IntegerField(default=0)

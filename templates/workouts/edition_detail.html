@@ -3,382 +3,456 @@
 {% block title %}{{ edition.title }} - Workouts{% endblock %}
 
 {% block extra_css %}
-<style>
-    /* Edition Header */
-    .edition-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 30px 20px;
-        color: white;
-    }
-
-    .edition-back {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 14px;
-        margin-bottom: 15px;
-        opacity: 0.9;
-    }
-
-    .edition-title {
-        font-size: 28px;
-        font-weight: 700;
-        margin-bottom: 10px;
-    }
-
-    .edition-subtitle {
-        font-size: 14px;
-        opacity: 0.9;
-    }
-
-    /* Workout Card */
-    .workout-card {
-        background: white;
-        margin: 15px 20px;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        text-decoration: none;
-        color: inherit;
-        display: block;
-        transition: all 0.3s;
-    }
-
-    .workout-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-    }
-
-    .workout-header {
-        background: #f8f9fa;
-        padding: 15px 20px;
-        border-bottom: 1px solid #e0e0e0;
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-
-    .workout-day {
-        background: #ffd700;
-        color: #2c3e50;
-        width: 50px;
-        height: 50px;
-        border-radius: 8px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        flex-shrink: 0;
-    }
-
-    .day-label {
-        font-size: 10px;
-        text-transform: uppercase;
-    }
-
-    .day-number {
-        font-size: 24px;
-    }
-
-    .workout-info {
-        flex: 1;
-    }
-
-    .workout-title {
-        font-size: 18px;
-        font-weight: 600;
-        color: #2c3e50;
-        margin-bottom: 5px;
-    }
-
-    .workout-meta {
-        font-size: 13px;
-        color: #999;
-        display: flex;
-        gap: 15px;
-    }
-
-    /* Exercise Preview List */
-    .exercise-preview-list {
-        padding: 15px 20px;
-    }
-
-    .exercise-preview-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 10px 0;
-        border-bottom: 1px solid #f0f0f0;
-    }
-
-    .exercise-preview-item:last-child {
-        border-bottom: none;
-    }
-
-    .exercise-thumbnail {
-        width: 50px;
-        height: 50px;
-        border-radius: 8px;
-        object-fit: cover;
-        background: #e0e0e0;
-    }
-
-    .exercise-placeholder-thumb {
-        width: 50px;
-        height: 50px;
-        border-radius: 8px;
-        background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-    }
-
-    .exercise-preview-info {
-        flex: 1;
-    }
-
-    .exercise-preview-name {
-        font-size: 14px;
-        font-weight: 500;
-        color: #2c3e50;
-        margin-bottom: 3px;
-    }
-
-    .exercise-preview-sets {
-        font-size: 12px;
-        color: #999;
-    }
-
-    /* Start Button */
-    .start-button-container {
-        padding: 15px 20px;
-        background: #f8f9fa;
-    }
-
-    .start-workout-btn {
-        width: 100%;
-        background: #ffd700;
-        color: #2c3e50;
-        border: none;
-        padding: 15px;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
-
-    .start-workout-btn:hover {
-        background: #ffed4e;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
-    }
-
-    /* Progress Bar (optional) */
-    .progress-bar {
-        background: white;
-        padding: 15px 20px;
-        margin: 15px 20px;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .progress-label {
-        font-size: 14px;
-        color: #666;
-        margin-bottom: 10px;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .progress-track {
-        height: 8px;
-        background: #e0e0e0;
-        border-radius: 4px;
-        overflow: hidden;
-    }
-
-    .progress-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #ffd700 0%, #ffed4e 100%);
-        border-radius: 4px;
-        transition: width 0.3s;
-    }
-
-    /* Info Banner */
-    .info-banner {
-        background: white;
-        margin: 15px 20px;
-        padding: 15px;
-        border-radius: 12px;
-        border-left: 4px solid #ffd700;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-
-    .info-banner-title {
-        font-size: 14px;
-        font-weight: 600;
-        color: #2c3e50;
-        margin-bottom: 5px;
-    }
-
-    .info-banner-text {
-        font-size: 13px;
-        color: #666;
-        line-height: 1.5;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .edition-title {
-            font-size: 24px;
+    <style>
+        /* Global Container/Body Style */
+        body {
+            background-color: #f4f4f9; /* Engil fon rangi */
         }
 
+        /* Top Navigation (Fixed/Reusable) */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            position: sticky; /* Sticky uchun qo'shildi */
+            top: 0;
+            z-index: 1000;
+        }
+
+        .top-nav h1 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .back-btn, .action-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #764ba2;
+            padding: 0 5px;
+        }
+
+        /* Edition Header */
+        .edition-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px 20px;
+            color: white;
+        }
+
+        .edition-back a { /* Link sifatida belgilandi */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            margin-bottom: 15px;
+            opacity: 0.9;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .edition-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .edition-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Workout Card */
         .workout-card {
-            margin: 10px 15px;
+            background: white;
+            margin: 15px 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Yumshoqroq soya */
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .workout-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .workout-header {
+            background: #fcfcfc;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         .workout-day {
-            width: 45px;
-            height: 45px;
+            background: #ffd700;
+            color: #2c3e50;
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .day-label {
+            font-size: 10px;
+            text-transform: uppercase;
         }
 
         .day-number {
-            font-size: 20px;
+            font-size: 24px;
+        }
+
+        .workout-info {
+            flex: 1;
         }
 
         .workout-title {
-            font-size: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
         }
-    }
-</style>
+
+        .workout-meta {
+            font-size: 13px;
+            color: #999;
+            display: flex;
+            gap: 15px;
+        }
+
+        /* Exercise Preview List */
+        .exercise-preview-list {
+            padding: 15px 20px;
+        }
+
+        .exercise-preview-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .exercise-preview-item:last-child {
+            border-bottom: none;
+        }
+
+        .exercise-thumbnail {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #e0e0e0;
+        }
+
+        .exercise-placeholder-thumb {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #555;
+        }
+
+        .exercise-preview-info {
+            flex: 1;
+        }
+
+        .exercise-preview-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 3px;
+        }
+
+        .exercise-preview-sets {
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* Start Button */
+        .start-button-container {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+        }
+
+        .start-workout-btn {
+            width: 100%;
+            background: #ffd700;
+            color: #2c3e50;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .start-workout-btn:hover {
+            background: #ffed4e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+        }
+
+        .start-workout-btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            background: white;
+            padding: 15px 20px;
+            margin: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .progress-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-track {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700 0%, #ffed4e 100%);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        /* Info Banner */
+        .info-banner {
+            background: white;
+            margin: 15px 20px;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #ffd700;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .info-banner-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .info-banner-text {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 50px;
+            color: #999;
+        }
+
+        .empty-state .icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            color: #999;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .edition-title {
+                font-size: 24px;
+            }
+
+            .workout-card {
+                margin: 10px 15px;
+            }
+
+            .workout-day {
+                width: 45px;
+                height: 45px;
+            }
+
+            .day-number {
+                font-size: 20px;
+            }
+
+            .workout-title {
+                font-size: 16px;
+            }
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
-<!-- Top Navigation -->
-<div class="top-nav">
-    <button class="back-btn" onclick="goBack()">‹</button>
-    <h1>WORKOUT</h1>
-    <button class="action-btn">Edit</button>
-</div>
+    <div class="top-nav">
+        <button class="back-btn" onclick="goBack()">‹</button>
+        <h1>WORKOUTS</h1>
+        <a href="#" class="action-btn" style="text-decoration: none; color: #764ba2;">Edit</a>
+    </div>
 
-<!-- Edition Header -->
-<div class="edition-header">
-    <div class="edition-back">
-        {{ edition.program.title }}
-    </div>
-    <h1 class="edition-title">{{ edition.title }}</h1>
-    <div class="edition-subtitle">
-        {{ edition.duration_weeks }} weeks • {{ edition.days_per_week }} days per week
-    </div>
-</div>
-
-<!-- Progress Bar (optional - if user started) -->
-<div class="progress-bar">
-    <div class="progress-label">
-        <span>Your Progress</span>
-        <span>0/{{ workouts.count }} completed</span>
-    </div>
-    <div class="progress-track">
-        <div class="progress-fill" style="width: 0%;"></div>
-    </div>
-</div>
-
-<!-- Info Banner -->
-<div class="info-banner">
-    <div class="info-banner-title">💡 How it works</div>
-    <div class="info-banner-text">
-        Complete each workout in order. Rest 1-2 days between sessions for best results.
-    </div>
-</div>
-
-<!-- Workouts List -->
-{% if workouts %}
-    {% for workout in workouts %}
-    <a href="{% url 'workout_detail' workout.id %}" class="workout-card">
-        <!-- Workout Header -->
-        <div class="workout-header">
-            <div class="workout-day">
-                <div class="day-label">Day</div>
-                <div class="day-number">{{ workout.day_number }}</div>
-            </div>
-            <div class="workout-info">
-                <div class="workout-title">{{ workout.exercise.title }}</div>
-                <div class="workout-meta">
-                    <span>🏋️ {{ workout.workout_exercises.count }} exercises</span>
-                    <span>⏱️ ~45 min</span>
-                </div>
-            </div>
+    <div class="edition-header">
+        <div class="edition-back">
+            <a href="{% url 'program_detail' edition.program.id %}">
+                &lsaquo; {{ edition.program.title }}
+            </a>
         </div>
+        <h1 class="edition-title">{{ edition.title }}</h1>
+        <div class="edition-subtitle">
+            {{ edition.duration_weeks }} weeks • {{ edition.days_per_week }} days per week
+        </div>
+    </div>
 
-        <!-- Exercise Preview List -->
-        <div class="exercise-preview-list">
-            {% for workout_exercise in workout.workout_exercises.all|slice:":3" %}
-            <div class="exercise-preview-item">
-                {% if workout_exercise.exercise.image %}
-                    <img src="{{ workout_exercise.exercise.image.url }}" 
-                         alt="{{ workout_exercise.exercise.name }}" 
-                         class="exercise-thumbnail">
-                {% else %}
-                    <div class="exercise-placeholder-thumb">💪</div>
-                {% endif %}
-                <div class="exercise-preview-info">
-                    <div class="exercise-preview-name">{{ workout_exercise.exercise.name }}</div>
-                    <div class="exercise-preview-sets">
-                        {{ workout_exercise.sets }} × {{ workout_exercise.reps }} reps
+    <div class="progress-bar">
+        <div class="progress-label">
+            <span>Your Progress</span>
+            <span>0/{{ workouts|length }} completed</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" style="width: 0%;"></div>
+        </div>
+    </div>
+
+    <div class="info-banner">
+        <div class="info-banner-title">💡 How it works</div>
+        <div class="info-banner-text">
+            Complete each workout in order. Rest 1-2 days between sessions for best results.
+        </div>
+    </div>
+
+    {% if workouts %}
+        {% for workout in workouts %}
+            <a href="{% url 'workout_start' workout.id %}" class="workout-card">
+                <div class="workout-header">
+                    <div class="workout-day">
+                        <div class="day-label">Day</div>
+                        <div class="day-number">{{ workout.day_number }}</div>
+                    </div>
+                    <div class="workout-info">
+                        <div class="workout-title">
+                            {{ workout.title|default:"Workout" }} Day {{ workout.day_number }}
+                        </div>
+                        <div class="workout-meta">
+                            <span>🏋️ {{ workout.workout_exercises.count }} exercises</span>
+                            <span>⏱️ ~45 min</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
-            
-            {% if workout.workout_exercises.count > 3 %}
-            <div class="exercise-preview-item">
-                <div class="exercise-preview-info" style="text-align: center; color: #999;">
-                    +{{ workout.workout_exercises.count|add:"-3" }} more exercises
-                </div>
-            </div>
-            {% endif %}
-        </div>
 
-        <!-- Start Button -->
-        <div class="start-button-container">
-            <button class="start-workout-btn" onclick="event.preventDefault(); startWorkout({{ workout.id }})">
-                Start Workout
-            </button>
+                <div class="exercise-preview-list">
+                    {% for workout_exercise in workout.workout_exercises.all|slice:":3" %}
+                        <div class="exercise-preview-item">
+                            {% if workout_exercise.exercise.image %}
+                                <img src="{{ workout_exercise.exercise.image.url }}"
+                                     alt="{{ workout_exercise.exercise.name }}"
+                                     class="exercise-thumbnail" loading="lazy">
+                            {% else %}
+                                <div class="exercise-placeholder-thumb">💪</div>
+                            {% endif %}
+                            <div class="exercise-preview-info">
+                                <div class="exercise-preview-name">{{ workout_exercise.exercise.name }}</div>
+                                <div class="exercise-preview-sets">
+                                    {{ workout_exercise.sets }} × {{ workout_exercise.reps }} reps
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    {% with remaining_exercises=workout.workout_exercises.count|add:"-3" %}
+                        {% if remaining_exercises > 0 %}
+                            <div class="exercise-preview-item">
+                                <div class="exercise-preview-info" style="text-align: center; color: #999;">
+                                    +{{ remaining_exercises }} more exercises
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+
+                <div class="start-button-container">
+                    <button class="start-workout-btn"
+                            onclick="event.preventDefault(); event.stopPropagation(); startWorkout({{ workout.id }})">
+                        Start Workout
+                    </button>
+                </div>
+            </a>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <div class="icon">🏋️</div>
+            <h3>No workouts yet</h3>
+            <p>Workouts will be added soon or create your first one.</p>
         </div>
-    </a>
-    {% endfor %}
-{% else %}
-    <div class="empty-state">
-        <div class="icon">🏋️</div>
-        <h3>No workouts yet</h3>
-        <p>Workouts will be added soon</p>
-    </div>
-{% endif %}
+    {% endif %}
 {% endblock %}
 
 {% block extra_js %}
-<script>
-    function startWorkout(workoutId) {
-        window.location.href = `/workouts/workout/${workoutId}/start/`;
-    }
+    <script>
+        // 1. Orqaga Qaytish Funksiyasi
+        function goBack() {
+            window.history.back();
+        }
 
-    // Animation on load
-    document.addEventListener('DOMContentLoaded', function() {
-        const cards = document.querySelectorAll('.workout-card');
-        
-        cards.forEach((card, index) => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            
-            setTimeout(() => {
-                card.style.transition = 'all 0.5s ease';
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, index * 100);
+        // 2. Workoutni boshlash funksiyasi
+        function startWorkout(workoutId) {
+            // Workoutni boshlash sahifasiga yo'naltirish (Django URL'ni o'zgartiring agar kerak bo'lsa)
+            window.location.href = `{% url 'workout_start' 0 %}`.replace('0', workoutId);
+        }
+
+        // 3. Animation on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.workout-card');
+
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)'; /* Yumshoqroq animatsiya */
+                    card.style.opacity = '1';
+                    card.style.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
         });
-    });
-</script>
+    </script>
 {% endblock %}

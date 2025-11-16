@@ -1,3 +1,4 @@
+from apps.models.base import CreatedBaseModel
 from django.db.models import (
     CASCADE,
     CharField,
@@ -7,10 +8,9 @@ from django.db.models import (
     IntegerField,
     Model,
     TextChoices,
-    TextField, )
+    TextField,
+)
 from django.utils.translation import gettext_lazy as _
-
-from apps.models.base import CreatedBaseModel
 
 
 class MuscleGroup(TextChoices):

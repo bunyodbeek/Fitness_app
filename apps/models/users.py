@@ -1,6 +1,5 @@
 from datetime import date
 
-from apps.models.base import CreatedBaseModel
 from django.contrib.auth.models import AbstractUser
 from django.db.models import (
     CASCADE,
@@ -16,6 +15,8 @@ from django.db.models import (
     TextChoices,
     TextField,
 )
+
+from apps.models.base import CreatedBaseModel
 
 
 class User(AbstractUser):
@@ -68,7 +69,7 @@ class UserProfile(CreatedBaseModel):
         verbose_name_plural = "User Profiles"
 
     def __str__(self):
-        return f"{self.name} - {self.telegram_id or 'no telegram'}"
+        return f"{self.name}"
 
     @property
     def age(self):

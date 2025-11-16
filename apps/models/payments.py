@@ -52,7 +52,7 @@ class Subscription(Model):
 
 class Payment(CreatedBaseModel):
     user = ForeignKey("apps.UserProfile", CASCADE, related_name='payments', verbose_name=_("User"))
-    subscription = ForeignKey('apps.Subscription', SET_NULL, null=True, related_name='payments',verbose_name=_("Subscription"))
+    subscription = ForeignKey('apps.Subscription', SET_NULL, null=True, related_name='payments', verbose_name=_("Subscription"))
     status = CharField(_("Status"), max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.PENDING)
     click_trans_id = CharField(_("Click Transaction ID"), max_length=100, blank=True, null=True)
     transaction_id = CharField(_("Merchant Transaction ID"), max_length=100, unique=True, blank=True, null=True)
