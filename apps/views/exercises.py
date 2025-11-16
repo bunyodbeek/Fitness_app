@@ -24,7 +24,7 @@ class MuscleGroupListView(View):
 
 class ExercisesByMuscleView(ListView):
     """
-    URL'dan kelgan muscle_group nomiga asoslanib mashqlarni ro'yxatlaydi.
+    URL'dan kelgan primary_body_part nomiga asoslanib mashqlarni ro'yxatlaydi.
     Har bir mashq uchun foydalanuvchining sevimli holatini tekshiradi.
     """
     model = Exercise

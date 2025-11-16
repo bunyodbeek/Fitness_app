@@ -1,4 +1,3 @@
-from apps.models.base import CreatedBaseModel
 from django.db.models import (
     CASCADE,
     CharField,
@@ -8,9 +7,10 @@ from django.db.models import (
     IntegerField,
     Model,
     TextChoices,
-    TextField,
-)
+    TextField, )
 from django.utils.translation import gettext_lazy as _
+
+from apps.models.base import CreatedBaseModel
 
 
 class MuscleGroup(TextChoices):
@@ -43,8 +43,8 @@ class Exercise(CreatedBaseModel):
 
     name = CharField(_("Name"), max_length=200)
     name_uz = CharField(_("Uzbek Name"), max_length=200, blank=True)
-    muscle_group = CharField(_("Muscle Group"), choices=MuscleGroup.choices, default=MuscleGroup.SHOULDERS)
-    secondary_muscle = CharField(_("Secondary Muscle"), choices=MuscleGroup.choices, default=MuscleGroup.SHOULDERS)
+    primary_body_part = CharField(_("Muscle Group"), choices=MuscleGroup.choices, default=MuscleGroup.SHOULDERS)
+    secondary_body_part = CharField(_("Secondary Muscle"), choices=MuscleGroup.choices, null=True, blank=True)
     description = TextField(_("Description"), blank=True)
     thumbnail = ImageField(_("Image"), upload_to='exercises/thumbnails/', blank=True, null=True)
     video = FileField(upload_to='exercises/videos/', blank=True, null=True)

@@ -23,13 +23,13 @@ class FavoritesView(LoginRequiredMixin, TemplateView):
             obj = fav.exercise
 
             if obj:
-                muscle_group_name = str(obj.muscle_group)
+                muscle_group_name = str(obj.primary_body_part)
 
                 favorites_list.append({
                     'id': fav.id,
                     'title': obj.name,
                     'thumbnail_url': obj.thumbnail.url if obj.thumbnail else '',
-                    'muscle_group': muscle_group_name,
+                    'primary_body_part': muscle_group_name,
                     'difficulty': getattr(obj, 'difficulty', ''),
                     'equipment': getattr(obj, 'equipment', ''),
 

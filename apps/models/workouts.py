@@ -1,3 +1,5 @@
+from django.utils.translation import gettext_lazy as _
+
 from apps.models import Exercise
 from apps.models.base import CreatedBaseModel
 from django.db.models import (
@@ -9,6 +11,7 @@ from django.db.models import (
     IntegerField,
     Model,
 )
+
 
 
 class Program(CreatedBaseModel):
@@ -33,6 +36,7 @@ class Edition(Model):
     days_per_week = CharField(default=3, help_text="Haftasiga necha kun")
     description = CharField()
     image = ImageField(upload_to='editions/', null=True, blank=True)
+    is_premium = BooleanField(_("Premium"), default=True)
 
     class Meta:
         ordering = ['order']
