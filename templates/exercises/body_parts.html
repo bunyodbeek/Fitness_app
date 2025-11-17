@@ -11,67 +11,141 @@
         }
 
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
         }
 
+        /* Animated background particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 90%, rgba(78, 205, 196, 0.05) 0%, transparent 50%);
+            animation: particleFloat 15s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        /* Header */
         .page-header {
-            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
-            padding: 15px 20px;
+            background: linear-gradient(135deg, rgba(15, 52, 96, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            padding: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
         }
 
         .page-title {
             color: white;
-            font-size: 20px;
-            font-weight: 700;
+            font-size: 24px;
+            font-weight: 900;
             text-transform: uppercase;
             text-align: center;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            position: relative;
         }
 
+        .page-title::after {
+            content: 'SELECT YOUR TARGET';
+            position: absolute;
+            bottom: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.5);
+            background: none;
+            -webkit-text-fill-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Body Container */
         .body-container {
             position: relative;
             max-width: 500px;
-            margin: 30px auto 120px auto;
+            margin: 50px auto 150px auto;
             width: 90%;
-            padding: 20px;
             z-index: 1;
         }
 
         .body-image-wrapper {
             position: relative;
             width: 100%;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 30px;
-            padding: 20px;
-            overflow: visible;
+            padding: 40px 20px;
             transition: all 0.4s ease;
+        }
+
+        /* Glowing effect behind body */
+        .body-image-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 90%;
+            background: radial-gradient(ellipse, rgba(255, 215, 0, 0.15) 0%, transparent 70%);
+            filter: blur(50px);
+            animation: pulse 4s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
         }
 
         .body-image {
             width: 100%;
             height: auto;
             display: block;
-            transition: opacity 0.6s ease;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.2));
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* =============================== */
-        /*         DOTS & LABELS           */
+        /*      DOTS & LABELS - MODERN     */
         /* =============================== */
         .body-part-container {
             position: absolute;
             z-index: 10;
             display: flex;
             align-items: center;
+            animation: fadeInPop 0.6s ease backwards;
+        }
+
+        @keyframes fadeInPop {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .body-part-container.left-side {
@@ -82,89 +156,255 @@
             flex-direction: row-reverse;
         }
 
-        /* SMALL DOTS */
+        /* Enhanced animated dots */
         .body-part-dot {
-            width: 14px;
-            height: 14px;
-            background: #ffd700;
-            border: 2px solid rgba(255, 255, 255, 0.8);
+            width: 18px;
+            height: 18px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border: 3px solid rgba(255, 255, 255, 0.9);
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-            transition: all 0.25s ease;
+            box-shadow:
+                0 0 20px rgba(255, 215, 0, 0.6),
+                0 0 40px rgba(255, 215, 0, 0.3),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            animation: dotPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes dotPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.5); }
+        }
+
+        .body-part-dot::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
         }
 
         .body-part-dot:hover {
-            transform: scale(1.25);
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+            transform: scale(1.4);
+            box-shadow:
+                0 0 30px rgba(255, 215, 0, 0.9),
+                0 0 60px rgba(255, 215, 0, 0.6),
+                inset 0 2px 8px rgba(255, 255, 255, 0.5);
         }
 
-        /* THIN LINE */
+        /* Modern connecting line */
         .dotted-line {
-            height: 1px;
-            background: rgba(255, 215, 0, 0.25);
+            height: 2px;
+            background: linear-gradient(90deg,
+                rgba(255, 215, 0, 0) 0%,
+                rgba(255, 215, 0, 0.4) 50%,
+                rgba(255, 215, 0, 0) 100%);
             pointer-events: none;
-            opacity: 0.4;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            position: relative;
         }
 
-        .body-part-container:hover .dotted-line {
-            background: rgba(255, 215, 0, 0.5);
-            opacity: 0.7;
+        .dotted-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255, 215, 0, 0.8) 50%,
+                transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
-        /* SMALL LABEL */
+        .body-part-container:hover .dotted-line::after {
+            opacity: 1;
+        }
+
+        /* Premium glass label */
         .body-part-label {
-            font-size: 12px;
+            font-size: 13px;
             color: white;
             font-weight: 700;
-            background: rgba(0, 0, 0, 0.55);
-            padding: 4px 10px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 215, 0, 0.4);
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
-            transition: all 0.2s ease;
+            background: linear-gradient(135deg,
+                rgba(255, 215, 0, 0.25) 0%,
+                rgba(255, 215, 0, 0.15) 100%);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .body-part-label::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent);
+            transition: left 0.5s ease;
+        }
+
+        .body-part-container:hover .body-part-label::before {
+            left: 100%;
         }
 
         .body-part-container:hover .body-part-label {
-            background: rgba(255, 215, 0, 0.35);
-            border-color: #ffd700;
+            background: linear-gradient(135deg,
+                rgba(255, 215, 0, 0.5) 0%,
+                rgba(255, 215, 0, 0.3) 100%);
+            border-color: rgba(255, 215, 0, 0.8);
             transform: scale(1.1);
+            box-shadow:
+                0 8px 32px rgba(255, 215, 0, 0.4),
+                inset 0 2px 8px rgba(255, 255, 255, 0.1);
         }
 
-        /* Rotate Button */
+        /* Premium rotate button */
         .rotate-btn {
             position: fixed;
-            bottom: 100px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #ffd700, #f39c12);
+            bottom: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
             border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.2);
+            border: 4px solid rgba(255, 255, 255, 0.3);
             cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 900;
             color: #1a1a2e;
-            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.5);
-            transition: transform 0.3s ease;
+            box-shadow:
+                0 12px 40px rgba(255, 215, 0, 0.5),
+                0 0 60px rgba(255, 215, 0, 0.3),
+                inset 0 2px 8px rgba(255, 255, 255, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            animation: rotateFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes rotateFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(180deg); }
         }
 
         .rotate-btn:hover {
-            transform: scale(1.1);
+            transform: scale(1.15) rotate(180deg);
+            box-shadow:
+                0 16px 50px rgba(255, 215, 0, 0.7),
+                0 0 80px rgba(255, 215, 0, 0.5),
+                inset 0 2px 12px rgba(255, 255, 255, 0.5);
+            animation: none;
         }
 
+        .rotate-btn:active {
+            transform: scale(1.05) rotate(180deg);
+        }
+
+        .rotate-btn::before {
+            content: '🔄';
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .rotate-btn::after {
+            content: 'FLIP';
+            font-size: 9px;
+            letter-spacing: 1px;
+        }
+
+        /* Transition effects */
         .front-dots, .back-dots {
-            transition: opacity 0.3s ease;
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
         .back-dots {
             display: none;
+            opacity: 0;
+        }
+
+        /* Staggered animation for dots */
+        .body-part-container:nth-child(1) { animation-delay: 0.1s; }
+        .body-part-container:nth-child(2) { animation-delay: 0.15s; }
+        .body-part-container:nth-child(3) { animation-delay: 0.2s; }
+        .body-part-container:nth-child(4) { animation-delay: 0.25s; }
+        .body-part-container:nth-child(5) { animation-delay: 0.3s; }
+        .body-part-container:nth-child(6) { animation-delay: 0.35s; }
+        .body-part-container:nth-child(7) { animation-delay: 0.4s; }
+        .body-part-container:nth-child(8) { animation-delay: 0.45s; }
+        .body-part-container:nth-child(9) { animation-delay: 0.5s; }
+        .body-part-container:nth-child(10) { animation-delay: 0.55s; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 20px;
+                letter-spacing: 3px;
+            }
+
+            .page-title::after {
+                font-size: 8px;
+                bottom: -16px;
+            }
+
+            .body-container {
+                margin: 30px auto 120px auto;
+            }
+
+            .body-part-label {
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+
+            .body-part-dot {
+                width: 16px;
+                height: 16px;
+            }
+
+            .rotate-btn {
+                width: 60px;
+                height: 60px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+
+        /* Loading animation */
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        .loading-shimmer {
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255, 215, 0, 0.1) 50%,
+                transparent 100%);
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite;
         }
     </style>
 {% endblock %}
@@ -181,10 +421,9 @@
 
             <!-- BACK IMAGE -->
             <img src="/media/body/model_man_backside.png" alt="Body Back" class="body-image" id="backImage"
-                 style="opacity:0; position:absolute; top:20px; left:20px; width:calc(100% - 40px);">
+                 style="opacity:0; position:absolute; top:40px; left:20px; width:calc(100% - 40px);">
 
             <!-- ================= FRONT DOTS ================= -->
-            <!-- FRONT DOTS -->
             <div class="front-dots">
                 <!-- Cardio -->
                 <div class="body-part-container right-side" style="top:13%; right:5%;">
@@ -242,7 +481,7 @@
                 </div>
 
                 <!-- Quads -->
-                <div class="body-part-container left-side" style="top:56    %; left:42%;">
+                <div class="body-part-container left-side" style="top:56%; left:42%;">
                     <a href="{% url 'exercises_by_muscle' 'quads' %}" class="body-part-dot"></a>
                     <div class="dotted-line" style="width:45px;"></div>
                     <a href="{% url 'exercises_by_muscle' 'quads' %}" class="body-part-label">Quads</a>
@@ -256,7 +495,7 @@
                 </div>
             </div>
 
-            <!-- BACK DOTS -->
+            <!-- ================= BACK DOTS ================= -->
             <div class="back-dots">
                 <!-- Cardio -->
                 <div class="body-part-container right-side" style="top:13%; right:5%;">
@@ -316,9 +555,8 @@
         </div>
     </div>
 
-    <button class="rotate-btn" onclick="rotateBody()">
-        180°
-    </button>
+    <!-- Premium Rotate Button -->
+    <button class="rotate-btn" onclick="rotateBody()"></button>
 
 {% endblock %}
 
@@ -333,17 +571,50 @@
             const backDots = document.querySelector('.back-dots');
 
             if (showingFront) {
+                // Show back
                 frontImg.style.opacity = '0';
-                backImg.style.opacity = '1';
-                frontDots.style.display = 'none';
-                backDots.style.display = 'block';
+                frontImg.style.transform = 'rotateY(90deg)';
+
+                setTimeout(() => {
+                    backImg.style.opacity = '1';
+                    backImg.style.transform = 'rotateY(0deg)';
+                }, 300);
+
+                frontDots.style.opacity = '0';
+                setTimeout(() => {
+                    frontDots.style.display = 'none';
+                    backDots.style.display = 'block';
+                    setTimeout(() => {
+                        backDots.style.opacity = '1';
+                    }, 50);
+                }, 300);
             } else {
-                frontImg.style.opacity = '1';
+                // Show front
                 backImg.style.opacity = '0';
-                frontDots.style.display = 'block';
-                backDots.style.display = 'none';
+                backImg.style.transform = 'rotateY(-90deg)';
+
+                setTimeout(() => {
+                    frontImg.style.opacity = '1';
+                    frontImg.style.transform = 'rotateY(0deg)';
+                }, 300);
+
+                backDots.style.opacity = '0';
+                setTimeout(() => {
+                    backDots.style.display = 'none';
+                    frontDots.style.display = 'block';
+                    setTimeout(() => {
+                        frontDots.style.opacity = '1';
+                    }, 50);
+                }, 300);
             }
+
             showingFront = !showingFront;
         }
+
+        // Preload back image
+        window.addEventListener('load', function() {
+            const backImg = new Image();
+            backImg.src = '/media/body/model_man_backside.png';
+        });
     </script>
 {% endblock %}

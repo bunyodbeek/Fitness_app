@@ -1,0 +1,619 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ program.title }} - Editions{% endblock %}
+
+{% block extra_css %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    /* Animated particles background */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%),
+                    radial-gradient(circle at 40% 90%, rgba(78, 205, 196, 0.05) 0%, transparent 50%);
+        animation: particleFloat 15s ease-in-out infinite;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    @keyframes particleFloat {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(30px, -30px) scale(1.1); }
+        66% { transform: translate(-20px, 20px) scale(0.9); }
+    }
+
+    /* Top Navigation */
+    .top-nav {
+        background: linear-gradient(135deg, rgba(15, 52, 96, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+    }
+
+    .back-btn {
+        background: rgba(255, 215, 0, 0.1);
+        border: 2px solid rgba(255, 215, 0, 0.3);
+        color: #ffd700;
+        font-size: 28px;
+        cursor: pointer;
+        padding: 0;
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 12px;
+    }
+
+    .back-btn:hover {
+        background: rgba(255, 215, 0, 0.2);
+        border-color: #ffd700;
+        transform: scale(1.1) translateX(-5px);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    }
+
+    .top-nav h1 {
+        color: white;
+        font-size: 24px;
+        font-weight: 900;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        flex: 1;
+        text-align: center;
+        margin-right: 45px;
+        background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Premium Program Header */
+    .program-header {
+        position: relative;
+        height: 300px;
+        overflow: hidden;
+        margin-bottom: 30px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .program-header-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(0.85);
+        transition: transform 0.6s ease;
+    }
+
+    .program-header:hover .program-header-image {
+        transform: scale(1.1);
+        filter: brightness(1);
+    }
+
+    .placeholder-image {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg,
+            rgba(255, 215, 0, 0.3) 0%,
+            rgba(255, 215, 0, 0.1) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 80px;
+        font-weight: 900;
+        color: rgba(255, 215, 0, 0.5);
+    }
+
+    .program-header-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top,
+            rgba(0, 0, 0, 0.95) 0%,
+            rgba(0, 0, 0, 0.7) 50%,
+            transparent 100%);
+        backdrop-filter: blur(5px);
+        padding: 60px 25px 25px;
+        color: white;
+    }
+
+    .program-logo {
+        font-size: 56px;
+        font-weight: 900;
+        background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 10px;
+        text-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+        letter-spacing: 2px;
+    }
+
+    .program-subtitle {
+        font-size: 18px;
+        opacity: 0.9;
+        margin-bottom: 5px;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 600;
+    }
+
+    /* Premium Stats Bar */
+    .stats-bar {
+        background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.1) 0%,
+            rgba(255, 255, 255, 0.05) 100%);
+        backdrop-filter: blur(10px);
+        padding: 25px 20px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        margin: 0 20px 30px;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        position: relative;
+        z-index: 1;
+        animation: fadeInUp 0.6s ease;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .stat-item {
+        text-align: center;
+        padding: 15px;
+        background: rgba(255, 215, 0, 0.05);
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .stat-item:hover {
+        background: rgba(255, 215, 0, 0.15);
+        transform: translateY(-5px);
+    }
+
+    .stat-value {
+        font-size: 36px;
+        font-weight: 900;
+        background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 8px;
+    }
+
+    .stat-label {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Premium Program Info */
+    .program-info {
+        background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.1) 0%,
+            rgba(255, 255, 255, 0.05) 100%);
+        backdrop-filter: blur(10px);
+        padding: 25px;
+        margin: 0 20px 30px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        position: relative;
+        z-index: 1;
+        animation: fadeInUp 0.8s ease;
+    }
+
+    .info-title {
+        font-size: 22px;
+        font-weight: 900;
+        background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .info-text {
+        font-size: 15px;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 20px;
+    }
+
+    .info-highlight {
+        background: linear-gradient(135deg,
+            rgba(255, 215, 0, 0.2) 0%,
+            rgba(255, 215, 0, 0.1) 100%);
+        backdrop-filter: blur(10px);
+        border-left: 4px solid #ffd700;
+        padding: 18px 20px;
+        border-radius: 12px;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 0;
+        border: 1px solid rgba(255, 215, 0, 0.3);
+        box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2);
+    }
+
+    .info-highlight strong {
+        color: #ffd700;
+        font-weight: 700;
+    }
+
+    /* Section Title */
+    .section-title {
+        background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.1) 0%,
+            rgba(255, 255, 255, 0.05) 100%);
+        backdrop-filter: blur(10px);
+        padding: 20px 25px;
+        margin: 0 20px 20px;
+        font-size: 24px;
+        font-weight: 900;
+        background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        border-radius: 15px;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+        animation: fadeInUp 1s ease;
+    }
+
+    /* Premium Editions List */
+    .editions-list {
+        padding: 0 20px 100px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .edition-card {
+        background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.1) 0%,
+            rgba(255, 255, 255, 0.05) 100%);
+        backdrop-filter: blur(10px);
+        margin-bottom: 20px;
+        padding: 25px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+        animation: slideInUp 0.6s ease;
+        opacity: 0;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .edition-card:nth-child(1) { animation-delay: 0.1s; }
+    .edition-card:nth-child(2) { animation-delay: 0.2s; }
+    .edition-card:nth-child(3) { animation-delay: 0.3s; }
+    .edition-card:nth-child(4) { animation-delay: 0.4s; }
+
+    .edition-card::before {
+        content: '';
+        position: absolute;
+        top: -100%;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            45deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            transparent 100%
+        );
+        transition: all 0.6s ease;
+    }
+
+    .edition-card:hover::before {
+        top: 100%;
+        left: 100%;
+    }
+
+    .edition-card:hover {
+        background: linear-gradient(135deg,
+            rgba(255, 215, 0, 0.15) 0%,
+            rgba(255, 215, 0, 0.08) 100%);
+        border-color: rgba(255, 215, 0, 0.6);
+        transform: translateX(10px);
+        box-shadow: 0 12px 40px rgba(255, 215, 0, 0.4);
+    }
+
+    .edition-number {
+        width: 70px;
+        height: 70px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        font-weight: 900;
+        color: white;
+        flex-shrink: 0;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        transition: all 0.3s ease;
+    }
+
+    .edition-card:hover .edition-number {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    /* Premium Edition Colors */
+    .edition-1 {
+        background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+        box-shadow: 0 8px 24px rgba(255, 107, 53, 0.5);
+    }
+    .edition-2 {
+        background: linear-gradient(135deg, #8B5CF6 0%, #A855F7 100%);
+        box-shadow: 0 8px 24px rgba(139, 92, 246, 0.5);
+    }
+    .edition-3 {
+        background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5);
+    }
+    .edition-4 {
+        background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+        box-shadow: 0 8px 24px rgba(59, 130, 246, 0.5);
+    }
+
+    .edition-content {
+        flex: 1;
+    }
+
+    .edition-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 8px;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .edition-meta {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 600;
+    }
+
+    .edition-arrow {
+        font-size: 28px;
+        color: rgba(255, 215, 0, 0.7);
+        transition: all 0.3s ease;
+    }
+
+    .edition-card:hover .edition-arrow {
+        color: #ffd700;
+        transform: translateX(5px);
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+        color: white;
+        animation: fadeInUp 0.8s ease;
+    }
+
+    .empty-state .icon {
+        font-size: 80px;
+        margin-bottom: 20px;
+        filter: grayscale(100%);
+        opacity: 0.5;
+    }
+
+    .empty-state h3 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .empty-state p {
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .program-header {
+            height: 250px;
+        }
+
+        .program-logo {
+            font-size: 42px;
+        }
+
+        .program-subtitle {
+            font-size: 16px;
+        }
+
+        .stats-bar {
+            gap: 15px;
+            padding: 20px 15px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+        }
+
+        .edition-number {
+            width: 60px;
+            height: 60px;
+            font-size: 28px;
+        }
+
+        .edition-title {
+            font-size: 18px;
+        }
+
+        .edition-meta {
+            font-size: 13px;
+        }
+
+        .top-nav h1 {
+            font-size: 20px;
+            letter-spacing: 3px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Top Navigation -->
+<div class="top-nav">
+    <button class="back-btn" onclick="goBack()">‹</button>
+    <h1>EDITIONS</h1>
+    <span></span>
+</div>
+
+<!-- Program Header -->
+<div class="program-header">
+    {% if program.image %}
+        <img src="{{ program.image.url }}" alt="{{ program.title }}" class="program-header-image">
+    {% else %}
+        <div class="placeholder-image">{{ program.title|slice:":3"|upper }}</div>
+    {% endif %}
+
+    <div class="program-header-overlay">
+        <div class="program-logo">GET IN SHAPE</div>
+        <div class="program-subtitle">{{ program.title }}</div>
+    </div>
+</div>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+    <div class="stat-item">
+        <div class="stat-value">{{ editions.count }}</div>
+        <div class="stat-label">Editions</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-value">{{ program.editions.first.duration_weeks|default:"4-6" }}</div>
+        <div class="stat-label">Weeks</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-value">{{ program.editions.first.days_per_week|default:"3" }}</div>
+        <div class="stat-label">Days/Week</div>
+    </div>
+</div>
+
+<!-- Program Info -->
+<div class="program-info">
+    <h2 class="info-title">About this program</h2>
+    <p class="info-text">{{ program.description }}</p>
+
+    <div class="info-highlight">
+        💡 <strong>Tip:</strong> Do each workout edition for 4-6 weeks, and then move on to other ones.
+    </div>
+</div>
+
+<!-- Section Title -->
+<div class="section-title">Choose Your Edition</div>
+
+<!-- Editions List -->
+<div class="editions-list">
+    {% for edition in editions %}
+    <a href="{% url 'edition_detail' edition.id %}" class="edition-card">
+        <div class="edition-number edition-{{ forloop.counter }}">
+            {{ forloop.counter }}
+        </div>
+        <div class="edition-content">
+            <div class="edition-title">{{ edition.title }}</div>
+            <div class="edition-meta">
+                {{ edition.duration_weeks }} weeks • {{ edition.days_per_week }} days/week
+            </div>
+        </div>
+        <div class="edition-arrow">›</div>
+    </a>
+    {% empty %}
+    <div class="empty-state">
+        <div class="icon">📋</div>
+        <h3>No editions available</h3>
+        <p>Check back later for workout editions</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function goBack() {
+        window.history.back();
+    }
+
+    // Animation on scroll
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.edition-card');
+        
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 100);
+        });
+    });
+</script>
+{% endblock %}
