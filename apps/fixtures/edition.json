@@ -1,137 +1,110 @@
 [
 {
-  "model": "apps.editionexercise",
+  "model": "apps.edition",
   "pk": 1,
   "fields": {
-    "created_at": "2025-11-16T12:58:34.435Z",
-    "updated_at": "2025-11-16T12:58:34.435Z",
-    "edition": 1,
-    "exercise": 1,
-    "order": 1,
-    "sets": 12,
-    "reps": 3,
-    "minutes": 15,
-    "day_number": 1
+    "program": 1,
+    "title": "Machine Focus",
+    "order": "1",
+    "duration_weeks": "2",
+    "days_per_week": "3",
+    "is_premium": true
   }
 },
 {
-  "model": "apps.editionexercise",
+  "model": "apps.edition",
   "pk": 2,
   "fields": {
-    "created_at": "2025-11-17T11:13:21.977Z",
-    "updated_at": "2025-11-17T11:13:21.977Z",
-    "edition": 2,
-    "exercise": 8,
-    "order": 1,
-    "sets": 12,
-    "reps": 3,
-    "minutes": 0,
-    "day_number": 1
+    "program": 1,
+    "title": "Adding dumbbels to your mix",
+    "order": "2",
+    "duration_weeks": "3",
+    "days_per_week": "3",
+    "is_premium": true
   }
 },
 {
-  "model": "apps.editionexercise",
+  "model": "apps.edition",
   "pk": 3,
   "fields": {
-    "created_at": "2025-11-17T11:13:35.520Z",
-    "updated_at": "2025-11-17T11:13:35.520Z",
-    "edition": 3,
-    "exercise": 5,
-    "order": 1,
-    "sets": 3,
-    "reps": 12,
-    "minutes": 0,
-    "day_number": 1
+    "program": 2,
+    "title": "Own your body",
+    "order": "1",
+    "duration_weeks": "2",
+    "days_per_week": "3",
+    "is_premium": true
   }
 },
 {
-  "model": "apps.editionexercise",
+  "model": "apps.edition",
   "pk": 4,
   "fields": {
-    "created_at": "2025-11-17T11:13:47.721Z",
-    "updated_at": "2025-11-17T11:13:47.721Z",
-    "edition": 4,
-    "exercise": 3,
-    "order": 1,
-    "sets": 4,
-    "reps": 10,
-    "minutes": 0,
-    "day_number": 1
+    "program": 3,
+    "title": "Complex Exercises",
+    "order": "2",
+    "duration_weeks": "3",
+    "days_per_week": "3",
+    "is_premium": true
   }
 },
 {
-  "model": "apps.editionexercise",
+  "model": "apps.edition",
   "pk": 5,
   "fields": {
-    "created_at": "2025-11-17T11:13:59.021Z",
-    "updated_at": "2025-11-17T11:13:59.021Z",
-    "edition": 5,
-    "exercise": 10,
-    "order": 1,
-    "sets": 2,
-    "reps": 12,
-    "minutes": 0,
-    "day_number": 1
+    "program": 4,
+    "title": "Superset all around",
+    "order": "1",
+    "duration_weeks": "2",
+    "days_per_week": "3",
+    "is_premium": true
   }
 },
 {
-  "model": "apps.editionexercise",
+  "model": "apps.edition",
   "pk": 6,
   "fields": {
-    "created_at": "2025-11-17T11:14:11.557Z",
-    "updated_at": "2025-11-17T11:14:11.557Z",
-    "edition": 6,
-    "exercise": 2,
-    "order": 1,
-    "sets": 3,
-    "reps": 5,
-    "minutes": 0,
-    "day_number": 1
+    "program": 5,
+    "title": "full body burn",
+    "order": "1",
+    "duration_weeks": "2",
+    "days_per_week": "3",
+    "is_premium": true
   }
 },
 {
-  "model": "apps.editionexercise",
+  "model": "apps.edition",
   "pk": 7,
   "fields": {
-    "created_at": "2025-11-17T11:14:22.393Z",
-    "updated_at": "2025-11-17T11:14:22.393Z",
-    "edition": 7,
-    "exercise": 8,
-    "order": 1,
-    "sets": 3,
-    "reps": 12,
-    "minutes": 0,
-    "day_number": 1
+    "program": 6,
+    "title": "Get big with supersets",
+    "order": "1",
+    "duration_weeks": "2",
+    "days_per_week": "3",
+    "is_premium": true
   }
 },
 {
-  "model": "apps.editionexercise",
+  "model": "apps.edition",
   "pk": 8,
   "fields": {
-    "created_at": "2025-11-17T11:14:35.055Z",
-    "updated_at": "2025-11-17T11:14:35.055Z",
-    "edition": 8,
-    "exercise": 4,
-    "order": 1,
-    "sets": 3,
-    "reps": 12,
-    "minutes": 0,
-    "day_number": 1
+    "program": 7,
+    "title": "High sets, low reps",
+    "order": "1",
+    "duration_weeks": "2",
+    "days_per_week": "3",
+    "is_premium": true
   }
 },
 {
-  "model": "apps.editionexercise",
+  "model": "apps.edition",
   "pk": 9,
   "fields": {
-    "created_at": "2025-11-17T11:14:50.901Z",
-    "updated_at": "2025-11-17T11:14:50.901Z",
-    "edition": 9,
-    "exercise": 1,
-    "order": 1,
-    "sets": 2,
-    "reps": 12,
-    "minutes": 0,
-    "day_number": 1
+    "program": 8,
+    "title": "Barbells & cables",
+    "order": "1",
+    "duration_weeks": "3",
+    "days_per_week": "3",
+    "is_premium": true
   }
 }
 ]
