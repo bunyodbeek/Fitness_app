@@ -4,10 +4,13 @@ import traceback
 import requests
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.core.files.base import ContentFile
-from django.http import HttpResponseNotAllowed, JsonResponse
+from django.http import HttpResponseNotAllowed
+from django.http import JsonResponse
 from django.shortcuts import redirect
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView, UpdateView
 
@@ -16,83 +19,115 @@ from apps.models import User, UserMotivation, UserProfile
 
 
 class QuestionnaireSubmitView(View):
-    def post(self, request, *args, **kwargs):
+
+    def parse_json(self, request):
+
         try:
-            data = json.loads(request.body)
-            telegram_id = data.get('telegram_id')
+            return json.loads(request.body)
+        except json.JSONDecodeError:
+            return None
 
-            if not telegram_id:
-                return JsonResponse({'success': False, 'error': 'Telegram ID topilmadi'}, status=400)
+    def get_or_update_user(self, telegram_id, first_name, last_name):
 
-            existing_profile = UserProfile.objects.filter(telegram_id=telegram_id).first()
-            if existing_profile:
-                return JsonResponse({
-                    'success': True,
-                    'redirect_url': reverse('program_list'),
-                    'message': 'User already exists'
-                })
+        user, created = User.objects.get_or_create(
+            username=f"telegram_{telegram_id}",
+            defaults={'first_name': first_name, 'last_name': last_name}
+        )
 
-            first_name = data.get('first_name', 'User')
-            last_name = data.get('last_name', '')
-            username = data.get('username', '')
-            photo_url = data.get('photo_url', '')
+        if not created:
+            user.first_name = first_name
+            user.last_name = last_name
+            user.save()
 
-            user, created = User.objects.get_or_create(
-                username=f'telegram_{telegram_id}',
-                defaults={'first_name': first_name, 'last_name': last_name}
+        return user, created
+
+    def create_or_update_profile(self, user, data):
+
+        profile, _ = UserProfile.objects.get_or_create(
+            user=user,
+            defaults={
+                'telegram_id': data['telegram_id'],
+                'name': data['first_name']
+            }
+        )
+
+        profile.telegram_id = data['telegram_id']
+        profile.telegram_username = data.get('username', '')
+        profile.name = data['first_name']
+        profile.gender = data.get('gender', 'male')
+        profile.experience_level = data.get('experience', 'beginner')
+        profile.fitness_goal = data.get('goal', 'build_body')
+        profile.workout_days_per_week = int(data.get('days', 3))
+        profile.weight = float(data.get('weight', 63))
+        profile.onboarding_completed = True
+
+        self.save_avatar_if_exists(profile, data.get('photo_url'))
+        profile.save()
+
+        return profile
+
+    def save_avatar_if_exists(self, profile, photo_url):
+
+        if not photo_url:
+            return
+
+        try:
+            response = requests.get(photo_url, timeout=5)
+            if response.status_code == 200:
+                profile.avatar.save(
+                    f"{profile.telegram_id}.jpg",
+                    ContentFile(response.content),
+                    save=False
+                )
+        except Exception as e:
+            print(f"Avatar save error: {e}")
+
+    def save_motivations(self, user, motivations):
+
+        UserMotivation.objects.filter(user=user).delete()
+        for m in motivations:
+            UserMotivation.objects.create(user=user, motivation=m)
+
+    def post(self, request, *args, **kwargs):
+        data = self.parse_json(request)
+        if data is None:
+            return JsonResponse({'success': False, 'error': 'Noto‘g‘ri JSON format'}, status=400)
+
+        telegram_id = data.get('telegram_id')
+        if not telegram_id:
+            return JsonResponse({'success': False, 'error': 'Telegram ID topilmadi'}, status=400)
+
+        existing_profile = UserProfile.objects.filter(telegram_id=telegram_id).first()
+        if existing_profile:
+            return JsonResponse({
+                'success': True,
+                'redirect_url': reverse('program_list'),
+                'message': 'User already exists'
+            })
+
+        try:
+
+            user, is_new = self.get_or_update_user(
+                telegram_id,
+                data.get('first_name', 'User'),
+                data.get('last_name', '')
             )
 
-            if not created:
-                user.first_name = first_name
-                user.last_name = last_name
-                user.save()
+            profile = self.create_or_update_profile(user, data)
 
-            profile, _ = UserProfile.objects.get_or_create(
-                user=user,
-                defaults={'telegram_id': telegram_id, 'name': first_name}
-            )
-            profile.telegram_id = telegram_id
-            profile.telegram_username = username
-            profile.name = first_name
-            profile.gender = data.get('gender', 'male')
-            profile.experience_level = data.get('experience', 'beginner')
-            profile.fitness_goal = data.get('goal', 'build_body')
-            profile.workout_days_per_week = int(data.get('days', 3))
-            profile.weight = float(data.get('weight', 63))
-            profile.onboarding_completed = True
-
-            if photo_url:
-                try:
-                    response = requests.get(photo_url, timeout=5)
-                    if response.status_code == 200:
-                        profile.avatar.save(
-                            f'telegram_{telegram_id}.jpg',
-                            ContentFile(response.content),
-                            save=False
-                        )
-                except Exception as e:
-                    print(f"Avatar save error: {e}")
-
-            profile.save()
-
-            UserMotivation.objects.filter(user=user).delete()
-            for motivation in data.get('motivation', []):
-                UserMotivation.objects.create(user=user, motivation=motivation)
+            self.save_motivations(user, data.get('motivation', []))
 
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
 
             return JsonResponse({
                 'success': True,
-                'message': 'Ma\'lumotlar muvaffaqiyatli saqlandi',
+                'message': "Ma'lumotlar saqlandi",
+                'redirect_url': reverse('program_list'),
+                'is_new_user': is_new,
                 'user_id': user.id,
-                'username': user.username,
                 'profile_id': profile.id,
-                'telegram_id': telegram_id,
-                'is_new_user': created
+                'telegram_id': telegram_id
             })
-
-        except json.JSONDecodeError:
-            return JsonResponse({'success': False, 'error': 'Noto‘g‘ri JSON format'}, status=400)
 
         except Exception as e:
             print(traceback.format_exc())
@@ -100,7 +135,6 @@ class QuestionnaireSubmitView(View):
 
 
 class TelegramAuthView(View):
-    """Telegram WebApp orqali avtomatik login"""
 
     def post(self, request, *args, **kwargs):
         try:
