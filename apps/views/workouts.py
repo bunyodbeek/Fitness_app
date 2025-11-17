@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.views.generic import DetailView, ListView
 
-from apps.models import Edition, Program
+from apps.models import Edition, Program, Exercise
 from apps.models.workouts import EditionExercise, Workout
 
 
@@ -37,16 +37,16 @@ class EditionDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        workouts = Workout.objects.filter(
-            edition=self.object
-        ).prefetch_related(
+        # Edition ichidagi barcha Workoutlar
+        workouts = self.object.workouts.prefetch_related(
             'workout_exercises__exercise'
-        ).order_by('day_number')
+        )
 
         context['workouts'] = workouts
         context['total_days'] = workouts.count()
 
         return context
+
 
 
 class WorkoutDetailView(DetailView):
