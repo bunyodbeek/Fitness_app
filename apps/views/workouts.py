@@ -31,13 +31,20 @@ class ProgramDetailView(DetailView):
 
 class EditionDetailView(DetailView):
     model = Edition
-    template_name = 'workouts/start_workout.html'
+    template_name = 'workouts/edition_detail.html'
     context_object_name = 'edition'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['workouts'] = self.object.edition_exercises.all().order_by('day_number')
+        workouts = Workout.objects.filter(
+            edition=self.object
+        ).prefetch_related(
+            'workout_exercises__exercise'
+        ).order_by('day_number')
+
+        context['workouts'] = workouts
+        context['total_days'] = workouts.count()
 
         return context
 
@@ -56,7 +63,7 @@ class WorkoutDetailView(DetailView):
 
 class WorkoutStartView(LoginRequiredMixin, DetailView):
     model = Workout
-    template_name = 'workouts/start_workout.html'
+    template_name = 'workouts/edition_detail.html'
     context_object_name = 'workout'
     login_url = '/accounts/login/'
 

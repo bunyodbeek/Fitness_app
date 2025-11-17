@@ -1,0 +1,330 @@
+<!-- templates/workouts/edition_detail.html -->
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ edition.name }} - Workout Program</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #2d3945;
+            color: white;
+        }
+
+        /* Header */
+        .header {
+            background: #36424f;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            color: #ffd700;
+            font-size: 28px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 40px;
+        }
+
+        .edit-btn {
+            color: #ffd700;
+            font-size: 16px;
+            font-weight: 600;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Title Section */
+        .title-section {
+            background: #36424f;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #2d3945;
+        }
+
+        .edition-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .edition-subtitle {
+            font-size: 14px;
+            color: #95a5a6;
+        }
+
+        /* Workout List (Days) */
+        .workout-list {
+            padding: 10px 0;
+        }
+
+        .workout-day-item {
+            background: #36424f;
+            margin: 10px 20px;
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .workout-day-item::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: repeating-linear-gradient(
+                45deg,
+                #4a5966,
+                #4a5966 10px,
+                transparent 10px,
+                transparent 20px
+            );
+        }
+
+        .workout-day-item:hover {
+            background: #3d4a58;
+            transform: translateX(5px);
+        }
+
+        .workout-day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .workout-day-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .workout-day-badge {
+            background: #ffd700;
+            color: #2d3945;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* Exercises Preview */
+        .exercises-preview {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 0;
+            margin-bottom: 15px;
+        }
+
+        .exercises-preview::-webkit-scrollbar {
+            display: none;
+        }
+
+        .exercise-preview-item {
+            flex-shrink: 0;
+            width: 70px;
+            text-align: center;
+        }
+
+        .exercise-preview-image {
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #2d3945;
+            margin-bottom: 5px;
+        }
+
+        .exercise-preview-placeholder {
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .exercise-preview-name {
+            font-size: 10px;
+            color: #95a5a6;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Start Button */
+        .start-workout-btn {
+            width: 100%;
+            background: #ffd700;
+            border: none;
+            color: #2d3945;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .start-workout-btn:hover {
+            background: #ffed4e;
+        }
+
+        /* Workout Info */
+        .workout-info {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            color: #95a5a6;
+            font-size: 14px;
+        }
+
+        .workout-info-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Bottom spacing */
+        .bottom-spacer {
+            height: 30px;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #95a5a6;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <button class="back-btn" onclick="window.history.back()">‹</button>
+        <button class="edit-btn" onclick="editEdition()">Edit</button>
+    </div>
+
+    <!-- Title Section -->
+    <div class="title-section">
+        <h1 class="edition-title">{{ edition.name|default:"Workout Program" }}</h1>
+        <p class="edition-subtitle">
+            {{ edition.program.name }} - {{ edition.duration_weeks }} weeks
+        </p>
+    </div>
+
+    <!-- Workout List (Days) -->
+    <div class="workout-list">
+        {% if workouts %}
+            {% for workout in workouts %}
+            <div class="workout-day-item">
+                <!-- Day Header -->
+                <div class="workout-day-header">
+                    <div class="workout-day-title">Day {{ workout.day_number }} - {{ workout.title|default:"Workout" }}</div>
+                    <div class="workout-day-badge">
+                        {{ workout.workout_exercises.count }} exercises
+                    </div>
+                </div>
+
+                <!-- Workout Info -->
+                <div class="workout-info">
+                    <div class="workout-info-item">
+                        <span>⏱</span>
+                        <span>{{ workout.estimated_duration|default:"45" }} min</span>
+                    </div>
+                    <div class="workout-info-item">
+                        <span>💪</span>
+                        <span>{{ workout.difficulty|default:"Intermediate" }}</span>
+                    </div>
+                    <div class="workout-info-item">
+                        <span>🔥</span>
+                        <span>{{ workout.calories_burned|default:"300" }} cal</span>
+                    </div>
+                </div>
+
+                <!-- Exercises Preview -->
+                <div class="exercises-preview">
+                    {% for workout_exercise in workout.workout_exercises.all|slice:":5" %}
+                        <div class="exercise-preview-item">
+                            {% if workout_exercise.exercise.image %}
+                                <img src="{{ workout_exercise.exercise.image.url }}"
+                                     alt="{{ workout_exercise.exercise.name }}"
+                                     class="exercise-preview-image">
+                            {% else %}
+                                <div class="exercise-preview-placeholder">💪</div>
+                            {% endif %}
+                            <div class="exercise-preview-name">
+                                {{ workout_exercise.exercise.name|truncatechars:12 }}
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    {% if workout.workout_exercises.count > 5 %}
+                        <div class="exercise-preview-item">
+                            <div class="exercise-preview-placeholder">+{{ workout.workout_exercises.count|add:"-5" }}</div>
+                            <div class="exercise-preview-name">more</div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Start Button -->
+                <button class="start-workout-btn" onclick="startWorkout({{ workout.id }})">
+                    Start Workout
+                </button>
+            </div>
+            {% endfor %}
+        {% else %}
+            <!-- Empty State -->
+            <div class="empty-state">
+                <div class="empty-state-icon">🏋️</div>
+                <h3>No workouts yet</h3>
+                <p>Add workouts to this program</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Bottom Spacer -->
+    <div class="bottom-spacer"></div>
+
+    <script>
+        function startWorkout(workoutId) {
+            // Django URL reverse
+            window.location.href = `/workout/${workoutId}/start/`;
+        }
+
+        function editEdition() {
+            alert('Edit functionality coming soon!');
+        }
+    </script>
+</body>
+</html>

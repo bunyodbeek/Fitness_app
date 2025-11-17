@@ -49,7 +49,6 @@ class EditionExercise(CreatedBaseModel):
     sets = IntegerField(default=0, null=True, blank=True)
     reps = IntegerField(default=0, null=True, blank=True)
     minutes = IntegerField(default=0, null=True, blank=True)
-    day_number = IntegerField(default=1)
 
     class Meta:
         verbose_name = "Edition Exercise"
@@ -65,6 +64,8 @@ class Workout(Model):
 
     duration = IntegerField(default=0)
     calories = IntegerField(default=0)
+    day_number = IntegerField(default=1)
+
 
 
 class WorkoutExercise(Model):
