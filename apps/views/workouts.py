@@ -20,7 +20,7 @@ class ProgramListView(ListView):
 
 class ProgramDetailView(DetailView):
     model = Program
-    template_name = 'workouts/program_detail.html'
+    template_name = 'workouts/edition_list.html'
     context_object_name = 'program'
 
     def get_context_data(self, **kwargs):
