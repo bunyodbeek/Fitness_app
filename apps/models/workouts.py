@@ -49,6 +49,7 @@ class EditionExercise(CreatedBaseModel):
     sets = IntegerField(default=0, null=True, blank=True)
     reps = IntegerField(default=0, null=True, blank=True)
     minutes = IntegerField(default=0, null=True, blank=True)
+    day_number = IntegerField(default=1, null=True, blank=True)
 
     class Meta:
         verbose_name = "Edition Exercise"
