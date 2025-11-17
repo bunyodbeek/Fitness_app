@@ -37,13 +37,10 @@ class EditionDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # Edition ichidagi barcha Workoutlar
-        workouts = self.object.workouts.prefetch_related(
-            'workout_exercises__exercise'
-        )
+        workouts = self.object.edition_exercises.select_related('exercise').all()
 
         context['workouts'] = workouts
-        context['total_days'] = workouts.count()
+        context['total_exercises'] = workouts.count()
 
         return context
 
