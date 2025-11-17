@@ -4,3 +4,6 @@ mig:
 
 user:
 	python3 manage.py createsuperuser
+
+loaddata:
+	python3 manage.py loaddata program edition exercises
