@@ -37,7 +37,7 @@ class EditionDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['workouts'] = self.object.exercises.all().order_by('day_number')
+        context['workouts'] = self.object.edition_exercises.all().order_by('day_number')
 
         return context
 
@@ -49,7 +49,7 @@ class WorkoutDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['exercises'] = self.object.workout_exercises.select_related(
+        context['exercises'] = self.object.edition_exercises.select_related(
             'exercise'
         ).all()
         return context
