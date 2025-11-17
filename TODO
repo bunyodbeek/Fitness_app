@@ -1,1 +1,0 @@
-python manage.py dumpdata apps. --indent 2 > apps/fixtures/.json
