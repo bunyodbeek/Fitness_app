@@ -54,7 +54,6 @@ class WorkoutDetailView(DetailView):
         ).all()
         return context
 
-
 class WorkoutStartView(LoginRequiredMixin, DetailView):
     model = Workout
     template_name = 'workouts/workout_start.html'
