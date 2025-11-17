@@ -33,8 +33,6 @@ class Edition(Model):
     order = CharField(default=0)
     duration_weeks = CharField(help_text="Dastur davomiyligi (haftalarda)")
     days_per_week = CharField(default=3, help_text="Haftasiga necha kun")
-    description = TextField(blank=True)
-    image = ImageField(upload_to='editions/', null=True, blank=True)
     is_premium = BooleanField(_("Premium"), default=True)
 
     class Meta:
