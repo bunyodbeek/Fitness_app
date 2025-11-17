@@ -44,7 +44,7 @@ class EditionDetailView(DetailView):
 
 class WorkoutDetailView(DetailView):
     model = EditionExercise
-    template_name = 'workouts/workout_detail.html'
+    template_name = 'exercises/exercise_detail.html'
     context_object_name = 'workout'
 
     def get_context_data(self, **kwargs):
