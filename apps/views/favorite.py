@@ -1,10 +1,9 @@
+from apps.models import Favorite
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, View
-
-from apps.models import Favorite
 
 
 class FavoritesView(LoginRequiredMixin, TemplateView):

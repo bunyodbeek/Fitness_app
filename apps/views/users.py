@@ -2,20 +2,16 @@ import json
 import traceback
 
 import requests
-from django.contrib.auth import login
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
-from django.core.files.base import ContentFile
-from django.http import HttpResponseNotAllowed
-from django.http import JsonResponse
-from django.shortcuts import redirect
-from django.urls import reverse
-from django.urls import reverse_lazy
-from django.views import View
-from django.views.generic import TemplateView, UpdateView
-
 from apps.forms import UserProfileForm
 from apps.models import User, UserMotivation, UserProfile
+from django.contrib.auth import login
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.files.base import ContentFile
+from django.http import HttpResponseNotAllowed, JsonResponse
+from django.shortcuts import redirect
+from django.urls import reverse, reverse_lazy
+from django.views import View
+from django.views.generic import TemplateView, UpdateView
 
 
 class QuestionnaireSubmitView(View):

@@ -1,9 +1,8 @@
+from apps.models import Edition, Program
+from apps.models.workouts import EditionExercise, Workout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.views.generic import DetailView, ListView
-
-from apps.models import Edition, Program, Exercise
-from apps.models.workouts import EditionExercise, Workout
 
 
 class ProgramListView(ListView):
@@ -84,7 +83,7 @@ class WorkoutStartView(LoginRequiredMixin, DetailView):
             'total_weight': request.POST.get('total_weight'),
         }
 
-        return redirect('workouts:workout_complete', workout_id=workout.id)
+        return redirect('workout_complete', workout_id=workout.id, data=workout_data)
 
 
 class WorkoutCompleteView(LoginRequiredMixin, DetailView):

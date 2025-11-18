@@ -1,5 +1,6 @@
 from datetime import date
 
+from apps.models.base import CreatedBaseModel
 from django.contrib.auth.models import AbstractUser
 from django.db.models import (
     CASCADE,
@@ -15,8 +16,6 @@ from django.db.models import (
     TextChoices,
     TextField,
 )
-
-from apps.models.base import CreatedBaseModel
 
 
 class User(AbstractUser):

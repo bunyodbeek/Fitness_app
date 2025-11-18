@@ -1,16 +1,19 @@
+from apps.models import Exercise
+from apps.models.base import CreatedBaseModel
 from django.db.models import (
     CASCADE,
+    SET_NULL,
     BooleanField,
     CharField,
+    DateTimeField,
+    FloatField,
     ForeignKey,
     ImageField,
     IntegerField,
-    Model, SET_NULL, DateTimeField, FloatField, TextField,
+    Model,
+    TextField,
 )
 from django.utils.translation import gettext_lazy as _
-
-from apps.models import Exercise
-from apps.models.base import CreatedBaseModel
 
 
 class Program(CreatedBaseModel):
@@ -66,7 +69,6 @@ class Workout(Model):
     duration = IntegerField(default=0)
     calories = IntegerField(default=0)
     day_number = IntegerField(default=1)
-
 
 
 class WorkoutExercise(Model):
