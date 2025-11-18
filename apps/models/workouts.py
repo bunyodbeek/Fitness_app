@@ -1,3 +1,5 @@
+from django.db.models.aggregates import Count
+
 from apps.models import Exercise
 from apps.models.base import CreatedBaseModel
 from django.db.models import (
@@ -28,6 +30,12 @@ class Program(CreatedBaseModel):
 
     def __str__(self):
         return self.title
+
+    @property
+    def exercises_count(self):
+        return self.editions \
+            .annotate(ex_count=Count('edition_exercises')) \
+            .aggregate(total=Count('edition_exercises'))['total'] or 0
 
 
 class Edition(Model):

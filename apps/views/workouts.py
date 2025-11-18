@@ -1,8 +1,9 @@
-from apps.models import Edition, Program
-from apps.models.workouts import EditionExercise, Workout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.views.generic import DetailView, ListView
+
+from apps.models import Edition, Program
+from apps.models.workouts import EditionExercise, Workout
 
 
 class ProgramListView(ListView):

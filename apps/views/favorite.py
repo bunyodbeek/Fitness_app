@@ -12,7 +12,6 @@ class FavoritesView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         favorite = Favorite.objects.filter(
             user=self.request.user.profile,
         ).order_by('-created_at')
@@ -35,7 +34,6 @@ class FavoritesView(LoginRequiredMixin, TemplateView):
 
                     'exercise_id': fav.exercise_id,
                 })
-
         context['favorites'] = favorites_list
         context['total_count'] = len(favorites_list)
 
