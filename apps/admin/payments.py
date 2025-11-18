@@ -1,5 +1,6 @@
-from apps.models import Payment, PaymentHistory, Subscription
 from django.contrib import admin
+
+from apps.models import Payment, PaymentHistory, Subscription
 
 
 @admin.register(Subscription)

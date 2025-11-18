@@ -1,43 +1,56 @@
+from django.urls import reverse_lazy
+
 from apps.models import Favorite
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import TemplateView, View
+from django.views.generic import TemplateView, View, ListView
 
 
-class FavoritesView(LoginRequiredMixin, TemplateView):
+class FavoriteListView(LoginRequiredMixin, ListView):
+    queryset = Favorite.objects.all()
     template_name = 'exercises/favorites_list.html'
-    login_url = '/login/'
+    context_object_name = 'favorites'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        favorite = Favorite.objects.filter(
-            user=self.request.user.profile,
-        ).order_by('-created_at')
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(user=self.request.user.profile)
+        return qs
 
-        favorites_list = []
-        for fav in favorite:
 
-            obj = fav.exercise
-
-            if obj:
-                muscle_group_name = str(obj.primary_body_part)
-
-                favorites_list.append({
-                    'id': fav.id,
-                    'title': obj.name,
-                    'thumbnail_url': obj.thumbnail.url if obj.thumbnail else '',
-                    'primary_body_part': muscle_group_name,
-                    'difficulty': getattr(obj, 'difficulty', ''),
-                    'equipment': getattr(obj, 'equipment', ''),
-
-                    'exercise_id': fav.exercise_id,
-                })
-        context['favorites'] = favorites_list
-        context['total_count'] = len(favorites_list)
-
-        return context
+# class FavoritesView(LoginRequiredMixin, TemplateView):
+#     template_name = 'exercises/favorites_list.html'
+#     login_url = '/login/'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         favorite = Favorite.objects.filter(
+#             user=self.request.user.profile,
+#         ).order_by('-created_at')
+#
+#         favorites_list = []
+#         for fav in favorite:
+#
+#             obj = fav.exercise
+#
+#             if obj:
+#                 muscle_group_name = str(obj.primary_body_part)
+#
+#                 favorites_list.append({
+#                     'id': fav.id,
+#                     'title': obj.name,
+#                     'thumbnail_url': obj.thumbnail.url if obj.thumbnail else '',
+#                     'primary_body_part': muscle_group_name,
+#                     'difficulty': getattr(obj, 'difficulty', ''),
+#                     'equipment': getattr(obj, 'equipment', ''),
+#
+#                     'exercise_id': fav.exercise_id,
+#                 })
+#         context['favorites'] = favorites_list
+#         context['total_count'] = len(favorites_list)
+#
+#         return context
 
 
 class RemoveFavoriteView(LoginRequiredMixin, View):

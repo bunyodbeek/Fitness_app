@@ -1,5 +1,6 @@
-from apps.models import UserActivity
 from django.contrib import admin
+
+from apps.models import UserActivity
 
 
 @admin.register(UserActivity)

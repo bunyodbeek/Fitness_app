@@ -10,11 +10,13 @@ class CreatedBaseModel(Model):
     class Meta:
         abstract = True
 
+
 class SlugBaseModel(Model):
     slug = SlugField(max_length=255, unique=True, editable=False)
 
     class Meta:
         abstract = True
+
 
 class UUIDBaseModel(Model):
     id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

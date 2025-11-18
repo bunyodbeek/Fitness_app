@@ -9,7 +9,7 @@ urlpatterns = [
     path('exercises/all/', exercises.AllExercisesView.as_view(), name='all_exercises'),
     path('exercises/detail/<int:exercise_id>/', exercises.ExerciseDetailView.as_view(), name='exercise_detail'),
     path('favorite/toggle/<int:exercise_id>/', ToggleFavoriteView.as_view(), name='toggle_favorite'),
-    path('favorites/', favorite.FavoritesView.as_view(), name='favorites'),
+    path('favorites/', favorite.FavoriteListView.as_view(), name='favorite_list_page'),
     path('exercises/favorite/toggle/<int:exercise_id>/', exercises.ToggleFavoriteView.as_view(),
          name='toggle_favorite'),
     path('favorites/remove/<int:favorite_id>/', favorite.RemoveFavoriteView.as_view(), name='remove_favorite'),

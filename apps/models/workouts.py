@@ -1,7 +1,3 @@
-from django.db.models.aggregates import Count
-
-from apps.models import Exercise
-from apps.models.base import CreatedBaseModel
 from django.db.models import (
     CASCADE,
     SET_NULL,
@@ -13,9 +9,12 @@ from django.db.models import (
     ImageField,
     IntegerField,
     Model,
-    TextField,
+    TextField
 )
+from django.db.models.aggregates import Count
 from django.utils.translation import gettext_lazy as _
+
+from apps.models.base import CreatedBaseModel
 
 
 class Program(CreatedBaseModel):
@@ -81,7 +80,7 @@ class Workout(Model):
 
 class WorkoutExercise(Model):
     workout = ForeignKey('apps.Workout', CASCADE, related_name="workout_exercises")
-    exercise = ForeignKey(Exercise, SET_NULL, null=True)
+    exercise = ForeignKey('apps.Exercise', SET_NULL, null=True)
 
     sets = IntegerField(default=0)
     reps = IntegerField(default=0)

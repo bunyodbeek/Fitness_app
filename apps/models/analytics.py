@@ -1,6 +1,7 @@
-from apps.models.base import CreatedBaseModel
 from django.db.models import CASCADE, CharField, ForeignKey, JSONField, TextChoices
 from django.utils.translation import gettext_lazy as _
+
+from apps.models.base import CreatedBaseModel
 
 
 class UserActivity(CreatedBaseModel):

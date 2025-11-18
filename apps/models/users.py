@@ -1,6 +1,5 @@
 from datetime import date
 
-from apps.models.base import CreatedBaseModel
 from django.contrib.auth.models import AbstractUser
 from django.db.models import (
     CASCADE,
@@ -16,6 +15,8 @@ from django.db.models import (
     TextChoices,
     TextField,
 )
+
+from apps.models.base import CreatedBaseModel
 
 
 class User(AbstractUser):
@@ -75,8 +76,7 @@ class UserProfile(CreatedBaseModel):
         if self.birth_date:
             today = date.today()
             return today.year - self.birth_date.year - (
-                    (today.month, today.day) < (self.birth_date.month, self.birth_date.day)
-            )
+                    (today.month, today.day) < (self.birth_date.month, self.birth_date.day))
         return None
 
     @property

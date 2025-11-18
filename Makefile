@@ -7,3 +7,6 @@ user:
 
 loaddata:
 	python3 manage.py loaddata program edition exercises editionexercise
+
+flake8:
+	flake8 .

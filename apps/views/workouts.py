@@ -2,20 +2,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.views.generic import DetailView, ListView
 
-from apps.models import Edition, Program
-from apps.models.workouts import EditionExercise, Workout
+from apps.models import Edition, Program, EditionExercise, Workout
 
 
-class ProgramListView(ListView):
+class ProgramListView(LoginRequiredMixin, ListView):
     queryset = Program.objects.filter(is_active=True).prefetch_related('editions')
     template_name = 'workouts/program_list.html'
     context_object_name = 'programs'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.user.is_authenticated:
-            context['user_favorites'] = []
-        return context
 
 
 class ProgramDetailView(DetailView):
@@ -45,7 +38,6 @@ class EditionDetailView(DetailView):
         return context
 
 
-
 class WorkoutDetailView(DetailView):
     model = EditionExercise
     template_name = 'exercises/exercise_detail.html'
@@ -57,6 +49,7 @@ class WorkoutDetailView(DetailView):
             'exercise'
         ).all()
         return context
+
 
 class WorkoutStartView(LoginRequiredMixin, DetailView):
     model = Workout

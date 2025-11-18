@@ -1,5 +1,6 @@
-from apps.models.workouts import Edition, EditionExercise, Program
 from django.contrib import admin
+
+from apps.models.workouts import Edition, EditionExercise, Program
 
 
 class EditionExerciseInline(admin.TabularInline):

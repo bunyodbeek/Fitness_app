@@ -31,6 +31,7 @@ def submit_questionnaire(request):
         print(f"✅ Questionnaire received from {telegram_id}")
         print(f"   Gender: {gender}")
         print(f"   Experience: {experience}")
+        print(f"   Motivation: {motivation}")
         print(f"   Goal: {goal}")
         print(f"   Days: {days}")
         print(f"   Weight: {weight}")
