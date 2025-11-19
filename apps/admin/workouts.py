@@ -1,12 +1,10 @@
-from apps.models.workouts import Edition, EditionExercise, Program
+from apps.models.workouts import Edition, Program, Workout
 from django.contrib import admin
 
 
-class EditionExerciseInline(admin.TabularInline):
-    model = EditionExercise
+class WorkoutInline(admin.TabularInline):
+    model = Workout
     extra = 1
-    fields = ("exercise", "sets", "reps", "order")
-    ordering = ("order",)
 
 
 @admin.register(Program)
@@ -23,4 +21,5 @@ class EditionAdmin(admin.ModelAdmin):
     list_filter = ("program",)
     search_fields = ("title",)
     ordering = ("program", "order")
-    inlines = [EditionExerciseInline]
+    inlines = [WorkoutInline]
+

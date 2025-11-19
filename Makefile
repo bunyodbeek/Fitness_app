@@ -6,4 +6,4 @@ user:
 	python3 manage.py createsuperuser
 
 loaddata:
-	python3 manage.py loaddata program edition exercises editionexercise
+	python3 manage.py loaddata program edition exercises workout workoutexercise
