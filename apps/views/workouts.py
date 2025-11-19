@@ -1,9 +1,8 @@
+from apps.models import Edition, Program
+from apps.models.workouts import Workout, WorkoutExercise
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.views.generic import DetailView, ListView
-
-from apps.models import Edition, Program
-from apps.models.workouts import EditionExercise, Workout
 
 
 class ProgramListView(ListView):
@@ -47,7 +46,7 @@ class EditionDetailView(DetailView):
 
 
 class WorkoutDetailView(DetailView):
-    model = EditionExercise
+    model = WorkoutExercise
     template_name = 'exercises/exercise_detail.html'
     context_object_name = 'workout'
 

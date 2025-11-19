@@ -1,5 +1,3 @@
-from django.db.models.aggregates import Count
-
 from apps.models import Exercise
 from apps.models.base import CreatedBaseModel
 from django.db.models import (
@@ -7,7 +5,6 @@ from django.db.models import (
     SET_NULL,
     BooleanField,
     CharField,
-    DateTimeField,
     FloatField,
     ForeignKey,
     ImageField,
@@ -15,6 +12,7 @@ from django.db.models import (
     Model,
     TextField,
 )
+from django.db.models.aggregates import Count
 from django.utils.translation import gettext_lazy as _
 
 
@@ -53,7 +51,7 @@ class Edition(Model):
         return f"{self.program.title} - {self.title}"
 
 
-class EditionExercise(CreatedBaseModel):
+class Workout(CreatedBaseModel):
     edition = ForeignKey('apps.Edition', CASCADE, related_name='edition_exercises')
     exercise = ForeignKey('apps.Exercise', CASCADE, related_name='edition_exercises')
     order = IntegerField(default=0)
@@ -63,20 +61,8 @@ class EditionExercise(CreatedBaseModel):
     day_number = IntegerField(default=1, null=True, blank=True)
 
     class Meta:
-        verbose_name = "Edition Exercise"
-        verbose_name_plural = "Edition Exercises"
-
-
-class Workout(Model):
-    user = ForeignKey('apps.UserProfile', CASCADE, related_name="workouts")
-    edition = ForeignKey('apps.Edition', SET_NULL, null=True, blank=True, related_name="workouts")
-
-    started_at = DateTimeField(auto_now_add=True)
-    finished_at = DateTimeField(null=True, blank=True)
-
-    duration = IntegerField(default=0)
-    calories = IntegerField(default=0)
-    day_number = IntegerField(default=1)
+        verbose_name = "Workout"
+        verbose_name_plural = "Workouts"
 
 
 class WorkoutExercise(Model):
