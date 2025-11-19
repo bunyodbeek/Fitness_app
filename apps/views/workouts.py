@@ -1,11 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
 
 from apps.models import Edition, Program
 from apps.models.workouts import Workout, WorkoutExercise
 
 
+class AnimationView(TemplateView):
+    template_name = 'workouts/animation.html'
 class ProgramListView(ListView):
     queryset = Program.objects.filter(is_active=True).prefetch_related('editions')
     template_name = 'workouts/program_list.html'
