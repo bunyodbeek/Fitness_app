@@ -177,7 +177,6 @@ class TelegramAuthView(View):
 
 class OnboardingView(TemplateView):
     template_name = 'miniapp/questionarrie.html'
-
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             profile = UserProfile.objects.filter(user=request.user).first()
