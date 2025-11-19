@@ -1,5 +1,3 @@
-from apps.models import Exercise
-from apps.models.base import CreatedBaseModel
 from django.db.models import (
     CASCADE,
     SET_NULL,
@@ -14,6 +12,8 @@ from django.db.models import (
 )
 from django.db.models.aggregates import Count
 from django.utils.translation import gettext_lazy as _
+
+from apps.models.base import CreatedBaseModel
 
 
 class Program(CreatedBaseModel):
@@ -52,25 +52,32 @@ class Edition(Model):
 
 
 class Workout(CreatedBaseModel):
-    edition = ForeignKey('apps.Edition', CASCADE, related_name='edition_exercises')
-    exercise = ForeignKey('apps.Exercise', CASCADE, related_name='edition_exercises')
-    order = IntegerField(default=0)
-    sets = IntegerField(default=0, null=True, blank=True)
-    reps = IntegerField(default=0, null=True, blank=True)
-    minutes = IntegerField(default=0, null=True, blank=True)
-    day_number = IntegerField(default=1, null=True, blank=True)
+    edition = ForeignKey('apps.Edition', CASCADE, related_name='workouts')
+    day_number = IntegerField(default=1)
+    title = CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         verbose_name = "Workout"
         verbose_name_plural = "Workouts"
+        ordering = ['day_number']
+
+    def __str__(self):
+        return f"{self.edition.title} - Day {self.day_number}"
 
 
 class WorkoutExercise(Model):
     workout = ForeignKey('apps.Workout', CASCADE, related_name="workout_exercises")
-    exercise = ForeignKey(Exercise, SET_NULL, null=True)
+    exercise = ForeignKey('apps.Exercise', SET_NULL, null=True)
 
     sets = IntegerField(default=0)
     reps = IntegerField(default=0)
-    weight = FloatField(default=0)
+    weight = FloatField(default=0, null=True, blank=True)
+    minutes = IntegerField(default=0, null=True, blank=True)
 
     order = IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.workout} - {self.exercise}"

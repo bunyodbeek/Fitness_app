@@ -5,8 +5,6 @@ from django.contrib import admin
 class WorkoutInline(admin.TabularInline):
     model = Workout
     extra = 1
-    fields = ("exercise", "sets", "reps", "order")
-    ordering = ("order",)
 
 
 @admin.register(Program)
@@ -24,3 +22,4 @@ class EditionAdmin(admin.ModelAdmin):
     search_fields = ("title",)
     ordering = ("program", "order")
     inlines = [WorkoutInline]
+
