@@ -180,7 +180,7 @@ class OnboardingView(TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            profile = getattr(request.user, 'profile', None)
+            profile = UserProfile.objects.filter(user=request.user).first()
             if profile and profile.onboarding_completed:
                 return redirect('/workouts/')
         return super().dispatch(request, *args, **kwargs)
