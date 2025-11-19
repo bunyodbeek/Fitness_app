@@ -78,11 +78,16 @@ class QuestionnaireSubmitView(View):
         except Exception as e:
             print(f"Avatar save error: {e}")
 
-    def save_motivations(self, user, motivations):
+    def save_motivations(self, profile, motivations):
 
-        UserMotivation.objects.filter(user=user).delete()
+        UserMotivation.objects.filter(profile=profile).delete()
+
         for m in motivations:
-            UserMotivation.objects.create(user=user, motivation=m)
+            UserMotivation.objects.create(
+                profile=profile,
+                motivation=m
+            )
+
 
     def post(self, request, *args, **kwargs):
         data = self.parse_json(request)
@@ -111,7 +116,7 @@ class QuestionnaireSubmitView(View):
 
             profile = self.create_or_update_profile(user, data)
 
-            self.save_motivations(user, data.get('motivation', []))
+            self.save_motivations(profile, data.get('motivation', []))
 
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
 
