@@ -2,6 +2,9 @@
 
 {% block title %}{{ body_part.name }} - Mashqlar{% endblock %}
 
+{% block bottom_nav %}{% endblock %}
+
+
 {% block extra_css %}
     <style>
         * {
@@ -25,15 +28,19 @@
             right: 0;
             bottom: 0;
             background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%);
+            radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%);
             animation: particleFloat 15s ease-in-out infinite;
             pointer-events: none;
             z-index: 0;
         }
 
         @keyframes particleFloat {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(20px, -20px); }
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(20px, -20px);
+            }
         }
 
         /* Top Navigation - Modern Glass */
@@ -100,8 +107,8 @@
             border-radius: 30px;
             border: 2px solid rgba(255, 215, 0, 0.2);
             background: linear-gradient(135deg,
-                rgba(255, 215, 0, 0.1) 0%,
-                rgba(255, 215, 0, 0.05) 100%);
+            rgba(255, 215, 0, 0.1) 0%,
+            rgba(255, 215, 0, 0.05) 100%);
             backdrop-filter: blur(10px);
             font-size: 16px;
             outline: none;
@@ -117,8 +124,8 @@
         #searchInput:focus {
             border-color: #ffd700;
             background: linear-gradient(135deg,
-                rgba(255, 215, 0, 0.2) 0%,
-                rgba(255, 215, 0, 0.1) 100%);
+            rgba(255, 215, 0, 0.2) 0%,
+            rgba(255, 215, 0, 0.1) 100%);
             box-shadow: 0 8px 32px rgba(255, 215, 0, 0.3);
         }
 
@@ -141,8 +148,8 @@
         /* Premium Exercise Card */
         .exercise-card {
             background: linear-gradient(135deg,
-                rgba(255, 255, 255, 0.1) 0%,
-                rgba(255, 255, 255, 0.05) 100%);
+            rgba(255, 255, 255, 0.1) 0%,
+            rgba(255, 255, 255, 0.05) 100%);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             overflow: hidden;
@@ -163,8 +170,8 @@
             right: 0;
             bottom: 0;
             background: linear-gradient(135deg,
-                rgba(255, 215, 0, 0.1) 0%,
-                transparent 100%);
+            rgba(255, 215, 0, 0.1) 0%,
+            transparent 100%);
             opacity: 0;
             transition: opacity 0.4s ease;
             z-index: 1;
@@ -198,8 +205,8 @@
             width: 100%;
             height: 220px;
             background: linear-gradient(135deg,
-                rgba(255, 215, 0, 0.2) 0%,
-                rgba(255, 215, 0, 0.1) 100%);
+            rgba(255, 215, 0, 0.2) 0%,
+            rgba(255, 215, 0, 0.1) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -234,8 +241,8 @@
             top: 15px;
             right: 15px;
             background: linear-gradient(135deg,
-                rgba(255, 255, 255, 0.95) 0%,
-                rgba(255, 255, 255, 0.85) 100%);
+            rgba(255, 255, 255, 0.95) 0%,
+            rgba(255, 255, 255, 0.85) 100%);
             backdrop-filter: blur(10px);
             width: 45px;
             height: 45px;
@@ -353,8 +360,12 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
         /* Staggered card animation */
@@ -362,12 +373,29 @@
             animation: slideUp 0.5s ease backwards;
         }
 
-        .exercise-card:nth-child(1) { animation-delay: 0.05s; }
-        .exercise-card:nth-child(2) { animation-delay: 0.1s; }
-        .exercise-card:nth-child(3) { animation-delay: 0.15s; }
-        .exercise-card:nth-child(4) { animation-delay: 0.2s; }
-        .exercise-card:nth-child(5) { animation-delay: 0.25s; }
-        .exercise-card:nth-child(6) { animation-delay: 0.3s; }
+        .exercise-card:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+
+        .exercise-card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .exercise-card:nth-child(3) {
+            animation-delay: 0.15s;
+        }
+
+        .exercise-card:nth-child(4) {
+            animation-delay: 0.2s;
+        }
+
+        .exercise-card:nth-child(5) {
+            animation-delay: 0.25s;
+        }
+
+        .exercise-card:nth-child(6) {
+            animation-delay: 0.3s;
+        }
 
         @keyframes slideUp {
             from {
@@ -389,10 +417,10 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(
-                45deg,
-                transparent 0%,
-                rgba(255, 255, 255, 0.1) 50%,
-                transparent 100%
+                    45deg,
+                    transparent 0%,
+                    rgba(255, 255, 255, 0.1) 50%,
+                    transparent 100%
             );
             transition: all 0.5s ease;
         }
@@ -426,7 +454,8 @@
                              data-exercise-id="{{ exercise.id }}"
                              onclick="event.preventDefault(); toggleFavorite(this, {{ exercise.id }})">
 
-                            <span id="fav-icon-{{ exercise.id }}">{% if exercise.is_favorited %}★{% else %}⭐{% endif %}</span>
+                            <span id="fav-icon-{{ exercise.id }}">{% if exercise.is_favorited %}★{% else %}
+                                ⭐{% endif %}</span>
                         </div>
 
                         {% if exercise.thumbnail %}
@@ -467,6 +496,7 @@
             }
             return cookieValue;
         }
+
         const csrftoken = getCookie('csrftoken');
 
 
@@ -522,7 +552,7 @@
 
 
         // 3. Qidiruv funksiyasi
-        document.getElementById('searchInput').addEventListener('input', function(e) {
+        document.getElementById('searchInput').addEventListener('input', function (e) {
             const searchTerm = e.target.value.toLowerCase();
             const cards = document.querySelectorAll('.exercise-card');
 
