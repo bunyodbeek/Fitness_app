@@ -2,6 +2,9 @@ import json
 import traceback
 
 import requests
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
 from apps.forms import UserProfileForm
 from apps.models import User, UserMotivation, UserProfile
 from django.contrib.auth import login
@@ -13,7 +16,7 @@ from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView, UpdateView
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class QuestionnaireSubmitView(View):
 
     def parse_json(self, request):
@@ -129,7 +132,7 @@ class QuestionnaireSubmitView(View):
             print(traceback.format_exc())
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class TelegramAuthView(View):
 
     def post(self, request, *args, **kwargs):
@@ -174,7 +177,7 @@ class TelegramAuthView(View):
     def get(self, request):
         return HttpResponseNotAllowed(['POST'])
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class OnboardingView(TemplateView):
     template_name = 'miniapp/questionarrie.html'
     def dispatch(self, request, *args, **kwargs):
