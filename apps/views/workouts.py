@@ -76,7 +76,7 @@ class WorkoutDetailView(DetailView):
 
 class WorkoutStartView(LoginRequiredMixin, DetailView):
     model = Workout
-    template_name = 'workouts/edition_detail.html'
+    template_name = 'workouts/workout_start.html'
     context_object_name = 'workout'
     login_url = '/accounts/login/'
 
