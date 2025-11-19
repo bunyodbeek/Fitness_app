@@ -84,9 +84,7 @@
         <h1>{{ edition.name }}</h1>
         <p>Jami mashqlar: {{ total_exercises }}</p>
     </div>
-
     {% if workouts %}
-
         {% for item in workouts %}
             <a href="{% url 'exercise_detail' item.exercise.id %}" style="text-decoration:none; color:white;">
                 <div class="exercise-card">

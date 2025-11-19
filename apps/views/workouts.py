@@ -1,8 +1,9 @@
-from apps.models import Edition, Program
-from apps.models.workouts import Workout, WorkoutExercise
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.views.generic import DetailView, ListView
+
+from apps.models import Edition, Program
+from apps.models.workouts import Workout, WorkoutExercise
 
 
 class ProgramListView(ListView):
@@ -12,8 +13,19 @@ class ProgramListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        editions = Edition.objects.filter(program__in=self.object_list).prefetch_related('workouts__workout_exercises')
+
+        workouts = Workout.objects.filter(edition__in=editions).prefetch_related("workout_exercises")
+
+        total_days = workouts.values('day_number').distinct().count()
+
+        context['workouts'] = workouts
+        context['total_days'] = total_days
+
         if self.request.user.is_authenticated:
             context['user_favorites'] = []
+
         return context
 
 
@@ -36,13 +48,17 @@ class EditionDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        workouts = self.object.edition_exercises.select_related('exercise').all()
+        workout_pks = Workout.objects.filter(edition=self.object).values_list('pk', flat=True)
 
-        context['workouts'] = workouts
-        context['total_exercises'] = workouts.count()
+        workout_exercises = WorkoutExercise.objects.filter(
+            workout__in=workout_pks
+        ).select_related('exercise')
+
+        context['workouts'] = workout_exercises
+
+        context['total_exercises'] = workout_exercises.count()
 
         return context
-
 
 
 class WorkoutDetailView(DetailView):
@@ -56,6 +72,7 @@ class WorkoutDetailView(DetailView):
             'exercise'
         ).all()
         return context
+
 
 class WorkoutStartView(LoginRequiredMixin, DetailView):
     model = Workout
