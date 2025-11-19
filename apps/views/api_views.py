@@ -40,7 +40,7 @@ def submit_questionnaire(request):
         return JsonResponse({
             'success': True,
             'message': 'Questionnaire saved successfully!',
-            'redirect': '/exercises/'
+            'redirect': ''
         })
 
     except Exception as e:
