@@ -1,10 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db import IntegrityError
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import View, ListView, CreateView
+from django.views.generic import View, ListView
 
 from apps.models import Favorite, Exercise
 
@@ -28,97 +25,71 @@ class FavoritesListView(LoginRequiredMixin, ListView):
         return qs
 
 
-
 class ToggleFavoriteView(LoginRequiredMixin, View):
+    login_url = '/login/'
 
     def post(self, request, exercise_id):
+        return self.toggle_favorite(request, exercise_id)
+
+    def delete(self, request, exercise_id):
+        return self.toggle_favorite(request, exercise_id)
+
+    def toggle_favorite(self, request, exercise_id):
         exercise = get_object_or_404(Exercise, pk=exercise_id)
-        user = request.user
+        user_profile = getattr(request.user, "profile", None)
+        if not user_profile:
+            return JsonResponse({'success': False, 'message': 'Profile topilmadi.'}, status=500)
 
-        try:
-            user_profile = user.profile
-        except AttributeError:
-            return JsonResponse({
-                'success': False,
-                'status': 'error',
-                'message': 'Foydalanuvchida Profile obyekti topilmadi (user.profile chaqiruvi xato).'
-            }, status=500)
+        favorite_instance = Favorite.objects.filter(
+            user=user_profile,
+            exercise=exercise
+        ).first()
 
-        try:
-
-            favorite_instance = Favorite.objects.get(user=user_profile, exercise=exercise)
-
+        if favorite_instance:
             favorite_instance.delete()
-            return JsonResponse({
-                'success': True,
-                'status': 'removed',
-                'message': f"{exercise.name} sevimlilardan olib tashlandi."
-            })
+            return JsonResponse({'success': True, 'status': 'removed'})
 
-        except Favorite.DoesNotExist:
+        Favorite.objects.create(user=user_profile, exercise=exercise)
+        return JsonResponse({'success': True, 'status': 'added'})
 
-            try:
-
-                Favorite.objects.create(user=user_profile, exercise=exercise)
-                return JsonResponse({
-                    'success': True,
-                    'status': 'added',
-                    'message': f"{exercise.name} sevimlilarga qo'shildi."
-                })
-            except IntegrityError:
-                return JsonResponse({
-                    'success': False,
-                    'status': 'error',
-                    'message': 'Obekt allaqachon mavjud.'
-                }, status=400)
-
-        except Exception as e:
-            return JsonResponse({
-                'success': False,
-                'status': 'error',
-                'message': str(e)
-            }, status=500)
-
-
-class RemoveFavoriteView(LoginRequiredMixin, View):
-    """Favorite o'chirish"""
-
-    @method_decorator(csrf_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
-
-    def delete(self, request, favorite_id):
-
-        try:
-
-            user_profile = request.user.profile
-        except AttributeError:
-            return JsonResponse({
-                'success': False,
-                'error': 'Foydalanuvchi tizimga kirmagan yoki Profile obyekti mavjud emas.'
-            }, status=400)
-
-        try:
-            favorite = Favorite.objects.get(
-                id=favorite_id,
-                user=user_profile
-            )
-            favorite.delete()
-
-            return JsonResponse({
-                'success': True,
-                'message': 'Sevimlidan muvaffaqiyatli o\'chirildi'
-            })
-        except Favorite.DoesNotExist:
-            return JsonResponse({
-                'success': False,
-                'error': 'Sevimli ro\'yxatda topilmadi.'
-            }, status=404)
-        except Exception as e:
-            return JsonResponse({
-                'success': False,
-                'error': f'Kutilmagan xato: {str(e)}'
-            }, status=500)
-
-    def post(self, request, favorite_id):
-        return self.delete(request, favorite_id)
+#
+# class RemoveFavoriteView(LoginRequiredMixin, View):
+#     @method_decorator(csrf_exempt)
+#     def dispatch(self, *args, **kwargs):
+#         return super().dispatch(*args, **kwargs)
+#
+#     def delete(self, request, favorite_id):
+#
+#         try:
+#
+#             user_profile = request.user.profile
+#         except AttributeError:
+#             return JsonResponse({
+#                 'success': False,
+#                 'error': 'Foydalanuvchi tizimga kirmagan yoki Profile obyekti mavjud emas.'
+#             }, status=400)
+#
+#         try:
+#             favorite = Favorite.objects.get(
+#                 id=favorite_id,
+#                 user=user_profile
+#             )
+#             favorite.delete()
+#
+#             return JsonResponse({
+#                 'success': True,
+#                 'message': 'Sevimlidan muvaffaqiyatli o\'chirildi'
+#             })
+#         except Favorite.DoesNotExist:
+#             return JsonResponse({
+#                 'success': False,
+#                 'error': 'Sevimli ro\'yxatda topilmadi.'
+#             }, status=404)
+#         except Exception as e:
+#             return JsonResponse({
+#                 'success': False,
+#                 'error': f'Kutilmagan xato: {str(e)}'
+#             }, status=500)
+#
+#     def post(self, request, favorite_id):
+#         return self.delete(request, favorite_id)

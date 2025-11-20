@@ -458,7 +458,7 @@
         // Unfavorite funksiyasi
         function unfavorite(id, button) {
             if (confirm('Bu mashqni sevimlilardan olib tashlashni xohlaysizmi?')) {
-                const url = `/favorites/remove/${id}/`;
+                const url = `/exercises/favorite/toggle/${id}/`;
 
                 fetch(url, {
                     method: 'DELETE',

@@ -2,7 +2,7 @@ from apps.views.api_views import get_user_profile, complete_onboarding, save_onb
 from apps.views.exercises import ExercisesByMuscleView, ExerciseDetailView, MuscleGroupListView
 from django.urls import path
 
-from apps.views.favorite import RemoveFavoriteView, ToggleFavoriteView, FavoritesListView
+from apps.views.favorite import ToggleFavoriteView, FavoritesListView
 from apps.views.users import SettingsView, UpdateProfileView, ProgressView, OnboardingView, TelegramAuthView, \
     QuestionnaireSubmitView, ProfileView
 from apps.views.workouts import WorkoutCompleteView, WorkoutStartView, EditionDetailView, ProgramDetailView, \
@@ -15,9 +15,8 @@ urlpatterns = [
     path('exercises/detail/<int:exercise_id>/', ExerciseDetailView.as_view(), name='exercise_detail'),
     path('favorite/toggle/<int:exercise_id>/', ToggleFavoriteView.as_view(), name='toggle_favorite'),
     path('favorites/', FavoritesListView.as_view(), name='favorites'),
-    path('exercises/favorite/toggle/<int:exercise_id>/', ToggleFavoriteView.as_view(),
-         name='toggle_favorite'),
-    path('favorites/remove/<int:favorite_id>/', RemoveFavoriteView.as_view(), name='remove_favorite'),
+    path('exercises/favorite/toggle/<int:exercise_id>/', ToggleFavoriteView.as_view(), name='toggle_favorite'),
+    # path('favorites/remove/<int:favorite_id>/', RemoveFavoriteView.as_view(), name='remove_favorite'),
 
     path('api/questionnaire/submit/', QuestionnaireSubmitView.as_view(), name='questionnaire_submit'),
     path('api/telegram-auth/', TelegramAuthView.as_view(), name='telegram_auth'),
