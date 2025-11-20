@@ -1,246 +1,477 @@
-{% extends 'base.html' %}
-
-{% block title %}Workout Complete{% endblock %}
-
-{% block extra_css %}
-<style>
-    body {
-        background: linear-gradient(135deg, #2c3e50 0%, #1a1a2e 100%);
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .complete-container {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 40px 20px;
-        text-align: center;
-    }
-
-    .complete-title {
-        font-size: 48px;
-        font-weight: 900;
-        color: white;
-        margin-bottom: 40px;
-    }
-
-    .stats-section {
-        width: 100%;
-        max-width: 400px;
-        margin-bottom: 50px;
-    }
-
-    .stats-header {
-        color: #ffd700;
-        font-size: 16px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 30px;
-        padding-bottom: 10px;
-        border-bottom: 2px solid #ffd700;
-    }
-
-    .stat-item {
-        margin-bottom: 35px;
-    }
-
-    .stat-value {
-        font-size: 42px;
-        font-weight: 700;
-        color: white;
-        margin-bottom: 5px;
-    }
-
-    .stat-label {
-        font-size: 16px;
-        color: #ffd700;
-        font-weight: 500;
-    }
-
-    .stat-time {
-        font-size: 56px;
-        font-weight: 700;
-        color: white;
-    }
-
-    .stat-time-unit {
-        font-size: 24px;
-        color: #ffd700;
-        margin-left: 5px;
-    }
-
-    .divider {
-        height: 1px;
-        background: linear-gradient(to right, transparent, #ffd700, transparent);
-        margin: 40px 0;
-    }
-
-    /* Action Buttons */
-    .action-buttons {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        display: flex;
-        gap: 0;
-        background: #16213e;
-    }
-
-    .done-btn {
-        flex: 2;
-        background: #ffd700;
-        border: none;
-        color: #2c3e50;
-        padding: 20px;
-        font-size: 20px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
-
-    .done-btn:hover {
-        background: #ffed4e;
-    }
-
-    .share-btn {
-        flex: 1;
-        background: #2c3e50;
-        border: none;
-        color: white;
-        padding: 20px;
-        font-size: 24px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s;
-    }
-
-    .share-btn:hover {
-        background: #34495e;
-    }
-
-    /* Confetti Animation */
-    @keyframes confetti-fall {
-        0% {
-            transform: translateY(-100vh) rotate(0deg);
-            opacity: 1;
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Complete</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        100% {
-            transform: translateY(100vh) rotate(720deg);
-            opacity: 0;
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #2c3e50;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
         }
-    }
 
-    .confetti {
-        position: fixed;
-        width: 10px;
-        height: 10px;
-        background: #ffd700;
-        top: -10px;
-        animation: confetti-fall 3s linear infinite;
-    }
+        /* Diagonal Pattern Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(0, 0, 0, 0.1) 10px,
+                rgba(0, 0, 0, 0.1) 20px
+            );
+            pointer-events: none;
+            z-index: 0;
+        }
 
-    /* Responsive */
-    @media (max-width: 768px) {
+        /* Main Container */
+        .complete-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px 120px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Title */
         .complete-title {
-            font-size: 36px;
+            font-size: 52px;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 50px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            animation: fadeInScale 0.6s ease backwards;
         }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Stats Section */
+        .stats-section {
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        .stats-header {
+            color: #ffd700;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #ffd700;
+            animation: fadeInUp 0.8s ease backwards 0.2s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stat Item */
+        .stat-item {
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease backwards;
+        }
+
+        .stat-item:nth-child(2) { animation-delay: 0.3s; }
+        .stat-item:nth-child(3) { animation-delay: 0.4s; }
+        .stat-item:nth-child(4) { animation-delay: 0.5s; }
+        .stat-item:nth-child(5) { animation-delay: 0.6s; }
 
         .stat-value {
-            font-size: 36px;
+            font-size: 56px;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
         }
 
+        .stat-label {
+            font-size: 18px;
+            color: #ffd700;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        /* Time Display */
         .stat-time {
-            font-size: 48px;
+            font-size: 72px;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
         }
-    }
-</style>
-{% endblock %}
 
-{% block content %}
-<div class="complete-container">
-    <h1 class="complete-title">Great job!</h1>
+        .stat-time-unit {
+            font-size: 28px;
+            color: #ffd700;
+            margin-left: 8px;
+            font-weight: 700;
+        }
 
-    <div class="stats-section">
-        <div class="stats-header">Your total workout</div>
+        /* Gradient Divider */
+        .divider {
+            height: 2px;
+            background: linear-gradient(
+                to right,
+                transparent,
+                rgba(255, 215, 0, 0.5) 20%,
+                rgba(255, 215, 0, 0.8) 50%,
+                rgba(255, 215, 0, 0.5) 80%,
+                transparent
+            );
+            margin: 35px 0;
+        }
 
-        <div class="stat-item">
-            <div class="stat-value">{{ total_reps }}</div>
-            <div class="stat-label">Reps</div>
-        </div>
+        /* Action Buttons */
+        .action-buttons {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            gap: 0;
+            background: #16213e;
+            z-index: 100;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+        }
 
-        <div class="divider"></div>
+        .done-btn {
+            flex: 7;
+            background: linear-gradient(135deg, #ffd700 0%, #f4e285 100%);
+            border: none;
+            color: #2c3e50;
+            padding: 22px;
+            font-size: 20px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
 
-        <div class="stat-item">
-            <div class="stat-value">{{ total_weight }}</div>
-            <div class="stat-label">kg</div>
-        </div>
+        .done-btn:hover {
+            background: linear-gradient(135deg, #ffed4e 0%, #ffd700 100%);
+            transform: translateY(-2px);
+        }
 
-        <div class="divider"></div>
+        .done-btn:active {
+            transform: translateY(0);
+        }
 
-        <div class="stat-item">
-            <div class="stat-time">
-                {{ workout_duration_minutes }}:{{ workout_duration_seconds }}
-                <span class="stat-time-unit">H</span>
+        .share-btn {
+            flex: 3;
+            background: #2c3e50;
+            border: none;
+            color: white;
+            padding: 22px;
+            font-size: 28px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border-left: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .share-btn:hover {
+            background: #34495e;
+            color: #ffd700;
+        }
+
+        .share-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Confetti Animation */
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            top: -20px;
+            animation: confetti-fall linear;
+            z-index: 1000;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .complete-title {
+                font-size: 42px;
+                margin-bottom: 40px;
+            }
+
+            .stat-value {
+                font-size: 48px;
+            }
+
+            .stat-time {
+                font-size: 60px;
+            }
+
+            .stat-time-unit {
+                font-size: 24px;
+            }
+
+            .done-btn {
+                font-size: 18px;
+                padding: 20px;
+            }
+
+            .share-btn {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .complete-title {
+                font-size: 36px;
+            }
+
+            .stat-value {
+                font-size: 40px;
+            }
+
+            .stat-time {
+                font-size: 52px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Container -->
+    <div class="complete-container">
+        <h1 class="complete-title">Great job!</h1>
+
+        <div class="stats-section">
+            <div class="stats-header">Your total workout</div>
+
+            <!-- Total Reps -->
+            <div class="stat-item">
+                <div class="stat-value" id="totalReps">--</div>
+                <div class="stat-label">Reps</div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Total Weight -->
+            <div class="stat-item">
+                <div class="stat-value" id="totalWeight">--</div>
+                <div class="stat-label">kg</div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Duration -->
+            <div class="stat-item">
+                <div class="stat-time">
+                    <span id="duration">0:01</span>
+                    <span class="stat-time-unit">H</span>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="action-buttons">
-    <button class="done-btn" onclick="window.location.href='{% url 'workouts_home' %}'">
-        Done
-    </button>
-    <button class="share-btn" onclick="shareWorkout()">
-        🔗
-    </button>
-</div>
-{% endblock %}
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button class="done-btn" onclick="backToWorkouts()">
+            Done
+        </button>
+        <button class="share-btn" onclick="shareWorkout()">
+            🔗
+        </button>
+    </div>
 
-{% block extra_js %}
-<script>
-    // Share workout
-    function shareWorkout() {
-        if (navigator.share) {
-            navigator.share({
-                title: 'My Workout',
-                text: `I just completed a workout! ${{{ total_reps }}} reps, ${{{ total_weight }}} kg in ${{{ workout_duration_minutes }}}:${{{ workout_duration_seconds }}} minutes! 💪`,
-                url: window.location.href
-            }).catch(err => console.log('Error sharing:', err));
-        } else {
-            alert('Share feature not available');
+    <script>
+        // ==========================================
+        // DUMMY DATA - Backend dasturchi o'zgartiradi
+        // ==========================================
+        const DUMMY_WORKOUT_DATA = {
+            total_reps: 36,
+            total_weight: 450,
+            duration_seconds: 3661, // 1:01:01
+            total_calories: 420,
+            exercises_completed: 9
+        };
+
+        // ==========================================
+        // BACKEND INTEGRATION VARIABLES
+        // ==========================================
+        /*
+        Backend dasturchi context ga qo'yishi kerak:
+
+        const workoutData = {
+            total_reps: {{ workout_summary.total_reps|default:0 }},
+            total_weight: {{ workout_summary.total_weight|default:0 }},
+            duration_seconds: {{ workout_summary.duration_seconds|default:0 }},
+            total_calories: {{ workout_summary.total_calories|default:0 }},
+            exercises_completed: {{ workout_summary.exercises_completed|default:0 }}
+        };
+        */
+
+        // Hozircha dummy data ishlatamiz
+        const workoutData = DUMMY_WORKOUT_DATA;
+
+        // ==========================================
+        // FUNCTIONS
+        // ==========================================
+
+        function formatDuration(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+
+            if (hours > 0) {
+                return `${hours}:${minutes.toString().padStart(2, '0')}`;
+            } else {
+                return `${minutes}:${secs.toString().padStart(2, '0')}`;
+            }
         }
-    }
 
-    // Create confetti
-    function createConfetti() {
-        const colors = ['#ffd700', '#00ff00', '#00d2a0', '#667eea', '#ff6b35'];
-        for (let i = 0; i < 50; i++) {
-            setTimeout(() => {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = Math.random() * 100 + '%';
-                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.animationDelay = Math.random() * 3 + 's';
-                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                document.body.appendChild(confetti);
+        function displayStats() {
+            // Display total reps
+            document.getElementById('totalReps').textContent = workoutData.total_reps || '--';
 
-                setTimeout(() => confetti.remove(), 5000);
-            }, i * 30);
+            // Display total weight
+            document.getElementById('totalWeight').textContent = workoutData.total_weight || '--';
+
+            // Display duration
+            document.getElementById('duration').textContent = formatDuration(workoutData.duration_seconds);
         }
-    }
 
-    // Initialize
-    document.addEventListener('DOMContentLoaded', function() {
-        createConfetti();
-    });
-</script>
-{% endblock %}
+        function shareWorkout() {
+            const shareText = `I just completed a workout! 💪\n` +
+                `${workoutData.total_reps} reps, ${workoutData.total_weight} kg in ${formatDuration(workoutData.duration_seconds)} minutes!\n` +
+                `🔥 Burned ${workoutData.total_calories} calories`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My Workout',
+                    text: shareText,
+                    url: window.location.href
+                }).catch(err => {
+                    console.log('Share cancelled or error:', err);
+                });
+            } else {
+                // Fallback - Copy to clipboard
+                navigator.clipboard.writeText(shareText).then(() => {
+                    alert('Workout stats copied to clipboard!');
+                }).catch(() => {
+                    alert('Share feature not available');
+                });
+            }
+        }
+
+        function backToWorkouts() {
+            window.location.href = '/workout/';  // Backend URL
+        }
+
+        function createConfetti() {
+            const colors = ['#ffd700', '#00ff00', '#00d2a0', '#667eea', '#ff6b35', '#f093fb'];
+            const confettiCount = 60;
+
+            for (let i = 0; i < confettiCount; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    confetti.style.animationDuration = (Math.random() * 2 + 2.5) + 's';
+
+                    // Random size
+                    const size = Math.random() * 8 + 8;
+                    confetti.style.width = size + 'px';
+                    confetti.style.height = size + 'px';
+
+                    document.body.appendChild(confetti);
+
+                    // Remove after animation
+                    setTimeout(() => confetti.remove(), 5000);
+                }, i * 40);
+            }
+        }
+
+        // ==========================================
+        // INITIALIZATION
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            displayStats();
+            createConfetti();
+
+            // Send analytics (optional)
+            // sendWorkoutAnalytics(workoutData);
+        });
+
+        // ==========================================
+        // OPTIONAL: Analytics tracking
+        // ==========================================
+        function sendWorkoutAnalytics(data) {
+            /*
+            fetch('/api/analytics/workout-complete/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                },
+                body: JSON.stringify(data)
+            });
+            */
+        }
+
+        function getCsrfToken() {
+            const token = document.querySelector('[name=csrfmiddlewaretoken]');
+            return token ? token.value : '';
+        }
+    </script>
+</body>
+</html>

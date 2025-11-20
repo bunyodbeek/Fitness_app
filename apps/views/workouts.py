@@ -65,7 +65,7 @@ class EditionDetailView(DetailView):
 
 class WorkoutStartView(LoginRequiredMixin, DetailView):
     model = Workout
-    template_name = 'workouts/workout_start.html'
+    template_name = 'workouts/active_workout.html'
     context_object_name = 'workout'
     login_url = '/accounts/login/'
 
@@ -100,9 +100,18 @@ class WorkoutCompleteView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        # Session dan summary ni olish
+        summary = self.request.session.get('workout_summary', {})
+
         context['summary'] = {
-            'total_reps': 0,
-            'total_weight': 0,
-            'duration': '0:00',
+            'total_reps': summary.get('total_reps', 0),
+            'total_weight': summary.get('total_weight', 0),
+            'duration': summary.get('duration', '0:00'),
         }
+
+        # Summary ishlatilgandan keyin tozalash
+        if 'workout_summary' in self.request.session:
+            del self.request.session['workout_summary']
+            self.request.session.modified = True
+
         return context
