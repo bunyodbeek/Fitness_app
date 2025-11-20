@@ -2,19 +2,20 @@ import json
 import traceback
 
 import requests
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-
-from apps.forms import UserProfileForm
-from apps.models import User, UserMotivation, UserProfile
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.base import ContentFile
 from django.http import HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, UpdateView
+
+from apps.forms import UserProfileForm
+from apps.models import User, UserMotivation, UserProfile
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class QuestionnaireSubmitView(View):
@@ -132,6 +133,7 @@ class QuestionnaireSubmitView(View):
             print(traceback.format_exc())
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
+
 @method_decorator(csrf_exempt, name='dispatch')
 class TelegramAuthView(View):
 
@@ -177,9 +179,11 @@ class TelegramAuthView(View):
     def get(self, request):
         return HttpResponseNotAllowed(['POST'])
 
+
 @method_decorator(csrf_exempt, name='dispatch')
 class OnboardingView(TemplateView):
     template_name = 'miniapp/questionarrie.html'
+
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             profile = UserProfile.objects.filter(user=request.user).first()

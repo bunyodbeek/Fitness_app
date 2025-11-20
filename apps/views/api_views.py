@@ -1,7 +1,6 @@
 import json
 
 import requests
-from apps.models import User, UserMotivation, UserProfile
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -9,6 +8,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+
+from apps.models import User, UserMotivation, UserProfile
 
 
 @csrf_exempt
@@ -31,6 +32,7 @@ def submit_questionnaire(request):
         print(f"✅ Questionnaire received from {telegram_id}")
         print(f"   Gender: {gender}")
         print(f"   Experience: {experience}")
+        print(f"   Motivation: {motivation}")
         print(f"   Goal: {goal}")
         print(f"   Days: {days}")
         print(f"   Weight: {weight}")
@@ -111,7 +113,7 @@ def check_telegram_premium(telegram_id):
             user_data = data.get('result', {}).get('user', {})
             return user_data.get('is_premium', False)
     except:
-        pass
+        print('xatolik ')
 
     return False
 
@@ -199,7 +201,6 @@ def complete_onboarding(request):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_user_profile(request):
-    """Foydalanuvchi profilini olish"""
     telegram_id = request.GET.get('telegram_id')
 
     try:

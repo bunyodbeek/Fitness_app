@@ -399,23 +399,19 @@
                 {% for fav in favorites %}
                     <div class="favorite-item" data-id="{{ fav.id }}" data-exercise-id="{{ fav.exercise_id }}">
                         <a href="{% url 'exercise_detail' fav.exercise_id %}" class="item-link-wrapper">
-                            <img src="{{ fav.thumbnail_url|default_if_none:'/static/img/default-thumb.jpg' }}"
+                            <img src="{{ fav.exercise.thumbnail.url|default_if_none:'/static/img/default-thumb.jpg' }}"
                                  alt="{{ fav.title }}" class="favorite-thumbnail">
 
                             <div class="favorite-info">
-                                <div class="favorite-title">{{ fav.title }}</div>
+                                <div class="favorite-title">{{ fav.exercise.name }}</div>
                                 <div class="favorite-meta">
-                                    <i class="fas fa-dumbbell"></i> Mashq • {{ fav.primary_body_part }}
+                                    <i class="fas fa-dumbbell"></i> Mashq • {{ fav.exercise.primary_body_part }}
                                 </div>
                                 <div class="favorite-tags">
-                                    <span class="favorite-tag">{{ fav.difficulty }}</span>
-                                    {% if fav.equipment %}
-                                        <span class="favorite-tag">{{ fav.equipment }}</span>
-                                    {% endif %}
+                                    <span class="favorite-tag">{{ fav.exercise.difficulty }}</span>
                                 </div>
                             </div>
                         </a>
-
                         <button class="unfavorite-btn"
                                 onclick="event.stopPropagation(); event.preventDefault(); unfavorite({{ fav.id }}, this)"
                                 title="Sevimlidan o'chirish"
@@ -462,7 +458,7 @@
         // Unfavorite funksiyasi
         function unfavorite(id, button) {
             if (confirm('Bu mashqni sevimlilardan olib tashlashni xohlaysizmi?')) {
-                const url = `/favorites/remove/${id}/`;
+                const url = `/exercises/favorite/toggle/${id}/`;
 
                 fetch(url, {
                     method: 'DELETE',
