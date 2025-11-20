@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+
+
 {% block title %}{{ exercise.name|default:"Mashq Tafsilotlari" }}{% endblock %}
 
 {% block extra_css %}
@@ -44,8 +46,8 @@
         }
 
         .content-wrapper {
-            max-width: 700px;
-            margin: 0 auto;
+            max-width: 400px;
+            margin: auto;
             padding: 20px;
             position: relative;
             z-index: 1;
@@ -444,6 +446,10 @@
                 padding: 12px 12px 12px 40px;
             }
         }
+        .exercise-detail-page .bottom-nav {
+    display: none !important;
+}
+
 
         /* Scrollbar styling */
         .instructions-in-media-container::-webkit-scrollbar {
@@ -526,6 +532,8 @@
         </div>
 
         <div class="action-buttons">
+        <body class="exercise-detail-page">
+
 
             <button class="action-btn active" id="imageBtn" onclick="showContent('image')">
                 <div class="action-icon">🖼️</div>

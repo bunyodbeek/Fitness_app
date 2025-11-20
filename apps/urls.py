@@ -30,7 +30,7 @@ urlpatterns = [
     path('workout/<int:pk>/', workouts.WorkoutDetailView.as_view(), name='workout_detail'),
     path('workout/<int:pk>/start/', workouts.WorkoutStartView.as_view(), name='workout_start'),
     path('workout/<int:pk>/complete/', workouts.WorkoutCompleteView.as_view(), name='workout_complete'),
-
+        
 
     path('api/users/auth/', api_views.telegram_auth, name='telegram_auth_api'),
     path('api/users/onboarding/save/', api_views.save_onboarding_step, name='save_onboarding_step'),
