@@ -37,8 +37,8 @@ urlpatterns = [
     path('workout/<int:pk>/complete/', WorkoutCompleteView.as_view(), name='workout_complete'),
 
 
-    path('api/users/auth/', telegram_auth(), name='telegram_auth_api'),
-    path('api/users/onboarding/save/', save_onboarding_step(), name='save_onboarding_step'),
-    path('api/users/onboarding/complete/', complete_onboarding(), name='complete_onboarding'),
-    path('api/users/profile/', get_user_profile(), name='get_user_profile'),
+    path('api/users/auth/', telegram_auth, name='telegram_auth_api'),
+    path('api/users/onboarding/save/', save_onboarding_step, name='save_onboarding_step'),
+    path('api/users/onboarding/complete/', complete_onboarding, name='complete_onboarding'),
+    path('api/users/profile/', get_user_profile, name='get_user_profile'),
 ]
