@@ -396,6 +396,13 @@
         .exercise-card:nth-child(6) {
             animation-delay: 0.3s;
         }
+        .exercise-details {
+    font-size: 0.85rem;
+    color: #ddd;
+    margin-left: 8px;
+    font-weight: normal;
+}
+
 
         @keyframes slideUp {
             from {
@@ -407,6 +414,18 @@
                 transform: translateY(0);
             }
         }
+        .search-bar {
+    position: sticky;
+    top: 70px;
+    z-index: 50;
+}
+        .exercises-grid {
+    padding-top: 20px;
+}
+.bottom-navigation {
+    display: none !important;
+}
+
 
         /* Hover shimmer effect */
         .exercise-card::after {
@@ -444,31 +463,43 @@
         <input type="text" placeholder="🔍 Mashqni qidirish..." id="searchInput">
     </div>
 
-    <div class="container">
-        {% if exercises %}
-            <div class="exercises-grid">
-                {% for exercise in exercises %}
-                    <a href="{% url 'exercise_detail' exercise.id %}" class="exercise-card" id="card-{{ exercise.id }}">
+   <div class="container">
+    {% if exercises %}
+        <div class="exercises-grid">
+            {% for exercise in exercises %}
+                <a href="{% url 'exercise_detail' exercise.id %}" class="exercise-card" id="card-{{ exercise.id }}">
 
-                        <div class="favorite-icon {% if exercise.is_favorited %}favorited{% endif %}"
-                             data-exercise-id="{{ exercise.id }}"
-                             onclick="event.preventDefault(); toggleFavorite(this, {{ exercise.id }})">
+                    <div class="favorite-icon {% if exercise.is_favorited %}favorited{% endif %}"
+                         data-exercise-id="{{ exercise.id }}"
+                         onclick="event.preventDefault(); toggleFavorite(this, {{ exercise.id }})">
 
-                            <span id="fav-icon-{{ exercise.id }}">{% if exercise.is_favorited %}★{% else %}
-                                ⭐{% endif %}</span>
-                        </div>
+                        <span id="fav-icon-{{ exercise.id }}">
+                            {% if exercise.is_favorited %}★{% else %}⭐{% endif %}
+                        </span>
+                    </div>
 
-                        {% if exercise.thumbnail %}
-                            <img src="{{ exercise.thumbnail.url }}" alt="{{ exercise.name }}" class="exercise-image">
-                        {% else %}
-                            <div class="exercise-placeholder">💪</div>
-                        {% endif %}
-                        <div class="exercise-info">
-                            <h3 class="exercise-name">{{ exercise.name }}</h3>
-                        </div>
-                    </a>
-                {% endfor %}
-            </div>
+                    {% if exercise.thumbnail %}
+                        <img src="{{ exercise.thumbnail.url }}" alt="{{ exercise.name }}" class="exercise-image">
+                    {% else %}
+                        <div class="exercise-placeholder">💪</div>
+                    {% endif %}
+
+                    <div class="exercise-info">
+                        <h3 class="exercise-name">
+                            {{ exercise.name }}
+
+                            <!-- YANGI QO‘SHILGAN QISM -->
+                            <span class="exercise-details">
+                                • {{ exercise.calories }} kcal
+                                • {{ exercise.duration }} min
+                            </span>
+                        </h3>
+                    </div>
+
+                </a>
+            {% endfor %}
+        </div>
+
         {% else %}
             <div class="empty-state">
                 <div class="icon">😔</div>

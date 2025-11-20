@@ -429,12 +429,13 @@
 {% block content %}{% endblock %}
 
 <!-- Premium Bottom Navigation -->
+{% block bottom_nav %}
 <div class="bottom-nav">
     <a href="{% url 'muscle_groups' %}" class="nav-item {% if 'exercises' in request.path or 'muscle' in request.path %}active{% endif %}">
         <span class="icon">💪</span>
         <span>Exercises</span>
     </a>
-    <a href="{% url 'program_list' %}" class="nav-item {% if 'workouts' in request.path or 'program' in request.path %}active{% endif %}">
+    <a href="{% url 'program_list' %}" class="nav-item {% if 'program' in request.path %}active{% endif %}">
         <span class="icon">✅</span>
         <span>Workouts</span>
     </a>
@@ -451,6 +452,8 @@
         <span>Profile</span>
     </a>
 </div>
+{% endblock %}
+
 
 <script>
     // Telegram WebApp initialization

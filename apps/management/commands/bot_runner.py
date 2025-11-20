@@ -54,7 +54,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 def main():
-    """Bot'ni ishga tushirish"""
+
 
     # Token olish
     bot_token = os.getenv('BOT_TOKEN')
