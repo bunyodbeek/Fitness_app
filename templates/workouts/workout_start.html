@@ -15,50 +15,96 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #2d3945;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
             color: white;
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 90%, rgba(78, 205, 196, 0.05) 0%, transparent 50%);
+            animation: particleFloat 15s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
         }
 
         /* Header */
         .session-header {
-            background: #36424f;
-            padding: 15px 20px;
+            background: linear-gradient(135deg, rgba(15, 52, 96, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            padding: 18px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
         }
 
         .exit-btn {
-            color: #ffd700;
-            font-size: 16px;
-            font-weight: 600;
-            background: none;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 17px;
+            font-weight: 800;
             border: none;
             cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .exit-btn:hover {
+            transform: scale(1.1);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
         }
 
         .progress-counter {
             color: white;
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: 1px;
         }
 
         .menu-btn {
-            color: #ffd700;
-            font-size: 24px;
-            background: none;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 26px;
             border: none;
             cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 900;
+        }
+
+        .menu-btn:hover {
+            transform: scale(1.1);
         }
 
         /* Exercise Content */
         .exercise-content {
-            padding: 30px 20px;
+            padding: 30px 20px 140px;
             text-align: center;
+            position: relative;
+            z-index: 1;
         }
 
         .exercise-image-container {
@@ -70,14 +116,23 @@
             width: 100%;
             height: 250px;
             object-fit: cover;
-            border-radius: 12px;
-            background: #36424f;
+            border-radius: 20px;
+            border: 3px solid rgba(255, 215, 0, 0.4);
+            box-shadow:
+                0 0 30px rgba(255, 215, 0, 0.3),
+                inset 0 2px 8px rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .exercise-name {
-            font-size: 24px;
-            font-weight: 700;
+            font-size: 26px;
+            font-weight: 900;
             margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         /* Timer */
@@ -86,25 +141,49 @@
         }
 
         .timer-box {
-            background: linear-gradient(135deg, #9fa96e, #b8bd7f);
-            border-radius: 16px;
-            padding: 30px;
+            background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
+            border-radius: 25px;
+            padding: 35px;
             display: inline-flex;
             align-items: center;
-            gap: 30px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            gap: 25px;
+            box-shadow:
+                0 15px 50px rgba(255, 215, 0, 0.5),
+                inset 0 2px 12px rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timer-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
 
         .timer-display {
-            font-size: 56px;
-            font-weight: 700;
-            color: #2d3945;
+            font-size: 60px;
+            font-weight: 900;
+            color: #1a1a2e;
         }
 
         .timer-label {
-            font-size: 18px;
-            color: #2d3945;
-            opacity: 0.7;
+            font-size: 20px;
+            color: #1a1a2e;
+            font-weight: 700;
+            opacity: 0.8;
         }
 
         /* Sets Tracker */
@@ -112,8 +191,15 @@
             max-width: 500px;
             margin: 30px auto;
             padding: 20px;
-            background: #36424f;
-            border-radius: 12px;
+            background: linear-gradient(135deg,
+                rgba(255, 215, 0, 0.15) 0%,
+                rgba(255, 215, 0, 0.08) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 2px 8px rgba(255, 255, 255, 0.1);
         }
 
         .set-row {
@@ -121,7 +207,7 @@
             align-items: center;
             gap: 10px;
             padding: 12px 0;
-            border-bottom: 1px solid #2d3945;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
         }
 
         .set-row:last-child {
@@ -129,100 +215,176 @@
         }
 
         .set-number {
-            font-size: 16px;
-            font-weight: 600;
-            color: #95a5a6;
+            font-size: 15px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.8);
             min-width: 60px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .set-input {
             flex: 1;
-            background: #2d3945;
-            border: 2px solid #445566;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 215, 0, 0.3);
             color: white;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 14px;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 16px;
             text-align: center;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .set-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
         }
 
         .set-input:focus {
             outline: none;
-            border-color: #ffd700;
+            border-color: rgba(255, 215, 0, 0.8);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
         }
 
         .set-done-btn {
-            width: 40px;
-            height: 40px;
-            background: #2d3945;
-            border: 2px solid #445566;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 215, 0, 0.3);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 22px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .set-done-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: rgba(255, 215, 0, 0.6);
         }
 
         .set-done-btn.completed {
-            background: #ffd700;
+            background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
             border-color: #ffd700;
-            color: #2d3945;
+            color: #1a1a2e;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
         }
 
         /* Action Buttons */
         .action-buttons {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
             display: flex;
-            gap: 15px;
-            padding: 0 20px;
-            margin-top: 40px;
+            gap: 12px;
+            z-index: 1000;
         }
 
         .pause-btn {
-            flex: 1;
-            background: #ffd700;
-            border: none;
-            color: #2d3945;
+            width: 70px;
+            background: linear-gradient(135deg,
+                rgba(255, 215, 0, 0.3) 0%,
+                rgba(255, 215, 0, 0.2) 100%);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 215, 0, 0.4);
+            color: #ffd700;
             padding: 18px;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 700;
+            border-radius: 18px;
+            font-size: 24px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .pause-btn:hover {
+            background: linear-gradient(135deg,
+                rgba(255, 215, 0, 0.4) 0%,
+                rgba(255, 215, 0, 0.3) 100%);
+            border-color: rgba(255, 215, 0, 0.6);
+            transform: translateY(-2px);
         }
 
         .did-it-btn {
-            flex: 2;
-            background: #ffd700;
+            flex: 1;
+            background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
             border: none;
-            color: #2d3945;
+            color: #1a1a2e;
             padding: 18px;
-            border-radius: 12px;
+            border-radius: 18px;
             font-size: 18px;
-            font-weight: 700;
+            font-weight: 900;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow:
+                0 10px 40px rgba(255, 215, 0, 0.5),
+                inset 0 2px 12px rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .did-it-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent);
+            transition: left 0.5s ease;
+        }
+
+        .did-it-btn:hover::before {
+            left: 100%;
+        }
+
+        .did-it-btn:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                0 15px 50px rgba(255, 215, 0, 0.7),
+                inset 0 2px 16px rgba(255, 255, 255, 0.4);
         }
 
         .did-it-btn:disabled {
-            background: #7f8c8d;
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.4);
             cursor: not-allowed;
+            box-shadow: none;
         }
 
         /* Up Next Section */
         .up-next-section {
             margin: 40px 20px 20px;
-            background: #36424f;
-            border-radius: 12px;
+            background: linear-gradient(135deg,
+                rgba(255, 215, 0, 0.15) 0%,
+                rgba(255, 215, 0, 0.08) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
             padding: 20px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 2px 8px rgba(255, 255, 255, 0.1);
         }
 
         .up-next-label {
-            font-size: 14px;
-            color: #ffd700;
-            font-weight: 600;
+            font-size: 13px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
             margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .up-next-content {
@@ -234,9 +396,11 @@
         .up-next-image {
             width: 80px;
             height: 80px;
-            border-radius: 8px;
+            border-radius: 12px;
             object-fit: cover;
-            background: #2d3945;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
         }
 
         .up-next-info {
@@ -245,13 +409,15 @@
 
         .up-next-name {
             font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 5px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: white;
         }
 
         .up-next-details {
-            font-size: 14px;
-            color: #95a5a6;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
         }
 
         /* Rest Overlay */
@@ -261,7 +427,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(10, 14, 39, 0.98);
+            backdrop-filter: blur(20px);
             display: none;
             align-items: center;
             justify-content: center;
@@ -274,25 +441,71 @@
         }
 
         .rest-title {
-            font-size: 32px;
-            color: #ffd700;
-            margin-bottom: 20px;
+            font-size: 28px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .rest-timer-circle {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            border: 8px solid rgba(255, 215, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .rest-timer-circle::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            border-radius: 50%;
+            border: 8px solid transparent;
+            border-top-color: #ffd700;
+            animation: rotate 1s linear infinite;
+        }
+
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
         }
 
         .rest-timer {
             font-size: 72px;
-            font-weight: 700;
-            margin-bottom: 30px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .skip-rest-btn {
-            background: none;
-            border: 2px solid #ffd700;
+            background: transparent;
+            border: 3px solid rgba(255, 215, 0, 0.6);
             color: #ffd700;
-            padding: 12px 30px;
-            border-radius: 25px;
+            padding: 15px 40px;
+            border-radius: 30px;
             font-size: 16px;
+            font-weight: 800;
             cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .skip-rest-btn:hover {
+            background: rgba(255, 215, 0, 0.1);
+            border-color: #ffd700;
+            transform: scale(1.05);
         }
 
         /* Finish Modal */
@@ -302,7 +515,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(10, 14, 39, 0.98);
+            backdrop-filter: blur(20px);
             display: none;
             align-items: center;
             justify-content: center;
@@ -315,31 +529,76 @@
         }
 
         .finish-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
+            font-size: 100px;
+            margin-bottom: 30px;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
 
         .finish-title {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 10px;
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .finish-subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 40px;
         }
 
         .finish-buttons {
             display: flex;
             gap: 15px;
-            margin-top: 20px;
         }
 
         .finish-save-btn {
-            background: #ffd700;
+            background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
             border: none;
-            color: #2d3945;
-            padding: 15px 30px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 700;
+            color: #1a1a2e;
+            padding: 18px 50px;
+            border-radius: 18px;
+            font-size: 18px;
+            font-weight: 900;
             cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow:
+                0 10px 40px rgba(255, 215, 0, 0.5),
+                inset 0 2px 12px rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .finish-save-btn:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                0 15px 50px rgba(255, 215, 0, 0.7),
+                inset 0 2px 16px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .timer-display {
+                font-size: 50px;
+            }
+
+            .rest-timer {
+                font-size: 60px;
+            }
+
+            .rest-timer-circle {
+                width: 240px;
+                height: 240px;
+            }
         }
     </style>
 </head>
@@ -400,14 +659,17 @@
     <!-- Rest Overlay -->
     <div class="rest-overlay" id="restOverlay">
         <div class="rest-title">Rest</div>
-        <div class="rest-timer" id="restTimer">00:60</div>
-        <button class="skip-rest-btn" onclick="skipRest()">Skip Rest</button>
+        <div class="rest-timer-circle">
+            <div class="rest-timer" id="restTimer">00:60</div>
+        </div>
+        <button class="skip-rest-btn" onclick="skipRest()">Tap to skip</button>
     </div>
 
     <!-- Finish Modal -->
     <div class="finish-modal" id="finishModal">
         <div class="finish-icon">🎉</div>
         <div class="finish-title">Great Job!</div>
+        <div class="finish-subtitle">Workout completed successfully</div>
         <div class="finish-buttons">
             <button class="finish-save-btn" onclick="finishWorkout()">Finish</button>
         </div>

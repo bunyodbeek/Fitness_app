@@ -2,6 +2,9 @@ import json
 import traceback
 
 import requests
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
 from apps.forms import UserProfileForm
 from apps.models import User, UserMotivation, UserProfile
 from django.contrib.auth import login
@@ -13,7 +16,7 @@ from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView, UpdateView
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class QuestionnaireSubmitView(View):
 
     def parse_json(self, request):
@@ -78,11 +81,11 @@ class QuestionnaireSubmitView(View):
         except Exception as e:
             print(f"Avatar save error: {e}")
 
-    def save_motivations(self, user, motivations):
+    def save_motivations(self, profile, motivations):
 
-        UserMotivation.objects.filter(user=user).delete()
+        UserMotivation.objects.filter(user=profile).delete()
         for m in motivations:
-            UserMotivation.objects.create(user=user, motivation=m)
+            UserMotivation.objects.create(user=profile, motivation=m)
 
     def post(self, request, *args, **kwargs):
         data = self.parse_json(request)
@@ -97,7 +100,7 @@ class QuestionnaireSubmitView(View):
         if existing_profile:
             return JsonResponse({
                 'success': True,
-                'redirect_url': reverse('program_list'),
+                'redirect_url': reverse('animation'),
                 'message': 'User already exists'
             })
 
@@ -111,14 +114,14 @@ class QuestionnaireSubmitView(View):
 
             profile = self.create_or_update_profile(user, data)
 
-            self.save_motivations(user, data.get('motivation', []))
+            self.save_motivations(profile, data.get('motivation', []))
 
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
 
             return JsonResponse({
                 'success': True,
                 'message': "Ma'lumotlar saqlandi",
-                'redirect_url': reverse('program_list'),
+                'redirect_url': reverse('animation'),
                 'is_new_user': is_new,
                 'user_id': user.id,
                 'profile_id': profile.id,
@@ -129,7 +132,7 @@ class QuestionnaireSubmitView(View):
             print(traceback.format_exc())
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class TelegramAuthView(View):
 
     def post(self, request, *args, **kwargs):
@@ -149,7 +152,7 @@ class TelegramAuthView(View):
                 if profile.onboarding_completed:
                     return JsonResponse({
                         'success': True,
-                        'redirect': '/workouts/',
+                        'redirect': '/',
                         'onboarding_completed': True,
                         'user_id': user.id
                     })
@@ -174,15 +177,14 @@ class TelegramAuthView(View):
     def get(self, request):
         return HttpResponseNotAllowed(['POST'])
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class OnboardingView(TemplateView):
     template_name = 'miniapp/questionarrie.html'
-
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            profile = getattr(request.user, 'profile', None)
+            profile = UserProfile.objects.filter(user=request.user).first()
             if profile and profile.onboarding_completed:
-                return redirect('/workouts/')
+                return redirect('/')
         return super().dispatch(request, *args, **kwargs)
 
 

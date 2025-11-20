@@ -23,12 +23,14 @@ urlpatterns = [
     path('users/profile/update/', users.UpdateProfileView.as_view(), name='profile_update'),
     path('users/settings/', users.SettingsView.as_view(), name='settings'),
 
-    path('', workouts.ProgramListView.as_view(), name='program_list'),
+    path('workout/', workouts.ProgramListView.as_view(), name='program_list'),
+    path('', workouts.AnimationView.as_view(), name='animation'),
     path('program/<int:pk>/', workouts.ProgramDetailView.as_view(), name='program_detail'),
     path('edition/<int:pk>/', workouts.EditionDetailView.as_view(), name='edition_detail'),
     path('workout/<int:pk>/', workouts.WorkoutDetailView.as_view(), name='workout_detail'),
     path('workout/<int:pk>/start/', workouts.WorkoutStartView.as_view(), name='workout_start'),
     path('workout/<int:pk>/complete/', workouts.WorkoutCompleteView.as_view(), name='workout_complete'),
+
 
     path('api/users/auth/', api_views.telegram_auth, name='telegram_auth_api'),
     path('api/users/onboarding/save/', api_views.save_onboarding_step, name='save_onboarding_step'),
