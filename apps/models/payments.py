@@ -66,10 +66,10 @@ class Payment(CreatedBaseModel):
         verbose_name_plural = _("To'lovlar")
 
     def mark_as_completed(self):
-        self.status = PaymentStatus.COMPLETED
+        self.status = self.PaymentStatus.COMPLETED
         self.completed_at = timezone.now()
         self.save()
 
     def mark_as_failed(self):
-        self.status = PaymentStatus.FAILED
+        self.status = self.PaymentStatus.FAILED
         self.save()

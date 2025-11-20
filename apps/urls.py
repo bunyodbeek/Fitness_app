@@ -15,7 +15,7 @@ urlpatterns = [
     path('favorites/remove/<int:favorite_id>/', favorite.RemoveFavoriteView.as_view(), name='remove_favorite'),
 
     path('api/questionnaire/submit/', users.QuestionnaireSubmitView.as_view(), name='questionnaire_submit'),
-    path('api/telegram-auth/', users.TelegramAuthView.as_view(), name='telegram_auth'),
+    # path('api/telegram-auth/', users.TelegramAuthView.as_view(), name='telegram_auth'),
     path('miniapp/questionnaire/', users.OnboardingView.as_view(), name='onboarding'),
     path('users/profile/', users.ProfileView.as_view(), name='user_profile'),
     path('user/progress/', users.ProgressView.as_view(), name='user_progress'),
@@ -36,4 +36,6 @@ urlpatterns = [
     path('api/users/onboarding/save/', api_views.save_onboarding_step, name='save_onboarding_step'),
     path('api/users/onboarding/complete/', api_views.complete_onboarding, name='complete_onboarding'),
     path('api/users/profile/', api_views.get_user_profile, name='get_user_profile'),
+
+    # path('api/tlg-bot', ) # pytelegrambotapi
 ]

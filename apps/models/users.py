@@ -115,9 +115,9 @@ class PaymentHistory(CreatedBaseModel):
 
     user = ForeignKey('apps.UserProfile', CASCADE, related_name='payment_history')
     amount = DecimalField(max_digits=10, decimal_places=2)
-    payment_method = CharField(max_length=50)
+    payment_method = CharField(max_length=50) # TODO ?
     status = CharField(max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.PENDING)
-    transaction_id = CharField(max_length=100, blank=True)
+    transaction_id = CharField(max_length=100, null=True, blank=True)
     description = TextField(blank=True)
 
     class Meta:
