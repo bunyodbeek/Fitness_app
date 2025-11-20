@@ -271,12 +271,12 @@
         /* Premium rotate button */
         .rotate-btn {
             position: fixed;
-            bottom: 100px;
-            right: 100px;
+            bottom: 140px;
+            right: 40px;
             width: 70px;
             height: 70px;
             background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
-            border-radius: 80%;
+            border-radius: 50%;
             border: 4px solid rgba(255, 255, 255, 0.3);
             cursor: pointer;
             display: flex;
@@ -352,11 +352,6 @@
             .page-title {
                 font-size: 20px;
                 letter-spacing: 3px;
-            }
-
-            .page-title::after {
-                font-size: 8px;
-                bottom: -16px;
             }
 
             .body-container {
@@ -527,11 +522,11 @@
                     <a href="{% url 'exercises_by_muscle' 'glutes' %}" class="body-part-dot"></a>
                 </div>
 
-                <!-- Hamstrings -->
-                <div class="body-part-container left-side" style="top:59%; left:40%;">
-                    <a href="{% url 'exercises_by_muscle' 'hamstrings' %}" class="body-part-dot"></a>
-                    <div class="dotted-line" style="width:50px;"></div>
+                <!-- Hamstrings - YANGILANGAN -->
+                <div class="body-part-container right-side" style="top:59%; right:20%;">
                     <a href="{% url 'exercises_by_muscle' 'hamstrings' %}" class="body-part-label">Hamstrings</a>
+                    <div class="dotted-line" style="width:50px;"></div>
+                    <a href="{% url 'exercises_by_muscle' 'hamstrings' %}" class="body-part-dot"></a>
                 </div>
 
                 <!-- Calves -->
