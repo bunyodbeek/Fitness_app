@@ -1,43 +1,83 @@
-from apps.models import Favorite
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import IntegrityError
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import TemplateView, View
+from django.views.generic import View, ListView, CreateView
+
+from apps.models import Favorite, Exercise
 
 
-class FavoritesView(LoginRequiredMixin, TemplateView):
+class FavoritesListView(LoginRequiredMixin, ListView):
+    model = Favorite
     template_name = 'exercises/favorites_list.html'
     login_url = '/login/'
+    context_object_name = 'favorites'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        favorite = Favorite.objects.filter(
-            user=self.request.user.profile,
-        ).order_by('-created_at')
-
-        favorites_list = []
-        for fav in favorite:
-
-            obj = fav.exercise
-
-            if obj:
-                muscle_group_name = str(obj.primary_body_part)
-
-                favorites_list.append({
-                    'id': fav.id,
-                    'title': obj.name,
-                    'thumbnail_url': obj.thumbnail.url if obj.thumbnail else '',
-                    'primary_body_part': muscle_group_name,
-                    'difficulty': getattr(obj, 'difficulty', ''),
-                    'equipment': getattr(obj, 'equipment', ''),
-
-                    'exercise_id': fav.exercise_id,
-                })
-        context['favorites'] = favorites_list
-        context['total_count'] = len(favorites_list)
-
+        context['total_count'] = Favorite.objects.filter(user=self.request.user.profile).count()
         return context
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        user = self.request.user
+        if user.is_authenticated:
+            qs.filter(user=self.request.user.profile)
+        return qs
+
+
+
+class ToggleFavoriteView(LoginRequiredMixin, View):
+
+    def post(self, request, exercise_id):
+        exercise = get_object_or_404(Exercise, pk=exercise_id)
+        user = request.user
+
+        try:
+            user_profile = user.profile
+        except AttributeError:
+            return JsonResponse({
+                'success': False,
+                'status': 'error',
+                'message': 'Foydalanuvchida Profile obyekti topilmadi (user.profile chaqiruvi xato).'
+            }, status=500)
+
+        try:
+
+            favorite_instance = Favorite.objects.get(user=user_profile, exercise=exercise)
+
+            favorite_instance.delete()
+            return JsonResponse({
+                'success': True,
+                'status': 'removed',
+                'message': f"{exercise.name} sevimlilardan olib tashlandi."
+            })
+
+        except Favorite.DoesNotExist:
+
+            try:
+
+                Favorite.objects.create(user=user_profile, exercise=exercise)
+                return JsonResponse({
+                    'success': True,
+                    'status': 'added',
+                    'message': f"{exercise.name} sevimlilarga qo'shildi."
+                })
+            except IntegrityError:
+                return JsonResponse({
+                    'success': False,
+                    'status': 'error',
+                    'message': 'Obekt allaqachon mavjud.'
+                }, status=400)
+
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'status': 'error',
+                'message': str(e)
+            }, status=500)
 
 
 class RemoveFavoriteView(LoginRequiredMixin, View):

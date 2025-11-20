@@ -22,4 +22,3 @@ class EditionAdmin(admin.ModelAdmin):
     search_fields = ("title",)
     ordering = ("program", "order")
     inlines = [WorkoutInline]
-
