@@ -8,7 +8,6 @@ User = get_user_model()
 
 
 class WorkoutSession(models.Model):
-    """User's workout session tracking"""
 
     STATUS_CHOICES = [
         ('completed', 'Completed'),

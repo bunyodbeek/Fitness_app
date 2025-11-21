@@ -5,6 +5,439 @@
 
 {% block extra_css %}
     <style>
+
+    /* ==========================================
+           ✨ PREMIUM ANIMATIONS - all_workouts.html style
+           ========================================== */
+
+        /* 1. Animated Background - Xuddi all_workouts kabi */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 90%, rgba(78, 205, 196, 0.05) 0%, transparent 50%);
+            animation: particleFloat 15s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        /* 2. Page Header Animation */
+        {#.page-header {#}
+        {#    animation: slideDownHeader 0.6s cubic-bezier(0.4, 0, 0.2, 1);#}
+        {#}#}
+
+        @keyframes slideDownHeader {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 3. Stats Card - Slide Down */
+        .favorite-stats {
+            animation: slideDownFade 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s backwards;
+        }
+
+        @keyframes slideDownFade {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 4. Tabs Animation */
+        .favorites-tabs {
+            animation: slideDownFade 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s backwards;
+        }
+
+        /* 5. Favorite Cards - Slide Down (ASOSIY ANIMATION) */
+        .favorite-item {
+            animation: slideInDown 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Staggered Animation - Har bir card ketma-ket */
+        .favorite-item:nth-child(1) { animation-delay: 0.1s; }
+        .favorite-item:nth-child(2) { animation-delay: 0.15s; }
+        .favorite-item:nth-child(3) { animation-delay: 0.2s; }
+        .favorite-item:nth-child(4) { animation-delay: 0.25s; }
+        .favorite-item:nth-child(5) { animation-delay: 0.3s; }
+        .favorite-item:nth-child(6) { animation-delay: 0.35s; }
+        .favorite-item:nth-child(7) { animation-delay: 0.4s; }
+        .favorite-item:nth-child(8) { animation-delay: 0.45s; }
+        .favorite-item:nth-child(9) { animation-delay: 0.5s; }
+        .favorite-item:nth-child(10) { animation-delay: 0.55s; }
+
+        /* 6. Shimmer Effect on Hover - all_workouts kabi */
+        .favorite-item::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                45deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 100%
+            );
+            transition: all 0.6s ease;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .favorite-item:hover::before {
+            top: 100%;
+            left: 100%;
+        }
+
+        /* 7. Empty State Animation */
+        .empty-state {
+            animation: fadeInUp 0.8s ease 0.4s backwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .empty-state-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        /* 8. Favorite Button Pulse - all_workouts kabi */
+        .unfavorite-btn {
+            animation: heartBeatSubtle 2s ease-in-out infinite;
+        }
+
+        @keyframes heartBeatSubtle {
+            0%, 100% {
+                box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+            }
+            50% {
+                box-shadow: 0 4px 30px rgba(255, 215, 0, 0.5);
+            }
+        }
+
+        .unfavorite-btn:hover {
+            animation: none;
+        }
+
+        /* 9. Add Collection Button Pulse */
+        .add-collection-btn {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            }
+            50% {
+                box-shadow: 0 4px 25px rgba(255, 215, 0, 0.7);
+            }
+        }
+
+        .add-collection-btn:hover {
+            animation: none;
+        }
+
+        /* 10. Modal Slide Up - all_workouts style */
+        .collection-modal.active .collection-modal-content {
+            animation: slideUpBounce 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes slideUpBounce {
+            from {
+                opacity: 0;
+                transform: translateY(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .collection-modal.active {
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* 11. Save Options Modal - Bottom Sheet Style */
+        .save-options-modal.active .save-options-content {
+            animation: slideUpBottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideUpBottom {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        /* 12. Collections Modal Scale In */
+        .collections-modal.active .collections-modal-content {
+            animation: scaleIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* 13. Exercise Items in Modal - Slide In Left */
+        .exercise-select-item {
+            animation: slideInLeft 0.4s ease backwards;
+        }
+
+        .exercise-select-item:nth-child(1) { animation-delay: 0.05s; }
+        .exercise-select-item:nth-child(2) { animation-delay: 0.1s; }
+        .exercise-select-item:nth-child(3) { animation-delay: 0.15s; }
+        .exercise-select-item:nth-child(4) { animation-delay: 0.2s; }
+        .exercise-select-item:nth-child(5) { animation-delay: 0.25s; }
+        .exercise-select-item:nth-child(6) { animation-delay: 0.3s; }
+        .exercise-select-item:nth-child(7) { animation-delay: 0.35s; }
+        .exercise-select-item:nth-child(8) { animation-delay: 0.4s; }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* 14. Collection Items Slide In */
+        .collection-item {
+            animation: slideInRight 0.3s ease backwards;
+        }
+
+        .collection-item:nth-child(1) { animation-delay: 0.05s; }
+        .collection-item:nth-child(2) { animation-delay: 0.1s; }
+        .collection-item:nth-child(3) { animation-delay: 0.15s; }
+        .collection-item:nth-child(4) { animation-delay: 0.2s; }
+        .collection-item:nth-child(5) { animation-delay: 0.25s; }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* 15. Save Options - Slide Up */
+        .save-option {
+            animation: slideUpOption 0.3s ease backwards;
+        }
+
+        .save-option:nth-child(1) { animation-delay: 0.1s; }
+        .save-option:nth-child(2) { animation-delay: 0.15s; }
+        .save-option:nth-child(3) { animation-delay: 0.2s; }
+
+        @keyframes slideUpOption {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 16. Thumbnail Zoom on Hover - all_workouts style */
+        .favorite-thumbnail {
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .favorite-item:hover .favorite-thumbnail {
+            transform: scale(1.15) rotate(2deg);
+            filter: brightness(1.1);
+        }
+
+        /* 17. Tab Button Shimmer */
+        .tab-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: left 0.5s ease;
+        }
+
+        .tab-btn:hover::before {
+            left: 100%;
+        }
+
+        /* 18. Stats Number Gradient Animation */
+        .favorite-stats span {
+            background: linear-gradient(
+                90deg,
+                #ffd700,
+                #ffed4e,
+                #ffd700
+            );
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        /* 19. Back Button Hover - all_workouts style */
+        .back-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .back-btn:hover {
+            animation: backArrowBounce 0.6s ease;
+        }
+
+        @keyframes backArrowBounce {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(-3px); }
+        }
+
+        /* 20. Page Load Fade In */
+        .favorites-content {
+            animation: fadeInContent 0.5s ease;
+        }
+
+        @keyframes fadeInContent {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* ==========================================
+           ⚡ RESPONSIVE ANIMATIONS
+           ========================================== */
+
+        @media (max-width: 768px) {
+            /* Mobile da animation tezroq */
+            .favorite-item {
+                animation-duration: 0.4s;
+            }
+
+            .page-header {
+                animation-duration: 0.5s;
+            }
+
+            .favorite-stats,
+            .favorites-tabs {
+                animation-duration: 0.5s;
+            }
+        }
+
+        /* ==========================================
+           🎯 PERFORMANCE OPTIMIZATION
+           ========================================== */
+
+        /* Reduced motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* GPU Acceleration for smooth animations */
+        .favorite-item,
+        .page-header,
+        .favorite-stats,
+        .favorites-tabs,
+        .favorite-thumbnail,
+        .unfavorite-btn {
+            will-change: transform, opacity;
+        }
         /* Global Stillar */
         * {
             margin: 0;
@@ -13,24 +446,25 @@
         }
 
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+                font-family: 'Poppins', sans-serif;
             min-height: 100vh;
             position: relative;
         }
 
         /* Header - Premium Style */
         .page-header {
-            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
-            padding: 18px 20px;
+            background: linear-gradient(135deg, rgba(15, 52, 96, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            padding: 25px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            justify-content: center;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
         }
 
         .back-btn {
@@ -54,15 +488,46 @@
             transform: translateX(-3px);
         }
 
-        .page-title {
+      .page-title {
             color: white;
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
+            font-size: 24px;
+            font-weight: 900;
             text-transform: uppercase;
-            flex: 1;
             text-align: center;
-            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            position: relative;
+          flex: 1;
+        }
+
+        /* ✨ YANGI - Add Collection Button */
+        .add-collection-btn {
+            background: linear-gradient(135deg, #ffd700, #f39c12);
+            border: none;
+            color: #1a1a2e;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            font-weight: 900;
+        }
+
+        .add-collection-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6);
+        }
+
+        .add-collection-btn:active {
+            transform: scale(0.95);
         }
 
         /* Content Wrapper */
@@ -340,6 +805,324 @@
             font-size: 16px;
         }
 
+        /* ==========================================
+           ✨ YANGI - COLLECTION MODAL STYLES
+           ========================================== */
+
+        /* Modal Overlay */
+        .collection-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .collection-modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Modal Content */
+        .collection-modal-content {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Modal Header */
+        .modal-header {
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .modal-title {
+            color: #ffd700;
+            font-size: 20px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .modal-close-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #ffd700;
+            transform: rotate(90deg);
+        }
+
+        /* Modal Body */
+        .modal-body {
+            padding: 25px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        /* Collection Name Input */
+        .collection-name-group {
+            margin-bottom: 25px;
+        }
+
+        .collection-name-label {
+            color: #ffd700;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .collection-name-input {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.08));
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 14px 18px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .collection-name-input:focus {
+            outline: none;
+            border-color: #ffd700;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+
+        .collection-name-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Exercise Select Section */
+        .exercise-select-section {
+            margin-top: 25px;
+        }
+
+        .exercise-select-header {
+            color: #ffd700;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .exercise-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .exercise-list::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .exercise-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        /* Exercise Select Item */
+        .exercise-select-item {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.05));
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .exercise-select-item:hover {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(243, 156, 18, 0.1));
+            border-color: rgba(255, 215, 0, 0.4);
+            transform: translateX(5px);
+        }
+
+        .exercise-select-item.selected {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(243, 156, 18, 0.15));
+            border-color: #ffd700;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Custom Checkbox */
+        .exercise-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .exercise-select-item.selected .exercise-checkbox {
+            background: linear-gradient(135deg, #ffd700, #f39c12);
+            border-color: #ffd700;
+        }
+
+        .exercise-checkbox-icon {
+            color: #1a1a2e;
+            font-size: 16px;
+            font-weight: 900;
+            display: none;
+        }
+
+        .exercise-select-item.selected .exercise-checkbox-icon {
+            display: block;
+        }
+
+        /* Exercise Info in Modal */
+        .exercise-select-thumbnail {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            object-fit: cover;
+            background: #2c3e50;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .exercise-select-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .exercise-select-name {
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .exercise-select-meta {
+            color: #95a5a6;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Modal Footer */
+        .modal-footer {
+            padding: 20px 25px;
+            border-top: 2px solid rgba(255, 215, 0, 0.2);
+            background: linear-gradient(135deg, rgba(15, 52, 96, 0.5) 0%, rgba(22, 33, 62, 0.5) 100%);
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 14px 25px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .modal-btn-cancel {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .modal-btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .modal-btn-save {
+            background: linear-gradient(135deg, #ffd700, #f39c12);
+            color: #1a1a2e;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .modal-btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6);
+        }
+
+        .modal-btn-save:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         /* Delete Animation */
         @keyframes slideOutRight {
             from {
@@ -367,6 +1150,15 @@
                 width: 42px;
                 height: 42px;
             }
+
+            .collection-modal-content {
+                width: 95%;
+                max-height: 90vh;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
         }
     </style>
 {% endblock %}
@@ -374,9 +1166,11 @@
 {% block content %}
     <div class="page-header">
         <button class="back-btn" onclick="window.history.back()">
-            <i class="fas fa-arrow-left"></i><
+            <i class="fas fa-arrow-left"></i>
         </button>
         <h1 class="page-title">⭐ Mening Sevimlilarim</h1>
+        <!-- ✨ YANGI - Add Collection Button -->
+        <button class="add-collection-btn" onclick="openCollectionModal()">+</button>
     </div>
 
     <div class="favorites-content">
@@ -429,10 +1223,77 @@
             {% endif %}
         </div>
     </div>
+
+    <!-- ==========================================
+         ✨ YANGI - COLLECTION MODAL
+         ========================================== -->
+    <div class="collection-modal" id="collectionModal">
+        <div class="collection-modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h3 class="modal-title">📁 Yangi To'plam</h3>
+                <button class="modal-close-btn" onclick="closeCollectionModal()">×</button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <!-- Collection Name Input -->
+                <div class="collection-name-group">
+                    <label class="collection-name-label">To'plam nomi</label>
+                    <input
+                        type="text"
+                        class="collection-name-input"
+                        id="collectionNameInput"
+                        placeholder="Masalan: Chest Day Mashqlari"
+                        maxlength="50"
+                    >
+                </div>
+
+                <!-- Exercise Selection -->
+                <div class="exercise-select-section">
+                    <div class="exercise-select-header">
+                        Mashqlarni tanlang (<span id="selectedCount">0</span> tanlandi)
+                    </div>
+                    <div class="exercise-list" id="exerciseList">
+                        <!-- Django template bilan exercises list -->
+                        {% for exercise in all_exercises %}
+                        <div class="exercise-select-item"
+                             data-exercise-id="{{ exercise.id }}"
+                             onclick="toggleExerciseSelection(this, {{ exercise.id }})">
+                            <div class="exercise-checkbox">
+                                <span class="exercise-checkbox-icon">✓</span>
+                            </div>
+                            <img src="{{ exercise.thumbnail.url|default_if_none:'/static/img/default-thumb.jpg' }}"
+                                 alt="{{ exercise.name }}" class="exercise-select-thumbnail">
+                            <div class="exercise-select-info">
+                                <div class="exercise-select-name">{{ exercise.name }}</div>
+                                <div class="exercise-select-meta">{{ exercise.primary_body_part }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" onclick="closeCollectionModal()">
+                    Bekor qilish
+                </button>
+                <button class="modal-btn modal-btn-save" id="saveCollectionBtn" onclick="saveCollection()" disabled>
+                    Saqlash
+                </button>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block extra_js %}
     <script>
+        // ==========================================
+        // MAVJUD FUNKSIYALAR
+        // ==========================================
+
         // Tab switching
         function showTab(buttonElement, tab) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -466,52 +1327,189 @@
                         'X-CSRFToken': getCookie('csrftoken')
                     }
                 })
-                    .then(response => {
-                        if (response.status !== 200) {
-                            return response.json().then(err => {
-                                throw new Error(err.error || `Server xatosi: ${response.status}`);
-                            }).catch(() => {
-                                throw new Error(`Serverga ulanishda xato: Status ${response.status}`);
-                            });
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.success) {
-                            const item = button.closest('.favorite-item');
-                            item.style.animation = 'slideOutRight 0.4s ease forwards';
+                .then(response => {
+                    if (response.status !== 200) {
+                        return response.json().then(err => {
+                            throw new Error(err.error || `Server xatosi: ${response.status}`);
+                        }).catch(() => {
+                            throw new Error(`Serverga ulanishda xato: Status ${response.status}`);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        const item = button.closest('.favorite-item');
+                        item.style.animation = 'slideOutRight 0.4s ease forwards';
 
-                            setTimeout(() => {
-                                item.remove();
+                        setTimeout(() => {
+                            item.remove();
 
-                                // Agar ro'yxat bo'sh bo'lsa, empty state ko'rsatish
-                                const remainingItems = document.querySelectorAll('.favorite-item').length;
-                                if (remainingItems === 0) {
-                                    document.getElementById('favoritesList').innerHTML = `
+                            const remainingItems = document.querySelectorAll('.favorite-item').length;
+                            if (remainingItems === 0) {
+                                document.getElementById('favoritesList').innerHTML = `
                                     <div class="empty-state">
                                         <div class="empty-state-icon">⭐</div>
                                         <h3>Sevimlilar ro'yxati bo'sh</h3>
                                         <p>O'zingizga yoqqan mashqlarni qo'shishni boshlang!</p>
                                     </div>
                                 `;
-                                }
-                            }, 400);
-
-                            // Umumiy sonni yangilash
-                            const totalCountElement = document.getElementById('total-favorites-count');
-                            if (totalCountElement) {
-                                let currentCount = parseInt(totalCountElement.textContent);
-                                totalCountElement.textContent = currentCount > 0 ? currentCount - 1 : 0;
                             }
-                        } else {
-                            alert("O'chirishda xato: " + (data.error || "Noma'lum xato"));
+                        }, 400);
+
+                        const totalCountElement = document.getElementById('total-favorites-count');
+                        if (totalCountElement) {
+                            let currentCount = parseInt(totalCountElement.textContent);
+                            totalCountElement.textContent = currentCount > 0 ? currentCount - 1 : 0;
                         }
-                    })
-                    .catch(err => {
-                        console.error("Unfavorite AJAX xatoligi:", err);
-                        alert("Sevimlidan o'chirishda kutilmagan xato yuz berdi: " + err.message);
-                    });
+                    } else {
+                        alert("O'chirishda xato: " + (data.error || "Noma'lum xato"));
+                    }
+                })
+                .catch(err => {
+                    console.error("Unfavorite AJAX xatoligi:", err);
+                    alert("Sevimlidan o'chirishda kutilmagan xato yuz berdi: " + err.message);
+                });
             }
         }
+
+        // ==========================================
+        // ✨ YANGI - COLLECTION MODAL FUNKSIYALARI
+        // ==========================================
+
+        let selectedExercises = [];
+
+        // Modal ochish
+        function openCollectionModal() {
+            document.getElementById('collectionModal').classList.add('active');
+            document.body.style.overflow = 'hidden'; // Scroll ni bloklash
+            selectedExercises = [];
+            updateSelectedCount();
+            updateSaveButton();
+        }
+
+        // Modal yopish
+        function closeCollectionModal() {
+            document.getElementById('collectionModal').classList.remove('active');
+            document.body.style.overflow = ''; // Scroll ni qayta yoqish
+
+            // Reset
+            document.getElementById('collectionNameInput').value = '';
+            document.querySelectorAll('.exercise-select-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            selectedExercises = [];
+            updateSelectedCount();
+        }
+
+        // Exercise selection toggle
+        function toggleExerciseSelection(element, exerciseId) {
+            element.classList.toggle('selected');
+
+            if (element.classList.contains('selected')) {
+                if (!selectedExercises.includes(exerciseId)) {
+                    selectedExercises.push(exerciseId);
+                }
+            } else {
+                selectedExercises = selectedExercises.filter(id => id !== exerciseId);
+            }
+
+            updateSelectedCount();
+            updateSaveButton();
+        }
+
+        // Tanlangan mashqlar sonini yangilash
+        function updateSelectedCount() {
+            document.getElementById('selectedCount').textContent = selectedExercises.length;
+        }
+
+        // Save tugmasini faollashtirish/o'chirish
+        function updateSaveButton() {
+            const collectionName = document.getElementById('collectionNameInput').value.trim();
+            const saveBtn = document.getElementById('saveCollectionBtn');
+
+            if (collectionName && selectedExercises.length > 0) {
+                saveBtn.disabled = false;
+            } else {
+                saveBtn.disabled = true;
+            }
+        }
+
+        // Input change listener
+        document.addEventListener('DOMContentLoaded', function() {
+            const nameInput = document.getElementById('collectionNameInput');
+            if (nameInput) {
+                nameInput.addEventListener('input', updateSaveButton);
+            }
+        });
+
+        // Collection saqlash
+        function saveCollection() {
+            const collectionName = document.getElementById('collectionNameInput').value.trim();
+
+            if (!collectionName) {
+                alert("Iltimos, to'plam nomini kiriting!");
+                return;
+            }
+
+            if (selectedExercises.length === 0) {
+                alert("Iltimos, kamida bitta mashq tanlang!");
+                return;
+            }
+
+            const saveBtn = document.getElementById('saveCollectionBtn');
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saqlanmoqda...';
+
+            // Backend API ga so'rov
+            fetch('/exercises/collection/create/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    name: collectionName,
+                    exercise_ids: selectedExercises
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`"${collectionName}" to'plami muvaffaqiyatli yaratildi!`);
+                    closeCollectionModal();
+
+                    // Sahifani yangilash (yoki dinamik ravishda qo'shish)
+                    location.reload();
+                } else {
+                    alert("Xato: " + (data.error || "Noma'lum xato"));
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = 'Saqlash';
+                }
+            })
+            .catch(err => {
+                console.error("Collection saqlashda xato:", err);
+                alert("To'plamni saqlashda xato yuz berdi!");
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Saqlash';
+            });
+        }
+
+        // ESC tugmasi bilan modal yopish
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modal = document.getElementById('collectionModal');
+                if (modal && modal.classList.contains('active')) {
+                    closeCollectionModal();
+                }
+            }
+        });
+
+        // Modal tashqarisiga bosish bilan yopish
+        document.getElementById('collectionModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeCollectionModal();
+            }
+        });
     </script>
 {% endblock %}
