@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Active Workout</title>
+    <title>Active Workout - {{ workout.title }}</title>
     <style>
         * {
             margin: 0;
@@ -92,7 +92,7 @@
         .timer-container {
             max-width: 600px;
             margin: 0 auto;
-            display: none;
+            display: none; /* JS orqali boshqariladi */
         }
 
         .timer-box {
@@ -284,7 +284,9 @@
         }
 
         @keyframes rotate {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .rest-timer {
@@ -340,11 +342,11 @@
         .exit-modal-divider {
             height: 4px;
             background: repeating-linear-gradient(
-                90deg,
-                #ffd700 0px,
-                #ffd700 12px,
-                transparent 12px,
-                transparent 24px
+                    90deg,
+                    #ffd700 0px,
+                    #ffd700 12px,
+                    transparent 12px,
+                    transparent 24px
             );
             margin: 20px 0;
         }
@@ -428,394 +430,458 @@
             box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
         }
 
+        /* Strength Details */
+        #strengthDetails {
+            margin-top: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffd700;
+            letter-spacing: 1px;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
-            .timer-display { font-size: 48px; }
-            .rest-timer { font-size: 64px; }
-            .rest-timer-circle { width: 250px; height: 250px; }
+            .timer-display {
+                font-size: 48px;
+            }
+
+            .rest-timer {
+                font-size: 64px;
+            }
+
+            .rest-timer-circle {
+                width: 250px;
+                height: 250px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <div class="session-header">
-        <button class="exit-btn" onclick="showExitModal()">Exit</button>
-        <div class="progress-counter">
-            <span id="current">1</span>/<span id="total">9</span>
-        </div>
-        <button class="menu-btn">☰</button>
+{% csrf_token %}
+
+<div class="session-header">
+    <button class="exit-btn" onclick="showExitModal()">Exit</button>
+    <div class="progress-counter">
+        <span id="current">1</span>/<span id="total">{{ total_exercises }}</span>
+    </div>
+    <button class="menu-btn">☰</button>
+</div>
+
+<div class="exercise-content">
+    <div class="exercise-image-container">
+        <img src="{% static 'images/default_exercise.png' %}" alt="Exercise" class="exercise-image" id="exerciseImage">
     </div>
 
-    <!-- Exercise Content -->
-    <div class="exercise-content">
-        <div class="exercise-image-container">
-            <img src="{% static 'images/exercise-placeholder.png' %}" alt="Exercise" class="exercise-image" id="exerciseImage">
-        </div>
+    <h2 class="exercise-name" id="exerciseName"></h2>
 
-        <h2 class="exercise-name" id="exerciseName">Elliptical Machine</h2>
-
-        <!-- Timer (for cardio) -->
-        <div class="timer-container" id="timerContainer">
-            <div class="timer-box">
-                <div class="timer-display" id="timer">09:58</div>
-                <div class="timer-label">Min</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Action Buttons -->
-    <div class="action-buttons">
-        <button class="pause-btn" id="pauseBtn" onclick="togglePause()">
-            <span id="pauseIcon">⏸</span>
-        </button>
-        <button class="did-it-btn" id="didItBtn" onclick="completeExercise()">
-            Did it
-        </button>
-    </div>
-
-    <!-- Up Next -->
-    <div class="up-next-section" id="upNext">
-        <div class="up-next-label">Up Next</div>
-        <div class="up-next-content">
-            <img src="{% static 'images/exercise-placeholder.png' %}" alt="Next" class="up-next-image" id="upNextImage">
-            <div class="up-next-info">
-                <div class="up-next-name" id="upNextName">Plate Loaded Chest Press Mach...</div>
-                <div class="up-next-details" id="upNextDetails">-- x 12 | -- x 12 | -- x 12</div>
-            </div>
+    <div class="timer-container" id="timerContainer">
+        <div class="timer-box">
+            <div class="timer-display" id="timer">00:00</div>
+            <div class="timer-label">Min</div>
         </div>
     </div>
 
-    <!-- Rest Overlay -->
-    <div class="rest-overlay" id="restOverlay">
-        <div class="rest-title">Rest</div>
+    <div id="strengthDetails" style="display:none;">
+        <span id="currentSet">1</span> / <span id="totalSets"></span> Sets | <span id="repsCount"></span> Reps
+    </div>
+</div>
 
-        <!-- Side Timers -->
-        <div class="side-timers">
-            <div class="side-timer" id="sideTimer">10:00</div>
-            <div class="side-check">✓</div>
-        </div>
+<div class="action-buttons">
+    <button class="pause-btn" id="pauseBtn" onclick="togglePause()">
+        <span id="pauseIcon">⏸</span>
+    </button>
+    <button class="did-it-btn" id="didItBtn" onclick="completeExercise()">
+        Did it
+    </button>
+</div>
 
-        <div class="rest-timer-circle" onclick="skipRest()">
-            <div class="rest-timer" id="restTimer">00:58</div>
-            <div class="rest-skip-text">Tap to skip</div>
+<div class="up-next-section" id="upNext">
+    <div class="up-next-label">Up Next</div>
+    <div class="up-next-content">
+        <img src="{% static 'images/default_exercise.png' %}" alt="Next" class="up-next-image" id="upNextImage">
+        <div class="up-next-info">
+            <div class="up-next-name" id="upNextName"></div>
+            <div class="up-next-details" id="upNextDetails"></div>
         </div>
     </div>
+</div>
 
-    <!-- Exit Modal -->
-    <div class="exit-modal" id="exitModal">
-        <div class="exit-modal-content">
-            <h3 class="exit-modal-title">Finish Workout?</h3>
-            <div class="exit-modal-divider"></div>
-            <p class="exit-modal-text">You did not complete all the exercises.</p>
-            <div class="exit-modal-buttons">
-                <button class="exit-modal-btn save-exit-btn" onclick="saveAndExit()">Save and Exit</button>
-                <button class="exit-modal-btn no-save-btn" onclick="exitWithoutSaving()">Exit without Saving</button>
-                <button class="exit-modal-btn return-btn" onclick="returnToWorkout()">Return to workout</button>
-            </div>
-        </div>
+<div class="rest-overlay" id="restOverlay">
+    <div class="rest-title">Rest</div>
+
+    <div class="side-timers">
+        <div class="side-timer" id="sideTimer">00:00</div>
+        <div class="side-check">✓</div>
     </div>
 
-    <script>
-        // ==========================================
-        // DUMMY DATA - Backend dasturchi o'zgartiradi
-        // ==========================================
-        const DUMMY_EXERCISES = [
+    <div class="rest-timer-circle" onclick="skipRest()">
+        <div class="rest-timer" id="restTimer">00:00</div>
+        <div class="rest-skip-text">Tap to skip</div>
+    </div>
+</div>
+
+<div class="exit-modal" id="exitModal">
+    <div class="exit-modal-content">
+        <h3 class="exit-modal-title">Finish Workout?</h3>
+        <div class="exit-modal-divider"></div>
+        <p class="exit-modal-text">You did not complete all the exercises.</p>
+        <div class="exit-modal-buttons">
+            <button class="exit-modal-btn save-exit-btn" onclick="saveAndExit()">Save and Exit</button>
+            <button class="exit-modal-btn no-save-btn" onclick="exitWithoutSaving()">Exit without Saving</button>
+            <button class="exit-modal-btn return-btn" onclick="returnToWorkout()">Return to workout</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    // BACKEND INTEGRATION VARIABLES (DJANGO DATA)
+    // ==========================================
+    const workoutId = {{ workout.id }};
+    const totalExercises = {{ total_exercises }};
+
+    const workoutData = {
+        // Backend'dan kelgan context['summary'] dan ma'lumotlarni o'zlashtirish:
+        total_reps: {{ summary.total_reps|default:0 }},
+        total_weight: {{ summary.total_weight|default:0 }},
+        duration_seconds: {{ summary.duration_seconds|default:0 }}, // seconds ni olyapmiz
+        total_calories: {{ summary.total_calories|default:0 }},
+        exercises_completed: {{ summary.exercises_completed|default:0 }}
+    };
+
+    // Django contextidan kelgan ma'lumotlarni JavaScript massiviga o'tkazish
+    const exercises = [
+        {% for ex in exercises %}
             {
-                id: 1,
-                name: "Elliptical Machine",
-                image: null,
-                type: "cardio",
-                duration_minutes: 10,
-                calories_per_minute: 10,
-                sets: null,
-                reps: null,
-                rest_seconds: 60
-            },
-            {
-                id: 2,
-                name: "Plate Loaded Chest Press Machine",
-                image: null,
-                type: "strength",
-                duration_minutes: null,
-                calories_per_minute: null,
-                sets: 3,
-                reps: 12,
-                rest_seconds: 60
+                id: {{ ex.exercise.id }},
+                name: "{{ ex.exercise.name|escapejs }}",
+                // !!! BU YERDA O'ZGARTIRILDI: 'image' o'rniga 'thumbnail' ishlatildi !!!
+                image: {% if ex.exercise.thumbnail %}"{{ ex.exercise.thumbnail.url }}"{% else %}null{% endif %},
+
+                type: "{{ ex.exercise_type|lower }}",
+                duration_minutes: {{ ex.duration_minutes|default:'null' }},
+                calories_per_minute: {{ ex.calories_per_minute|default:10 }},
+                sets: {{ ex.sets|default:'null' }},
+                reps: {{ ex.reps|default:'null' }},
+                rest_seconds: {{ ex.rest_time|default:60 }}
+            }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    // ==========================================
+    // STATE MANAGEMENT
+    // ==========================================
+    let currentExerciseIndex = 0;
+    let isPaused = false;
+    let timerInterval = null;
+    let restInterval = null;
+    let timeLeft = 0;
+    let exerciseStartTime = null;
+    let totalCaloriesBurned = 0;
+    let totalDuration = 0;
+    let totalExercisesCompleted = 0;
+    let currentSet = 1;
+
+    // ==========================================
+    // FUNCTIONS
+    // ==========================================
+
+    function loadExercise(index) {
+        if (index >= exercises.length) {
+            finishWorkout();
+            return;
+        }
+
+        currentExerciseIndex = index;
+        const exercise = exercises[index];
+
+        // UI ni yangilash
+        document.getElementById('current').textContent = index + 1;
+        document.getElementById('exerciseName').textContent = exercise.name;
+
+        const defaultImage = "{% static 'images/default_exercise.png' %}";
+        // 'image' manbasini ishlatish
+        document.getElementById('exerciseImage').src = exercise.image || defaultImage;
+
+        // Set/Rep ma'lumotlarini nolga tiklash (kuch mashqlari uchun)
+        currentSet = 1;
+        document.getElementById('strengthDetails').style.display = 'none';
+
+        // Tugmalarni nolga tiklash
+        const didItBtn = document.getElementById('didItBtn');
+        didItBtn.classList.remove('completed');
+        didItBtn.textContent = (exercise.type === 'strength') ? 'Set Completed' : 'Did it';
+        didItBtn.disabled = false;
+
+
+        // Tegishli interfeysni ko'rsatish
+        if (exercise.type === 'cardio') {
+            showCardioInterface(exercise.duration_minutes);
+        } else if (exercise.type === 'strength') {
+            showStrengthInterface(exercise.sets, exercise.reps);
+        }
+
+        // Keyingi mashqni ko'rsatish
+        showUpNext(index);
+
+        // Vaqtni kuzatishni boshlash
+        exerciseStartTime = Date.now();
+    }
+
+    function showCardioInterface(minutes) {
+        document.getElementById('timerContainer').style.display = 'flex';
+        document.getElementById('strengthDetails').style.display = 'none';
+        timeLeft = minutes * 60;
+        updateTimerDisplay();
+        startTimer();
+    }
+
+    function showStrengthInterface(sets, reps) {
+        document.getElementById('timerContainer').style.display = 'none';
+        document.getElementById('strengthDetails').style.display = 'block';
+        document.getElementById('totalSets').textContent = sets;
+        document.getElementById('repsCount').textContent = reps;
+        document.getElementById('currentSet').textContent = currentSet;
+
+        // Kuch mashqlarida timer interval yo'q
+        clearInterval(timerInterval);
+        document.getElementById('didItBtn').textContent = 'Set Completed';
+    }
+
+
+    function startTimer() {
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            if (!isPaused) {
+                timeLeft = Math.max(0, timeLeft - 1);
+                updateTimerDisplay();
             }
-        ];
-
-        // ==========================================
-        // BACKEND INTEGRATION VARIABLES
-        // ==========================================
-        /*
-        Backend dasturchi context ga qo'yishi kerak:
-
-        const workoutId = {{ workout.id }};
-        const exercises = [
-{#            {% for ex in exercises %}#}
-{#            {#}
-{#                id: {{ ex.id }},#}
-{#                name: "{{ ex.name|escapejs }}",#}
-{#                image: {% if ex.image %}"{{ ex.image.url }}"{% else %}null{% endif %},#}
-{#                type: "{{ ex.exercise_type }}",  // 'cardio' or 'strength'#}
-{#                duration_minutes: {{ ex.duration_minutes|default:null }},#}
-{#                calories_per_minute: {{ ex.calories_per_minute|default:10 }},#}
-{#                sets: {{ ex.sets|default:null }},#}
-{#                reps: {{ ex.reps|default:null }},#}
-{#                rest_seconds: {{ ex.rest_time|default:60 }}#}
-{#            }{% if not forloop.last %},{% endif %}#}
-{#            {% endfor %}#}
-{#        ];#}
-        */
-
-        // Hozircha dummy data ishlatamiz
-        const workoutId = 1;
-        const exercises = DUMMY_EXERCISES;
-
-        // ==========================================
-        // STATE MANAGEMENT
-        // ==========================================
-        let currentExerciseIndex = 0;
-        let isPaused = false;
-        let timerInterval = null;
-        let restInterval = null;
-        let timeLeft = 0;
-        let exerciseStartTime = null;
-        let totalCaloriesBurned = 0;
-        let totalDuration = 0;
-        let totalExercisesCompleted = 0;
-
-        // ==========================================
-        // FUNCTIONS
-        // ==========================================
-
-        function loadExercise(index) {
-            if (index >= exercises.length) {
-                finishWorkout();
-                return;
+            if (timeLeft === 0) {
+                clearInterval(timerInterval);
+                completeExercise(true);
             }
+        }, 1000);
+    }
 
-            currentExerciseIndex = index;
-            const exercise = exercises[index];
+    function updateTimerDisplay() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        document.getElementById('timer').textContent =
+            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
 
-            // Update UI
-            document.getElementById('current').textContent = index + 1;
-            document.getElementById('total').textContent = exercises.length;
-            document.getElementById('exerciseName').textContent = exercise.name;
+    function togglePause() {
+        isPaused = !isPaused;
+        document.getElementById('pauseIcon').textContent = isPaused ? '▶' : '⏸';
+    }
 
-            if (exercise.image) {
-                document.getElementById('exerciseImage').src = exercise.image;
-            }
+    function completeExercise(isAutoCompleted = false) {
+        const exercise = exercises[currentExerciseIndex];
+        const didItBtn = document.getElementById('didItBtn');
 
-            // Reset buttons
-            const didItBtn = document.getElementById('didItBtn');
-            didItBtn.classList.remove('completed');
-            didItBtn.textContent = 'Did it';
-
-            // Show appropriate interface
-            if (exercise.type === 'cardio') {
-                showTimer(exercise.duration_minutes);
-            }
-
-            // Show up next
-            showUpNext(index);
-
-            // Track start time
-            exerciseStartTime = Date.now();
-        }
-
-        function showTimer(minutes) {
-            document.getElementById('timerContainer').style.display = 'block';
-            document.getElementById('upNext').style.display = 'block';
-
-            timeLeft = minutes * 60;
-            updateTimerDisplay();
-            startTimer();
-        }
-
-        function startTimer() {
-            clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                if (!isPaused && timeLeft > 0) {
-                    timeLeft--;
-                    updateTimerDisplay();
-                }
-                if (timeLeft === 0) {
-                    clearInterval(timerInterval);
-                    // Auto complete when timer ends
-                    completeExercise();
-                }
-            }, 1000);
-        }
-
-        function updateTimerDisplay() {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            document.getElementById('timer').textContent =
-                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
-
-        function togglePause() {
-            isPaused = !isPaused;
-            document.getElementById('pauseIcon').textContent = isPaused ? '▶' : '⏸';
-        }
-
-        function completeExercise() {
+        if (exercise.type === 'cardio') {
             clearInterval(timerInterval);
 
-            const exercise = exercises[currentExerciseIndex];
-            const didItBtn = document.getElementById('didItBtn');
-
-            // Mark as completed
             didItBtn.classList.add('completed');
-            didItBtn.textContent = '';
+            didItBtn.textContent = '✓ Completed';
+            didItBtn.disabled = true;
 
-            // Calculate exercise duration
-            const exerciseDuration = Math.floor((Date.now() - exerciseStartTime) / 1000);
-            totalDuration += exerciseDuration;
+            processExerciseCompletion(exercise);
+            setTimeout(() => {
+                loadExercise(currentExerciseIndex + 1);
+            }, 1000);
 
-            // Calculate calories
-            if (exercise.type === 'cardio' && exercise.calories_per_minute) {
-                const caloriesBurned = (exerciseDuration / 60) * exercise.calories_per_minute;
-                totalCaloriesBurned += caloriesBurned;
-            }
+        } else if (exercise.type === 'strength') {
 
-            totalExercisesCompleted++;
-
-            // Save progress (Backend API call here)
-            // saveExerciseProgress(currentExerciseIndex, exerciseDuration);
-
-            // Move to next or finish
-            if (currentExerciseIndex < exercises.length - 1) {
+            if (currentSet < exercise.sets) {
+                processSetCompletion(exercise);
                 startRest(exercise.rest_seconds);
             } else {
+                didItBtn.classList.add('completed');
+                didItBtn.textContent = '✓ Completed';
+                didItBtn.disabled = true;
+
+                processExerciseCompletion(exercise);
+
                 setTimeout(() => {
-                    finishWorkout();
+                    loadExercise(currentExerciseIndex + 1);
                 }, 1000);
             }
         }
+    }
 
-        function startRest(restSeconds = 60) {
-            // Show side timer with last exercise time
-            const lastTime = document.getElementById('timer').textContent;
-            document.getElementById('sideTimer').textContent = lastTime;
+    function processSetCompletion(exercise) {
+        currentSet++;
+    }
 
-            // Show rest overlay
-            document.getElementById('restOverlay').classList.add('active');
+    function processExerciseCompletion(exercise) {
+        const exerciseDuration = Math.floor((Date.now() - exerciseStartTime) / 1000);
+        totalDuration += exerciseDuration;
 
-            let restLeft = restSeconds;
-            document.getElementById('restTimer').textContent = formatTime(restLeft);
-
-            clearInterval(restInterval);
-            restInterval = setInterval(() => {
-                restLeft--;
-                document.getElementById('restTimer').textContent = formatTime(restLeft);
-
-                if (restLeft <= 0) {
-                    skipRest();
-                }
-            }, 1000);
+        if (exercise.type === 'cardio' && exercise.calories_per_minute) {
+            // Formula: (Davomiylik sekundda / 60) * Kaloriya/minut
+            const caloriesBurned = (exerciseDuration / 60) * exercise.calories_per_minute;
+            totalCaloriesBurned += caloriesBurned;
         }
 
-        function skipRest() {
-            clearInterval(restInterval);
-            document.getElementById('restOverlay').classList.remove('active');
+        totalExercisesCompleted++;
+    }
+
+    function startRest(restSeconds = 60) {
+        const previousExercise = exercises[currentExerciseIndex];
+
+        // Side Timer Displeyni yangilash
+        if (previousExercise.type === 'cardio') {
+            document.getElementById('sideTimer').textContent = formatTime(previousExercise.duration_minutes * 60 - timeLeft);
+        } else if (previousExercise.type === 'strength') {
+            document.getElementById('sideTimer').textContent = `Set ${currentSet - 1} Complete`;
+            document.getElementById('currentSet').textContent = currentSet;
+        }
+
+        document.getElementById('restOverlay').classList.add('active');
+
+        let restLeft = restSeconds;
+        document.getElementById('restTimer').textContent = formatTime(restLeft);
+
+        showUpNext(currentExerciseIndex);
+
+
+        clearInterval(restInterval);
+        restInterval = setInterval(() => {
+            if (!isPaused) {
+                restLeft = Math.max(0, restLeft - 1);
+                document.getElementById('restTimer').textContent = formatTime(restLeft);
+            }
+            if (restLeft <= 0) {
+                skipRest();
+            }
+        }, 1000);
+    }
+
+    function skipRest() {
+        clearInterval(restInterval);
+        document.getElementById('restOverlay').classList.remove('active');
+
+        const previousExercise = exercises[currentExerciseIndex];
+
+        if (previousExercise.type === 'strength' && currentSet <= previousExercise.sets) {
+            // Agar strength mashqi bo'lsa va hali setlar tugamagan bo'lsa, keyingi setni ko'rsatish
+            showStrengthInterface(previousExercise.sets, previousExercise.reps);
+        } else {
+            // Keyingi mashqga o'tish
             loadExercise(currentExerciseIndex + 1);
         }
+    }
 
-        function showUpNext(index) {
-            const upNextSection = document.getElementById('upNext');
+    function showUpNext(index) {
+        const upNextSection = document.getElementById('upNext');
 
-            if (index < exercises.length - 1) {
-                const next = exercises[index + 1];
-                upNextSection.style.display = 'block';
+        // Agar strength mashqi bo'lsa va hali setlar tugamagan bo'lsa, keyingi setni ko'rsatish
+        if (exercises[index] && exercises[index].type === 'strength' && currentSet <= exercises[index].sets) {
+            upNextSection.style.display = 'block';
+            document.getElementById('upNextName').textContent = exercises[index].name;
+            document.getElementById('upNextDetails').textContent = `Next: Set ${currentSet}/${exercises[index].sets} (${exercises[index].reps} Reps)`;
+            const defaultImage = "{% static 'images/default_exercise.png' %}";
+            document.getElementById('upNextImage').src = exercises[index].image || defaultImage;
+            return;
+        }
 
-                if (next.image) {
-                    document.getElementById('upNextImage').src = next.image;
-                }
+        // Keyingi haqiqiy mashqni ko'rsatish
+        if (index < exercises.length - 1) {
+            const next = exercises[index + 1];
+            upNextSection.style.display = 'block';
 
-                document.getElementById('upNextName').textContent = next.name;
+            const defaultImage = "{% static 'images/default_exercise.png' %}";
+            document.getElementById('upNextImage').src = next.image || defaultImage;
 
-                if (next.type === 'cardio') {
-                    document.getElementById('upNextDetails').textContent = `${next.duration_minutes} minutes`;
-                } else {
-                    document.getElementById('upNextDetails').textContent = `${next.sets} × ${next.reps} reps`;
-                }
+            document.getElementById('upNextName').textContent = next.name;
+
+            if (next.type === 'cardio') {
+                document.getElementById('upNextDetails').textContent = `${next.duration_minutes} minutes`;
             } else {
-                upNextSection.style.display = 'none';
+                document.getElementById('upNextDetails').textContent = `${next.sets} x ${next.reps} reps`;
             }
+        } else {
+            upNextSection.style.display = 'none';
         }
+    }
 
-        function showExitModal() {
-            document.getElementById('exitModal').classList.add('active');
+    function showExitModal() {
+        document.getElementById('exitModal').classList.add('active');
+        togglePause();
+    }
+
+    function returnToWorkout() {
+        document.getElementById('exitModal').classList.remove('active');
+        togglePause();
+    }
+
+    function saveAndExit() {
+        const form = createExitForm(true);
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    function exitWithoutSaving() {
+        const form = createExitForm(false);
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    function createExitForm(save) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = "{% url 'workout_start' workout.id %}";
+
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        form.innerHTML = `<input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">`;
+
+        form.innerHTML += `<input type="hidden" name="action" value="exit">`;
+        form.innerHTML += `<input type="hidden" name="save_progress" value="${save ? 'true' : 'false'}">`;
+        form.innerHTML += `<input type="hidden" name="current_exercise_index" value="${currentExerciseIndex}">`;
+        form.innerHTML += `<input type="hidden" name="total_duration" value="${totalDuration}">`;
+        form.innerHTML += `<input type="hidden" name="total_calories" value="${totalCaloriesBurned.toFixed(2)}">`;
+        form.innerHTML += `<input type="hidden" name="exercises_completed" value="${totalExercisesCompleted}">`;
+
+        return form;
+    }
+
+    function finishWorkout() {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = "{% url 'workout_complete' workout.id %}";
+
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        form.innerHTML = `<input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">`;
+
+        form.innerHTML += `<input type="hidden" name="action" value="complete">`;
+        form.innerHTML += `<input type="hidden" name="total_duration" value="${totalDuration}">`;
+        form.innerHTML += `<input type="hidden" name="total_calories" value="${totalCaloriesBurned.toFixed(2)}">`;
+        form.innerHTML += `<input type="hidden" name="exercises_completed" value="${totalExercisesCompleted}">`;
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    // ==========================================
+    // INITIALIZATION
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', function () {
+        if (exercises.length > 0) {
+            // Agar viewdan current_index kelgan bo'lsa, o'sha joydan boshlash
+            const initialIndex = parseInt("{{ request.session.current_workout_index|default:0 }}"); // Misol uchun, sessiondan olish
+            loadExercise(initialIndex);
+        } else {
+            document.getElementById('exerciseName').textContent = 'No exercises found.';
+            document.getElementById('didItBtn').disabled = true;
         }
-
-        function returnToWorkout() {
-            document.getElementById('exitModal').classList.remove('active');
-        }
-
-        function saveAndExit() {
-            // Backend API: Save progress
-            /*
-            fetch(`/api/workout/${workoutId}/save-progress/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCsrfToken()
-                },
-                body: JSON.stringify({
-                    current_exercise_index: currentExerciseIndex,
-                    total_duration: totalDuration,
-                    total_calories: totalCaloriesBurned,
-                    exercises_completed: totalExercisesCompleted
-                })
-            });
-            */
-
-            window.location.href = '/my-trainer/';  // Backend URL
-        }
-
-        function exitWithoutSaving() {
-            window.location.href = '/workout/';  // Backend URL
-        }
-
-        function finishWorkout() {
-            // Backend API: Save completed workout
-            /*
-            fetch(`/api/workout/${workoutId}/complete/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCsrfToken()
-                },
-                body: JSON.stringify({
-                    total_duration: totalDuration,
-                    total_calories: totalCaloriesBurned,
-                    exercises_completed: totalExercisesCompleted
-                })
-            });
-            */
-
-            // Redirect to complete page
-            window.location.href = `/workout/${workoutId}/complete/`;
-        }
-
-        function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-        }
-
-        function getCsrfToken() {
-            return document.querySelector('[name=csrfmiddlewaretoken]').value;
-        }
-
-        // ==========================================
-        // INITIALIZATION
-        // ==========================================
-        document.addEventListener('DOMContentLoaded', function() {
-            loadExercise(0);
-        });
-    </script>
+    });
+</script>
 </body>
 </html>
