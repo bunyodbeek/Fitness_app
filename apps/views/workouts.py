@@ -1,4 +1,5 @@
 from apps.models import Edition, Program, Exercise
+from apps.models.my_trainer import WorkoutSession
 from apps.models.workouts import Workout, WorkoutExercise
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
@@ -113,5 +114,129 @@ class WorkoutCompleteView(LoginRequiredMixin, DetailView):
         if 'workout_summary' in self.request.session:
             del self.request.session['workout_summary']
             self.request.session.modified = True
+
+        return context
+
+
+# apps/views/workouts.py
+
+from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Sum, Count, Q
+from django.utils import timezone
+from datetime import timedelta, datetime
+
+
+class MyTrainerView(LoginRequiredMixin, TemplateView):
+    """User's personal trainer dashboard"""
+
+    template_name = 'my_trainer/my_trainer.html'
+    login_url = '/accounts/login/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+
+        # Get all user's sessions
+        sessions = WorkoutSession.objects.filter(user=user)
+        completed_sessions = sessions.filter(status='completed')
+
+        # Calculate statistics
+        total_workouts = completed_sessions.count()
+
+        total_duration = completed_sessions.aggregate(
+            total=Sum('duration_seconds')
+        )['total'] or 0
+
+        total_calories = completed_sessions.aggregate(
+            total=Sum('total_calories')
+        )['total'] or 0
+
+        # Calculate current streak
+        current_streak = self.calculate_streak(user)
+
+        context['user_stats'] = {
+            'total_workouts': total_workouts,
+            'total_duration_hours': round(total_duration / 3600, 1),
+            'total_calories': int(total_calories),
+            'current_streak': current_streak
+        }
+
+        # Get recent workouts (last 10)
+        recent_workouts = sessions.select_related('workout', 'workout__edition').order_by('-started_at')[:10]
+
+        context['recent_workouts'] = recent_workouts
+
+        return context
+
+    def calculate_streak(self, user):
+        """Calculate consecutive days with completed workouts"""
+        today = timezone.now().date()
+        streak = 0
+        current_date = today
+
+        # Check up to 100 days back (reasonable limit)
+        for _ in range(100):
+            has_workout = WorkoutSession.objects.filter(
+                user=user,
+                started_at__date=current_date,
+                status='completed'
+            ).exists()
+
+            if has_workout:
+                streak += 1
+                current_date -= timedelta(days=1)
+            else:
+                # Break streak only if not today (user might not have worked out yet today)
+                if current_date != today:
+                    break
+                current_date -= timedelta(days=1)
+
+        return streak
+
+
+class MyTrainerHistoryView(LoginRequiredMixin, TemplateView):
+    """Full workout history"""
+
+    template_name = 'my_trainer/my_trainer_history.html'
+    login_url = '/accounts/login/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+
+        # Get all sessions
+        all_sessions = WorkoutSession.objects.filter(
+            user=user
+        ).select_related('workout', 'workout__edition').order_by('-started_at')
+
+        context['all_workouts'] = all_sessions
+
+        return context
+
+
+class WorkoutDetailView(LoginRequiredMixin, TemplateView):
+    """Detailed view of a specific workout session"""
+
+    template_name = 'my_trainer/workout_detail.html'
+    login_url = '/accounts/login/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        session_id = kwargs.get('session_id')
+
+        try:
+            session = WorkoutSession.objects.select_related(
+                'workout', 'workout__edition'
+            ).prefetch_related('exercise_logs__exercise').get(
+                id=session_id,
+                user=self.request.user
+            )
+
+            context['session'] = session
+            context['exercise_logs'] = session.exercise_logs.all()
+
+        except WorkoutSession.DoesNotExist:
+            context['error'] = 'Workout session not found'
 
         return context

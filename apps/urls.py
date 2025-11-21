@@ -7,6 +7,11 @@ from apps.views.users import SettingsView, UpdateProfileView, ProgressView, Onbo
     QuestionnaireSubmitView, ProfileView
 from apps.views.workouts import WorkoutCompleteView, WorkoutStartView, EditionDetailView, ProgramDetailView, \
     AnimationView, ProgramListView
+from django.urls import path
+from apps.views.workouts import (
+    MyTrainerView,
+    MyTrainerHistoryView,
+    WorkoutDetailView,)
 
 urlpatterns = [
 
@@ -40,4 +45,8 @@ urlpatterns = [
     path('api/users/onboarding/save/', save_onboarding_step, name='save_onboarding_step'),
     path('api/users/onboarding/complete/', complete_onboarding, name='complete_onboarding'),
     path('api/users/profile/', get_user_profile, name='get_user_profile'),
+  path('my-trainer/', MyTrainerView.as_view(), name='my_trainer'),
+    path('my-trainer/history/', MyTrainerHistoryView.as_view(), name='my_trainer_history'),
+    path('workout/<int:session_id>/detail/', WorkoutDetailView.as_view(), name='workout_session_detail'),
+
 ]

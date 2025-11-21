@@ -1,10 +1,10 @@
-{% extends 'base.html' %}
+{% load static %}
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Trainer - Fitness App</title>
+    <title>My Trainer - Progress Tracking</title>
     <style>
         * {
             margin: 0;
@@ -13,136 +13,98 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #0f1419 0%, #1a1f35 100%);
-            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: white;
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
             padding-bottom: 80px;
         }
 
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%);
+            animation: particleFloat 15s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -20px) scale(1.05); }
+        }
+
         /* Header */
-        .header {
-            background: rgba(30, 36, 51, 0.95);
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
+        .page-header {
+            background: linear-gradient(135deg, rgba(15, 52, 96, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            text-align: center;
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
         }
 
-        .back-btn {
-            background: none;
-            border: none;
-            color: #00FF88;
-            font-size: 24px;
-            cursor: pointer;
-            padding: 8px;
-            display: flex;
-            align-items: center;
-            transition: transform 0.2s;
+        .page-title {
+            font-size: 28px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .back-btn:active {
-            transform: scale(0.95);
-        }
-
-        .header h1 {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        /* Main Content */
+        /* Container */
         .container {
-            padding: 20px;
-            max-width: 600px;
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Empty State */
-        .empty-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 60px 20px;
-            min-height: 60vh;
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
         }
 
-        .empty-icon {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(135deg, #00FF88 0%, #00D4FF 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 60px;
-            margin-bottom: 24px;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
-        }
-
-        .empty-state h2 {
-            font-size: 24px;
-            margin-bottom: 12px;
-            color: #00FF88;
-        }
-
-        .empty-state p {
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 32px;
-            line-height: 1.5;
-        }
-
-        .cta-button {
-            background: linear-gradient(135deg, #00FF88 0%, #00D4FF 100%);
-            color: #0f1419;
-            border: none;
-            padding: 16px 40px;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 8px 24px rgba(0, 255, 136, 0.3);
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(0, 255, 136, 0.4);
-        }
-
-        .cta-button:active {
-            transform: translateY(0);
-        }
-
-        /* Active Program */
-        .program-card {
-            background: rgba(30, 36, 51, 0.8);
+        .stat-card {
+            background: linear-gradient(135deg,
+                rgba(255, 215, 0, 0.15) 0%,
+                rgba(255, 215, 0, 0.08) 100%);
+            backdrop-filter: blur(10px);
             border-radius: 20px;
-            overflow: hidden;
-            margin-bottom: 24px;
-            border: 1px solid rgba(0, 255, 136, 0.2);
-            animation: slideUp 0.5s ease-out;
+            padding: 20px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease backwards;
         }
 
-        @keyframes slideUp {
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
@@ -150,235 +112,231 @@
             }
         }
 
-        .program-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            position: relative;
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.4);
+            border-color: rgba(255, 215, 0, 0.6);
         }
 
-        .program-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .program-badge {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            background: linear-gradient(135deg, #00FF88 0%, #00D4FF 100%);
-            color: #0f1419;
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .program-content {
-            padding: 24px;
-        }
-
-        .program-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: #00FF88;
-        }
-
-        .program-subtitle {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 20px;
-        }
-
-        /* Progress Section */
-        .progress-section {
-            margin-bottom: 24px;
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .progress-label {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 600;
-        }
-
-        .progress-value {
-            font-size: 16px;
-            font-weight: 700;
-            color: #00FF88;
-        }
-
-        .progress-bar-container {
-            width: 100%;
-            height: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #00FF88 0%, #00D4FF 100%);
-            border-radius: 50px;
-            transition: width 1s ease-out;
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { opacity: 1; }
-            50% { opacity: 0.8; }
-            100% { opacity: 1; }
-        }
-
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            border-radius: 16px;
-            padding: 16px;
-            text-align: center;
+        .stat-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
         }
 
         .stat-value {
-            font-size: 28px;
-            font-weight: 700;
-            color: #00FF88;
-            display: block;
-            margin-bottom: 4px;
+            font-size: 32px;
+            font-weight: 900;
+            color: #ffd700;
+            margin-bottom: 5px;
         }
 
         .stat-label {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.6);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Today's Workout */
-        .today-section {
-            background: rgba(30, 36, 51, 0.6);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .section-icon {
-            font-size: 24px;
-        }
-
-        .workout-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .workout-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .workout-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, #00FF88 0%, #00D4FF 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            flex-shrink: 0;
-        }
-
-        .workout-info {
-            flex: 1;
-        }
-
-        .workout-name {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .workout-details {
             font-size: 13px;
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        /* Action Buttons */
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 24px;
-        }
-
-        .btn-primary {
-            flex: 1;
-            background: linear-gradient(135deg, #00FF88 0%, #00D4FF 100%);
-            color: #0f1419;
-            border: none;
-            padding: 18px;
-            border-radius: 16px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 8px 24px rgba(0, 255, 136, 0.3);
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .btn-primary:active {
-            transform: scale(0.98);
+        /* Section Header */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
         }
 
-        .btn-secondary {
-            flex: 1;
+        .section-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #ffd700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .view-all-btn {
             background: transparent;
-            color: #00FF88;
-            border: 2px solid #00FF88;
-            padding: 18px;
-            border-radius: 16px;
-            font-size: 16px;
+            border: 2px solid rgba(255, 215, 0, 0.4);
+            color: #ffd700;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 13px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .btn-secondary:active {
-            transform: scale(0.98);
-            background: rgba(0, 255, 136, 0.1);
+        .view-all-btn:hover {
+            background: rgba(255, 215, 0, 0.1);
+            border-color: #ffd700;
+            transform: scale(1.05);
+        }
+
+        /* Workout Cards */
+        .workouts-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .workout-card {
+            background: linear-gradient(135deg,
+                rgba(15, 52, 96, 0.8) 0%,
+                rgba(22, 33, 62, 0.8) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: fadeInLeft 0.6s ease backwards;
+        }
+
+        .workout-card:nth-child(1) { animation-delay: 0.1s; }
+        .workout-card:nth-child(2) { animation-delay: 0.2s; }
+        .workout-card:nth-child(3) { animation-delay: 0.3s; }
+        .workout-card:nth-child(4) { animation-delay: 0.4s; }
+        .workout-card:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .workout-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.3);
+            border-color: rgba(255, 215, 0, 0.5);
+        }
+
+        .workout-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .workout-name {
+            font-size: 18px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .workout-date {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+        }
+
+        .workout-status {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-completed {
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .status-in-progress {
+            background: linear-gradient(135deg, #ff9800 0%, #ffa726 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+        }
+
+        /* Workout Stats */
+        .workout-stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .workout-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 600;
+        }
+
+        .workout-stat-icon {
+            font-size: 18px;
+            color: #ffd700;
+        }
+
+        .workout-stat-value {
+            color: white;
+            font-weight: 700;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .empty-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .empty-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 10px;
+        }
+
+        .empty-text {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 30px;
+        }
+
+        .start-workout-btn {
+            background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
+            border: none;
+            color: #1a1a2e;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 900;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .start-workout-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(255, 215, 0, 0.7);
         }
 
         /* Bottom Navigation */
@@ -387,12 +345,14 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(30, 36, 51, 0.98);
+            background: linear-gradient(135deg, rgba(15, 52, 96, 0.98) 0%, rgba(22, 33, 62, 0.98) 100%);
             backdrop-filter: blur(20px);
+            padding: 12px 0;
             display: flex;
             justify-content: space-around;
-            padding: 12px 0 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            align-items: center;
+            box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.5);
+            border-top: 1px solid rgba(255, 215, 0, 0.1);
             z-index: 1000;
         }
 
@@ -400,202 +360,323 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
-            color: rgba(255, 255, 255, 0.5);
+            gap: 5px;
+            color: rgba(255, 255, 255, 0.6);
             text-decoration: none;
-            transition: all 0.3s;
-            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 8px 15px;
+            border-radius: 12px;
+        }
+
+        .nav-item:hover {
+            color: #ffd700;
+            transform: translateY(-2px);
         }
 
         .nav-item.active {
-            color: #00FF88;
+            color: #ffd700;
+            background: rgba(255, 215, 0, 0.1);
         }
 
         .nav-icon {
             font-size: 24px;
-            transition: transform 0.2s;
-        }
-
-        .nav-item.active .nav-icon {
-            transform: scale(1.1);
-        }
-
-        .nav-label {
-            font-size: 11px;
-            font-weight: 600;
         }
 
         /* Responsive */
-        @media (min-width: 768px) {
+        @media (max-width: 768px) {
             .stats-grid {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(2, 1fr);
             }
 
-            .container {
-                padding: 32px;
+            .page-title {
+                font-size: 24px;
+            }
+
+            .section-title {
+                font-size: 18px;
+            }
+
+            .workout-name {
+                font-size: 16px;
+            }
+
+            .workout-stats {
+                gap: 15px;
             }
         }
 
         @media (max-width: 480px) {
-            .header h1 {
-                font-size: 18px;
-            }
-
-            .program-title {
-                font-size: 20px;
-            }
-
             .stat-value {
-                font-size: 24px;
+                font-size: 28px;
+            }
+
+            .workout-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
             }
         }
     </style>
 </head>
 <body>
     <!-- Header -->
-    <div class="header">
-        <button class="back-btn" onclick="history.back()">←</button>
-        <h1>MY TRAINER</h1>
+    <div class="page-header">
+        <h1 class="page-title">My Trainer</h1>
     </div>
 
-    <!-- Main Content -->
+    <!-- Container -->
     <div class="container">
-        <!-- EMPTY STATE (ko'rsatiladi agar program yo'q bo'lsa) -->
-        <div class="empty-state" id="emptyState">
-            <div class="empty-icon">💪</div>
-            <h2>No Active Program</h2>
-            <p>Start your fitness journey by choosing a program that matches your goals!</p>
-            <a href="/workouts" class="cta-button">Browse Programs</a>
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">💪</div>
+                <div class="stat-value" id="totalWorkouts">0</div>
+                <div class="stat-label">Workouts</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">⏱️</div>
+                <div class="stat-value" id="totalDuration">0h</div>
+                <div class="stat-label">Hours</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-value" id="totalCalories">0</div>
+                <div class="stat-label">Calories</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📈</div>
+                <div class="stat-value" id="currentStreak">0</div>
+                <div class="stat-label">Day Streak</div>
+            </div>
         </div>
 
-        <!-- ACTIVE PROGRAM (ko'rsatiladi agar program tanlangan bo'lsa) -->
-        <div id="activeProgram" style="display: none;">
-            <!-- Program Card -->
-            <div class="program-card">
-                <div class="program-image" style="position: relative;">
-                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600" alt="Program">
-                    <span class="program-badge" style="position: absolute;">ACTIVE</span>
-                </div>
-                <div class="program-content">
-                    <h2 class="program-title">Full Body Strength</h2>
-                    <p class="program-subtitle">12 Week Program • Intermediate</p>
+        <!-- Recent Workouts Section -->
+        <div class="section-header">
+            <h2 class="section-title">Recent Workouts</h2>
+            <button class="view-all-btn" onclick="viewAllWorkouts()">View All</button>
+        </div>
 
-                    <!-- Progress -->
-                    <div class="progress-section">
-                        <div class="progress-header">
-                            <span class="progress-label">Overall Progress</span>
-                            <span class="progress-value">42% Complete</span>
-                        </div>
-                        <div class="progress-bar-container">
-                            <div class="progress-bar" style="width: 42%;"></div>
-                        </div>
-                    </div>
+        <!-- Workouts List -->
+        <div class="workouts-list" id="workoutsList">
+            <!-- Workouts will be loaded here -->
+        </div>
 
-                    <!-- Stats Grid -->
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <span class="stat-value">5</span>
-                            <span class="stat-label">Days Done</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-value">7</span>
-                            <span class="stat-label">Remaining</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-value">3</span>
-                            <span class="stat-label">Streak 🔥</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Today's Workout -->
-            <div class="today-section">
-                <h3 class="section-title">
-                    <span class="section-icon">🎯</span>
-                    Today's Workout
-                </h3>
-
-                <div class="workout-item">
-                    <div class="workout-icon">🏋️</div>
-                    <div class="workout-info">
-                        <div class="workout-name">Bench Press</div>
-                        <div class="workout-details">4 sets × 8-10 reps</div>
-                    </div>
-                </div>
-
-                <div class="workout-item">
-                    <div class="workout-icon">💪</div>
-                    <div class="workout-info">
-                        <div class="workout-name">Squats</div>
-                        <div class="workout-details">4 sets × 10-12 reps</div>
-                    </div>
-                </div>
-
-                <div class="workout-item">
-                    <div class="workout-icon">🎯</div>
-                    <div class="workout-info">
-                        <div class="workout-name">Deadlifts</div>
-                        <div class="workout-details">3 sets × 6-8 reps</div>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="action-buttons">
-                    <button class="btn-primary" onclick="startWorkout()">
-                        ▶ Start Workout
-                    </button>
-                    <button class="btn-secondary" onclick="viewProgram()">
-                        View Full Program
-                    </button>
-                </div>
-            </div>
+        <!-- Empty State (if no workouts) -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-icon">🏋️</div>
+            <h3 class="empty-title">No Workouts Yet</h3>
+            <p class="empty-text">Start your fitness journey today!</p>
+            <button class="start-workout-btn" onclick="startNewWorkout()">Start Workout</button>
         </div>
     </div>
 
-{#    <!-- Bottom Navigation -->#}
-{#    <div class="bottom-nav">#}
-{#        <a href="/exercises" class="nav-item">#}
-{#            <span class="nav-icon">💪</span>#}
-{#            <span class="nav-label">Exercises</span>#}
-{#        </a>#}
-{#        <a href="/workouts" class="nav-item">#}
-{#            <span class="nav-icon">✅</span>#}
-{#            <span class="nav-label">Workouts</span>#}
-{#        </a>#}
-{#        <a href="/my-trainer" class="nav-item active">#}
-{#            <span class="nav-icon">👤</span>#}
-{#            <span class="nav-label">My Trainer</span>#}
-{#        </a>#}
-{#        <a href="/favorites" class="nav-item">#}
-{#            <span class="nav-icon">⭐</span>#}
-{#            <span class="nav-label">Favorites</span>#}
-{#        </a>#}
-{#        <a href="/profile" class="nav-item">#}
-{#            <span class="nav-icon">😊</span>#}
-{#            <span class="nav-label">Profile</span>#}
-{#        </a>#}
-{#    </div>#}
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="/exercises/" class="nav-item">
+            <div class="nav-icon">💪</div>
+            <div>Exercises</div>
+        </a>
+        <a href="/workout/" class="nav-item">
+            <div class="nav-icon">✅</div>
+            <div>Workouts</div>
+        </a>
+        <a href="/my-trainer/" class="nav-item active">
+            <div class="nav-icon">👤</div>
+            <div>My Trainer</div>
+        </a>
+        <a href="/favorites/" class="nav-item">
+            <div class="nav-icon">⭐</div>
+            <div>Favorites</div>
+        </a>
+        <a href="/profile/" class="nav-item">
+            <div class="nav-icon">⚙️</div>
+            <div>Profile</div>
+        </a>
+    </div>
 
     <script>
-        // Demo: Toggle between empty and active state
-        // Production da backend dan ma'lumot keladi
+        // ==========================================
+        // DUMMY DATA - Backend dasturchi o'zgartiradi
+        // ==========================================
+        const DUMMY_USER_STATS = {
+            total_workouts: 12,
+            total_duration_hours: 8.5,
+            total_calories: 4250,
+            current_streak: 5
+        };
 
-        function startWorkout() {
-            alert('Starting workout...');
-            // Bu yerda workout session boshlash logikasi bo'ladi
+        const DUMMY_RECENT_WORKOUTS = [
+            {
+                id: 1,
+                name: "Machine Focus - Edition 1",
+                date: "2025-11-20",
+                time: "14:30",
+                status: "completed",
+                duration_minutes: 45,
+                exercises_completed: 9,
+                total_calories: 420,
+                total_reps: 108
+            },
+            {
+                id: 2,
+                name: "Free Weights Emphasis",
+                date: "2025-11-19",
+                time: "10:15",
+                status: "completed",
+                duration_minutes: 52,
+                exercises_completed: 12,
+                total_calories: 485,
+                total_reps: 144
+            },
+            {
+                id: 3,
+                name: "Cardio & Strength Mix",
+                date: "2025-11-18",
+                time: "18:45",
+                status: "in-progress",
+                duration_minutes: 30,
+                exercises_completed: 5,
+                total_calories: 280,
+                total_reps: 60
+            }
+        ];
+
+        // ==========================================
+        // BACKEND INTEGRATION VARIABLES
+        // ==========================================
+        /*
+        Backend dasturchi context ga qo'yishi kerak:
+
+        const userStats = {
+            total_workouts: {{ user_stats.total_workouts }},
+            total_duration_hours: {{ user_stats.total_duration_hours }},
+            total_calories: {{ user_stats.total_calories }},
+            current_streak: {{ user_stats.current_streak }}
+        };
+
+        const recentWorkouts = [
+            {% for workout in recent_workouts %}
+            {
+                id: {{ workout.id }},
+                name: "{{ workout.name|escapejs }}",
+                date: "{{ workout.completed_at|date:'Y-m-d' }}",
+                time: "{{ workout.completed_at|date:'H:i' }}",
+                status: "{{ workout.status }}",  // 'completed' or 'in-progress'
+                duration_minutes: {{ workout.duration_minutes }},
+                exercises_completed: {{ workout.exercises_completed }},
+                total_calories: {{ workout.total_calories }},
+                total_reps: {{ workout.total_reps }}
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+        */
+
+        // Hozircha dummy data
+        const userStats = DUMMY_USER_STATS;
+        const recentWorkouts = DUMMY_RECENT_WORKOUTS;
+
+        // ==========================================
+        // FUNCTIONS
+        // ==========================================
+
+        function displayStats() {
+            document.getElementById('totalWorkouts').textContent = userStats.total_workouts;
+            document.getElementById('totalDuration').textContent = userStats.total_duration_hours + 'h';
+            document.getElementById('totalCalories').textContent = userStats.total_calories;
+            document.getElementById('currentStreak').textContent = userStats.current_streak;
         }
 
-        function viewProgram() {
-            alert('Viewing full program...');
-            // Bu yerda full program detailsga o'tish
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            if (date.toDateString() === today.toDateString()) {
+                return 'Today';
+            } else if (date.toDateString() === yesterday.toDateString()) {
+                return 'Yesterday';
+            } else {
+                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            }
         }
 
-        // Test uchun: 3 sekunddan keyin active program ko'rsatish
-        setTimeout(() => {
-            document.getElementById('emptyState').style.display = 'none';
-            document.getElementById('activeProgram').style.display = 'block';
-        }, 3000);
+        function displayWorkouts() {
+            const workoutsList = document.getElementById('workoutsList');
+            const emptyState = document.getElementById('emptyState');
+
+            if (recentWorkouts.length === 0) {
+                workoutsList.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            workoutsList.innerHTML = '';
+
+            recentWorkouts.forEach(workout => {
+                const card = document.createElement('div');
+                card.className = 'workout-card';
+                card.onclick = () => viewWorkoutDetail(workout.id);
+
+                const statusClass = workout.status === 'completed' ? 'status-completed' : 'status-in-progress';
+                const statusText = workout.status === 'completed' ? 'Completed' : 'In Progress';
+
+                card.innerHTML = `
+                    <div class="workout-header">
+                        <div>
+                            <div class="workout-name">${workout.name}</div>
+                            <div class="workout-date">${formatDate(workout.date)} at ${workout.time}</div>
+                        </div>
+                        <div class="workout-status ${statusClass}">${statusText}</div>
+                    </div>
+                    <div class="workout-stats">
+                        <div class="workout-stat">
+                            <span class="workout-stat-icon">⏱️</span>
+                            <span class="workout-stat-value">${workout.duration_minutes} min</span>
+                        </div>
+                        <div class="workout-stat">
+                            <span class="workout-stat-icon">💪</span>
+                            <span class="workout-stat-value">${workout.exercises_completed} exercises</span>
+                        </div>
+                        <div class="workout-stat">
+                            <span class="workout-stat-icon">🔥</span>
+                            <span class="workout-stat-value">${workout.total_calories} cal</span>
+                        </div>
+                        <div class="workout-stat">
+                            <span class="workout-stat-icon">🔢</span>
+                            <span class="workout-stat-value">${workout.total_reps} reps</span>
+                        </div>
+                    </div>
+                `;
+
+                workoutsList.appendChild(card);
+            });
+        }
+
+        function viewWorkoutDetail(workoutId) {
+            window.location.href = `/workout/${workoutId}/detail/`;  // Backend URL
+        }
+
+        function viewAllWorkouts() {
+            window.location.href = '/my-trainer/history/';  // Backend URL
+        }
+
+        function startNewWorkout() {
+            window.location.href = '/workout/';  // Backend URL
+        }
+
+        // ==========================================
+        // INITIALIZATION
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            displayStats();
+            displayWorkouts();
+        });
     </script>
 </body>
 </html>
