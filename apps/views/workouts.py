@@ -9,6 +9,7 @@ from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
 
 from apps.models import Edition, Program
+from apps.models.my_trainer import WorkoutSession
 from apps.models.workouts import Workout, WorkoutExercise
 
 
