@@ -439,7 +439,7 @@
         <span class="icon">✅</span>
         <span>Workouts</span>
     </a>
-    <a href="#" class="nav-item {% if 'my-trainer' in request.path %}active{% endif %}">
+    <a href="{% url 'my_trainer' %}" class="nav-item {% if 'my-trainer' in request.path %}active{% endif %}">
         <span class="icon">👤</span>
         <span>My Trainer</span>
     </a>
