@@ -25,7 +25,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
 
     # Mini App URL
-    webapp_url = os.getenv('WEBAPP_URL', 'https://educated-luana-shroudlike.ngrok-free.dev')
+    webapp_url = os.getenv('WEBAPP_URL')
 
     # Mini App tugmasi
     webapp = WebAppInfo(url=webapp_url + '/miniapp/questionnaire/')
