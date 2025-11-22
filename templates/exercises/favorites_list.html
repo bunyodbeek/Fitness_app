@@ -95,48 +95,48 @@
         }
 
         /* Staggered Animation - Har bir card ketma-ket */
-        .favorite-item:nth-child(1) {
+        .favorite-item:nth-child(1), .edition-card:nth-child(1) {
             animation-delay: 0.1s;
         }
 
-        .favorite-item:nth-child(2) {
+        .favorite-item:nth-child(2), .edition-card:nth-child(2) {
             animation-delay: 0.15s;
         }
 
-        .favorite-item:nth-child(3) {
+        .favorite-item:nth-child(3), .edition-card:nth-child(3) {
             animation-delay: 0.2s;
         }
 
-        .favorite-item:nth-child(4) {
+        .favorite-item:nth-child(4), .edition-card:nth-child(4) {
             animation-delay: 0.25s;
         }
 
-        .favorite-item:nth-child(5) {
+        .favorite-item:nth-child(5), .edition-card:nth-child(5) {
             animation-delay: 0.3s;
         }
 
-        .favorite-item:nth-child(6) {
+        .favorite-item:nth-child(6), .edition-card:nth-child(6) {
             animation-delay: 0.35s;
         }
 
-        .favorite-item:nth-child(7) {
+        .favorite-item:nth-child(7), .edition-card:nth-child(7) {
             animation-delay: 0.4s;
         }
 
-        .favorite-item:nth-child(8) {
+        .favorite-item:nth-child(8), .edition-card:nth-child(8) {
             animation-delay: 0.45s;
         }
 
-        .favorite-item:nth-child(9) {
+        .favorite-item:nth-child(9), .edition-card:nth-child(9) {
             animation-delay: 0.5s;
         }
 
-        .favorite-item:nth-child(10) {
+        .favorite-item:nth-child(10), .edition-card:nth-child(10) {
             animation-delay: 0.55s;
         }
 
         /* 6. Shimmer Effect on Hover - all_workouts kabi */
-        .favorite-item::before {
+        .favorite-item::before, .edition-card::before {
             content: '';
             position: absolute;
             top: -100%;
@@ -154,7 +154,7 @@
             pointer-events: none;
         }
 
-        .favorite-item:hover::before {
+        .favorite-item:hover::before, .edition-card:hover::before {
             top: 100%;
             left: 100%;
         }
@@ -396,11 +396,12 @@
         }
 
         /* 16. Thumbnail Zoom on Hover - all_workouts style */
-        .favorite-thumbnail {
+        .favorite-thumbnail, .edition-thumbnail {
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .favorite-item:hover .favorite-thumbnail {
+        .favorite-item:hover .favorite-thumbnail,
+        .edition-card:hover .edition-thumbnail {
             transform: scale(1.15) rotate(2deg);
             filter: brightness(1.1);
         }
@@ -495,7 +496,7 @@
 
         @media (max-width: 768px) {
             /* Mobile da animation tezroq */
-            .favorite-item {
+            .favorite-item, .edition-card {
                 animation-duration: 0.4s;
             }
 
@@ -526,10 +527,12 @@
 
         /* GPU Acceleration for smooth animations */
         .favorite-item,
+        .edition-card,
         .page-header,
         .favorite-stats,
         .favorites-tabs,
         .favorite-thumbnail,
+        .edition-thumbnail,
         .unfavorite-btn {
             will-change: transform, opacity;
         }
@@ -906,6 +909,255 @@
         }
 
         /* ==========================================
+           ✨ YANGI - PREMIUM EDITIONS CONTAINER
+           ========================================== */
+
+        /* Editions Container */
+        .editions-container {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .editions-container.active {
+            display: flex;
+        }
+
+        /* Edition Card - Premium Design */
+        .edition-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(243, 156, 18, 0.08));
+            border: 3px solid rgba(255, 215, 0, 0.3);
+            border-radius: 20px;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.2);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideInDown 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        .edition-card:hover {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(243, 156, 18, 0.15));
+            border-color: #ffd700;
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 45px rgba(255, 215, 0, 0.4);
+        }
+
+        /* Edition Header with Thumbnail */
+        .edition-header {
+            position: relative;
+            height: 180px;
+            overflow: hidden;
+        }
+
+        .edition-thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7);
+            transition: all 0.6s ease;
+        }
+
+        .edition-card:hover .edition-thumbnail {
+            filter: brightness(0.9);
+            transform: scale(1.1);
+        }
+
+        /* Edition Header Overlay */
+        .edition-header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                    to bottom,
+                    rgba(0, 0, 0, 0.3) 0%,
+                    rgba(0, 0, 0, 0.7) 100%
+            );
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 18px;
+        }
+
+        /* One-Time Purchase Badge */
+        .edition-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #ffd700, #f39c12);
+            color: #1a1a2e;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
+            animation: badgePulse 2s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 6px 25px rgba(255, 215, 0, 0.7);
+            }
+        }
+
+        .edition-badge i {
+            font-size: 14px;
+        }
+
+        /* Edition Title on Thumbnail */
+        .edition-thumbnail-title {
+            color: white;
+            font-size: 24px;
+            font-weight: 900;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+            margin-top: auto;
+            line-height: 1.2;
+        }
+
+        /* Edition Body */
+        .edition-body {
+            padding: 20px;
+        }
+
+        /* Edition Info */
+        .edition-info-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 18px;
+        }
+
+        .edition-info-item {
+            flex: 1;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.08));
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .edition-info-label {
+            color: #95a5a6;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .edition-info-value {
+            color: #ffd700;
+            font-size: 18px;
+            font-weight: 800;
+            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Edition Description */
+        .edition-description {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Edition Actions */
+        .edition-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* Start Workout Button */
+        .start-workout-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #ffd700, #f39c12);
+            color: #1a1a2e;
+            border: none;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .start-workout-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 35px rgba(255, 215, 0, 0.6);
+            background: linear-gradient(135deg, #ffed4e, #ffd700);
+        }
+
+        .start-workout-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .start-workout-btn i {
+            font-size: 18px;
+        }
+
+        /* View Details Button */
+        .view-details-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            color: #ffd700;
+            padding: 16px 24px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .view-details-btn:hover {
+            background: rgba(255, 215, 0, 0.15);
+            border-color: #ffd700;
+            transform: translateY(-2px);
+        }
+
+        /* Locked State */
+        .edition-card.locked {
+            opacity: 0.7;
+        }
+
+        .edition-card.locked .start-workout-btn {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            cursor: not-allowed;
+        }
+
+        .edition-card.locked .start-workout-btn:hover {
+            transform: none;
+            box-shadow: 0 6px 20px rgba(149, 165, 166, 0.3);
+        }
+
+        /* ==========================================
            ✨ YANGI - COLLECTION MODAL STYLES
            ========================================== */
 
@@ -927,15 +1179,6 @@
 
         .collection-modal.active {
             display: flex;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
         }
 
         /* Modal Content */
@@ -1245,7 +1488,7 @@
                 font-size: 18px;
             }
 
-            .favorite-thumbnail {
+            .favorite-thumbnail, .edition-thumbnail {
                 width: 75px;
                 height: 75px;
             }
@@ -1262,6 +1505,23 @@
 
             .modal-body {
                 padding: 20px;
+            }
+
+            .edition-header {
+                height: 150px;
+            }
+
+            .edition-thumbnail-title {
+                font-size: 20px;
+            }
+
+            .edition-info-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .edition-actions {
+                flex-direction: column;
             }
         }
     </style>
@@ -1290,8 +1550,12 @@
             <button class="tab-btn" onclick="showTab(this, 'exercise')">
                 <i class="fas fa-dumbbell" style="margin-right: 6px;"></i> Mashqlar
             </button>
+            <button class="tab-btn" onclick="showTab(this, 'editions')">
+                <i class="fas fa-crown" style="margin-right: 6px;"></i> bir martalik harid`
+            </button>
         </div>
 
+        <!-- MASHQLAR CONTAINER -->
         <div class="favorites-list" id="favoritesList">
             {% for fav in favorites %}
                 <div class="favorite-item" data-id="{{ fav.id }}" data-exercise-id="{{ fav.exercise_id }}">
@@ -1321,6 +1585,83 @@
                     <div class="empty-state-icon">⭐</div>
                     <h3>Sevimlilar ro'yxati bo'sh</h3>
                     <p>O'zingizga yoqqan mashqlarni qo'shishni boshlang!</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- ==========================================
+             ✨ YANGI - PREMIUM EDITIONS CONTAINER
+             ========================================== -->
+        <div class="editions-container" id="editionsContainer">
+            {% for edition in premium_editions %}
+                <div class="edition-card {% if not edition.is_purchased %}locked{% endif %}">
+                    <!-- One-Time Purchase Badge -->
+                    <div class="edition-badge">
+                        <i class="fas fa-gem"></i>
+                        <span>ONE-TIME PURCHASE</span>
+                    </div>
+
+                    <!-- Edition Header with Thumbnail -->
+                    <div class="edition-header">
+                        <img src="{{ edition.thumbnail.url|default_if_none:'/static/img/default-program.jpg' }}"
+                             alt="{{ edition.name }}"
+                             class="edition-thumbnail">
+                        <div class="edition-header-overlay">
+                            <div></div> <!-- Spacer -->
+                            <h2 class="edition-thumbnail-title">{{ edition.name }}</h2>
+                        </div>
+                    </div>
+
+                    <!-- Edition Body -->
+                    <div class="edition-body">
+                        <!-- Edition Info Row -->
+                        <div class="edition-info-row">
+                            <div class="edition-info-item">
+                                <div class="edition-info-label">Hafta</div>
+                                <div class="edition-info-value">{{ edition.duration_weeks }}</div>
+                            </div>
+                            <div class="edition-info-item">
+                                <div class="edition-info-label">Mashqlar</div>
+                                <div class="edition-info-value">{{ edition.total_exercises }}</div>
+                            </div>
+                            <div class="edition-info-item">
+                                <div class="edition-info-label">Qiyinlik</div>
+                                <div class="edition-info-value">{{ edition.difficulty|upper }}</div>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <p class="edition-description">
+                            {{ edition.description|default:"Professional dastur bilan maqsadlaringizga erishing!" }}
+                        </p>
+
+                        <!-- Actions -->
+                        <div class="edition-actions">
+                            {% if edition.is_purchased %}
+                                <button class="start-workout-btn"
+                                        onclick="startWorkout({{ edition.id }})">
+                                    <i class="fas fa-play"></i>
+                                    <span>BOSHLASH</span>
+                                </button>
+                            {% else %}
+                                <button class="start-workout-btn"
+                                        onclick="purchaseEdition({{ edition.id }})">
+                                    <i class="fas fa-lock"></i>
+                                    <span>SOTIB OLISH</span>
+                                </button>
+                            {% endif %}
+                            <button class="view-details-btn"
+                                    onclick="viewEditionDetails({{ edition.id }})">
+                                Batafsil
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">👑</div>
+                    <h3>Premium Editionlar yo'q</h3>
+                    <p>Tez orada yangi dasturlar qo'shiladi!</p>
                 </div>
             {% endfor %}
         </div>
@@ -1396,10 +1737,27 @@
         // MAVJUD FUNKSIYALAR
         // ==========================================
 
-        // Tab switching
+        // Tab switching with container toggle
         function showTab(buttonElement, tab) {
+            // Update tab buttons
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             buttonElement.classList.add('active');
+
+            // Show/hide containers
+            const favoritesList = document.getElementById('favoritesList');
+            const editionsContainer = document.getElementById('editionsContainer');
+
+            if (tab === 'editions') {
+                favoritesList.style.display = 'none';
+                editionsContainer.classList.add('active');
+            } else if (tab === 'exercise') {
+                favoritesList.style.display = 'flex';
+                editionsContainer.classList.remove('active');
+            } else {
+                // 'all' - show both
+                favoritesList.style.display = 'flex';
+                editionsContainer.classList.add('active');
+            }
         }
 
         // Get CSRF token
@@ -1473,6 +1831,25 @@
                         alert("Sevimlidan o'chirishda kutilmagan xato yuz berdi: " + err.message);
                     });
             }
+        }
+
+        // ==========================================
+        // ✨ YANGI - EDITION FUNKSIYALARI
+        // ==========================================
+
+        function startWorkout(editionId) {
+            // Workout boshlash
+            window.location.href = `/workouts/edition/${editionId}/start/`;
+        }
+
+        function purchaseEdition(editionId) {
+            // Sotib olish sahifasiga o'tish
+            window.location.href = `/payments/edition/${editionId}/purchase/`;
+        }
+
+        function viewEditionDetails(editionId) {
+            // Batafsil sahifaga o'tish
+            window.location.href = `/workouts/edition/${editionId}/details/`;
         }
 
         // ==========================================
