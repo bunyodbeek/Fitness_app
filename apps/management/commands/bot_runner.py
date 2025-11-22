@@ -4,7 +4,7 @@ import logging
 import os
 
 from dotenv import load_dotenv
-from telegram import KeyboardButton, ReplyKeyboardMarkup, Update, WebAppInfo
+from telegram import KeyboardButton, ReplyKeyboardMarkup, Update, WebAppInfo, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import Application, CommandHandler, ContextTypes
 
 # .env faylni yuklash
@@ -28,11 +28,18 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     webapp_url = os.getenv('WEBAPP_URL', 'https://educated-luana-shroudlike.ngrok-free.dev')
 
     # Mini App tugmasi
+    print(webapp_url + '/miniapp/questionnaire/')
+    print("---" * 20)
     webapp = WebAppInfo(url=webapp_url + '/miniapp/questionnaire/')
+    # keyboard = [
+    #     [KeyboardButton(text="🏋️ Start Fitness Journey", web_app=webapp)]
+    # ]
+    # reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+
     keyboard = [
-        [KeyboardButton(text="🏋️ Start Fitness Journey", web_app=webapp)]
+        [InlineKeyboardButton(text="🏋️ Start Fitness Inline", web_app=webapp)]
     ]
-    reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+    reply_markup = InlineKeyboardMarkup(keyboard)
 
     await update.message.reply_text(
         f"💪 Welcome {user.first_name}!\n\n"

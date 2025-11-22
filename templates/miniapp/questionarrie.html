@@ -1,46 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Fitness Questionnaire</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Fitness Questionnaire — Telegram WebApp</title>
+
+    <!-- Optional: Telegram WebApp JS is normally available at this path in WebView -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
     <style>
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #2c3e50;
-            color: white;
-            min-height: 100vh;
+            color: #ffffff;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            padding: 20px;
+            min-height: 100vh;
         }
 
         .container {
-            flex: 1;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
             width: 100%;
+            max-width: 640px;
+            background: linear-gradient(180deg, #213744 0%, #253744 100%);
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
         }
 
         .progress-bar {
-            height: 6px;
+            height: 8px;
             background: #34495e;
-            border-radius: 3px;
-            margin-bottom: 30px;
+            border-radius: 8px;
             overflow: hidden;
+            margin-bottom: 22px;
         }
 
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, #f1c40f, #f39c12);
-            transition: width 0.3s ease;
+            width: 0%;
+            transition: width .28s ease;
+        }
+
+        h1 {
+            font-size: 22px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #f1c40f;
+            text-align: center;
+            margin-bottom: 18px;
+            font-size: 13px;
         }
 
         .question {
@@ -49,19 +72,6 @@
 
         .question.active {
             display: block;
-        }
-
-        h1 {
-            font-size: 28px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .subtitle {
-            color: #f1c40f;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 14px;
         }
 
         .options {
@@ -74,29 +84,30 @@
             background: #f1c40f;
             color: #2c3e50;
             border: none;
-            padding: 18px 20px;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 14px 16px;
+            border-radius: 10px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: transform .12s ease, background .12s ease;
             text-align: center;
         }
 
         .option-btn:hover {
-            background: #f39c12;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
         }
 
         .option-btn.selected {
             background: #2ecc71;
-            color: white;
+            color: #fff;
+            transform: none;
         }
 
         .option-btn.outline {
             background: transparent;
             border: 2px solid #f1c40f;
             color: #f1c40f;
+            font-weight: 600;
         }
 
         .option-btn.outline.selected {
@@ -107,360 +118,487 @@
         .weight-input {
             background: #34495e;
             border: none;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 10px;
             color: white;
-            font-size: 48px;
+            font-size: 40px;
             text-align: center;
-            margin: 30px 0;
+            margin: 18px 0;
+            width: 100%;
         }
 
         .unit {
             text-align: center;
             color: #95a5a6;
-            margin-bottom: 20px;
+            margin-bottom: 14px;
         }
 
         .final-screen {
             text-align: center;
-            padding: 40px 20px;
+            padding: 18px;
         }
 
         .badge {
-            width: 200px;
-            height: 200px;
-            margin: 30px auto;
+            width: 180px;
+            height: 180px;
+            margin: 18px auto;
             border: 4px solid #f1c40f;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
+            background: rgba(0, 0, 0, 0.08);
         }
 
         .badge h2 {
-            font-size: 24px;
+            font-size: 20px;
             color: #f1c40f;
             text-transform: uppercase;
+            text-align: center;
+            line-height: 1.05;
         }
 
         .stats {
-            font-size: 36px;
-            font-weight: bold;
+            font-size: 30px;
+            font-weight: 700;
             color: #f1c40f;
-            margin: 20px 0;
+            margin-top: 12px;
         }
 
         .continue-btn {
             background: #f1c40f;
             color: #2c3e50;
             border: none;
-            padding: 18px 40px;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: 600;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 14px;
+        }
+
+        /* debug panel */
+        #debug {
+            white-space: pre-wrap;
+            background: #1e272e;
+            color: #f5f6fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 14px;
+            font-family: monospace;
+            font-size: 13px;
+            display: none;
+        }
+
+        .nav-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+            justify-content: center;
+        }
+
+        .nav-row button {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .nav-prev {
+            background: #34495e;
+            color: #fff;
+        }
+
+        .nav-next {
+            background: #f1c40f;
+            color: #2c3e50;
+        }
+
+        @media (min-width: 720px) {
+            h1 {
+                font-size: 26px;
+            }
+
+            .option-btn {
+                font-size: 16px;
+                padding: 16px;
+            }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <!-- Progress Bar -->
-    <div class="progress-bar">
-        <div class="progress-fill" id="progress"></div>
+<div class="container" role="main">
+    <div class="progress-bar" aria-hidden="true">
+        <div id="progress" class="progress-fill"></div>
     </div>
 
-    <!-- Question 1: Gender -->
+    <!-- Step 1 -->
     <div class="question active" data-step="1">
         <h1>Let's start with the basics</h1>
-        <div class="options">
-            <button class="option-btn" onclick="selectOption('gender', 'male')">Male</button>
-            <button class="option-btn" onclick="selectOption('gender', 'female')">Female</button>
+        <div class="options" id="genderOptions">
+            <button class="option-btn" data-value="male">Male</button>
+            <button class="option-btn" data-value="female">Female</button>
         </div>
     </div>
 
-    <!-- Question 2: Experience -->
+    <!-- Step 2 -->
     <div class="question" data-step="2">
         <h1>How would you describe your gym experience?</h1>
-        <div class="options">
-            <button class="option-btn" onclick="selectOption('experience', 'beginner')">
-                Beginner<br><small>Training for less than 6 mos</small>
+        <div class="options" id="expOptions">
+            <button class="option-btn" data-value="beginner">
+                Beginner<br><small style="font-weight:400; color:#1e272e">Training for less than 6 mos</small>
             </button>
-            <button class="option-btn" onclick="selectOption('experience', 'intermediate')">
-                Intermediate<br><small>Training for 6 mos - 2 yrs</small>
+            <button class="option-btn" data-value="intermediate">
+                Intermediate<br><small style="font-weight:400; color:#1e272e">Training for 6 mos - 2 yrs</small>
             </button>
-            <button class="option-btn" onclick="selectOption('experience', 'advanced')">
-                Advanced<br><small>Training for more than 2 yrs</small>
+            <button class="option-btn" data-value="advanced">
+                Advanced<br><small style="font-weight:400; color:#1e272e">Training for more than 2 yrs</small>
             </button>
         </div>
     </div>
 
-    <!-- Question 3: Goal -->
+    <!-- Step 3 -->
     <div class="question" data-step="3">
         <h1>What's your current fitness objective?</h1>
-        <div class="options">
-            <button class="option-btn" onclick="selectOption('goal', 'build_body')">Build a great body</button>
-            <button class="option-btn" onclick="selectOption('goal', 'lose_weight')">Lose weight</button>
-            <button class="option-btn" onclick="selectOption('goal', 'gain_muscle')">Gain muscle</button>
-            <button class="option-btn" onclick="selectOption('goal', 'get_shape')">Get in shape</button>
+        <div class="options" id="goalOptions">
+            <button class="option-btn" data-value="build_body">Build a great body</button>
+            <button class="option-btn" data-value="lose_weight">Lose weight</button>
+            <button class="option-btn" data-value="gain_muscle">Gain muscle</button>
+            <button class="option-btn" data-value="get_shape">Get in shape</button>
         </div>
     </div>
 
-    <!-- Question 4: Motivation (Multi-select) -->
+    <!-- Step 4 (multi-select) -->
     <div class="question" data-step="4">
         <h1>What drives you most to work out?</h1>
         <p class="subtitle">You can choose more than one</p>
-        <div class="options">
-            <button class="option-btn outline" onclick="toggleOption('motivation', 'healthy_lifestyle')">
-                I want a healthy lifestyle
-            </button>
-            <button class="option-btn outline" onclick="toggleOption('motivation', 'improve_physique')">
-                Improve my physique
-            </button>
-            <button class="option-btn outline" onclick="toggleOption('motivation', 'get_stronger')">
-                Get stronger every day
-            </button>
-            <button class="option-btn outline" onclick="toggleOption('motivation', 'good_challenge')">
-                I like a good challenge
-            </button>
+        <div class="options" id="motivationOptions">
+            <button class="option-btn outline" data-value="healthy_lifestyle">I want a healthy lifestyle</button>
+            <button class="option-btn outline" data-value="improve_physique">Improve my physique</button>
+            <button class="option-btn outline" data-value="get_stronger">Get stronger every day</button>
+            <button class="option-btn outline" data-value="good_challenge">I like a good challenge</button>
         </div>
-        <button class="option-btn" onclick="continueToNext()" style="margin-top: 30px;">Continue</button>
+        <div style="text-align:center; margin-top:12px;">
+            <button class="option-btn" id="motivationContinue">Continue</button>
+        </div>
     </div>
 
-    <!-- Question 5: Days per week -->
+    <!-- Step 5 -->
     <div class="question" data-step="5">
         <h1>How many days per week would you like to work out?</h1>
-        <div class="options">
-            <button class="option-btn" onclick="selectOption('days', '2')">2 days</button>
-            <button class="option-btn" onclick="selectOption('days', '3')">3 days</button>
-            <button class="option-btn" onclick="selectOption('days', '4')">4 days</button>
+        <div class="options" id="daysOptions">
+            <button class="option-btn" data-value="2">2 days</button>
+            <button class="option-btn" data-value="3">3 days</button>
+            <button class="option-btn" data-value="4">4 days</button>
         </div>
     </div>
 
-    <!-- Question 6: Weight -->
+    <!-- Step 6 -->
     <div class="question" data-step="6">
         <h1>What's your weight?</h1>
-        <input type="number" class="weight-input" id="weight" placeholder="63" value="63" min="30" max="200">
+        <input id="weightInput" type="number" class="weight-input" placeholder="63" value="63" min="30" max="250"/>
         <div class="unit">Kilograms</div>
-        <button class="option-btn" onclick="selectOption('weight', document.getElementById('weight').value)">
-            Next
-        </button>
+        <div style="text-align:center;">
+            <button class="option-btn" id="weightNext">Next</button>
+        </div>
     </div>
 
-    <!-- Final Screen -->
+    <!-- Step 7: Final -->
     <div class="question" data-step="7">
         <div class="final-screen">
             <h1>Ready to crush your goal?</h1>
             <div class="badge">
                 <h2 id="finalGoal">BUILD A<br>GREAT BODY</h2>
             </div>
-            <div class="stats">15,227,894</div>
-            <p>Users just like you match your profile, and reach their goal!</p>
-            <button class="continue-btn" onclick="submitQuestionnaire()">Build My Plan</button>
+            <div class="stats" id="finalStats">15,227,894</div>
+            <p style="color:#dfe6e9; margin-top:8px">Users just like you match your profile, and reach their goal!</p>
+            <button class="continue-btn" id="submitBtn">Build My Plan</button>
         </div>
     </div>
-</div>
 
-<div id="debug"
-     style="white-space: pre-wrap; background:#1e272e; color:#f5f6fa; padding:15px; margin-top:20px; border-radius:8px; display:none;">
+    <!-- Small nav for testing/back -->
+    <div class="nav-row" aria-hidden="true">
+        <button class="nav-prev" id="prevBtn">&larr; Prev</button>
+        <button class="nav-next" id="nextBtn">Next &rarr;</button>
+    </div>
+
+    <div id="debug" aria-live="polite"></div>
 </div>
 
 <script>
-    // Telegram WebApp
-    const tg = window.Telegram.WebApp;
-    tg.ready();
-    tg.expand();
+    // -- Telegram WebApp init ------------------------------------------------
+    const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
 
-    console.log('🔍 Telegram WebApp initialized');
-    console.log('📱 Platform:', tg.platform);
-    console.log('🌐 Version:', tg.version);
-
-    // Get Telegram user ma'lumotlari (multiple methods)
-    let telegramUser = null;
-    let telegram_id = null;
-    let first_name = 'User';
-    let last_name = '';
-    let username = '';
-    let photo_url = '';
-
-    // Method 1: initDataUnsafe
-    if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-        telegramUser = tg.initDataUnsafe.user;
-        telegram_id = telegramUser.id;
-        first_name = telegramUser.first_name || 'User';
-        last_name = telegramUser.last_name || '';
-        username = telegramUser.username || '';
-        photo_url = telegramUser.photo_url || '';
-
-        console.log('✅ Method 1: Got user from initDataUnsafe');
-        console.log('👤 User:', telegramUser);
-    }
-
-    // Method 2: Parse initData manually
-    if (!telegram_id && tg.initData) {
-        console.log('🔄 Trying Method 2: Parsing initData manually');
+    // Graceful fallback if not in Telegram WebApp environment
+    if (!tg) {
+        console.warn('Telegram WebApp object not found. Running in fallback mode (for dev/testing).');
+    } else {
+        // Try to expand the WebApp to full height
         try {
-            const params = new URLSearchParams(tg.initData);
-            const userParam = params.get('user');
-            if (userParam) {
-                telegramUser = JSON.parse(decodeURIComponent(userParam));
-                telegram_id = telegramUser.id;
-                first_name = telegramUser.first_name || 'User';
-                last_name = telegramUser.last_name || '';
-                username = telegramUser.username || '';
-                photo_url = telegramUser.photo_url || '';
-
-                console.log('✅ Method 2: Parsed user from initData');
-                console.log('👤 User:', telegramUser);
-            }
-        } catch (e) {
-            console.error('❌ Failed to parse initData:', e);
+            tg.expand();
+        } catch (e) { /* ignore */
         }
     }
 
-    // Final check
-    console.log('=' * 60);
-    console.log('FINAL USER DATA:');
-    console.log('ID:', telegram_id);
-    console.log('Name:', first_name, last_name);
-    console.log('Username:', username);
-    console.log('Photo:', photo_url);
-    console.log('=' * 60);
+    // -- Form state and initialization ---------------------------------------
+    const telegramUser = tg?.initDataUnsafe?.user || null;
 
-    // Form data
     const formData = {
-        telegram_id: telegram_id,
-        first_name: first_name,
-        last_name: last_name,
-        username: username,
-        photo_url: photo_url,
+        telegram_id: telegramUser?.id || null,
+        first_name: telegramUser?.first_name || '',
+        last_name: telegramUser?.last_name || '',
+        username: telegramUser?.username || '',
+        photo_url: telegramUser?.photo_url || '',
         gender: '',
         experience: '',
         goal: '',
         motivation: [],
         days: '',
-        weight: 63
+        weight: Number(document.getElementById('weightInput')?.value || 63)
     };
 
-    let currentStep = 1;
+    // DOM refs
+    const dbg = document.getElementById('debug');
     const totalSteps = 7;
+    let currentStep = 1;
 
-    // Update progress
+    function updateDebug() {
+        dbg.style.display = 'block';
+        dbg.textContent = '🔍 Debug info (live):\n\n' +
+            'Telegram initDataUnsafe:\n' + JSON.stringify(tg?.initDataUnsafe || {}, null, 2) +
+            '\n\nformData:\n' + JSON.stringify(formData, null, 2) +
+            '\n\ncurrentStep: ' + currentStep;
+    }
+
+    // -- Progress handling ---------------------------------------------------
     function updateProgress() {
-        const progress = (currentStep / totalSteps) * 100;
-        document.getElementById('progress').style.width = progress + '%';
+        const pct = Math.round((currentStep / totalSteps) * 100);
+        const fill = document.getElementById('progress');
+        if (fill) fill.style.width = pct + '%';
     }
 
-    // Select option (single choice)
-    function selectOption(field, value) {
-        formData[field] = value;
+    function showStep(step) {
+        const prev = document.querySelector('.question.active');
+        if (prev) prev.classList.remove('active');
 
-        if (field === 'goal') {
-            document.getElementById('finalGoal').textContent =
-                value.replace('_', ' ').toUpperCase();
-        }
+        const next = document.querySelector(`.question[data-step="${step}"]`);
+        if (next) next.classList.add('active');
 
-        nextStep();
-    }
-
-    // Toggle option (multi-choice)
-    function toggleOption(field, value) {
-        const btn = event.target;
-
-        if (formData[field].includes(value)) {
-            formData[field] = formData[field].filter(v => v !== value);
-            btn.classList.remove('selected');
-        } else {
-            formData[field].push(value);
-            btn.classList.add('selected');
-        }
-    }
-
-    // Continue to next (for multi-choice)
-    function continueToNext() {
-        if (formData.motivation.length === 0) {
-            tg.showAlert('Please select at least one option');
-            return;
-        }
-        nextStep();
-    }
-
-    // Next step
-    function nextStep() {
-        document.querySelector('.question.active').classList.remove('active');
-        currentStep++;
-        document.querySelector(`.question[data-step="${currentStep}"]`).classList.add('active');
+        currentStep = step;
         updateProgress();
+        updateDebug();
     }
 
-    // Submit questionnaire
+    function nextStep() {
+        if (currentStep >= totalSteps) return;
+        showStep(currentStep + 1);
+    }
+
+    function prevStep() {
+        if (currentStep <= 1) return;
+        showStep(currentStep - 1);
+    }
+
+    // -- Helpers for option selection ---------------------------------------
+    // single group selection: clears other buttons in that group
+    function singleSelect(groupRoot, value) {
+        const buttons = groupRoot.querySelectorAll('.option-btn');
+        buttons.forEach(btn => {
+            if (btn.dataset.value === value) btn.classList.add('selected');
+            else btn.classList.remove('selected');
+        });
+    }
+
+    // wire up single-choice groups
+    function wireSingleGroup(containerId, fieldName, autoNext = true) {
+        const root = document.getElementById(containerId);
+        if (!root) return;
+        root.addEventListener('click', (e) => {
+            const btn = e.target.closest('.option-btn');
+            if (!btn) return;
+            const value = btn.dataset.value;
+            if (!value) return;
+
+            // set data
+            formData[fieldName] = value;
+            singleSelect(root, value);
+
+            // reflect goal in final badge if needed
+            if (fieldName === 'goal') {
+                document.getElementById('finalGoal').innerHTML = value.replace(/_/g, ' ').toUpperCase();
+            }
+
+            updateDebug();
+
+            if (autoNext) {
+                // tiny delay so UI shows selected state
+                setTimeout(nextStep, 180);
+            }
+        });
+    }
+
+    // wire single-choice groups used in app
+    wireSingleGroup('genderOptions', 'gender', true);
+    wireSingleGroup('expOptions', 'experience', true);
+    wireSingleGroup('goalOptions', 'goal', true);
+    wireSingleGroup('daysOptions', 'days', true);
+
+    // -- Multi-select (motivation) ------------------------------------------
+    (function wireMultiMotivation() {
+        const root = document.getElementById('motivationOptions');
+        if (!root) return;
+        root.addEventListener('click', (e) => {
+            const btn = e.target.closest('.option-btn');
+            if (!btn) return;
+            const value = btn.dataset.value;
+            if (!value) return;
+
+            const idx = formData.motivation.indexOf(value);
+            if (idx === -1) {
+                formData.motivation.push(value);
+                btn.classList.add('selected');
+            } else {
+                formData.motivation.splice(idx, 1);
+                btn.classList.remove('selected');
+            }
+            updateDebug();
+        });
+
+        document.getElementById('motivationContinue').addEventListener('click', () => {
+            if (!formData.motivation.length) {
+                if (tg && tg.showAlert) tg.showAlert('Please select at least one option');
+                else alert('Please select at least one option');
+                return;
+            }
+            nextStep();
+        });
+    })();
+
+    // -- Weight input handling ----------------------------------------------
+    const weightInput = document.getElementById('weightInput');
+    if (weightInput) {
+        weightInput.addEventListener('input', (e) => {
+            const v = Number(e.target.value || 0);
+            if (!isNaN(v)) formData.weight = v;
+            updateDebug();
+        });
+
+        document.getElementById('weightNext').addEventListener('click', () => {
+            // basic validation
+            const w = Number(weightInput.value || 0);
+            if (!w || w < 30 || w > 300) {
+                if (tg && tg.showAlert) tg.showAlert('Please enter a valid weight (30 - 300 kg).');
+                else alert('Please enter a valid weight (30 - 300 kg).');
+                return;
+            }
+            formData.weight = w;
+            updateDebug();
+            nextStep();
+        });
+    }
+
+    // -- Prev/Next nav (optional, for testing) ------------------------------
+    document.getElementById('prevBtn').addEventListener('click', prevStep);
+    document.getElementById('nextBtn').addEventListener('click', nextStep);
+
+    // -- Submit handler -----------------------------------------------------
     async function submitQuestionnaire() {
-        console.log('📤 Submitting data:', formData);
+        updateDebug();
 
-        // DEBUG PANELGA YOZISH
-        const dbg = document.getElementById('debug');
-        dbg.style.display = "block";
-
-        dbg.textContent =
-            "📌 FORM DATA:\n" +
-            JSON.stringify(formData, null, 2) +
-            "\n\n📌 tg.initData:\n" +
-            tg.initData +
-            "\n\n📌 tg.initDataUnsafe.user:\n" +
-            JSON.stringify(tg.initDataUnsafe.user, null, 2);
-
-        // Validate Telegram ID
+        // minimal validation before submit
         if (!formData.telegram_id) {
-            tg.showAlert('Error: Telegram ID not found. Please restart the bot.');
+            if (tg && tg.showAlert) tg.showAlert('Error: Telegram ID not found. Please restart the bot.');
+            else alert('Error: Telegram ID not found. Please restart the bot.');
             return;
         }
 
-        // Show loading
-        tg.MainButton.setText('Submitting...');
-        tg.MainButton.showProgress();
+        // Provide user feedback using MainButton when available
+        try {
+            if (tg && tg.MainButton) {
+                tg.MainButton.setText('Submitting...');
+                try {
+                    tg.MainButton.showProgress();
+                } catch (err) { /* ignore if not available */
+                }
+                try {
+                    tg.MainButton.show();
+                } catch (err) { /* ignore */
+                }
+            }
+        } catch (e) { /* ignore */
+        }
 
         try {
-            const response = await fetch('/api/questionnaire/submit/', {
+            const res = await fetch('{% url "questionnaire_submit" %}', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(formData)
             });
 
-            console.log('📡 Response status:', response.status);
+            const data = await res.json().catch(() => ({success: false}));
 
-            const data = await response.json();
-            console.log('📦 Response data:', data);
-
-            tg.MainButton.hideProgress();
-
-            if (data.success) {
-                console.log('✅ Success! Redirecting...');
-                // Redirect to workouts page
-                window.location.href = '';
-            } else {
-                console.error('❌ Error:', data.error);
-                tg.showAlert('Error: ' + (data.error || 'Unknown error'));
+            // hide progress
+            try {
+                if (tg && tg.MainButton && tg.MainButton.hideProgress) tg.MainButton.hideProgress();
+            } catch (e) {
             }
-        } catch (error) {
-            console.error('❌ Network error:', error);
-            tg.MainButton.hideProgress();
-            tg.showAlert('Connection error. Please try again.');
+
+            if (data && data.success) {
+                // success — redirect or show success message
+                if (data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                } else {
+                    if (tg && tg.showAlert) {
+                        tg.showAlert('Success! Your plan is being prepared.');
+                        // Redirect to workouts page
+                        window.location.href = '';
+                    } else {
+                        alert('Success! Your plan is being prepared.');
+                    }
+                    // Optionally close WebApp: tg.close(); (only if appropriate)
+                }
+            } else {
+                const errMsg = data && data.error ? data.error : 'Unknown error from server';
+                if (tg && tg.showAlert) tg.showAlert('Error: ' + errMsg);
+                else alert('Error: ' + errMsg);
+            }
+        } catch (err) {
+            try {
+                if (tg && tg.MainButton && tg.MainButton.hideProgress) tg.MainButton.hideProgress();
+            } catch (e) {
+            }
+            if (tg && tg.showAlert) tg.showAlert('Network error. Please try again.');
+            else alert('Network error. Please try again.');
+            console.error('Network error submitting questionnaire:', err);
         }
     }
 
-    // Initialize
-    updateProgress();
+    // wire final submit button
+    document.getElementById('submitBtn').addEventListener('click', submitQuestionnaire);
 
-    // Show user info for debugging
-    if (telegram_id) {
-        console.log('✅ Ready to start onboarding!');
-        console.log('User ID:', telegram_id);
-    } else {
-        console.error('❌ WARNING: No Telegram ID available!');
-    }
+    // initial UI update
+    updateProgress();
+    updateDebug();
+
+    // If you want, pre-fill some UI from existing formData (e.g., highlight selected if loaded)
+    (function initialHighlight() {
+        // highlight gender if known
+        if (formData.gender) singleSelect(document.getElementById('genderOptions'), formData.gender);
+        if (formData.experience) singleSelect(document.getElementById('expOptions'), formData.experience);
+        if (formData.goal) singleSelect(document.getElementById('goalOptions'), formData.goal);
+        if (formData.days) singleSelect(document.getElementById('daysOptions'), formData.days);
+        // motivations
+        if (Array.isArray(formData.motivation) && formData.motivation.length) {
+            formData.motivation.forEach(val => {
+                const b = document.querySelector(`#motivationOptions .option-btn[data-value="${val}"]`);
+                if (b) b.classList.add('selected');
+            });
+        }
+        // finalGoal badge
+        if (formData.goal) document.getElementById('finalGoal').innerHTML = formData.goal.replace(/_/g, ' ').toUpperCase();
+    })();
 </script>
 </body>
 </html>
