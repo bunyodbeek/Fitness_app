@@ -6,9 +6,9 @@
 {% block extra_css %}
     <style>
 
-    /* ==========================================
-           ✨ PREMIUM ANIMATIONS - all_workouts.html style
-           ========================================== */
+        /* ==========================================
+               ✨ PREMIUM ANIMATIONS - all_workouts.html style
+               ========================================== */
 
         /* 1. Animated Background - Xuddi all_workouts kabi */
         body::before {
@@ -19,23 +19,30 @@
             right: 0;
             bottom: 0;
             background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%),
-                        radial-gradient(circle at 40% 90%, rgba(78, 205, 196, 0.05) 0%, transparent 50%);
+            radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%),
+            radial-gradient(circle at 40% 90%, rgba(78, 205, 196, 0.05) 0%, transparent 50%);
             animation: particleFloat 15s ease-in-out infinite;
             pointer-events: none;
             z-index: 0;
         }
 
         @keyframes particleFloat {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -30px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(30px, -30px) scale(1.1);
+            }
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
         }
 
         /* 2. Page Header Animation */
         {#.page-header {#}
         {#    animation: slideDownHeader 0.6s cubic-bezier(0.4, 0, 0.2, 1);#}
-        {#}#}
+        {
+        #}#}
 
         @keyframes slideDownHeader {
             from {
@@ -88,16 +95,45 @@
         }
 
         /* Staggered Animation - Har bir card ketma-ket */
-        .favorite-item:nth-child(1) { animation-delay: 0.1s; }
-        .favorite-item:nth-child(2) { animation-delay: 0.15s; }
-        .favorite-item:nth-child(3) { animation-delay: 0.2s; }
-        .favorite-item:nth-child(4) { animation-delay: 0.25s; }
-        .favorite-item:nth-child(5) { animation-delay: 0.3s; }
-        .favorite-item:nth-child(6) { animation-delay: 0.35s; }
-        .favorite-item:nth-child(7) { animation-delay: 0.4s; }
-        .favorite-item:nth-child(8) { animation-delay: 0.45s; }
-        .favorite-item:nth-child(9) { animation-delay: 0.5s; }
-        .favorite-item:nth-child(10) { animation-delay: 0.55s; }
+        .favorite-item:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .favorite-item:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .favorite-item:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .favorite-item:nth-child(4) {
+            animation-delay: 0.25s;
+        }
+
+        .favorite-item:nth-child(5) {
+            animation-delay: 0.3s;
+        }
+
+        .favorite-item:nth-child(6) {
+            animation-delay: 0.35s;
+        }
+
+        .favorite-item:nth-child(7) {
+            animation-delay: 0.4s;
+        }
+
+        .favorite-item:nth-child(8) {
+            animation-delay: 0.45s;
+        }
+
+        .favorite-item:nth-child(9) {
+            animation-delay: 0.5s;
+        }
+
+        .favorite-item:nth-child(10) {
+            animation-delay: 0.55s;
+        }
 
         /* 6. Shimmer Effect on Hover - all_workouts kabi */
         .favorite-item::before {
@@ -108,10 +144,10 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(
-                45deg,
-                transparent 0%,
-                rgba(255, 255, 255, 0.1) 50%,
-                transparent 100%
+                    45deg,
+                    transparent 0%,
+                    rgba(255, 255, 255, 0.1) 50%,
+                    transparent 100%
             );
             transition: all 0.6s ease;
             z-index: 1;
@@ -144,8 +180,12 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(5deg); }
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
         }
 
         /* 8. Favorite Button Pulse - all_workouts kabi */
@@ -205,8 +245,12 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
         /* 11. Save Options Modal - Bottom Sheet Style */
@@ -244,14 +288,37 @@
             animation: slideInLeft 0.4s ease backwards;
         }
 
-        .exercise-select-item:nth-child(1) { animation-delay: 0.05s; }
-        .exercise-select-item:nth-child(2) { animation-delay: 0.1s; }
-        .exercise-select-item:nth-child(3) { animation-delay: 0.15s; }
-        .exercise-select-item:nth-child(4) { animation-delay: 0.2s; }
-        .exercise-select-item:nth-child(5) { animation-delay: 0.25s; }
-        .exercise-select-item:nth-child(6) { animation-delay: 0.3s; }
-        .exercise-select-item:nth-child(7) { animation-delay: 0.35s; }
-        .exercise-select-item:nth-child(8) { animation-delay: 0.4s; }
+        .exercise-select-item:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+
+        .exercise-select-item:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .exercise-select-item:nth-child(3) {
+            animation-delay: 0.15s;
+        }
+
+        .exercise-select-item:nth-child(4) {
+            animation-delay: 0.2s;
+        }
+
+        .exercise-select-item:nth-child(5) {
+            animation-delay: 0.25s;
+        }
+
+        .exercise-select-item:nth-child(6) {
+            animation-delay: 0.3s;
+        }
+
+        .exercise-select-item:nth-child(7) {
+            animation-delay: 0.35s;
+        }
+
+        .exercise-select-item:nth-child(8) {
+            animation-delay: 0.4s;
+        }
 
         @keyframes slideInLeft {
             from {
@@ -269,11 +336,25 @@
             animation: slideInRight 0.3s ease backwards;
         }
 
-        .collection-item:nth-child(1) { animation-delay: 0.05s; }
-        .collection-item:nth-child(2) { animation-delay: 0.1s; }
-        .collection-item:nth-child(3) { animation-delay: 0.15s; }
-        .collection-item:nth-child(4) { animation-delay: 0.2s; }
-        .collection-item:nth-child(5) { animation-delay: 0.25s; }
+        .collection-item:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+
+        .collection-item:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .collection-item:nth-child(3) {
+            animation-delay: 0.15s;
+        }
+
+        .collection-item:nth-child(4) {
+            animation-delay: 0.2s;
+        }
+
+        .collection-item:nth-child(5) {
+            animation-delay: 0.25s;
+        }
 
         @keyframes slideInRight {
             from {
@@ -291,9 +372,17 @@
             animation: slideUpOption 0.3s ease backwards;
         }
 
-        .save-option:nth-child(1) { animation-delay: 0.1s; }
-        .save-option:nth-child(2) { animation-delay: 0.15s; }
-        .save-option:nth-child(3) { animation-delay: 0.2s; }
+        .save-option:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .save-option:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .save-option:nth-child(3) {
+            animation-delay: 0.2s;
+        }
 
         @keyframes slideUpOption {
             from {
@@ -330,10 +419,10 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.2),
-                transparent
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.2),
+                    transparent
             );
             transition: left 0.5s ease;
         }
@@ -345,10 +434,10 @@
         /* 18. Stats Number Gradient Animation */
         .favorite-stats span {
             background: linear-gradient(
-                90deg,
-                #ffd700,
-                #ffed4e,
-                #ffd700
+                    90deg,
+                    #ffd700,
+                    #ffed4e,
+                    #ffd700
             );
             background-size: 200% 100%;
             -webkit-background-clip: text;
@@ -375,9 +464,15 @@
         }
 
         @keyframes backArrowBounce {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(-3px); }
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-8px);
+            }
+            75% {
+                transform: translateX(-3px);
+            }
         }
 
         /* 20. Page Load Fade In */
@@ -438,6 +533,7 @@
         .unfavorite-btn {
             will-change: transform, opacity;
         }
+
         /* Global Stillar */
         * {
             margin: 0;
@@ -447,7 +543,7 @@
 
         body {
             background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
-                font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', sans-serif;
             min-height: 100vh;
             position: relative;
         }
@@ -488,7 +584,7 @@
             transform: translateX(-3px);
         }
 
-      .page-title {
+        .page-title {
             color: white;
             font-size: 24px;
             font-weight: 900;
@@ -500,7 +596,7 @@
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
             position: relative;
-          flex: 1;
+            flex: 1;
         }
 
         /* ✨ YANGI - Add Collection Button */
@@ -789,8 +885,12 @@
         }
 
         @keyframes floatStar {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(10deg); }
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(10deg);
+            }
         }
 
         .empty-state h3 {
@@ -830,8 +930,12 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
         /* Modal Content */
@@ -1189,38 +1293,36 @@
         </div>
 
         <div class="favorites-list" id="favoritesList">
-            {% if favorites %}
-                {% for fav in favorites %}
-                    <div class="favorite-item" data-id="{{ fav.id }}" data-exercise-id="{{ fav.exercise_id }}">
-                        <a href="{% url 'exercise_detail' fav.exercise_id %}" class="item-link-wrapper">
-                            <img src="{{ fav.exercise.thumbnail.url|default_if_none:'/static/img/default-thumb.jpg' }}"
-                                 alt="{{ fav.title }}" class="favorite-thumbnail">
+            {% for fav in favorites %}
+                <div class="favorite-item" data-id="{{ fav.id }}" data-exercise-id="{{ fav.exercise_id }}">
+                    <a href="{% url 'exercise_detail' fav.exercise_id %}" class="item-link-wrapper">
+                        <img src="{{ fav.exercise.thumbnail.url|default_if_none:'/static/img/default-thumb.jpg' }}"
+                             alt="{{ fav.title }}" class="favorite-thumbnail">
 
-                            <div class="favorite-info">
-                                <div class="favorite-title">{{ fav.exercise.name }}</div>
-                                <div class="favorite-meta">
-                                    <i class="fas fa-dumbbell"></i> Mashq • {{ fav.exercise.primary_body_part }}
-                                </div>
-                                <div class="favorite-tags">
-                                    <span class="favorite-tag">{{ fav.exercise.difficulty }}</span>
-                                </div>
+                        <div class="favorite-info">
+                            <div class="favorite-title">{{ fav.exercise.name }}</div>
+                            <div class="favorite-meta">
+                                <i class="fas fa-dumbbell"></i> Mashq • {{ fav.exercise.primary_body_part }}
                             </div>
-                        </a>
-                        <button class="unfavorite-btn"
-                                onclick="event.stopPropagation(); event.preventDefault(); unfavorite({{ fav.id }}, this)"
-                                title="Sevimlidan o'chirish"
-                                aria-label="O'chirish">
-                            ⭐
-                        </button>
-                    </div>
-                {% endfor %}
-            {% else %}
+                            <div class="favorite-tags">
+                                <span class="favorite-tag">{{ fav.exercise.difficulty }}</span>
+                            </div>
+                        </div>
+                    </a>
+                    <button class="unfavorite-btn"
+                            onclick="event.stopPropagation(); event.preventDefault(); unfavorite({{ fav.id }}, this)"
+                            title="Sevimlidan o'chirish"
+                            aria-label="O'chirish">
+                        ⭐
+                    </button>
+                </div>
+            {% empty %}
                 <div class="empty-state">
                     <div class="empty-state-icon">⭐</div>
                     <h3>Sevimlilar ro'yxati bo'sh</h3>
                     <p>O'zingizga yoqqan mashqlarni qo'shishni boshlang!</p>
                 </div>
-            {% endif %}
+            {% endfor %}
         </div>
     </div>
 
@@ -1241,11 +1343,11 @@
                 <div class="collection-name-group">
                     <label class="collection-name-label">To'plam nomi</label>
                     <input
-                        type="text"
-                        class="collection-name-input"
-                        id="collectionNameInput"
-                        placeholder="Masalan: Chest Day Mashqlari"
-                        maxlength="50"
+                            type="text"
+                            class="collection-name-input"
+                            id="collectionNameInput"
+                            placeholder="Masalan: Chest Day Mashqlari"
+                            maxlength="50"
                     >
                 </div>
 
@@ -1257,19 +1359,19 @@
                     <div class="exercise-list" id="exerciseList">
                         <!-- Django template bilan exercises list -->
                         {% for exercise in all_exercises %}
-                        <div class="exercise-select-item"
-                             data-exercise-id="{{ exercise.id }}"
-                             onclick="toggleExerciseSelection(this, {{ exercise.id }})">
-                            <div class="exercise-checkbox">
-                                <span class="exercise-checkbox-icon">✓</span>
+                            <div class="exercise-select-item"
+                                 data-exercise-id="{{ exercise.id }}"
+                                 onclick="toggleExerciseSelection(this, {{ exercise.id }})">
+                                <div class="exercise-checkbox">
+                                    <span class="exercise-checkbox-icon">✓</span>
+                                </div>
+                                <img src="{{ exercise.thumbnail.url|default_if_none:'/static/img/default-thumb.jpg' }}"
+                                     alt="{{ exercise.name }}" class="exercise-select-thumbnail">
+                                <div class="exercise-select-info">
+                                    <div class="exercise-select-name">{{ exercise.name }}</div>
+                                    <div class="exercise-select-meta">{{ exercise.primary_body_part }}</div>
+                                </div>
                             </div>
-                            <img src="{{ exercise.thumbnail.url|default_if_none:'/static/img/default-thumb.jpg' }}"
-                                 alt="{{ exercise.name }}" class="exercise-select-thumbnail">
-                            <div class="exercise-select-info">
-                                <div class="exercise-select-name">{{ exercise.name }}</div>
-                                <div class="exercise-select-meta">{{ exercise.primary_body_part }}</div>
-                            </div>
-                        </div>
                         {% endfor %}
                     </div>
                 </div>
@@ -1327,49 +1429,49 @@
                         'X-CSRFToken': getCookie('csrftoken')
                     }
                 })
-                .then(response => {
-                    if (response.status !== 200) {
-                        return response.json().then(err => {
-                            throw new Error(err.error || `Server xatosi: ${response.status}`);
-                        }).catch(() => {
-                            throw new Error(`Serverga ulanishda xato: Status ${response.status}`);
-                        });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        const item = button.closest('.favorite-item');
-                        item.style.animation = 'slideOutRight 0.4s ease forwards';
+                    .then(response => {
+                        if (response.status !== 200) {
+                            return response.json().then(err => {
+                                throw new Error(err.error || `Server xatosi: ${response.status}`);
+                            }).catch(() => {
+                                throw new Error(`Serverga ulanishda xato: Status ${response.status}`);
+                            });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            const item = button.closest('.favorite-item');
+                            item.style.animation = 'slideOutRight 0.4s ease forwards';
 
-                        setTimeout(() => {
-                            item.remove();
+                            setTimeout(() => {
+                                item.remove();
 
-                            const remainingItems = document.querySelectorAll('.favorite-item').length;
-                            if (remainingItems === 0) {
-                                document.getElementById('favoritesList').innerHTML = `
+                                const remainingItems = document.querySelectorAll('.favorite-item').length;
+                                if (remainingItems === 0) {
+                                    document.getElementById('favoritesList').innerHTML = `
                                     <div class="empty-state">
                                         <div class="empty-state-icon">⭐</div>
                                         <h3>Sevimlilar ro'yxati bo'sh</h3>
                                         <p>O'zingizga yoqqan mashqlarni qo'shishni boshlang!</p>
                                     </div>
                                 `;
-                            }
-                        }, 400);
+                                }
+                            }, 400);
 
-                        const totalCountElement = document.getElementById('total-favorites-count');
-                        if (totalCountElement) {
-                            let currentCount = parseInt(totalCountElement.textContent);
-                            totalCountElement.textContent = currentCount > 0 ? currentCount - 1 : 0;
+                            const totalCountElement = document.getElementById('total-favorites-count');
+                            if (totalCountElement) {
+                                let currentCount = parseInt(totalCountElement.textContent);
+                                totalCountElement.textContent = currentCount > 0 ? currentCount - 1 : 0;
+                            }
+                        } else {
+                            alert("O'chirishda xato: " + (data.error || "Noma'lum xato"));
                         }
-                    } else {
-                        alert("O'chirishda xato: " + (data.error || "Noma'lum xato"));
-                    }
-                })
-                .catch(err => {
-                    console.error("Unfavorite AJAX xatoligi:", err);
-                    alert("Sevimlidan o'chirishda kutilmagan xato yuz berdi: " + err.message);
-                });
+                    })
+                    .catch(err => {
+                        console.error("Unfavorite AJAX xatoligi:", err);
+                        alert("Sevimlidan o'chirishda kutilmagan xato yuz berdi: " + err.message);
+                    });
             }
         }
 
@@ -1436,7 +1538,7 @@
         }
 
         // Input change listener
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const nameInput = document.getElementById('collectionNameInput');
             if (nameInput) {
                 nameInput.addEventListener('input', updateSaveButton);
@@ -1473,30 +1575,30 @@
                     exercise_ids: selectedExercises
                 })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(`"${collectionName}" to'plami muvaffaqiyatli yaratildi!`);
-                    closeCollectionModal();
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`"${collectionName}" to'plami muvaffaqiyatli yaratildi!`);
+                        closeCollectionModal();
 
-                    // Sahifani yangilash (yoki dinamik ravishda qo'shish)
-                    location.reload();
-                } else {
-                    alert("Xato: " + (data.error || "Noma'lum xato"));
+                        // Sahifani yangilash (yoki dinamik ravishda qo'shish)
+                        location.reload();
+                    } else {
+                        alert("Xato: " + (data.error || "Noma'lum xato"));
+                        saveBtn.disabled = false;
+                        saveBtn.textContent = 'Saqlash';
+                    }
+                })
+                .catch(err => {
+                    console.error("Collection saqlashda xato:", err);
+                    alert("To'plamni saqlashda xato yuz berdi!");
                     saveBtn.disabled = false;
                     saveBtn.textContent = 'Saqlash';
-                }
-            })
-            .catch(err => {
-                console.error("Collection saqlashda xato:", err);
-                alert("To'plamni saqlashda xato yuz berdi!");
-                saveBtn.disabled = false;
-                saveBtn.textContent = 'Saqlash';
-            });
+                });
         }
 
         // ESC tugmasi bilan modal yopish
-        document.addEventListener('keydown', function(event) {
+        document.addEventListener('keydown', function (event) {
             if (event.key === 'Escape') {
                 const modal = document.getElementById('collectionModal');
                 if (modal && modal.classList.contains('active')) {
@@ -1506,7 +1608,7 @@
         });
 
         // Modal tashqarisiga bosish bilan yopish
-        document.getElementById('collectionModal').addEventListener('click', function(event) {
+        document.getElementById('collectionModal').addEventListener('click', function (event) {
             if (event.target === this) {
                 closeCollectionModal();
             }

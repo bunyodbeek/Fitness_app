@@ -1,0 +1,56 @@
+import logging
+
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from telebot.types import WebAppInfo, InlineKeyboardMarkup, InlineKeyboardButton, Update
+
+from apps.views.bot import bot
+from root.settings import WEBAPP_URL
+
+# Logging
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
+logger = logging.getLogger(__name__)
+
+
+@bot.message_handler(commands=['start'])
+def start(message):
+    user = message.from_user
+
+    webapp_link = WEBAPP_URL + "/miniapp/questionnaire/"
+    webapp_info = WebAppInfo(url=webapp_link)
+
+    keyboard = InlineKeyboardMarkup()
+    keyboard.add(
+        InlineKeyboardButton("🏋️ Start Fitness Inline", web_app=webapp_info)
+    )
+
+    bot.send_message(
+        message.chat.id,
+        f"💪 Welcome {user.first_name}!\n\n"
+        "Ready to transform your body?\n\n"
+        "Tap the button below to create your personalized workout plan! 🚀",
+        reply_markup=keyboard
+    )
+
+
+@bot.message_handler(commands=['help'])
+def help_cmd(message):
+    bot.send_message(
+        message.chat.id,
+        "🏋️ Fitness Bot Commands:\n\n"
+        "/start - Begin your fitness journey\n"
+        "/help - Show help menu"
+    )
+
+
+class TelegramWebhookView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        update = Update.de_json(request.data)
+        bot.process_new_updates([update])
+        return Response({"status": "ok"})

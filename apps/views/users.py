@@ -1,9 +1,6 @@
-import json
 import traceback
 
 import requests
-from apps.forms import UserProfileForm
-from apps.models import User, UserMotivation, UserProfile
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.base import ContentFile
@@ -11,20 +8,17 @@ from django.http import HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, UpdateView
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from apps.forms import UserProfileForm
+from apps.models import User, UserMotivation, UserProfile
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class QuestionnaireSubmitView(View):
-
-    def parse_json(self, request):
-
-        try:
-            return json.loads(request.body)
-        except json.JSONDecodeError:
-            return None
+class QuestionnaireSubmitAPIView(APIView):
 
     def get_or_update_user(self, telegram_id, first_name, last_name):
 
@@ -88,17 +82,17 @@ class QuestionnaireSubmitView(View):
             UserMotivation.objects.create(user=profile, motivation=m)
 
     def post(self, request, *args, **kwargs):
-        data = self.parse_json(request)
+        data = request.data
         if data is None:
-            return JsonResponse({'success': False, 'error': 'Noto‘g‘ri JSON format'}, status=400)
+            return Response({'success': False, 'error': 'Noto‘g‘ri JSON format'}, status=400)
 
         telegram_id = data.get('telegram_id')
         if not telegram_id:
-            return JsonResponse({'success': False, 'error': 'Telegram ID topilmadi'}, status=400)
+            return Response({'success': False, 'error': 'Telegram ID topilmadi'}, status=400)
 
         existing_profile = UserProfile.objects.filter(telegram_id=telegram_id).first()
         if existing_profile:
-            return JsonResponse({
+            return Response({
                 'success': True,
                 'redirect_url': reverse('animation'),
                 'message': 'User already exists'
@@ -116,9 +110,9 @@ class QuestionnaireSubmitView(View):
 
             self.save_motivations(profile, data.get('motivation', []))
 
-            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            login(request, user)
 
-            return JsonResponse({
+            return Response({
                 'success': True,
                 'message': "Ma'lumotlar saqlandi",
                 'redirect_url': reverse('animation'),
@@ -130,53 +124,50 @@ class QuestionnaireSubmitView(View):
 
         except Exception as e:
             print(traceback.format_exc())
-            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+            return Response({'success': False, 'error': str(e)}, status=500)
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class TelegramAuthView(View):
+class TelegramAuthAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            data = json.loads(request.body)
+            data = request.data
             telegram_id = data.get('telegram_id')
 
             if not telegram_id:
-                return JsonResponse({'success': False, 'error': 'Telegram ID not found'}, status=400)
+                return Response({'success': False, 'error': 'Telegram ID not found'},
+                                status=status.HTTP_400_BAD_REQUEST)
 
             profile = UserProfile.objects.filter(telegram_id=telegram_id).first()
 
             if profile:
                 user = profile.user
-                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+                login(request, user)
 
                 if profile.onboarding_completed:
-                    return JsonResponse({
+                    return Response({
                         'success': True,
-                        'redirect': '/',
+                        'redirect': reverse_lazy('animation'),
                         'onboarding_completed': True,
                         'user_id': user.id
                     })
                 else:
-                    return JsonResponse({
+                    return Response({
                         'success': True,
-                        'redirect': '/miniapp/questionnaire/',
+                        'redirect': reverse_lazy('onboarding'),
                         'onboarding_completed': False
                     })
 
-            return JsonResponse({
+            return Response({
                 'success': True,
-                'redirect': '/miniapp/questionnaire/',
+                'redirect': reverse_lazy('onboarding'),
                 'onboarding_completed': False,
                 'is_new_user': True
             })
 
         except Exception as e:
             print(traceback.format_exc())
-            return JsonResponse({'success': False, 'error': str(e)}, status=500)
-
-    def get(self, request):
-        return HttpResponseNotAllowed(['POST'])
+            return Response({'success': False, 'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -187,7 +178,7 @@ class OnboardingView(TemplateView):
         if request.user.is_authenticated:
             profile = UserProfile.objects.filter(user=request.user).first()
             if profile and profile.onboarding_completed:
-                return redirect('/')
+                return redirect('animation')
         return super().dispatch(request, *args, **kwargs)
 
 

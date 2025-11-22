@@ -1,8 +1,10 @@
-from apps.models import Exercise, Favorite
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.views.generic import ListView, View
+from django.views.generic import ListView
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from apps.models import Exercise, Favorite
 
 
 class FavoritesListView(LoginRequiredMixin, ListView):
@@ -20,11 +22,11 @@ class FavoritesListView(LoginRequiredMixin, ListView):
         qs = super().get_queryset()
         user = self.request.user
         if user.is_authenticated:
-            qs.filter(user=self.request.user.profile)
+            qs = qs.filter(user=self.request.user.profile)
         return qs
 
 
-class ToggleFavoriteView(LoginRequiredMixin, View):
+class ToggleFavoriteView(LoginRequiredMixin, APIView):
     login_url = '/login/'
 
     def post(self, request, exercise_id):
@@ -37,19 +39,19 @@ class ToggleFavoriteView(LoginRequiredMixin, View):
         exercise = get_object_or_404(Exercise, pk=exercise_id)
         user_profile = getattr(request.user, "profile", None)
         if not user_profile:
-            return JsonResponse({'success': False, 'message': 'Profile topilmadi.'}, status=500)
+            return Response({'success': False, 'message': 'Profile topilmadi.'}, status=500)
 
-        favorite_instance = Favorite.objects.filter(
+        favorite_instance, created = Favorite.objects.get_or_create(
             user=user_profile,
             exercise=exercise
-        ).first()
-
-        if favorite_instance:
+        )
+        if created:
+            status = 'added'
+        else:
             favorite_instance.delete()
-            return JsonResponse({'success': True, 'status': 'removed'})
+            status = 'removed'
 
-        Favorite.objects.create(user=user_profile, exercise=exercise)
-        return JsonResponse({'success': True, 'status': 'added'})
+        return Response({'success': True, 'status': status})
 
 #
 # class RemoveFavoriteView(LoginRequiredMixin, View):

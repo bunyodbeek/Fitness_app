@@ -1,6 +1,5 @@
 from datetime import date
 
-from apps.models.base import CreatedBaseModel
 from django.contrib.auth.models import AbstractUser
 from django.db.models import (
     CASCADE,
@@ -16,6 +15,8 @@ from django.db.models import (
     TextChoices,
     TextField,
 )
+
+from apps.models.base import CreatedBaseModel
 
 
 class User(AbstractUser):
@@ -47,7 +48,7 @@ class UserProfile(CreatedBaseModel):
         GAIN_MUSCLE = 'gain_muscle', 'Gain muscle'
         GET_SHAPE = 'get_shape', 'Get in shape'
 
-    user = OneToOneField('apps.User', on_delete=CASCADE, related_name='profile')
+    user = OneToOneField('apps.User', CASCADE, related_name='profile')
     telegram_id = BigIntegerField(unique=True, null=True, blank=True)
     is_premium = BooleanField(default=False)
     name = CharField(max_length=100, default='User')

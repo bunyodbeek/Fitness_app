@@ -11,3 +11,6 @@ loaddata:
 check:
 	isort .
 	flake8 .
+
+ngrok:
+	ngrok http 8000
