@@ -516,7 +516,7 @@
         @keyframes shimmer {
             0% { background-position: -1000px 0; }
             100% { background-position: 1000px 0; }
-        }
+        }}
     </style>
 {% endblock %}
 
@@ -531,12 +531,12 @@
     <div class="avatar-section">
         <div class="avatar-circle" onclick="window.location.href='{% url 'profile_update' %}'">
             {% if user.profile.avatar %}
-                <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" class="avatar-image">
+                <img src="{{ user.profile.avatar.url }}" alt="{{ user.first_name }}" class="avatar-image">
             {% else %}
                 <img src="/media/user/avatar.jpg" alt="Avatar" class="avatar-image">
             {% endif %}
         </div>
-        <h2 class="user-name">{{ user.username }}</h2>
+        <h2 class="user-name">{{ user.first_name|default:"User" }}</h2>
     </div>
 
     <!-- STATS -->

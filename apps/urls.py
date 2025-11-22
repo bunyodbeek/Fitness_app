@@ -1,31 +1,28 @@
-from django.urls import path
-
-from apps.views import (TelegramWebhookView,
-                        AnimationView,
-                        EditionDetailView,
-                        MyTrainerHistoryView,
-                        MyTrainerView,
-                        ProgramDetailView,
-                        ProgramListView,
-                        WorkoutCompleteView,
-                        WorkoutDetailView,
-                        WorkoutStartView,
-                        ExerciseDetailView, ExercisesByMuscleView, MuscleGroupListView,
-                        FavoritesListView, ToggleFavoriteView,
-                        OnboardingView,
-                        ProfileView,
-                        ProgressView,
-                        QuestionnaireSubmitAPIView,
-                        SettingsView,
-                        TelegramAuthAPIView,
-                        UpdateProfileView
-                        )
-from apps.views.api_views import (
-    complete_onboarding,
-    get_user_profile,
-    save_onboarding_step,
-    telegram_auth,
+from apps.views import (
+    AnimationView,
+    EditionDetailView,
+    ExerciseDetailView,
+    ExercisesByMuscleView,
+    FavoritesListView,
+    MuscleGroupListView,
+    MyTrainerHistoryView,
+    MyTrainerView,
+    OnboardingView,
+    ProfileView,
+    ProgramDetailView,
+    ProgramListView,
+    ProgressView,
+    QuestionnaireSubmitAPIView,
+    SettingsView,
+    TelegramAuthAPIView,
+    TelegramWebhookView,
+    ToggleFavoriteView,
+    UpdateProfileView,
+    WorkoutCompleteView,
+    WorkoutDetailView,
+    WorkoutStartView,
 )
+from django.urls import path
 
 urlpatterns = [
 
@@ -35,7 +32,6 @@ urlpatterns = [
     path('favorite/toggle/<int:exercise_id>/', ToggleFavoriteView.as_view(), name='toggle_favorite'),
     path('favorites/', FavoritesListView.as_view(), name='favorite_list_page'),
     path('exercises/favorite/toggle/<int:exercise_id>/', ToggleFavoriteView.as_view(), name='toggle_favorite'),
-    # path('favorites/remove/<int:favorite_id>/', RemoveFavoriteView.as_view(), name='remove_favorite'),
 
     path('api/questionnaire/submit/', QuestionnaireSubmitAPIView.as_view(), name='questionnaire_submit'),
     path('api/telegram-auth/', TelegramAuthAPIView.as_view(), name='telegram_auth'),
@@ -50,14 +46,9 @@ urlpatterns = [
     path('', AnimationView.as_view(), name='animation'),
     path('program/<int:pk>/', ProgramDetailView.as_view(), name='program_detail'),
     path('edition/<int:pk>/', EditionDetailView.as_view(), name='edition_detail'),
-    # path('workout/<int:pk>/', WorkoutDetailView.as_view(), name='workout_detail'),
+    path('workout/<int:pk>/', WorkoutDetailView.as_view(), name='workout_detail'),
     path('workout/<int:pk>/start/', WorkoutStartView.as_view(), name='workout_start'),
     path('workout/<int:pk>/complete/', WorkoutCompleteView.as_view(), name='workout_complete'),
-
-    path('api/users/auth/', telegram_auth, name='telegram_auth_api'),
-    path('api/users/onboarding/save/', save_onboarding_step, name='save_onboarding_step'),
-    path('api/users/onboarding/complete/', complete_onboarding, name='complete_onboarding'),
-    path('api/users/profile/', get_user_profile, name='get_user_profile'),
     path('my-trainer/', MyTrainerView.as_view(), name='my_trainer'),
     path('my-trainer/history/', MyTrainerHistoryView.as_view(), name='my_trainer_history'),
     path('workout/<int:session_id>/detail/', WorkoutDetailView.as_view(), name='workout_session_detail'),

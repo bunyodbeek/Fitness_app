@@ -1,12 +1,11 @@
 import logging
 
+from apps.views.bot import bot
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from telebot.types import WebAppInfo, InlineKeyboardMarkup, InlineKeyboardButton, Update
-
-from apps.views.bot import bot
 from root.settings import WEBAPP_URL
+from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup, Update, WebAppInfo
 
 # Logging
 logging.basicConfig(

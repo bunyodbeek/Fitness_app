@@ -1,6 +1,6 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% block content %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -475,30 +475,6 @@
         </div>
     </div>
 
-    <!-- Bottom Navigation -->
-    <div class="bottom-nav">
-        <a href="/exercises/" class="nav-item">
-            <div class="nav-icon">💪</div>
-            <div>Exercises</div>
-        </a>
-        <a href="/workout/" class="nav-item">
-            <div class="nav-icon">✅</div>
-            <div>Workouts</div>
-        </a>
-        <a href="/my-trainer/" class="nav-item active">
-            <div class="nav-icon">👤</div>
-            <div>My Trainer</div>
-        </a>
-        <a href="/favorites/" class="nav-item">
-            <div class="nav-icon">⭐</div>
-            <div>Favorites</div>
-        </a>
-        <a href="/profile/" class="nav-item">
-            <div class="nav-icon">⚙️</div>
-            <div>Profile</div>
-        </a>
-    </div>
-
     <script>
         // ==========================================
         // DUMMY DATA - Backend dasturchi o'zgartiradi
@@ -679,4 +655,4 @@
         });
     </script>
 </body>
-</html>
+{% endblock %}

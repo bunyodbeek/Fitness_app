@@ -8,16 +8,6 @@ logger = logging.getLogger(__name__)
 
 
 async def send_telegram_notification_async(telegram_id: int, message: str):
-    """
-    Async - Telegram orqali xabar yuborish
-
-    Args:
-        telegram_id: Foydalanuvchi telegram ID
-        message: Yuborilishi kerak bo'lgan xabar
-
-    Returns:
-        bool: Muvaffaqiyatli yuborilsa True, aks holda False
-    """
     if not telegram_id:
         logger.warning("Telegram ID not provided")
         return False

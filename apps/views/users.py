@@ -1,10 +1,12 @@
 import traceback
 
 import requests
+from apps.forms import UserProfileForm
+from apps.models import User, UserMotivation, UserProfile
+from apps.utils import bot_send_message
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.base import ContentFile
-from django.http import HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
@@ -14,12 +16,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.forms import UserProfileForm
-from apps.models import User, UserMotivation, UserProfile
-
 
 class QuestionnaireSubmitAPIView(APIView):
-
     def get_or_update_user(self, telegram_id, first_name, last_name):
 
         user, created = User.objects.get_or_create(
@@ -112,6 +110,15 @@ class QuestionnaireSubmitAPIView(APIView):
 
             login(request, user)
 
+            bot_send_message(telegram_id,
+                             f"🎉 Botimizga Muvaffaqiyatli Ro'yxatdan O'tish Tugallandi! 🎉\n\n"
+                             f"Sizning ma'lumotlaringiz:\n"
+                             f"━━━━━━━━━━━━━━━━━━━\n"
+                             f"👤 **Ism-Sharif:** {self.request.user.username}\n"
+                             f"🆔 **ID Raqamingiz:** {self.request.user.id}\n"
+                             f"━━━━━━━━━━━━━━━━━━━\n\n"
+                             f"Xush kelibsiz! Endi botning barcha imkoniyatlaridan foydalanishingiz mumkin. ✅")
+
             return Response({
                 'success': True,
                 'message': "Ma'lumotlar saqlandi",
@@ -121,7 +128,6 @@ class QuestionnaireSubmitAPIView(APIView):
                 'profile_id': profile.id,
                 'telegram_id': telegram_id
             })
-
         except Exception as e:
             print(traceback.format_exc())
             return Response({'success': False, 'error': str(e)}, status=500)

@@ -1,3 +1,4 @@
+from apps.models.base import CreatedBaseModel
 from django.db.models import (
     CASCADE,
     SET_NULL,
@@ -16,8 +17,6 @@ from django.db.models.fields import (
 )
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-
-from apps.models.base import CreatedBaseModel
 
 
 class Subscription(Model):

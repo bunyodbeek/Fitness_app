@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'drf_spectacular',
+
 ]
 
 MIDDLEWARE = [
@@ -127,6 +128,7 @@ CLICK_MERCHANT_USER_ID = os.getenv('CLICK_MERCHANT_USER_ID', default='')
 SUBSCRIPTION_MONTHLY_PRICE = 67000  # UZS
 TRIAL_DAYS = 1
 TRIAL_PROGRAMS_LIMIT = 1
+
 
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
@@ -267,3 +269,11 @@ JAZZMIN_SETTINGS = {
     # Add a language dropdown into the admin
     "language_chooser": False,
 }
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
+
