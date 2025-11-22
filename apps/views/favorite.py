@@ -1,97 +1,94 @@
-from django.urls import reverse_lazy
-
-from apps.models import Favorite
+from apps.models import Exercise, Favorite
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import TemplateView, View, ListView
+from django.shortcuts import get_object_or_404
+from django.views.generic import ListView, View
 
 
-class FavoriteListView(LoginRequiredMixin, ListView):
-    queryset = Favorite.objects.all()
+class FavoritesListView(LoginRequiredMixin, ListView):
+    model = Favorite
     template_name = 'exercises/favorites_list.html'
+    login_url = '/login/'
     context_object_name = 'favorites'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_count'] = Favorite.objects.filter(user=self.request.user.profile).count()
+        return context
 
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.filter(user=self.request.user.profile)
+        user = self.request.user
+        if user.is_authenticated:
+            qs.filter(user=self.request.user.profile)
         return qs
 
 
-# class FavoritesView(LoginRequiredMixin, TemplateView):
-#     template_name = 'exercises/favorites_list.html'
-#     login_url = '/login/'
+class ToggleFavoriteView(LoginRequiredMixin, View):
+    login_url = '/login/'
+
+    def post(self, request, exercise_id):
+        return self.toggle_favorite(request, exercise_id)
+
+    def delete(self, request, exercise_id):
+        return self.toggle_favorite(request, exercise_id)
+
+    def toggle_favorite(self, request, exercise_id):
+        exercise = get_object_or_404(Exercise, pk=exercise_id)
+        user_profile = getattr(request.user, "profile", None)
+        if not user_profile:
+            return JsonResponse({'success': False, 'message': 'Profile topilmadi.'}, status=500)
+
+        favorite_instance = Favorite.objects.filter(
+            user=user_profile,
+            exercise=exercise
+        ).first()
+
+        if favorite_instance:
+            favorite_instance.delete()
+            return JsonResponse({'success': True, 'status': 'removed'})
+
+        Favorite.objects.create(user=user_profile, exercise=exercise)
+        return JsonResponse({'success': True, 'status': 'added'})
+
 #
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         favorite = Favorite.objects.filter(
-#             user=self.request.user.profile,
-#         ).order_by('-created_at')
+# class RemoveFavoriteView(LoginRequiredMixin, View):
+#     @method_decorator(csrf_exempt)
+#     def dispatch(self, *args, **kwargs):
+#         return super().dispatch(*args, **kwargs)
 #
-#         favorites_list = []
-#         for fav in favorite:
+#     def delete(self, request, favorite_id):
 #
-#             obj = fav.exercise
+#         try:
 #
-#             if obj:
-#                 muscle_group_name = str(obj.primary_body_part)
+#             user_profile = request.user.profile
+#         except AttributeError:
+#             return JsonResponse({
+#                 'success': False,
+#                 'error': 'Foydalanuvchi tizimga kirmagan yoki Profile obyekti mavjud emas.'
+#             }, status=400)
 #
-#                 favorites_list.append({
-#                     'id': fav.id,
-#                     'title': obj.name,
-#                     'thumbnail_url': obj.thumbnail.url if obj.thumbnail else '',
-#                     'primary_body_part': muscle_group_name,
-#                     'difficulty': getattr(obj, 'difficulty', ''),
-#                     'equipment': getattr(obj, 'equipment', ''),
+#         try:
+#             favorite = Favorite.objects.get(
+#                 id=favorite_id,
+#                 user=user_profile
+#             )
+#             favorite.delete()
 #
-#                     'exercise_id': fav.exercise_id,
-#                 })
-#         context['favorites'] = favorites_list
-#         context['total_count'] = len(favorites_list)
+#             return JsonResponse({
+#                 'success': True,
+#                 'message': 'Sevimlidan muvaffaqiyatli o\'chirildi'
+#             })
+#         except Favorite.DoesNotExist:
+#             return JsonResponse({
+#                 'success': False,
+#                 'error': 'Sevimli ro\'yxatda topilmadi.'
+#             }, status=404)
+#         except Exception as e:
+#             return JsonResponse({
+#                 'success': False,
+#                 'error': f'Kutilmagan xato: {str(e)}'
+#             }, status=500)
 #
-#         return context
-
-
-class RemoveFavoriteView(LoginRequiredMixin, View):
-    """Favorite o'chirish"""
-
-    @method_decorator(csrf_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
-
-    def delete(self, request, favorite_id):
-
-        try:
-
-            user_profile = request.user.profile
-        except AttributeError:
-            return JsonResponse({
-                'success': False,
-                'error': 'Foydalanuvchi tizimga kirmagan yoki Profile obyekti mavjud emas.'
-            }, status=400)
-
-        try:
-            favorite = Favorite.objects.get(
-                id=favorite_id,
-                user=user_profile
-            )
-            favorite.delete()
-
-            return JsonResponse({
-                'success': True,
-                'message': 'Sevimlidan muvaffaqiyatli o\'chirildi'
-            })
-        except Favorite.DoesNotExist:
-            return JsonResponse({
-                'success': False,
-                'error': 'Sevimli ro\'yxatda topilmadi.'
-            }, status=404)
-        except Exception as e:
-            return JsonResponse({
-                'success': False,
-                'error': f'Kutilmagan xato: {str(e)}'
-            }, status=500)
-
-    def post(self, request, favorite_id):
-        return self.delete(request, favorite_id)
+#     def post(self, request, favorite_id):
+#         return self.delete(request, favorite_id)

@@ -1,41 +1,67 @@
-from apps.views import api_views, exercises, favorite, users, workouts
-from apps.views.exercises import ExercisesByMuscleView, ToggleFavoriteView
+from apps.views.api_views import (
+    complete_onboarding,
+    get_user_profile,
+    save_onboarding_step,
+    telegram_auth,
+)
+from apps.views.exercises import ExerciseDetailView, ExercisesByMuscleView, MuscleGroupListView
+from apps.views.favorite import FavoritesListView, ToggleFavoriteView
+from apps.views.users import (
+    OnboardingView,
+    ProfileView,
+    ProgressView,
+    QuestionnaireSubmitView,
+    SettingsView,
+    TelegramAuthView,
+    UpdateProfileView,
+)
+from apps.views.workouts import (
+    AnimationView,
+    EditionDetailView,
+    MyTrainerHistoryView,
+    MyTrainerView,
+    ProgramDetailView,
+    ProgramListView,
+    WorkoutCompleteView,
+    WorkoutDetailView,
+    WorkoutStartView,
+)
 from django.urls import path
 
 urlpatterns = [
 
-    path('exercises/', exercises.MuscleGroupListView.as_view(), name='muscle_groups'),
+    path('exercises/', MuscleGroupListView.as_view(), name='muscle_groups'),
     path('exercises/<str:muscle>/', ExercisesByMuscleView.as_view(), name='exercises_by_muscle'),
-    path('exercises/all/', exercises.AllExercisesView.as_view(), name='all_exercises'),
-    path('exercises/detail/<int:exercise_id>/', exercises.ExerciseDetailView.as_view(), name='exercise_detail'),
+    path('exercises/detail/<int:exercise_id>/', ExerciseDetailView.as_view(), name='exercise_detail'),
     path('favorite/toggle/<int:exercise_id>/', ToggleFavoriteView.as_view(), name='toggle_favorite'),
-    path('favorites/', favorite.FavoriteListView.as_view(), name='favorite_list_page'),
-    path('exercises/favorite/toggle/<int:exercise_id>/', exercises.ToggleFavoriteView.as_view(),
-         name='toggle_favorite'),
-    path('favorites/remove/<int:favorite_id>/', favorite.RemoveFavoriteView.as_view(), name='remove_favorite'),
+    path('favorites/', FavoritesListView.as_view(), name='favorites'),
+    path('exercises/favorite/toggle/<int:exercise_id>/', ToggleFavoriteView.as_view(), name='toggle_favorite'),
+    # path('favorites/remove/<int:favorite_id>/', RemoveFavoriteView.as_view(), name='remove_favorite'),
 
-    path('api/questionnaire/submit/', users.QuestionnaireSubmitView.as_view(), name='questionnaire_submit'),
-    # path('api/telegram-auth/', users.TelegramAuthView.as_view(), name='telegram_auth'),
-    path('miniapp/questionnaire/', users.OnboardingView.as_view(), name='onboarding'),
-    path('users/profile/', users.ProfileView.as_view(), name='user_profile'),
-    path('user/progress/', users.ProgressView.as_view(), name='user_progress'),
+    path('api/questionnaire/submit/', QuestionnaireSubmitView.as_view(), name='questionnaire_submit'),
+    path('api/telegram-auth/', TelegramAuthView.as_view(), name='telegram_auth'),
+    path('miniapp/questionnaire/', OnboardingView.as_view(), name='onboarding'),
+    path('users/profile/', ProfileView.as_view(), name='user_profile'),
+    path('user/progress/', ProgressView.as_view(), name='user_progress'),
 
-    path('users/profile/update/', users.UpdateProfileView.as_view(), name='profile_update'),
-    path('users/settings/', users.SettingsView.as_view(), name='settings'),
+    path('users/profile/update/', UpdateProfileView.as_view(), name='profile_update'),
+    path('users/settings/', SettingsView.as_view(), name='settings'),
 
-    path('workout/', workouts.ProgramListView.as_view(), name='program_list'),
-    path('', workouts.AnimationView.as_view(), name='animation'),
-    path('program/<int:pk>/', workouts.ProgramDetailView.as_view(), name='program_detail'),
-    path('edition/<int:pk>/', workouts.EditionDetailView.as_view(), name='edition_detail'),
-    path('workout/<int:pk>/', workouts.WorkoutDetailView.as_view(), name='workout_detail'),
-    path('workout/<int:pk>/start/', workouts.WorkoutStartView.as_view(), name='workout_start'),
-    path('workout/<int:pk>/complete/', workouts.WorkoutCompleteView.as_view(), name='workout_complete'),
+    path('workout/', ProgramListView.as_view(), name='program_list'),
+    path('', AnimationView.as_view(), name='animation'),
+    path('program/<int:pk>/', ProgramDetailView.as_view(), name='program_detail'),
+    path('edition/<int:pk>/', EditionDetailView.as_view(), name='edition_detail'),
+    # path('workout/<int:pk>/', WorkoutDetailView.as_view(), name='workout_detail'),
+    path('workout/<int:pk>/start/', WorkoutStartView.as_view(), name='workout_start'),
+    path('workout/<int:pk>/complete/', WorkoutCompleteView.as_view(), name='workout_complete'),
 
 
-    path('api/users/auth/', api_views.telegram_auth, name='telegram_auth_api'),
-    path('api/users/onboarding/save/', api_views.save_onboarding_step, name='save_onboarding_step'),
-    path('api/users/onboarding/complete/', api_views.complete_onboarding, name='complete_onboarding'),
-    path('api/users/profile/', api_views.get_user_profile, name='get_user_profile'),
+    path('api/users/auth/', telegram_auth, name='telegram_auth_api'),
+    path('api/users/onboarding/save/', save_onboarding_step, name='save_onboarding_step'),
+    path('api/users/onboarding/complete/', complete_onboarding, name='complete_onboarding'),
+    path('api/users/profile/', get_user_profile, name='get_user_profile'),
+    path('my-trainer/', MyTrainerView.as_view(), name='my_trainer'),
+    path('my-trainer/history/', MyTrainerHistoryView.as_view(), name='my_trainer_history'),
+    path('workout/<int:session_id>/detail/', WorkoutDetailView.as_view(), name='workout_session_detail'),
 
-    # path('api/tlg-bot', ) # pytelegrambotapi
 ]

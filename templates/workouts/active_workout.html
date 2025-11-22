@@ -1,0 +1,887 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Workout - {{ workout.title }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a2332 0%, #2d3e50 100%);
+            color: white;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .session-header {
+            background: linear-gradient(135deg, rgba(26, 35, 50, 0.98) 0%, rgba(45, 62, 80, 0.98) 100%);
+            backdrop-filter: blur(10px);
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .exit-btn, .menu-btn {
+            background: transparent;
+            border: none;
+            color: #ffd700;
+            font-size: 18px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-btn {
+            font-size: 24px;
+        }
+
+        .progress-counter {
+            color: white;
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        /* Exercise Content */
+        .exercise-content {
+            padding: 40px 20px 160px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .exercise-image-container {
+            max-width: 200px;
+            margin: 0 auto 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .exercise-image {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+        }
+
+        .exercise-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            color: rgba(255, 255, 255, 0.9);
+            letter-spacing: 0.5px;
+        }
+
+        /* Timer Container */
+        .timer-container {
+            max-width: 600px;
+            margin: 0 auto;
+            display: none; /* JS orqali boshqariladi */
+        }
+
+        .timer-box {
+            background: linear-gradient(135deg, #d4af37 0%, #f4e285 100%);
+            border-radius: 16px;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.4);
+        }
+
+        .timer-display {
+            font-size: 56px;
+            font-weight: 900;
+            color: #1a2332;
+        }
+
+        .timer-label {
+            font-size: 18px;
+            color: #1a2332;
+            font-weight: 700;
+            opacity: 0.8;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            gap: 0;
+            z-index: 1000;
+        }
+
+        .pause-btn {
+            width: 80px;
+            background: linear-gradient(135deg, #5a6b7d 0%, #3d4d5f 100%);
+            border: none;
+            color: #ffd700;
+            padding: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pause-btn:hover {
+            background: linear-gradient(135deg, #6a7b8d 0%, #4d5d6f 100%);
+        }
+
+        .did-it-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #ffd700 0%, #f4e285 100%);
+            border: none;
+            color: #1a2332;
+            padding: 20px;
+            font-size: 18px;
+            font-weight: 900;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .did-it-btn:hover {
+            background: linear-gradient(135deg, #ffed4e 0%, #ffd700 100%);
+        }
+
+        .did-it-btn.completed {
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            color: white;
+        }
+
+        .did-it-btn.completed::before {
+            content: '✓';
+            margin-right: 10px;
+            font-size: 24px;
+        }
+
+        /* Up Next Section */
+        .up-next-section {
+            margin: 50px 20px 20px;
+            background: rgba(26, 35, 50, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            display: none;
+        }
+
+        .up-next-label {
+            font-size: 14px;
+            color: #ffd700;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .up-next-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .up-next-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            object-fit: contain;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px;
+        }
+
+        .up-next-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .up-next-name {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: white;
+        }
+
+        .up-next-details {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+        }
+
+        /* Rest Overlay */
+        .rest-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(26, 35, 50, 0.98) 0%, rgba(45, 62, 80, 0.98) 100%);
+            backdrop-filter: blur(20px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            flex-direction: column;
+        }
+
+        .rest-overlay.active {
+            display: flex;
+        }
+
+        .rest-title {
+            font-size: 28px;
+            color: #ffd700;
+            margin-bottom: 50px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .rest-timer-circle {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 6px solid rgba(255, 215, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            position: relative;
+            margin-bottom: 30px;
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .rest-timer-circle::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            right: -6px;
+            bottom: -6px;
+            border-radius: 50%;
+            border: 6px solid transparent;
+            border-top-color: #ffd700;
+            animation: rotate 2s linear infinite;
+        }
+
+        @keyframes rotate {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .rest-timer {
+            font-size: 80px;
+            font-weight: 900;
+            color: #ffd700;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+
+        .rest-skip-text {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        /* Exit Modal */
+        .exit-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 14, 27, 0.95);
+            backdrop-filter: blur(20px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 300;
+        }
+
+        .exit-modal.active {
+            display: flex;
+        }
+
+        .exit-modal-content {
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+            padding: 35px 30px;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .exit-modal-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #1a2332;
+            margin-bottom: 15px;
+        }
+
+        .exit-modal-divider {
+            height: 4px;
+            background: repeating-linear-gradient(
+                    90deg,
+                    #ffd700 0px,
+                    #ffd700 12px,
+                    transparent 12px,
+                    transparent 24px
+            );
+            margin: 20px 0;
+        }
+
+        .exit-modal-text {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .exit-modal-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .exit-modal-btn {
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .save-exit-btn, .no-save-btn {
+            background: linear-gradient(135deg, #ffd700 0%, #f4e285 100%);
+            color: #1a2332;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .save-exit-btn:hover, .no-save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .return-btn {
+            background: transparent;
+            color: #666;
+            border: none;
+            font-size: 15px;
+            text-transform: none;
+        }
+
+        .return-btn:hover {
+            color: #333;
+        }
+
+        /* Side Timer Display (during rest) */
+        .side-timers {
+            position: absolute;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .side-timer {
+            background: linear-gradient(135deg, #ffd700 0%, #f4e285 100%);
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 24px;
+            font-weight: 900;
+            color: #1a2332;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .side-check {
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 32px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        /* Strength Details */
+        #strengthDetails {
+            margin-top: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffd700;
+            letter-spacing: 1px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .timer-display {
+                font-size: 48px;
+            }
+
+            .rest-timer {
+                font-size: 64px;
+            }
+
+            .rest-timer-circle {
+                width: 250px;
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+{% csrf_token %}
+
+<div class="session-header">
+    <button class="exit-btn" onclick="showExitModal()">Exit</button>
+    <div class="progress-counter">
+        <span id="current">1</span>/<span id="total">{{ total_exercises }}</span>
+    </div>
+    <button class="menu-btn">☰</button>
+</div>
+
+<div class="exercise-content">
+    <div class="exercise-image-container">
+        <img src="{% static 'images/default_exercise.png' %}" alt="Exercise" class="exercise-image" id="exerciseImage">
+    </div>
+
+    <h2 class="exercise-name" id="exerciseName"></h2>
+
+    <div class="timer-container" id="timerContainer">
+        <div class="timer-box">
+            <div class="timer-display" id="timer">00:00</div>
+            <div class="timer-label">Min</div>
+        </div>
+    </div>
+
+    <div id="strengthDetails" style="display:none;">
+        <span id="currentSet">1</span> / <span id="totalSets"></span> Sets | <span id="repsCount"></span> Reps
+    </div>
+</div>
+
+<div class="action-buttons">
+    <button class="pause-btn" id="pauseBtn" onclick="togglePause()">
+        <span id="pauseIcon">⏸</span>
+    </button>
+    <button class="did-it-btn" id="didItBtn" onclick="completeExercise()">
+        Did it
+    </button>
+</div>
+
+<div class="up-next-section" id="upNext">
+    <div class="up-next-label">Up Next</div>
+    <div class="up-next-content">
+        <img src="{% static 'images/default_exercise.png' %}" alt="Next" class="up-next-image" id="upNextImage">
+        <div class="up-next-info">
+            <div class="up-next-name" id="upNextName"></div>
+            <div class="up-next-details" id="upNextDetails"></div>
+        </div>
+    </div>
+</div>
+
+<div class="rest-overlay" id="restOverlay">
+    <div class="rest-title">Rest</div>
+
+    <div class="side-timers">
+        <div class="side-timer" id="sideTimer">00:00</div>
+        <div class="side-check">✓</div>
+    </div>
+
+    <div class="rest-timer-circle" onclick="skipRest()">
+        <div class="rest-timer" id="restTimer">00:00</div>
+        <div class="rest-skip-text">Tap to skip</div>
+    </div>
+</div>
+
+<div class="exit-modal" id="exitModal">
+    <div class="exit-modal-content">
+        <h3 class="exit-modal-title">Finish Workout?</h3>
+        <div class="exit-modal-divider"></div>
+        <p class="exit-modal-text">You did not complete all the exercises.</p>
+        <div class="exit-modal-buttons">
+            <button class="exit-modal-btn save-exit-btn" onclick="saveAndExit()">Save and Exit</button>
+            <button class="exit-modal-btn no-save-btn" onclick="exitWithoutSaving()">Exit without Saving</button>
+            <button class="exit-modal-btn return-btn" onclick="returnToWorkout()">Return to workout</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    // BACKEND INTEGRATION VARIABLES (DJANGO DATA)
+    // ==========================================
+    const workoutId = {{ workout.id }};
+    const totalExercises = {{ total_exercises }};
+
+    const workoutData = {
+        // Backend'dan kelgan context['summary'] dan ma'lumotlarni o'zlashtirish:
+        total_reps: {{ summary.total_reps|default:0 }},
+        total_weight: {{ summary.total_weight|default:0 }},
+        duration_seconds: {{ summary.duration_seconds|default:0 }}, // seconds ni olyapmiz
+        total_calories: {{ summary.total_calories|default:0 }},
+        exercises_completed: {{ summary.exercises_completed|default:0 }}
+    };
+
+    // Django contextidan kelgan ma'lumotlarni JavaScript massiviga o'tkazish
+    const exercises = [
+        {% for ex in exercises %}
+            {
+                id: {{ ex.exercise.id }},
+                name: "{{ ex.exercise.name|escapejs }}",
+                // !!! BU YERDA O'ZGARTIRILDI: 'image' o'rniga 'thumbnail' ishlatildi !!!
+                image: {% if ex.exercise.thumbnail %}"{{ ex.exercise.thumbnail.url }}"{% else %}null{% endif %},
+
+                type: "{{ ex.exercise_type|lower }}",
+                duration_minutes: {{ ex.duration_minutes|default:'null' }},
+                calories_per_minute: {{ ex.calories_per_minute|default:10 }},
+                sets: {{ ex.sets|default:'null' }},
+                reps: {{ ex.reps|default:'null' }},
+                rest_seconds: {{ ex.rest_time|default:60 }}
+            }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    // ==========================================
+    // STATE MANAGEMENT
+    // ==========================================
+    let currentExerciseIndex = 0;
+    let isPaused = false;
+    let timerInterval = null;
+    let restInterval = null;
+    let timeLeft = 0;
+    let exerciseStartTime = null;
+    let totalCaloriesBurned = 0;
+    let totalDuration = 0;
+    let totalExercisesCompleted = 0;
+    let currentSet = 1;
+
+    // ==========================================
+    // FUNCTIONS
+    // ==========================================
+
+    function loadExercise(index) {
+        if (index >= exercises.length) {
+            finishWorkout();
+            return;
+        }
+
+        currentExerciseIndex = index;
+        const exercise = exercises[index];
+
+        // UI ni yangilash
+        document.getElementById('current').textContent = index + 1;
+        document.getElementById('exerciseName').textContent = exercise.name;
+
+        const defaultImage = "{% static 'images/default_exercise.png' %}";
+        // 'image' manbasini ishlatish
+        document.getElementById('exerciseImage').src = exercise.image || defaultImage;
+
+        // Set/Rep ma'lumotlarini nolga tiklash (kuch mashqlari uchun)
+        currentSet = 1;
+        document.getElementById('strengthDetails').style.display = 'none';
+
+        // Tugmalarni nolga tiklash
+        const didItBtn = document.getElementById('didItBtn');
+        didItBtn.classList.remove('completed');
+        didItBtn.textContent = (exercise.type === 'strength') ? 'Set Completed' : 'Did it';
+        didItBtn.disabled = false;
+
+
+        // Tegishli interfeysni ko'rsatish
+        if (exercise.type === 'cardio') {
+            showCardioInterface(exercise.duration_minutes);
+        } else if (exercise.type === 'strength') {
+            showStrengthInterface(exercise.sets, exercise.reps);
+        }
+
+        // Keyingi mashqni ko'rsatish
+        showUpNext(index);
+
+        // Vaqtni kuzatishni boshlash
+        exerciseStartTime = Date.now();
+    }
+
+    function showCardioInterface(minutes) {
+        document.getElementById('timerContainer').style.display = 'flex';
+        document.getElementById('strengthDetails').style.display = 'none';
+        timeLeft = minutes * 60;
+        updateTimerDisplay();
+        startTimer();
+    }
+
+    function showStrengthInterface(sets, reps) {
+        document.getElementById('timerContainer').style.display = 'none';
+        document.getElementById('strengthDetails').style.display = 'block';
+        document.getElementById('totalSets').textContent = sets;
+        document.getElementById('repsCount').textContent = reps;
+        document.getElementById('currentSet').textContent = currentSet;
+
+        // Kuch mashqlarida timer interval yo'q
+        clearInterval(timerInterval);
+        document.getElementById('didItBtn').textContent = 'Set Completed';
+    }
+
+
+    function startTimer() {
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            if (!isPaused) {
+                timeLeft = Math.max(0, timeLeft - 1);
+                updateTimerDisplay();
+            }
+            if (timeLeft === 0) {
+                clearInterval(timerInterval);
+                completeExercise(true);
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        document.getElementById('timer').textContent =
+            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function togglePause() {
+        isPaused = !isPaused;
+        document.getElementById('pauseIcon').textContent = isPaused ? '▶' : '⏸';
+    }
+
+    function completeExercise(isAutoCompleted = false) {
+        const exercise = exercises[currentExerciseIndex];
+        const didItBtn = document.getElementById('didItBtn');
+
+        if (exercise.type === 'cardio') {
+            clearInterval(timerInterval);
+
+            didItBtn.classList.add('completed');
+            didItBtn.textContent = '✓ Completed';
+            didItBtn.disabled = true;
+
+            processExerciseCompletion(exercise);
+            setTimeout(() => {
+                loadExercise(currentExerciseIndex + 1);
+            }, 1000);
+
+        } else if (exercise.type === 'strength') {
+
+            if (currentSet < exercise.sets) {
+                processSetCompletion(exercise);
+                startRest(exercise.rest_seconds);
+            } else {
+                didItBtn.classList.add('completed');
+                didItBtn.textContent = '✓ Completed';
+                didItBtn.disabled = true;
+
+                processExerciseCompletion(exercise);
+
+                setTimeout(() => {
+                    loadExercise(currentExerciseIndex + 1);
+                }, 1000);
+            }
+        }
+    }
+
+    function processSetCompletion(exercise) {
+        currentSet++;
+    }
+
+    function processExerciseCompletion(exercise) {
+        const exerciseDuration = Math.floor((Date.now() - exerciseStartTime) / 1000);
+        totalDuration += exerciseDuration;
+
+        if (exercise.type === 'cardio' && exercise.calories_per_minute) {
+            // Formula: (Davomiylik sekundda / 60) * Kaloriya/minut
+            const caloriesBurned = (exerciseDuration / 60) * exercise.calories_per_minute;
+            totalCaloriesBurned += caloriesBurned;
+        }
+
+        totalExercisesCompleted++;
+    }
+
+    function startRest(restSeconds = 60) {
+        const previousExercise = exercises[currentExerciseIndex];
+
+        // Side Timer Displeyni yangilash
+        if (previousExercise.type === 'cardio') {
+            document.getElementById('sideTimer').textContent = formatTime(previousExercise.duration_minutes * 60 - timeLeft);
+        } else if (previousExercise.type === 'strength') {
+            document.getElementById('sideTimer').textContent = `Set ${currentSet - 1} Complete`;
+            document.getElementById('currentSet').textContent = currentSet;
+        }
+
+        document.getElementById('restOverlay').classList.add('active');
+
+        let restLeft = restSeconds;
+        document.getElementById('restTimer').textContent = formatTime(restLeft);
+
+        showUpNext(currentExerciseIndex);
+
+
+        clearInterval(restInterval);
+        restInterval = setInterval(() => {
+            if (!isPaused) {
+                restLeft = Math.max(0, restLeft - 1);
+                document.getElementById('restTimer').textContent = formatTime(restLeft);
+            }
+            if (restLeft <= 0) {
+                skipRest();
+            }
+        }, 1000);
+    }
+
+    function skipRest() {
+        clearInterval(restInterval);
+        document.getElementById('restOverlay').classList.remove('active');
+
+        const previousExercise = exercises[currentExerciseIndex];
+
+        if (previousExercise.type === 'strength' && currentSet <= previousExercise.sets) {
+            // Agar strength mashqi bo'lsa va hali setlar tugamagan bo'lsa, keyingi setni ko'rsatish
+            showStrengthInterface(previousExercise.sets, previousExercise.reps);
+        } else {
+            // Keyingi mashqga o'tish
+            loadExercise(currentExerciseIndex + 1);
+        }
+    }
+
+    function showUpNext(index) {
+        const upNextSection = document.getElementById('upNext');
+
+        // Agar strength mashqi bo'lsa va hali setlar tugamagan bo'lsa, keyingi setni ko'rsatish
+        if (exercises[index] && exercises[index].type === 'strength' && currentSet <= exercises[index].sets) {
+            upNextSection.style.display = 'block';
+            document.getElementById('upNextName').textContent = exercises[index].name;
+            document.getElementById('upNextDetails').textContent = `Next: Set ${currentSet}/${exercises[index].sets} (${exercises[index].reps} Reps)`;
+            const defaultImage = "{% static 'images/default_exercise.png' %}";
+            document.getElementById('upNextImage').src = exercises[index].image || defaultImage;
+            return;
+        }
+
+        // Keyingi haqiqiy mashqni ko'rsatish
+        if (index < exercises.length - 1) {
+            const next = exercises[index + 1];
+            upNextSection.style.display = 'block';
+
+            const defaultImage = "{% static 'images/default_exercise.png' %}";
+            document.getElementById('upNextImage').src = next.image || defaultImage;
+
+            document.getElementById('upNextName').textContent = next.name;
+
+            if (next.type === 'cardio') {
+                document.getElementById('upNextDetails').textContent = `${next.duration_minutes} minutes`;
+            } else {
+                document.getElementById('upNextDetails').textContent = `${next.sets} x ${next.reps} reps`;
+            }
+        } else {
+            upNextSection.style.display = 'none';
+        }
+    }
+
+    function showExitModal() {
+        document.getElementById('exitModal').classList.add('active');
+        togglePause();
+    }
+
+    function returnToWorkout() {
+        document.getElementById('exitModal').classList.remove('active');
+        togglePause();
+    }
+
+    function saveAndExit() {
+        const form = createExitForm(true);
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    function exitWithoutSaving() {
+        const form = createExitForm(false);
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    function createExitForm(save) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = "{% url 'workout_start' workout.id %}";
+
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        form.innerHTML = `<input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">`;
+
+        form.innerHTML += `<input type="hidden" name="action" value="exit">`;
+        form.innerHTML += `<input type="hidden" name="save_progress" value="${save ? 'true' : 'false'}">`;
+        form.innerHTML += `<input type="hidden" name="current_exercise_index" value="${currentExerciseIndex}">`;
+        form.innerHTML += `<input type="hidden" name="total_duration" value="${totalDuration}">`;
+        form.innerHTML += `<input type="hidden" name="total_calories" value="${totalCaloriesBurned.toFixed(2)}">`;
+        form.innerHTML += `<input type="hidden" name="exercises_completed" value="${totalExercisesCompleted}">`;
+
+        return form;
+    }
+
+    function finishWorkout() {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = "{% url 'workout_complete' workout.id %}";
+
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        form.innerHTML = `<input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">`;
+
+        form.innerHTML += `<input type="hidden" name="action" value="complete">`;
+        form.innerHTML += `<input type="hidden" name="total_duration" value="${totalDuration}">`;
+        form.innerHTML += `<input type="hidden" name="total_calories" value="${totalCaloriesBurned.toFixed(2)}">`;
+        form.innerHTML += `<input type="hidden" name="exercises_completed" value="${totalExercisesCompleted}">`;
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    // ==========================================
+    // INITIALIZATION
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', function () {
+        if (exercises.length > 0) {
+            // Agar viewdan current_index kelgan bo'lsa, o'sha joydan boshlash
+            const initialIndex = parseInt("{{ request.session.current_workout_index|default:0 }}"); // Misol uchun, sessiondan olish
+            loadExercise(initialIndex);
+        } else {
+            document.getElementById('exerciseName').textContent = 'No exercises found.';
+            document.getElementById('didItBtn').disabled = true;
+        }
+    });
+</script>
+</body>
+</html>

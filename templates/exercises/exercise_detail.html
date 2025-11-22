@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+
+
 {% block title %}{{ exercise.name|default:"Mashq Tafsilotlari" }}{% endblock %}
 
 {% block extra_css %}
@@ -44,8 +46,8 @@
         }
 
         .content-wrapper {
-            max-width: 700px;
-            margin: 0 auto;
+            max-width: 500px;
+            margin: auto;
             padding: 20px;
             position: relative;
             z-index: 1;
@@ -277,95 +279,58 @@
         }
 
         /* Premium Action Buttons */
-        .action-buttons {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: linear-gradient(135deg,
-                rgba(255, 255, 255, 0.1) 0%,
-                rgba(255, 255, 255, 0.05) 100%);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 215, 0, 0.1);
-            animation: fadeInUp 1s ease;
-        }
+     /* Action buttons container — kichiklashtirilgan */
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px; /* 15px → 10px */
+    margin-bottom: 20px; /* 30px → 20px */
+    padding: 12px; /* 20px → 12px */
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 100%);
+    backdrop-filter: blur(10px);
+    border-radius: 16px; /* 20px → 16px */
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25); /* 8px 32px → 6px 24px */
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    animation: fadeInUp 0.8s ease; /* 1s → 0.8s */
+}
 
-        .action-btn {
-            flex: 1;
-            background: linear-gradient(135deg,
-                rgba(255, 215, 0, 0.1) 0%,
-                rgba(255, 215, 0, 0.05) 100%);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 215, 0, 0.3);
-            border-radius: 16px;
-            padding: 18px 12px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            color: #EAEAEA;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
+/* Har bir button — kichikroq */
+.action-btn {
+    flex: 1;
+    background: linear-gradient(135deg,
+        rgba(255, 215, 0, 0.1) 0%,
+        rgba(255, 215, 0, 0.05) 100%);
+    padding: 12px 8px; /* 18px 12px → 12px 8px */
+    border-radius: 12px; /* 16px → 12px */
+    border: 2px solid rgba(255, 215, 0, 0.25);
+    color: #EAEAEA;
+    font-size: 0.85rem; /* text kichraydi */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px; /* icon-text o'rtasi */
+    transition: all 0.25s ease; /* biroz tezroq animation */
+}
 
-        .action-btn::before {
-            content: '';
-            position: absolute;
-            top: -100%;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                45deg,
-                transparent 0%,
-                rgba(255, 255, 255, 0.1) 50%,
-                transparent 100%
-            );
-            transition: all 0.5s ease;
-        }
+/* Hover effekti ham kichikroq */
+.action-btn:hover {
+    background: linear-gradient(135deg,
+        rgba(255, 215, 0, 0.18) 0%,
+        rgba(255, 215, 0, 0.1) 100%);
+    transform: translateY(-3px); /* -5px → -3px */
+    box-shadow: 0 8px 26px rgba(255, 215, 0, 0.3); /* 12px 32px → 8px 26px */
+    border-color: rgba(255, 215, 0, 0.5);
+}
 
-        .action-btn:hover::before {
-            top: 100%;
-            left: 100%;
-        }
-
-        .action-btn:hover {
-            background: linear-gradient(135deg,
-                rgba(255, 215, 0, 0.2) 0%,
-                rgba(255, 215, 0, 0.1) 100%);
-            transform: translateY(-5px);
-            box-shadow: 0 12px 32px rgba(255, 215, 0, 0.3);
-            border-color: rgba(255, 215, 0, 0.6);
-        }
-
-        .action-btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .action-btn:disabled:hover {
-            transform: none;
-            box-shadow: none;
-        }
-
-        .action-btn.active {
-            background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
-            color: #1a1f3a;
-            border-color: #ffd700;
-            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.6);
-            transform: translateY(-5px);
-        }
-
-        .action-btn.active .action-icon {
-            color: #1a1f3a;
-            transform: scale(1.2);
-        }
+/* Active holati kichiklashtirilgan */
+.action-btn.active {
+    background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
+    border-color: #ffd700;
+    transform: translateY(-3px); /* -5px → -3px */
+    box-shadow: 0 10px 28px rgba(255, 215, 0, 0.5);
+}
 
         /* Favorite button special styling */
         .favorite-toggle.favorited {
@@ -444,6 +409,10 @@
                 padding: 12px 12px 12px 40px;
             }
         }
+        .exercise-detail-page .bottom-nav {
+    display: none !important;
+}
+
 
         /* Scrollbar styling */
         .instructions-in-media-container::-webkit-scrollbar {
@@ -526,6 +495,8 @@
         </div>
 
         <div class="action-buttons">
+        <body class="exercise-detail-page">
+
 
             <button class="action-btn active" id="imageBtn" onclick="showContent('image')">
                 <div class="action-icon">🖼️</div>

@@ -1,5 +1,6 @@
 from datetime import date
 
+from apps.models.base import CreatedBaseModel
 from django.contrib.auth.models import AbstractUser
 from django.db.models import (
     CASCADE,
@@ -15,8 +16,6 @@ from django.db.models import (
     TextChoices,
     TextField,
 )
-
-from apps.models.base import CreatedBaseModel
 
 
 class User(AbstractUser):
@@ -75,8 +74,8 @@ class UserProfile(CreatedBaseModel):
     def age(self):
         if self.birth_date:
             today = date.today()
-            return today.year - self.birth_date.year - (
-                    (today.month, today.day) < (self.birth_date.month, self.birth_date.day))
+            is_before_birthday = (today.month, today.day) < (self.birth_date.month, self.birth_date.day)
+            return today.year - self.birth_date.year - int(is_before_birthday)
         return None
 
     @property
@@ -115,9 +114,9 @@ class PaymentHistory(CreatedBaseModel):
 
     user = ForeignKey('apps.UserProfile', CASCADE, related_name='payment_history')
     amount = DecimalField(max_digits=10, decimal_places=2)
-    payment_method = CharField(max_length=50) # TODO ?
+    payment_method = CharField(max_length=50)
     status = CharField(max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.PENDING)
-    transaction_id = CharField(max_length=100, null=True, blank=True)
+    transaction_id = CharField(max_length=100, blank=True)
     description = TextField(blank=True)
 
     class Meta:

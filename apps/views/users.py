@@ -2,9 +2,6 @@ import json
 import traceback
 
 import requests
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-
 from apps.forms import UserProfileForm
 from apps.models import User, UserMotivation, UserProfile
 from django.contrib.auth import login
@@ -13,7 +10,9 @@ from django.core.files.base import ContentFile
 from django.http import HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, UpdateView
 
 

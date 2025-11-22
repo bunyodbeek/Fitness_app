@@ -50,6 +50,8 @@ class Exercise(CreatedBaseModel):
     thumbnail = ImageField(_("Image"), upload_to='exercises/thumbnails/', blank=True, null=True)
     video = FileField(upload_to='exercises/videos/', blank=True, null=True)
     difficulty = CharField(_("Difficulty"), max_length=20, choices=Difficulty.choices, default=Difficulty.INTERMEDIATE)
+    calory = IntegerField(_("Calories"), default=0)
+    duration = IntegerField(_("Duration"), default=0)
 
     class Meta:
         ordering = ['name']

@@ -8,5 +8,6 @@ user:
 loaddata:
 	python3 manage.py loaddata program edition exercises workout workoutexercise
 
-flake8:
+check:
+	isort .
 	flake8 .

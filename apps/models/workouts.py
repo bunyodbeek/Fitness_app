@@ -1,3 +1,4 @@
+from apps.models.base import CreatedBaseModel
 from django.db.models import (
     CASCADE,
     BooleanField,
@@ -7,12 +8,11 @@ from django.db.models import (
     ImageField,
     IntegerField,
     Model,
-    TextField, Sum,
+    Sum,
+    TextField,
 )
 from django.db.models.aggregates import Count
 from django.utils.translation import gettext_lazy as _
-
-from apps.models.base import CreatedBaseModel
 
 
 class Program(CreatedBaseModel):
@@ -33,6 +33,7 @@ class Program(CreatedBaseModel):
         return self.editions.annotate(ex_count=Count('workouts')) \
             .aggregate(total=Sum('ex_count'))['total'] or 0
 
+
 class Edition(Model):
     program = ForeignKey('apps.Program', CASCADE, related_name='editions')
     title = CharField(max_length=200)
@@ -49,7 +50,6 @@ class Edition(Model):
         return WorkoutExercise.objects.filter(
             workout__edition=self
         ).count()
-
 
     def __str__(self):
         return f"{self.program.title} - {self.title}"

@@ -1,10 +1,6 @@
 from apps.models import Exercise, Favorite
 from apps.models.exercises import MuscleGroup
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.contenttypes.models import ContentType
-from django.db import IntegrityError
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render
 from django.views import View
 from django.views.generic import DetailView, ListView
 
@@ -118,116 +114,5 @@ class ExerciseDetailView(DetailView):
                 context['is_favorited'] = False
         else:
             context['is_favorited'] = False
-
-        return context
-
-
-class ToggleFavoriteView(LoginRequiredMixin, View):
-
-    def post(self, request, exercise_id):
-        exercise = get_object_or_404(Exercise, pk=exercise_id)
-        user = request.user
-
-        try:
-            user_profile = user.profile
-        except AttributeError:
-            return JsonResponse({
-                'success': False,
-                'status': 'error',
-                'message': 'Foydalanuvchida Profile obyekti topilmadi (user.profile chaqiruvi xato).'
-            }, status=500)
-
-        try:
-
-            favorite_instance = Favorite.objects.get(user=user_profile, exercise=exercise)
-
-            favorite_instance.delete()
-            return JsonResponse({
-                'success': True,
-                'status': 'removed',
-                'message': f"{exercise.name} sevimlilardan olib tashlandi."
-            })
-
-        except Favorite.DoesNotExist:
-
-            try:
-
-                Favorite.objects.create(user=user_profile, exercise=exercise)
-                return JsonResponse({
-                    'success': True,
-                    'status': 'added',
-                    'message': f"{exercise.name} sevimlilarga qo'shildi."
-                })
-            except IntegrityError:
-                return JsonResponse({
-                    'success': False,
-                    'status': 'error',
-                    'message': 'Obekt allaqachon mavjud.'
-                }, status=400)
-
-        except Exception as e:
-            return JsonResponse({
-                'success': False,
-                'status': 'error',
-                'message': str(e)
-            }, status=500)
-
-
-class AllExercisesView(ListView):
-    model = Exercise
-    template_name = 'exercises/all_exercises.html'
-    context_object_name = 'exercises'
-    paginate_by = 20
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-
-        search_query = self.request.GET.get('search', '')
-        if search_query:
-            queryset = queryset.filter(name__icontains=search_query)
-
-        muscle_filter = self.request.GET.get('muscle', '')
-        if muscle_filter:
-            queryset = queryset.filter(muscle_group_id=muscle_filter)
-
-        difficulty_filter = self.request.GET.get('difficulty', '')
-        if difficulty_filter:
-            queryset = queryset.filter(difficulty=difficulty_filter)
-
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['muscle_groups'] = MuscleGroup.objects.all()
-        context['search_query'] = self.request.GET.get('search', '')
-        context['selected_muscle'] = self.request.GET.get('muscle', '')
-        context['selected_difficulty'] = self.request.GET.get('difficulty', '')
-
-        context['difficulty_choices'] = Exercise.Difficulty.choices
-
-        if self.request.user.is_authenticated:
-
-            try:
-                user_profile = self.request.user.profile
-            except AttributeError:
-                user_profile = None
-
-            if user_profile:
-
-                exercise_ct = ContentType.objects.get_for_model(Exercise)
-                exercise_ids = self.object_list.values_list('id', flat=True)
-
-                favorited = Favorite.objects.filter(
-
-                    user=user_profile,
-                    content_type=exercise_ct,
-                    object_id__in=exercise_ids
-                ).values_list('object_id', flat=True)
-
-                context['favorited_ids'] = list(favorited)
-            else:
-                context['favorited_ids'] = []
-        else:
-            context['favorited_ids'] = []
 
         return context

@@ -190,7 +190,7 @@
             align-items: center;
             color: rgba(255, 255, 255, 0.6);
             text-decoration: none;
-            font-size: 11px;
+            font-size: 15px;
             font-weight: 600;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             padding: 8px 12px;
@@ -429,16 +429,17 @@
 {% block content %}{% endblock %}
 
 <!-- Premium Bottom Navigation -->
+{% block bottom_nav %}
 <div class="bottom-nav">
     <a href="{% url 'muscle_groups' %}" class="nav-item {% if 'exercises' in request.path or 'muscle' in request.path %}active{% endif %}">
         <span class="icon">💪</span>
         <span>Exercises</span>
     </a>
-    <a href="{% url 'program_list' %}" class="nav-item {% if 'workouts' in request.path or 'program' in request.path %}active{% endif %}">
+    <a href="{% url 'program_list' %}" class="nav-item {% if 'program' in request.path %}active{% endif %}">
         <span class="icon">✅</span>
         <span>Workouts</span>
     </a>
-    <a href="#" class="nav-item {% if 'my-trainer' in request.path %}active{% endif %}">
+    <a href="{% url 'my_trainer' %}" class="nav-item {% if 'my-trainer' in request.path %}active{% endif %}">
         <span class="icon">👤</span>
         <span>My Trainer</span>
     </a>
@@ -451,6 +452,8 @@
         <span>Profile</span>
     </a>
 </div>
+{% endblock %}
+
 
 <script>
     // Telegram WebApp initialization
