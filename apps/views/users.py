@@ -2,6 +2,8 @@ import json
 import traceback
 
 import requests
+from apps.forms import UserProfileForm
+from apps.models import User, UserMotivation, UserProfile
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.base import ContentFile
@@ -12,9 +14,6 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, UpdateView
-
-from apps.forms import UserProfileForm
-from apps.models import User, UserMotivation, UserProfile
 
 
 @method_decorator(csrf_exempt, name='dispatch')

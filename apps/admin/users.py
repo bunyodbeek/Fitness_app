@@ -1,4 +1,4 @@
-from apps.models import UserProfile, Favorite
+from apps.models import Favorite, UserProfile
 from django.contrib import admin
 
 
@@ -8,6 +8,7 @@ class UserProfileAdmin(admin.ModelAdmin):
     list_filter = ['gender', 'unit_system', 'language']
     search_fields = ['name', 'user__username', 'user__email']
     readonly_fields = ['age', 'bmi', 'created_at', 'updated_at']
+
 
 @admin.register(Favorite)
 class FavoriteAdmin(admin.ModelAdmin):

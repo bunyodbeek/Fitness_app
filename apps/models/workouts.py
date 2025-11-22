@@ -1,3 +1,4 @@
+from apps.models.base import CreatedBaseModel
 from django.db.models import (
     CASCADE,
     BooleanField,
@@ -12,8 +13,6 @@ from django.db.models import (
 )
 from django.db.models.aggregates import Count
 from django.utils.translation import gettext_lazy as _
-
-from apps.models.base import CreatedBaseModel
 
 
 class Program(CreatedBaseModel):

@@ -7,3 +7,7 @@ user:
 
 loaddata:
 	python3 manage.py loaddata program edition exercises workout workoutexercise
+
+check:
+	isort .
+	flake8 .

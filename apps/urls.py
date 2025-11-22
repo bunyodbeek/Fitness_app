@@ -1,17 +1,32 @@
-from apps.views.api_views import get_user_profile, complete_onboarding, save_onboarding_step, telegram_auth
-from apps.views.exercises import ExercisesByMuscleView, ExerciseDetailView, MuscleGroupListView
-from django.urls import path
-
-from apps.views.favorite import ToggleFavoriteView, FavoritesListView
-from apps.views.users import SettingsView, UpdateProfileView, ProgressView, OnboardingView, TelegramAuthView, \
-    QuestionnaireSubmitView, ProfileView
-from apps.views.workouts import WorkoutCompleteView, WorkoutStartView, EditionDetailView, ProgramDetailView, \
-    AnimationView, ProgramListView
-from django.urls import path
+from apps.views.api_views import (
+    complete_onboarding,
+    get_user_profile,
+    save_onboarding_step,
+    telegram_auth,
+)
+from apps.views.exercises import ExerciseDetailView, ExercisesByMuscleView, MuscleGroupListView
+from apps.views.favorite import FavoritesListView, ToggleFavoriteView
+from apps.views.users import (
+    OnboardingView,
+    ProfileView,
+    ProgressView,
+    QuestionnaireSubmitView,
+    SettingsView,
+    TelegramAuthView,
+    UpdateProfileView,
+)
 from apps.views.workouts import (
-    MyTrainerView,
+    AnimationView,
+    EditionDetailView,
     MyTrainerHistoryView,
-    WorkoutDetailView,)
+    MyTrainerView,
+    ProgramDetailView,
+    ProgramListView,
+    WorkoutCompleteView,
+    WorkoutDetailView,
+    WorkoutStartView,
+)
+from django.urls import path
 
 urlpatterns = [
 
@@ -45,7 +60,7 @@ urlpatterns = [
     path('api/users/onboarding/save/', save_onboarding_step, name='save_onboarding_step'),
     path('api/users/onboarding/complete/', complete_onboarding, name='complete_onboarding'),
     path('api/users/profile/', get_user_profile, name='get_user_profile'),
-  path('my-trainer/', MyTrainerView.as_view(), name='my_trainer'),
+    path('my-trainer/', MyTrainerView.as_view(), name='my_trainer'),
     path('my-trainer/history/', MyTrainerHistoryView.as_view(), name='my_trainer_history'),
     path('workout/<int:session_id>/detail/', WorkoutDetailView.as_view(), name='workout_session_detail'),
 

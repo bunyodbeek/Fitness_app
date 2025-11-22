@@ -74,7 +74,8 @@ class UserProfile(CreatedBaseModel):
     def age(self):
         if self.birth_date:
             today = date.today()
-            return today.year - self.birth_date.year - ((today.month, today.day) < (self.birth_date.month, self.birth_date.day))
+            is_before_birthday = (today.month, today.day) < (self.birth_date.month, self.birth_date.day)
+            return today.year - self.birth_date.year - int(is_before_birthday)
         return None
 
     @property

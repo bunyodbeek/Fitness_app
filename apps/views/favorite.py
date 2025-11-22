@@ -1,9 +1,8 @@
+from apps.models import Exercise, Favorite
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.views.generic import View, ListView
-
-from apps.models import Favorite, Exercise
+from django.views.generic import ListView, View
 
 
 class FavoritesListView(LoginRequiredMixin, ListView):

@@ -1,16 +1,15 @@
 from datetime import timedelta
 
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models.aggregates import Sum
-from django.http import Http404, JsonResponse
-from django.shortcuts import redirect, get_object_or_404, render
-from django.utils import timezone
-from django.views import View
-from django.views.generic import DetailView, ListView, TemplateView
-
 from apps.models import Edition, Program
 from apps.models.my_trainer import WorkoutSession
 from apps.models.workouts import Workout, WorkoutExercise
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models.aggregates import Sum
+from django.http import Http404
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
+from django.views import View
+from django.views.generic import DetailView, ListView, TemplateView
 
 
 class AnimationView(TemplateView):
@@ -136,11 +135,7 @@ class WorkoutStartView(LoginRequiredMixin, View):
             return render(request, 'error.html', {'error_message': str(e)})
 
     def post(self, request, pk):
-        """
-        Mashq natijalarini qabul qiladi (yakunlash yoki saqlash va chiqish).
-        """
-        workout = get_object_or_404(Workout, pk=pk)
-        action = request.POST.get('action')  # 'complete' yoki 'exit'
+        action = request.POST.get('action')
 
         total_duration = request.POST.get('total_duration', 0)
         total_calories = request.POST.get('total_calories', 0)
@@ -190,7 +185,6 @@ class WorkoutCompleteView(LoginRequiredMixin, View):
             del request.session['workout_summary']
             request.session.modified = True
 
-        # POST ham GET bilan bir xil sahifani ko'rsatadi
         return render(request, "workouts/workout_complete.html", {
             "workout": workout,
             "summary": summary
@@ -208,7 +202,6 @@ class WorkoutCompleteView(LoginRequiredMixin, View):
             "workout": workout,
             "summary": summary
         })
-
 
 
 class MyTrainerView(LoginRequiredMixin, TemplateView):

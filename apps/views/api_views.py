@@ -1,6 +1,7 @@
 import json
 
 import requests
+from apps.models import User, UserMotivation, UserProfile
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -8,8 +9,6 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-
-from apps.models import User, UserMotivation, UserProfile
 
 
 @csrf_exempt
@@ -112,56 +111,75 @@ def check_telegram_premium(telegram_id):
         if data.get('ok'):
             user_data = data.get('result', {}).get('user', {})
             return user_data.get('is_premium', False)
-    except:
-        print('xatolik ')
+    except Exception as e:
+        print(e)
 
     return False
 
 
+def handle_gender(profile, value):
+    profile.gender = value
+
+
+def handle_experience(profile, value):
+    profile.experience_level = value
+
+
+def handle_goal(profile, value):
+    profile.fitness_goal = value
+
+
+def handle_motivation(profile, value):
+    motivations = value if isinstance(value, list) else [value]
+
+    UserMotivation.objects.filter(user=profile.user).delete()
+
+    for m in motivations:
+        UserMotivation.objects.create(user=profile.user, motivation=m)
+
+
+def handle_days(profile, value):
+    profile.workout_days_per_week = int(value)
+
+
+def handle_weight(profile, value):
+    profile.weight = float(value)
+
+
+def handle_height(profile, value):
+    profile.height = float(value)
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def save_onboarding_step(request):
-    """Onboarding qadamlarini saqlash"""
     telegram_id = request.data.get('telegram_id')
-    step = request.data.get('step')  # 'gender', 'experience', 'goal', 'motivation', 'days', 'weight'
+    step = request.data.get('step')
     value = request.data.get('value')
 
     try:
         profile = UserProfile.objects.get(telegram_id=telegram_id)
 
-        if step == 'gender':
-            profile.gender = value
+        handlers = {
+            'gender': handle_gender,
+            'experience': handle_experience,
+            'goal': handle_goal,
+            'motivation': handle_motivation,
+            'days': handle_days,
+            'weight': handle_weight,
+            'height': handle_height,
+        }
 
-        elif step == 'experience':
-            profile.experience_level = value
+        handler = handlers.get(step)
+        if handler is None:
+            return Response(
+                {'error': f'Unknown step: {step}'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        elif step == 'goal':
-            profile.fitness_goal = value
-
-        elif step == 'motivation':
-            # Ko'p tanlov bo'lgani uchun
-            motivations = value if isinstance(value, list) else [value]
-            # Avvalgi motivatsiyalarni o'chirish
-            UserMotivation.objects.filter(user=profile.user).delete()
-            # Yangilarini qo'shish
-            for motivation in motivations:
-                UserMotivation.objects.create(user=profile.user, motivation=motivation)
-
-        elif step == 'days':
-            profile.workout_days_per_week = int(value)
-
-        elif step == 'weight':
-            profile.weight = float(value)
-
-        elif step == 'height':
-            profile.height = float(value)
-
+        handler(profile, value)
         profile.save()
 
-        return Response({
-            'success': True,
-            'message': 'Data saved successfully'
-        })
+        return Response({'success': True, 'message': 'Data saved successfully'})
 
     except UserProfile.DoesNotExist:
         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)

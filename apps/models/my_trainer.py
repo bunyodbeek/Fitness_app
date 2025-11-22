@@ -1,14 +1,13 @@
 # apps/models/workout_session.py
 
-from django.db import models
-from django.contrib.auth import get_user_model
 from apps.models.workouts import Workout
+from django.contrib.auth import get_user_model
+from django.db import models
 
 User = get_user_model()
 
 
 class WorkoutSession(models.Model):
-
     STATUS_CHOICES = [
         ('completed', 'Completed'),
         ('in_progress', 'In Progress'),
