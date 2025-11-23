@@ -14,182 +14,240 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a2332 0%, #2d3e50 100%);
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
             color: white;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
         }
 
-        /* Header */
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ===== COMPACT HEADER ===== */
         .session-header {
-            background: linear-gradient(135deg, rgba(26, 35, 50, 0.98) 0%, rgba(45, 62, 80, 0.98) 100%);
+            background: linear-gradient(135deg, rgba(15, 52, 96, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
             backdrop-filter: blur(10px);
-            padding: 18px 20px;
+            padding: 12px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
         }
 
         .exit-btn, .menu-btn {
-            background: transparent;
-            border: none;
+            background: rgba(255, 215, 0, 0.1);
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
             color: #ffd700;
-            font-size: 18px;
-            font-weight: 800;
+            font-size: 12px;
+            font-weight: 700;
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 1px;
             transition: all 0.3s ease;
+            padding: 8px 14px;
+            border-radius: 10px;
         }
 
         .menu-btn {
-            font-size: 24px;
+            font-size: 18px;
+            padding: 6px 12px;
+        }
+
+        .exit-btn:hover, .menu-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
         }
 
         .progress-counter {
             color: white;
-            font-size: 20px;
-            font-weight: 900;
+            font-size: 16px;
+            font-weight: 800;
             letter-spacing: 1px;
+            background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* Exercise Content */
+        /* ===== EXERCISE CONTENT ===== */
         .exercise-content {
-            padding: 40px 20px 160px;
+            padding: 24px 16px 120px;
             text-align: center;
             position: relative;
             z-index: 1;
         }
 
         .exercise-image-container {
-            max-width: 200px;
-            margin: 0 auto 30px;
-            background: rgba(255, 255, 255, 0.05);
+            max-width: 160px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg,
+                rgba(255, 215, 0, 0.1) 0%,
+                rgba(255, 215, 0, 0.05) 100%);
             border-radius: 16px;
-            padding: 20px;
+            padding: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
         }
 
         .exercise-image {
             width: 100%;
-            height: 200px;
+            height: 140px;
             object-fit: contain;
+            border-radius: 10px;
         }
 
         .exercise-name {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 40px;
-            color: rgba(255, 255, 255, 0.9);
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: white;
             letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
-        /* Timer Container */
+        /* ===== TIMER CONTAINER ===== */
         .timer-container {
-            max-width: 600px;
+            max-width: 300px;
             margin: 0 auto;
-            display: none; /* JS orqali boshqariladi */
+            display: none;
         }
 
         .timer-box {
-            background: linear-gradient(135deg, #d4af37 0%, #f4e285 100%);
-            border-radius: 16px;
-            padding: 30px;
+            background: linear-gradient(135deg, #ffd700 0%, #f4e285 100%);
+            border-radius: 14px;
+            padding: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
-            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.4);
+            gap: 12px;
+            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.4);
         }
 
         .timer-display {
-            font-size: 56px;
+            font-size: 42px;
             font-weight: 900;
-            color: #1a2332;
+            color: #0a0e27;
         }
 
         .timer-label {
-            font-size: 18px;
-            color: #1a2332;
+            font-size: 14px;
+            color: #0a0e27;
             font-weight: 700;
-            opacity: 0.8;
+            opacity: 0.7;
         }
 
-        /* Action Buttons */
+        /* ===== STRENGTH DETAILS (FIXED) ===== */
+        #strengthDetails {
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffd700;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg,
+                rgba(255, 215, 0, 0.15) 0%,
+                rgba(255, 215, 0, 0.08) 100%);
+            padding: 14px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            display: inline-block;
+        }
+
+        /* ===== ACTION BUTTONS (COMPACT & RAISED) ===== */
         .action-buttons {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            bottom: 20px;
+            left: 12px;
+            right: 12px;
             display: flex;
-            gap: 0;
+            gap: 10px;
             z-index: 1000;
         }
 
         .pause-btn {
-            width: 80px;
-            background: linear-gradient(135deg, #5a6b7d 0%, #3d4d5f 100%);
-            border: none;
+            width: 56px;
+            height: 50px;
+            background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0.05) 100%);
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
+            border-radius: 14px;
             color: #ffd700;
-            padding: 20px;
-            font-size: 28px;
+            font-size: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .pause-btn:hover {
-            background: linear-gradient(135deg, #6a7b8d 0%, #4d5d6f 100%);
+            background: rgba(255, 215, 0, 0.15);
+            border-color: #ffd700;
         }
 
         .did-it-btn {
             flex: 1;
             background: linear-gradient(135deg, #ffd700 0%, #f4e285 100%);
             border: none;
-            color: #1a2332;
-            padding: 20px;
-            font-size: 18px;
-            font-weight: 900;
+            border-radius: 14px;
+            color: #0a0e27;
+            padding: 14px 20px;
+            font-size: 14px;
+            font-weight: 800;
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             transition: all 0.3s ease;
+            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.4);
         }
 
         .did-it-btn:hover {
-            background: linear-gradient(135deg, #ffed4e 0%, #ffd700 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 35px rgba(255, 215, 0, 0.5);
+        }
+
+        .did-it-btn:active {
+            transform: translateY(-1px) scale(0.99);
         }
 
         .did-it-btn.completed {
-            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
             color: white;
+            box-shadow: 0 6px 25px rgba(34, 197, 94, 0.4);
         }
 
-        .did-it-btn.completed::before {
-            content: '✓';
-            margin-right: 10px;
-            font-size: 24px;
-        }
-
-        /* Up Next Section */
+        /* ===== UP NEXT SECTION ===== */
         .up-next-section {
-            margin: 50px 20px 20px;
-            background: rgba(26, 35, 50, 0.8);
+            margin: 30px 16px 20px;
+            background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.08) 0%,
+                rgba(255, 255, 255, 0.03) 100%);
             backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 14px;
+            padding: 14px;
+            border: 1px solid rgba(255, 215, 0, 0.15);
             display: none;
         }
 
         .up-next-label {
-            font-size: 14px;
+            font-size: 11px;
             color: #ffd700;
-            font-weight: 800;
-            margin-bottom: 15px;
+            font-weight: 700;
+            margin-bottom: 10px;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
@@ -197,16 +255,17 @@
         .up-next-content {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
         .up-next-image {
-            width: 80px;
-            height: 80px;
-            border-radius: 12px;
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
             object-fit: contain;
             background: rgba(255, 255, 255, 0.05);
-            padding: 8px;
+            padding: 6px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
         }
 
         .up-next-info {
@@ -215,32 +274,33 @@
         }
 
         .up-next-name {
-            font-size: 16px;
+            font-size: 13px;
             font-weight: 700;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             color: white;
         }
 
         .up-next-details {
-            font-size: 13px;
+            font-size: 11px;
             color: rgba(255, 255, 255, 0.6);
-            font-weight: 600;
+            font-weight: 500;
         }
 
-        /* Rest Overlay */
+        /* ===== REST OVERLAY (FIXED) ===== */
         .rest-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(26, 35, 50, 0.98) 0%, rgba(45, 62, 80, 0.98) 100%);
+            background: linear-gradient(135deg, rgba(10, 14, 39, 0.98) 0%, rgba(26, 31, 58, 0.98) 100%);
             backdrop-filter: blur(20px);
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 200;
             flex-direction: column;
+            padding: 20px;
         }
 
         .rest-overlay.active {
@@ -248,74 +308,107 @@
         }
 
         .rest-title {
-            font-size: 28px;
+            font-size: 20px;
             color: #ffd700;
-            margin-bottom: 50px;
-            font-weight: 900;
+            margin-bottom: 30px;
+            font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 3px;
         }
 
+        /* FIXED: Set Complete Badge - yuqorida alohida */
+        .set-complete-badge {
+            background: linear-gradient(135deg, #ffd700 0%, #f4e285 100%);
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 800;
+            color: #0a0e27;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        /* Rest Timer Circle */
         .rest-timer-circle {
-            width: 300px;
-            height: 300px;
+            width: 200px;
+            height: 200px;
             border-radius: 50%;
-            border: 6px solid rgba(255, 215, 0, 0.3);
+            border: 4px solid rgba(255, 215, 0, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
             position: relative;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             background: rgba(255, 215, 0, 0.05);
+            cursor: pointer;
         }
 
         .rest-timer-circle::before {
             content: '';
             position: absolute;
-            top: -6px;
-            left: -6px;
-            right: -6px;
-            bottom: -6px;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
             border-radius: 50%;
-            border: 6px solid transparent;
+            border: 4px solid transparent;
             border-top-color: #ffd700;
             animation: rotate 2s linear infinite;
         }
 
         @keyframes rotate {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
 
         .rest-timer {
-            font-size: 80px;
+            font-size: 56px;
             font-weight: 900;
             color: #ffd700;
             text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
         }
 
         .rest-skip-text {
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.6);
-            margin-top: 15px;
-            font-weight: 600;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 10px;
+            font-weight: 500;
         }
 
-        /* Exit Modal */
+        /* Up Next in Rest */
+        .rest-up-next {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .rest-up-next-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .rest-up-next-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+        }
+
+        /* ===== EXIT MODAL ===== */
         .exit-modal {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(10, 14, 27, 0.95);
+            background: rgba(10, 14, 39, 0.95);
             backdrop-filter: blur(20px);
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 300;
+            padding: 20px;
         }
 
         .exit-modal.active {
@@ -323,52 +416,52 @@
         }
 
         .exit-modal-content {
-            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
-            padding: 35px 30px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%);
+            padding: 28px 24px;
             border-radius: 20px;
-            max-width: 400px;
-            width: 90%;
+            max-width: 340px;
+            width: 100%;
             text-align: center;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
 
         .exit-modal-title {
-            font-size: 26px;
+            font-size: 20px;
             font-weight: 800;
-            color: #1a2332;
-            margin-bottom: 15px;
+            color: #0a0e27;
+            margin-bottom: 12px;
         }
 
         .exit-modal-divider {
-            height: 4px;
+            height: 3px;
             background: repeating-linear-gradient(
-                    90deg,
-                    #ffd700 0px,
-                    #ffd700 12px,
-                    transparent 12px,
-                    transparent 24px
+                90deg,
+                #ffd700 0px,
+                #ffd700 10px,
+                transparent 10px,
+                transparent 20px
             );
-            margin: 20px 0;
+            margin: 16px 0;
         }
 
         .exit-modal-text {
-            font-size: 15px;
+            font-size: 13px;
             color: #666;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
             line-height: 1.6;
         }
 
         .exit-modal-buttons {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .exit-modal-btn {
-            padding: 16px;
+            padding: 14px;
             border-radius: 12px;
-            font-size: 16px;
-            font-weight: 800;
+            font-size: 13px;
+            font-weight: 700;
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -378,7 +471,7 @@
 
         .save-exit-btn, .no-save-btn {
             background: linear-gradient(135deg, #ffd700 0%, #f4e285 100%);
-            color: #1a2332;
+            color: #0a0e27;
             box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
         }
 
@@ -391,67 +484,102 @@
             background: transparent;
             color: #666;
             border: none;
-            font-size: 15px;
+            font-size: 13px;
             text-transform: none;
+            font-weight: 600;
         }
 
         .return-btn:hover {
             color: #333;
         }
 
-        /* Side Timer Display (during rest) */
-        .side-timers {
-            position: absolute;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 30px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-
-        .side-timer {
-            background: linear-gradient(135deg, #ffd700 0%, #f4e285 100%);
-            padding: 15px 25px;
-            border-radius: 12px;
-            font-size: 24px;
-            font-weight: 900;
-            color: #1a2332;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-        }
-
-        .side-check {
-            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
-            padding: 15px 25px;
-            border-radius: 12px;
-            font-size: 32px;
-            color: white;
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
-        }
-
-        /* Strength Details */
-        #strengthDetails {
-            margin-top: 30px;
-            font-size: 18px;
-            font-weight: 600;
-            color: #ffd700;
-            letter-spacing: 1px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .timer-display {
-                font-size: 48px;
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 360px) {
+            .session-header {
+                padding: 10px 12px;
             }
 
-            .rest-timer {
-                font-size: 64px;
+            .exit-btn {
+                font-size: 11px;
+                padding: 6px 10px;
+            }
+
+            .progress-counter {
+                font-size: 14px;
+            }
+
+            .exercise-content {
+                padding: 20px 12px 110px;
+            }
+
+            .exercise-image-container {
+                max-width: 140px;
+                padding: 10px;
+            }
+
+            .exercise-image {
+                height: 120px;
+            }
+
+            .exercise-name {
+                font-size: 16px;
+            }
+
+            .timer-display {
+                font-size: 36px;
+            }
+
+            #strengthDetails {
+                font-size: 14px;
+                padding: 12px 16px;
+            }
+
+            .action-buttons {
+                bottom: 16px;
+                left: 10px;
+                right: 10px;
+                gap: 8px;
+            }
+
+            .pause-btn {
+                width: 50px;
+                height: 46px;
+                font-size: 18px;
+            }
+
+            .did-it-btn {
+                padding: 12px 16px;
+                font-size: 12px;
             }
 
             .rest-timer-circle {
-                width: 250px;
-                height: 250px;
+                width: 180px;
+                height: 180px;
+            }
+
+            .rest-timer {
+                font-size: 48px;
+            }
+        }
+
+        @media (min-width: 500px) {
+            .exercise-content {
+                padding: 30px 20px 130px;
+            }
+
+            .exercise-image-container {
+                max-width: 180px;
+            }
+
+            .exercise-name {
+                font-size: 20px;
+            }
+
+            .action-buttons {
+                max-width: 400px;
+                left: 50%;
+                transform: translateX(-50%);
+                bottom: 24px;
             }
         }
     </style>
@@ -459,14 +587,16 @@
 <body>
 {% csrf_token %}
 
+<!-- Compact Header -->
 <div class="session-header">
     <button class="exit-btn" onclick="showExitModal()">Exit</button>
     <div class="progress-counter">
-        <span id="current">1</span>/<span id="total">{{ total_exercises }}</span>
+        <span id="current">1</span> / <span id="total">{{ total_exercises }}</span>
     </div>
     <button class="menu-btn">☰</button>
 </div>
 
+<!-- Exercise Content -->
 <div class="exercise-content">
     <div class="exercise-image-container">
         <img src="{% static 'images/default_exercise.png' %}" alt="Exercise" class="exercise-image" id="exerciseImage">
@@ -474,6 +604,7 @@
 
     <h2 class="exercise-name" id="exerciseName"></h2>
 
+    <!-- Timer for Cardio -->
     <div class="timer-container" id="timerContainer">
         <div class="timer-box">
             <div class="timer-display" id="timer">00:00</div>
@@ -481,20 +612,13 @@
         </div>
     </div>
 
+    <!-- FIXED: Strength Details Format -->
     <div id="strengthDetails" style="display:none;">
-        <span id="currentSet">1</span> / <span id="totalSets"></span> Sets | <span id="repsCount"></span> Reps
+        Set <span id="currentSet">1</span> / <span id="totalSets"></span> • <span id="repsCount"></span> Reps
     </div>
 </div>
 
-<div class="action-buttons">
-    <button class="pause-btn" id="pauseBtn" onclick="togglePause()">
-        <span id="pauseIcon">⏸</span>
-    </button>
-    <button class="did-it-btn" id="didItBtn" onclick="completeExercise()">
-        Did it
-    </button>
-</div>
-
+<!-- Up Next Section -->
 <div class="up-next-section" id="upNext">
     <div class="up-next-label">Up Next</div>
     <div class="up-next-content">
@@ -506,20 +630,39 @@
     </div>
 </div>
 
+<!-- Compact Action Buttons -->
+<div class="action-buttons">
+    <button class="pause-btn" id="pauseBtn" onclick="togglePause()">
+        <span id="pauseIcon">⏸</span>
+    </button>
+    <button class="did-it-btn" id="didItBtn" onclick="completeExercise()">
+        Did it
+    </button>
+</div>
+
+<!-- FIXED: Rest Overlay -->
 <div class="rest-overlay" id="restOverlay">
     <div class="rest-title">Rest</div>
 
-    <div class="side-timers">
-        <div class="side-timer" id="sideTimer">00:00</div>
-        <div class="side-check">✓</div>
+    <!-- Set Complete Badge (alohida, aralashmaydi) -->
+    <div class="set-complete-badge" id="setCompleteBadge">
+        Set 1 Complete ✓
     </div>
 
+    <!-- Timer Circle -->
     <div class="rest-timer-circle" onclick="skipRest()">
         <div class="rest-timer" id="restTimer">00:00</div>
         <div class="rest-skip-text">Tap to skip</div>
     </div>
+
+    <!-- Up Next Info -->
+    <div class="rest-up-next">
+        <div class="rest-up-next-label">Next Up</div>
+        <div class="rest-up-next-name" id="restUpNextName">Set 2</div>
+    </div>
 </div>
 
+<!-- Exit Modal -->
 <div class="exit-modal" id="exitModal">
     <div class="exit-modal-content">
         <h3 class="exit-modal-title">Finish Workout?</h3>
@@ -535,29 +678,25 @@
 
 <script>
     // ==========================================
-    // BACKEND INTEGRATION VARIABLES (DJANGO DATA)
+    // BACKEND INTEGRATION VARIABLES
     // ==========================================
     const workoutId = {{ workout.id }};
     const totalExercises = {{ total_exercises }};
 
     const workoutData = {
-        // Backend'dan kelgan context['summary'] dan ma'lumotlarni o'zlashtirish:
         total_reps: {{ summary.total_reps|default:0 }},
         total_weight: {{ summary.total_weight|default:0 }},
-        duration_seconds: {{ summary.duration_seconds|default:0 }}, // seconds ni olyapmiz
+        duration_seconds: {{ summary.duration_seconds|default:0 }},
         total_calories: {{ summary.total_calories|default:0 }},
         exercises_completed: {{ summary.exercises_completed|default:0 }}
     };
 
-    // Django contextidan kelgan ma'lumotlarni JavaScript massiviga o'tkazish
     const exercises = [
         {% for ex in exercises %}
             {
                 id: {{ ex.exercise.id }},
                 name: "{{ ex.exercise.name|escapejs }}",
-                // !!! BU YERDA O'ZGARTIRILDI: 'image' o'rniga 'thumbnail' ishlatildi !!!
                 image: {% if ex.exercise.thumbnail %}"{{ ex.exercise.thumbnail.url }}"{% else %}null{% endif %},
-
                 type: "{{ ex.exercise_type|lower }}",
                 duration_minutes: {{ ex.duration_minutes|default:'null' }},
                 calories_per_minute: {{ ex.calories_per_minute|default:10 }},
@@ -595,36 +734,27 @@
         currentExerciseIndex = index;
         const exercise = exercises[index];
 
-        // UI ni yangilash
         document.getElementById('current').textContent = index + 1;
         document.getElementById('exerciseName').textContent = exercise.name;
 
         const defaultImage = "{% static 'images/default_exercise.png' %}";
-        // 'image' manbasini ishlatish
         document.getElementById('exerciseImage').src = exercise.image || defaultImage;
 
-        // Set/Rep ma'lumotlarini nolga tiklash (kuch mashqlari uchun)
         currentSet = 1;
         document.getElementById('strengthDetails').style.display = 'none';
 
-        // Tugmalarni nolga tiklash
         const didItBtn = document.getElementById('didItBtn');
         didItBtn.classList.remove('completed');
-        didItBtn.textContent = (exercise.type === 'strength') ? 'Set Completed' : 'Did it';
+        didItBtn.textContent = (exercise.type === 'strength') ? 'Set Done' : 'Did it';
         didItBtn.disabled = false;
 
-
-        // Tegishli interfeysni ko'rsatish
         if (exercise.type === 'cardio') {
             showCardioInterface(exercise.duration_minutes);
         } else if (exercise.type === 'strength') {
             showStrengthInterface(exercise.sets, exercise.reps);
         }
 
-        // Keyingi mashqni ko'rsatish
         showUpNext(index);
-
-        // Vaqtni kuzatishni boshlash
         exerciseStartTime = Date.now();
     }
 
@@ -637,17 +767,15 @@
     }
 
     function showStrengthInterface(sets, reps) {
-        document.getElementById('timerContainer').style.display = 'none';
-        document.getElementById('strengthDetails').style.display = 'block';
-        document.getElementById('totalSets').textContent = sets;
-        document.getElementById('repsCount').textContent = reps;
-        document.getElementById('currentSet').textContent = currentSet;
+    document.getElementById('timerContainer').style.display = 'none';
+    document.getElementById('strengthDetails').style.display = 'inline-block';
+    document.getElementById('totalSets').textContent = reps;  // reps = set soni
+    document.getElementById('repsCount').textContent = sets;   // sets = takrorlash soni
+    document.getElementById('currentSet').textContent = currentSet;
 
-        // Kuch mashqlarida timer interval yo'q
-        clearInterval(timerInterval);
-        document.getElementById('didItBtn').textContent = 'Set Completed';
-    }
-
+    clearInterval(timerInterval);
+    document.getElementById('didItBtn').textContent = 'Set Done';
+}
 
     function startTimer() {
         clearInterval(timerInterval);
@@ -676,42 +804,37 @@
     }
 
     function completeExercise(isAutoCompleted = false) {
-        const exercise = exercises[currentExerciseIndex];
-        const didItBtn = document.getElementById('didItBtn');
+    const exercise = exercises[currentExerciseIndex];
+    const didItBtn = document.getElementById('didItBtn');
 
         if (exercise.type === 'cardio') {
             clearInterval(timerInterval);
-
             didItBtn.classList.add('completed');
-            didItBtn.textContent = '✓ Completed';
+            didItBtn.textContent = '✓ Done';
             didItBtn.disabled = true;
 
             processExerciseCompletion(exercise);
             setTimeout(() => {
                 loadExercise(currentExerciseIndex + 1);
-            }, 1000);
+            }, 800);
 
         } else if (exercise.type === 'strength') {
-
-            if (currentSet < exercise.sets) {
-                processSetCompletion(exercise);
-                startRest(exercise.rest_seconds);
+            if (currentSet < exercise.reps) {
+                // Set tugadi, rest boshlanadi
+                startRest(exercise.rest_seconds, currentSet, exercise.reps);
+                currentSet++;
             } else {
-                didItBtn.classList.add('completed');
-                didItBtn.textContent = '✓ Completed';
-                didItBtn.disabled = true;
+                // Oxirgi set tugadi
+               didItBtn.classList.add('completed');
+            didItBtn.textContent = '✓ Done';
+            didItBtn.disabled = true;
 
                 processExerciseCompletion(exercise);
-
                 setTimeout(() => {
                     loadExercise(currentExerciseIndex + 1);
-                }, 1000);
+                }, 800);
             }
         }
-    }
-
-    function processSetCompletion(exercise) {
-        currentSet++;
     }
 
     function processExerciseCompletion(exercise) {
@@ -719,7 +842,6 @@
         totalDuration += exerciseDuration;
 
         if (exercise.type === 'cardio' && exercise.calories_per_minute) {
-            // Formula: (Davomiylik sekundda / 60) * Kaloriya/minut
             const caloriesBurned = (exerciseDuration / 60) * exercise.calories_per_minute;
             totalCaloriesBurned += caloriesBurned;
         }
@@ -727,24 +849,22 @@
         totalExercisesCompleted++;
     }
 
-    function startRest(restSeconds = 60) {
-        const previousExercise = exercises[currentExerciseIndex];
+    function startRest(restSeconds, completedSet, totalSets) {
+        // Update set complete badge
+        document.getElementById('setCompleteBadge').textContent = `Set ${completedSet} Complete ✓`;
 
-        // Side Timer Displeyni yangilash
-        if (previousExercise.type === 'cardio') {
-            document.getElementById('sideTimer').textContent = formatTime(previousExercise.duration_minutes * 60 - timeLeft);
-        } else if (previousExercise.type === 'strength') {
-            document.getElementById('sideTimer').textContent = `Set ${currentSet - 1} Complete`;
-            document.getElementById('currentSet').textContent = currentSet;
+        // Update next info
+        const nextSet = completedSet + 1;
+        if (nextSet <= totalSets) {
+            document.getElementById('restUpNextName').textContent = `Set ${nextSet} / ${totalSets}`;
+        } else {
+            document.getElementById('restUpNextName').textContent = 'Next Exercise';
         }
 
         document.getElementById('restOverlay').classList.add('active');
 
         let restLeft = restSeconds;
         document.getElementById('restTimer').textContent = formatTime(restLeft);
-
-        showUpNext(currentExerciseIndex);
-
 
         clearInterval(restInterval);
         restInterval = setInterval(() => {
@@ -762,44 +882,42 @@
         clearInterval(restInterval);
         document.getElementById('restOverlay').classList.remove('active');
 
-        const previousExercise = exercises[currentExerciseIndex];
+        const exercise = exercises[currentExerciseIndex];
 
-        if (previousExercise.type === 'strength' && currentSet <= previousExercise.sets) {
-            // Agar strength mashqi bo'lsa va hali setlar tugamagan bo'lsa, keyingi setni ko'rsatish
-            showStrengthInterface(previousExercise.sets, previousExercise.reps);
+        if (exercise.type === 'strength' && currentSet <= exercise.sets) {
+            showStrengthInterface(exercise.sets, exercise.reps);
         } else {
-            // Keyingi mashqga o'tish
             loadExercise(currentExerciseIndex + 1);
         }
     }
 
     function showUpNext(index) {
         const upNextSection = document.getElementById('upNext');
+        const exercise = exercises[index];
 
-        // Agar strength mashqi bo'lsa va hali setlar tugamagan bo'lsa, keyingi setni ko'rsatish
-        if (exercises[index] && exercises[index].type === 'strength' && currentSet <= exercises[index].sets) {
+        // Strength mashqda keyingi set ko'rsatish
+        if (exercise && exercise.type === 'strength' && currentSet < exercise.sets) {
             upNextSection.style.display = 'block';
-            document.getElementById('upNextName').textContent = exercises[index].name;
-            document.getElementById('upNextDetails').textContent = `Next: Set ${currentSet}/${exercises[index].sets} (${exercises[index].reps} Reps)`;
+            document.getElementById('upNextName').textContent = exercise.name;
+            document.getElementById('upNextDetails').textContent = `Next: Set ${currentSet + 1}/${exercise.sets}`;
             const defaultImage = "{% static 'images/default_exercise.png' %}";
-            document.getElementById('upNextImage').src = exercises[index].image || defaultImage;
+            document.getElementById('upNextImage').src = exercise.image || defaultImage;
             return;
         }
 
-        // Keyingi haqiqiy mashqni ko'rsatish
+        // Keyingi mashq ko'rsatish
         if (index < exercises.length - 1) {
             const next = exercises[index + 1];
             upNextSection.style.display = 'block';
 
             const defaultImage = "{% static 'images/default_exercise.png' %}";
             document.getElementById('upNextImage').src = next.image || defaultImage;
-
             document.getElementById('upNextName').textContent = next.name;
 
             if (next.type === 'cardio') {
-                document.getElementById('upNextDetails').textContent = `${next.duration_minutes} minutes`;
+                document.getElementById('upNextDetails').textContent = `${next.duration_minutes} min`;
             } else {
-                document.getElementById('upNextDetails').textContent = `${next.sets} x ${next.reps} reps`;
+                document.getElementById('upNextDetails').textContent = `${next.sets} sets × ${next.reps} reps`;
             }
         } else {
             upNextSection.style.display = 'none';
@@ -808,12 +926,12 @@
 
     function showExitModal() {
         document.getElementById('exitModal').classList.add('active');
-        togglePause();
+        if (!isPaused) togglePause();
     }
 
     function returnToWorkout() {
         document.getElementById('exitModal').classList.remove('active');
-        togglePause();
+        if (isPaused) togglePause();
     }
 
     function saveAndExit() {
@@ -835,7 +953,6 @@
 
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         form.innerHTML = `<input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">`;
-
         form.innerHTML += `<input type="hidden" name="action" value="exit">`;
         form.innerHTML += `<input type="hidden" name="save_progress" value="${save ? 'true' : 'false'}">`;
         form.innerHTML += `<input type="hidden" name="current_exercise_index" value="${currentExerciseIndex}">`;
@@ -853,7 +970,6 @@
 
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         form.innerHTML = `<input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">`;
-
         form.innerHTML += `<input type="hidden" name="action" value="complete">`;
         form.innerHTML += `<input type="hidden" name="total_duration" value="${totalDuration}">`;
         form.innerHTML += `<input type="hidden" name="total_calories" value="${totalCaloriesBurned.toFixed(2)}">`;
@@ -874,8 +990,7 @@
     // ==========================================
     document.addEventListener('DOMContentLoaded', function () {
         if (exercises.length > 0) {
-            // Agar viewdan current_index kelgan bo'lsa, o'sha joydan boshlash
-            const initialIndex = parseInt("{{ request.session.current_workout_index|default:0 }}"); // Misol uchun, sessiondan olish
+            const initialIndex = parseInt("{{ request.session.current_workout_index|default:0 }}");
             loadExercise(initialIndex);
         } else {
             document.getElementById('exerciseName').textContent = 'No exercises found.';

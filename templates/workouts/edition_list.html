@@ -2,7 +2,6 @@
 
 {% block title %}{{ program.title }} - Editions{% endblock %}
 
-
 {% block bottom_nav %}{% endblock %}
 {% block extra_css %}
 <style>
@@ -42,78 +41,76 @@
         66% { transform: translate(-20px, 20px) scale(0.9); }
     }
 
-    /* Top Navigation */
+    /* ===== COMPACT TOP NAVIGATION ===== */
     .top-nav {
         background: linear-gradient(135deg, rgba(15, 52, 96, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
         backdrop-filter: blur(10px);
-        padding: 20px;
+        padding: 12px 16px;
         display: flex;
         align-items: center;
-        gap: 15px;
+        gap: 12px;
         position: sticky;
         top: 0;
         z-index: 100;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         border-bottom: 1px solid rgba(255, 215, 0, 0.1);
     }
 
     .back-btn {
         background: rgba(255, 215, 0, 0.1);
-        border: 2px solid rgba(255, 215, 0, 0.3);
+        border: 1.5px solid rgba(255, 215, 0, 0.3);
         color: #ffd700;
-        font-size: 28px;
+        font-size: 20px;
         cursor: pointer;
         padding: 0;
-        width: 45px;
-        height: 45px;
+        width: 32px;
+        height: 32px;
         display: flex;
         align-items: center;
         justify-content: center;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        border-radius: 12px;
+        border-radius: 10px;
     }
 
     .back-btn:hover {
         background: rgba(255, 215, 0, 0.2);
         border-color: #ffd700;
-        transform: scale(1.1) translateX(-5px);
-        box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        transform: scale(1.05);
     }
 
     .top-nav h1 {
         color: white;
-        font-size: 24px;
-        font-weight: 900;
-        letter-spacing: 4px;
+        font-size: 16px;
+        font-weight: 800;
+        letter-spacing: 3px;
         text-transform: uppercase;
         flex: 1;
         text-align: center;
-        margin-right: 45px;
+        margin-right: 32px;
         background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
 
-    /* Premium Program Header */
+    /* ===== COMPACT PROGRAM HEADER ===== */
     .program-header {
         position: relative;
-        height: 300px;
+        height: 140px;
         overflow: hidden;
-        margin-bottom: 30px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        margin-bottom: 0;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
     .program-header-image {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        filter: brightness(0.85);
-        transition: transform 0.6s ease;
+        filter: brightness(0.8);
+        transition: transform 0.5s ease;
     }
 
     .program-header:hover .program-header-image {
-        transform: scale(1.1);
-        filter: brightness(1);
+        transform: scale(1.05);
     }
 
     .placeholder-image {
@@ -125,7 +122,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 80px;
+        font-size: 40px;
         font-weight: 900;
         color: rgba(255, 215, 0, 0.5);
     }
@@ -137,55 +134,52 @@
         right: 0;
         background: linear-gradient(to top,
             rgba(0, 0, 0, 0.95) 0%,
-            rgba(0, 0, 0, 0.7) 50%,
+            rgba(0, 0, 0, 0.6) 60%,
             transparent 100%);
-        backdrop-filter: blur(5px);
-        padding: 60px 25px 25px;
+        padding: 35px 16px 14px;
         color: white;
     }
 
     .program-logo {
-        font-size: 56px;
+        font-size: 22px;
         font-weight: 900;
         background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin-bottom: 10px;
-        text-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
-        letter-spacing: 2px;
+        margin-bottom: 4px;
+        letter-spacing: 1px;
     }
 
     .program-subtitle {
-        font-size: 18px;
+        font-size: 12px;
         opacity: 0.9;
-        margin-bottom: 5px;
-        color: rgba(255, 255, 255, 0.9);
-        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+        font-weight: 500;
     }
 
-    /* Premium Stats Bar */
+    /* ===== COMPACT STATS BAR ===== */
     .stats-bar {
         background: linear-gradient(135deg,
-            rgba(255, 255, 255, 0.1) 0%,
-            rgba(255, 255, 255, 0.05) 100%);
+            rgba(255, 255, 255, 0.08) 0%,
+            rgba(255, 255, 255, 0.03) 100%);
         backdrop-filter: blur(10px);
-        padding: 25px 20px;
+        padding: 14px 12px;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-        border: 1px solid rgba(255, 215, 0, 0.2);
-        margin: 0 20px 30px;
-        border-radius: 20px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        gap: 10px;
+        border: 1px solid rgba(255, 215, 0, 0.15);
+        margin: 14px 12px;
+        border-radius: 14px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         position: relative;
         z-index: 1;
-        animation: fadeInUp 0.6s ease;
+        animation: fadeInUp 0.5s ease;
     }
 
     @keyframes fadeInUp {
         from {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(20px);
         }
         to {
             opacity: 1;
@@ -195,81 +189,78 @@
 
     .stat-item {
         text-align: center;
-        padding: 15px;
+        padding: 10px 6px;
         background: rgba(255, 215, 0, 0.05);
-        border-radius: 15px;
+        border-radius: 10px;
         transition: all 0.3s ease;
     }
 
     .stat-item:hover {
-        background: rgba(255, 215, 0, 0.15);
-        transform: translateY(-5px);
+        background: rgba(255, 215, 0, 0.12);
+        transform: translateY(-2px);
     }
 
     .stat-value {
-        font-size: 36px;
-        font-weight: 900;
+        font-size: 20px;
+        font-weight: 800;
         background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin-bottom: 8px;
+        margin-bottom: 4px;
     }
 
     .stat-label {
-        font-size: 13px;
-        color: rgba(255, 255, 255, 0.7);
+        font-size: 9px;
+        color: rgba(255, 255, 255, 0.6);
         font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 0.5px;
     }
 
-    /* Premium Program Info */
+    /* ===== COMPACT PROGRAM INFO ===== */
     .program-info {
         background: linear-gradient(135deg,
-            rgba(255, 255, 255, 0.1) 0%,
-            rgba(255, 255, 255, 0.05) 100%);
+            rgba(255, 255, 255, 0.08) 0%,
+            rgba(255, 255, 255, 0.03) 100%);
         backdrop-filter: blur(10px);
-        padding: 25px;
-        margin: 0 20px 30px;
-        border-radius: 20px;
-        border: 1px solid rgba(255, 215, 0, 0.2);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        padding: 16px 14px;
+        margin: 0 12px 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 215, 0, 0.15);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         position: relative;
         z-index: 1;
-        animation: fadeInUp 0.8s ease;
+        animation: fadeInUp 0.6s ease;
     }
 
     .info-title {
-        font-size: 22px;
-        font-weight: 900;
+        font-size: 14px;
+        font-weight: 800;
         background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 0.5px;
     }
 
     .info-text {
-        font-size: 15px;
-        line-height: 1.8;
-        color: rgba(255, 255, 255, 0.8);
-        margin-bottom: 20px;
+        font-size: 12px;
+        line-height: 1.7;
+        color: rgba(255, 255, 255, 0.75);
+        margin-bottom: 14px;
     }
 
     .info-highlight {
         background: linear-gradient(135deg,
-            rgba(255, 215, 0, 0.2) 0%,
-            rgba(255, 215, 0, 0.1) 100%);
-        backdrop-filter: blur(10px);
-        border-left: 4px solid #ffd700;
-        padding: 18px 20px;
-        border-radius: 12px;
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.9);
-        margin-bottom: 0;
-        border: 1px solid rgba(255, 215, 0, 0.3);
-        box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2);
+            rgba(255, 215, 0, 0.15) 0%,
+            rgba(255, 215, 0, 0.08) 100%);
+        border-left: 3px solid #ffd700;
+        padding: 12px 14px;
+        border-radius: 10px;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.85);
+        border: 1px solid rgba(255, 215, 0, 0.2);
     }
 
     .info-highlight strong {
@@ -277,54 +268,49 @@
         font-weight: 700;
     }
 
-    /* Section Title */
+    /* ===== COMPACT SECTION TITLE ===== */
     .section-title {
-        background: linear-gradient(135deg,
-            rgba(255, 255, 255, 0.1) 0%,
-            rgba(255, 255, 255, 0.05) 100%);
-        backdrop-filter: blur(10px);
-        padding: 20px 25px;
-        margin: 0 20px 20px;
-        font-size: 24px;
-        font-weight: 900;
+        padding: 12px 14px;
+        margin: 0 12px 12px;
+        font-size: 14px;
+        font-weight: 800;
         background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         text-transform: uppercase;
-        letter-spacing: 2px;
-        border-radius: 15px;
+        letter-spacing: 1.5px;
         text-align: center;
         position: relative;
         z-index: 1;
-        animation: fadeInUp 1s ease;
+        animation: fadeInUp 0.7s ease;
     }
 
-    /* Premium Editions List */
+    /* ===== COMPACT EDITIONS LIST ===== */
     .editions-list {
-        padding: 0 20px 100px;
+        padding: 0 12px 90px;
         position: relative;
         z-index: 1;
     }
 
     .edition-card {
         background: linear-gradient(135deg,
-            rgba(255, 255, 255, 0.1) 0%,
-            rgba(255, 255, 255, 0.05) 100%);
+            rgba(255, 255, 255, 0.08) 0%,
+            rgba(255, 255, 255, 0.03) 100%);
         backdrop-filter: blur(10px);
-        margin-bottom: 20px;
-        padding: 25px;
+        margin-bottom: 10px;
+        padding: 14px 16px;
         display: flex;
         align-items: center;
-        gap: 20px;
+        gap: 14px;
         text-decoration: none;
         color: inherit;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 1px solid rgba(255, 215, 0, 0.2);
-        border-radius: 20px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(255, 215, 0, 0.15);
+        border-radius: 14px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
         position: relative;
         overflow: hidden;
-        animation: slideInUp 0.6s ease;
+        animation: slideInUp 0.5s ease;
         opacity: 0;
         animation-fill-mode: forwards;
     }
@@ -332,7 +318,7 @@
     @keyframes slideInUp {
         from {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(20px);
         }
         to {
             opacity: 1;
@@ -340,10 +326,10 @@
         }
     }
 
-    .edition-card:nth-child(1) { animation-delay: 0.1s; }
-    .edition-card:nth-child(2) { animation-delay: 0.2s; }
-    .edition-card:nth-child(3) { animation-delay: 0.3s; }
-    .edition-card:nth-child(4) { animation-delay: 0.4s; }
+    .edition-card:nth-child(1) { animation-delay: 0.05s; }
+    .edition-card:nth-child(2) { animation-delay: 0.1s; }
+    .edition-card:nth-child(3) { animation-delay: 0.15s; }
+    .edition-card:nth-child(4) { animation-delay: 0.2s; }
 
     .edition-card::before {
         content: '';
@@ -355,10 +341,10 @@
         background: linear-gradient(
             45deg,
             transparent 0%,
-            rgba(255, 255, 255, 0.1) 50%,
+            rgba(255, 255, 255, 0.08) 50%,
             transparent 100%
         );
-        transition: all 0.6s ease;
+        transition: all 0.5s ease;
     }
 
     .edition-card:hover::before {
@@ -367,117 +353,212 @@
     }
 
     .edition-card:hover {
-        background: linear-gradient(135deg,
-            rgba(255, 215, 0, 0.15) 0%,
-            rgba(255, 215, 0, 0.08) 100%);
-        border-color: rgba(255, 215, 0, 0.6);
-        transform: translateX(10px);
-        box-shadow: 0 12px 40px rgba(255, 215, 0, 0.4);
+        border-color: rgba(255, 215, 0, 0.5);
+        transform: translateX(6px);
+        box-shadow: 0 8px 30px rgba(255, 215, 0, 0.25);
     }
 
+    .edition-card:active {
+        transform: translateX(3px) scale(0.98);
+    }
+
+    /* ===== COMPACT EDITION NUMBER ===== */
     .edition-number {
-        width: 70px;
-        height: 70px;
-        border-radius: 16px;
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 36px;
-        font-weight: 900;
+        font-size: 20px;
+        font-weight: 800;
         color: white;
         flex-shrink: 0;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
         transition: all 0.3s ease;
     }
 
     .edition-card:hover .edition-number {
-        transform: scale(1.1) rotate(5deg);
+        transform: scale(1.08) rotate(3deg);
     }
 
-    /* Premium Edition Colors */
+    /* Edition Colors */
     .edition-1 {
         background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
-        box-shadow: 0 8px 24px rgba(255, 107, 53, 0.5);
+        box-shadow: 0 4px 16px rgba(255, 107, 53, 0.4);
     }
     .edition-2 {
         background: linear-gradient(135deg, #8B5CF6 0%, #A855F7 100%);
-        box-shadow: 0 8px 24px rgba(139, 92, 246, 0.5);
+        box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
     }
     .edition-3 {
         background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-        box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5);
+        box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
     }
     .edition-4 {
         background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
-        box-shadow: 0 8px 24px rgba(59, 130, 246, 0.5);
+        box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+    }
+    .edition-5 {
+        background: linear-gradient(135deg, #EC4899 0%, #DB2777 100%);
+        box-shadow: 0 4px 16px rgba(236, 72, 153, 0.4);
+    }
+    .edition-6 {
+        background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+        box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
     }
 
     .edition-content {
         flex: 1;
+        min-width: 0;
     }
 
     .edition-title {
-        font-size: 20px;
+        font-size: 14px;
         font-weight: 700;
         color: white;
-        margin-bottom: 8px;
-        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .edition-meta {
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.7);
-        font-weight: 600;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: 500;
     }
 
     .edition-arrow {
-        font-size: 28px;
-        color: rgba(255, 215, 0, 0.7);
+        font-size: 20px;
+        color: rgba(255, 215, 0, 0.6);
         transition: all 0.3s ease;
     }
 
     .edition-card:hover .edition-arrow {
         color: #ffd700;
-        transform: translateX(5px);
+        transform: translateX(4px);
     }
 
-    /* Empty State */
+    /* ===== EMPTY STATE ===== */
     .empty-state {
         text-align: center;
-        padding: 80px 20px;
+        padding: 50px 20px;
         color: white;
-        animation: fadeInUp 0.8s ease;
+        animation: fadeInUp 0.6s ease;
     }
 
     .empty-state .icon {
-        font-size: 80px;
-        margin-bottom: 20px;
+        font-size: 50px;
+        margin-bottom: 16px;
         filter: grayscale(100%);
         opacity: 0.5;
     }
 
     .empty-state h3 {
-        font-size: 24px;
+        font-size: 18px;
         font-weight: 700;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
         background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
 
     .empty-state p {
-        font-size: 16px;
-        color: rgba(255, 255, 255, 0.6);
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.5);
     }
 
-    /* Responsive */
-    @media (max-width: 768px) {
+    /* ===== RESPONSIVE - TABLET ===== */
+    @media (min-width: 500px) {
+        .top-nav {
+            padding: 14px 20px;
+        }
+
+        .top-nav h1 {
+            font-size: 18px;
+        }
+
         .program-header {
-            height: 250px;
+            height: 180px;
         }
 
         .program-logo {
-            font-size: 42px;
+            font-size: 28px;
+        }
+
+        .program-subtitle {
+            font-size: 14px;
+        }
+
+        .stats-bar {
+            padding: 18px 16px;
+            margin: 18px 16px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+        }
+
+        .stat-label {
+            font-size: 10px;
+        }
+
+        .program-info {
+            padding: 20px 18px;
+            margin: 0 16px 18px;
+        }
+
+        .info-title {
+            font-size: 16px;
+        }
+
+        .info-text {
+            font-size: 13px;
+        }
+
+        .edition-card {
+            padding: 18px 20px;
+        }
+
+        .edition-number {
+            width: 52px;
+            height: 52px;
+            font-size: 24px;
+        }
+
+        .edition-title {
+            font-size: 16px;
+        }
+
+        .edition-meta {
+            font-size: 12px;
+        }
+    }
+
+    /* ===== RESPONSIVE - DESKTOP ===== */
+    @media (min-width: 768px) {
+        .top-nav {
+            padding: 16px 24px;
+        }
+
+        .top-nav h1 {
+            font-size: 20px;
+            letter-spacing: 4px;
+        }
+
+        .back-btn {
+            width: 38px;
+            height: 38px;
+            font-size: 22px;
+        }
+
+        .program-header {
+            height: 220px;
+        }
+
+        .program-logo {
+            font-size: 36px;
         }
 
         .program-subtitle {
@@ -485,16 +566,49 @@
         }
 
         .stats-bar {
-            gap: 15px;
-            padding: 20px 15px;
+            padding: 22px 20px;
+            margin: 24px 20px;
+            gap: 16px;
         }
 
         .stat-value {
-            font-size: 28px;
+            font-size: 30px;
         }
 
         .stat-label {
             font-size: 11px;
+        }
+
+        .program-info {
+            padding: 24px 22px;
+            margin: 0 20px 24px;
+        }
+
+        .info-title {
+            font-size: 18px;
+        }
+
+        .info-text {
+            font-size: 14px;
+        }
+
+        .info-highlight {
+            font-size: 13px;
+            padding: 16px 18px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            margin: 0 20px 18px;
+        }
+
+        .editions-list {
+            padding: 0 20px 100px;
+        }
+
+        .edition-card {
+            padding: 22px 24px;
+            margin-bottom: 14px;
         }
 
         .edition-number {
@@ -511,28 +625,124 @@
             font-size: 13px;
         }
 
+        .edition-arrow {
+            font-size: 24px;
+        }
+    }
+
+    /* ===== VERY SMALL PHONES ===== */
+    @media (max-width: 360px) {
+        .top-nav {
+            padding: 10px 12px;
+        }
+
         .top-nav h1 {
-            font-size: 20px;
-            letter-spacing: 3px;
+            font-size: 14px;
+            letter-spacing: 2px;
         }
 
         .back-btn {
-            width: 40px;
-            height: 40px;
+            width: 28px;
+            height: 28px;
+            font-size: 18px;
+        }
+
+        .program-header {
+            height: 110px;
+        }
+
+        .program-logo {
+            font-size: 18px;
+        }
+
+        .program-subtitle {
+            font-size: 10px;
+        }
+
+        .stats-bar {
+            padding: 10px 8px;
+            margin: 10px 10px;
+            gap: 6px;
+        }
+
+        .stat-item {
+            padding: 8px 4px;
+        }
+
+        .stat-value {
+            font-size: 16px;
+        }
+
+        .stat-label {
+            font-size: 8px;
+        }
+
+        .program-info {
+            padding: 12px 10px;
+            margin: 0 10px 10px;
+        }
+
+        .info-title {
+            font-size: 12px;
+        }
+
+        .info-text {
+            font-size: 11px;
+            margin-bottom: 10px;
+        }
+
+        .info-highlight {
+            font-size: 10px;
+            padding: 10px 12px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            padding: 10px 12px;
+            margin: 0 10px 10px;
+        }
+
+        .editions-list {
+            padding: 0 10px 80px;
+        }
+
+        .edition-card {
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            gap: 10px;
+        }
+
+        .edition-number {
+            width: 38px;
+            height: 38px;
+            font-size: 16px;
+            border-radius: 10px;
+        }
+
+        .edition-title {
+            font-size: 13px;
+        }
+
+        .edition-meta {
+            font-size: 10px;
+        }
+
+        .edition-arrow {
+            font-size: 18px;
         }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- Top Navigation -->
+<!-- Compact Top Navigation -->
 <div class="top-nav">
     <button class="back-btn" onclick="goBack()">‹</button>
     <h1>EDITIONS</h1>
     <span></span>
 </div>
 
-<!-- Program Header -->
+<!-- Compact Program Header -->
 <div class="program-header">
     {% if program.image %}
         <img src="{{ program.image.url }}" alt="{{ program.title }}" class="program-header-image">
@@ -541,19 +751,19 @@
     {% endif %}
 
     <div class="program-header-overlay">
-        <div class="program-logo">GET IN SHAPE</div>
-        <div class="program-subtitle">{{ program.title }}</div>
+        <div class="program-logo">{{ program.title|upper }}</div>
+        <div class="program-subtitle">Professional Workout Program</div>
     </div>
 </div>
 
-<!-- Stats Bar -->
+<!-- Compact Stats Bar -->
 <div class="stats-bar">
     <div class="stat-item">
         <div class="stat-value">{{ editions.count }}</div>
         <div class="stat-label">Editions</div>
     </div>
     <div class="stat-item">
-        <div class="stat-value">{{ program.editions.first.duration_weeks|default:"4-6" }}</div>
+        <div class="stat-value">{{ program.editions.first.duration_weeks|default:"4" }}</div>
         <div class="stat-label">Weeks</div>
     </div>
     <div class="stat-item">
@@ -562,20 +772,20 @@
     </div>
 </div>
 
-<!-- Program Info -->
+<!-- Compact Program Info -->
 <div class="program-info">
     <h2 class="info-title">About this program</h2>
-    <p class="info-text">{{ program.description }}</p>
+    <p class="info-text">{{ program.description|default:"Transform your body with this comprehensive workout program designed for all fitness levels."|truncatewords:25 }}</p>
 
     <div class="info-highlight">
-        💡 <strong>Tip:</strong> Do each workout edition for 4-6 weeks, and then move on to other ones.
+        💡 <strong>Tip:</strong> Complete each edition for 4-6 weeks before moving to the next.
     </div>
 </div>
 
 <!-- Section Title -->
 <div class="section-title">Choose Your Edition</div>
 
-<!-- Editions List -->
+<!-- Compact Editions List -->
 <div class="editions-list">
     {% for edition in editions %}
     <a href="{% url 'edition_detail' edition.id %}" class="edition-card">
@@ -585,7 +795,7 @@
         <div class="edition-content">
             <div class="edition-title">{{ edition.title }}</div>
             <div class="edition-meta">
-                {{ edition.duration_weeks }} weeks • {{ edition.days_per_week }} days/week
+                {{ edition.duration_weeks }}w • {{ edition.days_per_week }}d/week
             </div>
         </div>
         <div class="edition-arrow">›</div>
@@ -606,15 +816,13 @@
         window.history.back();
     }
 
-    // Animation on scroll
-    document.addEventListener('DOMContentLoaded', function() {
-        const cards = document.querySelectorAll('.edition-card');
-        
-        cards.forEach((card, index) => {
-            setTimeout(() => {
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, index * 100);
+    // Touch feedback
+    document.querySelectorAll('.edition-card').forEach(card => {
+        card.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.98)';
+        });
+        card.addEventListener('touchend', function() {
+            this.style.transform = '';
         });
     });
 </script>
