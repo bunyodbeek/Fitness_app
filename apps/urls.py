@@ -24,6 +24,8 @@ from apps.views import (
 )
 from django.urls import path
 
+from apps.views.users import AdminPageView
+
 urlpatterns = [
 
     path('exercises/', MuscleGroupListView.as_view(), name='muscle_groups'),
@@ -54,4 +56,6 @@ urlpatterns = [
     path('workout/<int:session_id>/detail/', WorkoutDetailView.as_view(), name='workout_session_detail'),
 
     path("bot/webhook/", TelegramWebhookView.as_view(), name="telegram_webhook"),
+
+    path('panel/', AdminPageView.as_view(), name='admin_page'),
 ]

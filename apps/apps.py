@@ -1,6 +1,4 @@
 from django.apps import AppConfig
-from telebot import TeleBot
-
 from root.settings import BOT_TOKEN, WEBAPP_URL
 
 
@@ -18,15 +16,17 @@ class AppsConfig(AppConfig):
             return
         #
         # from telebot import TeleBot
-        bot = TeleBot(BOT_TOKEN)
-
-         # bot.set_my_description('darslik haqida')
-         # Avval eski webhook o'chiriladi, keyin yangi o'rnatiladi
-        #
+        # bot = TeleBot(BOT_TOKEN)
+        # # #
+        # # # # bot.set_my_description('darslik haqida')
+        # # # # Avval eski webhook o'chiriladi, keyin yangi o'rnatiladi
+        # # #
         # bot.remove_webhook()
         # status = bot.set_webhook(WEBAPP_URL + '/bot/webhook/')
-        # #
+        #
         # if status:
         #     print(f"✅ Webhook o‘rnatildi: {WEBAPP_URL}/bot/webhook/")
         # else:
         #     print("❌ Webhookni o‘rnatishda xatolik yuz berdi")
+        #
+        #
