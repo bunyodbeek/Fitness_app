@@ -110,7 +110,6 @@ CSRF_TRUSTED_ORIGINS = [
     'https://educated-luana-shroudlike.ngrok-free.dev',
 ]
 
-
 # CORS Settings
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -129,6 +128,7 @@ SUBSCRIPTION_MONTHLY_PRICE = 67000  # UZS
 TRIAL_DAYS = 1
 TRIAL_PROGRAMS_LIMIT = 1
 
+ADMIN_ID = os.getenv('ADMIN_ID')
 
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
@@ -276,4 +276,3 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ]
 }
-
