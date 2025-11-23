@@ -244,3 +244,7 @@ class ProgressView(LoginRequiredMixin, TemplateView):
             ]
         })
         return context
+
+
+class AdminPageView(LoginRequiredMixin, TemplateView):
+    template_name = 'admin_page/admin.html'
