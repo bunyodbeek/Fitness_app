@@ -5,589 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Active Workout - {{ workout.title }}</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
-            color: white;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* Animated background */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* ===== COMPACT HEADER ===== */
-        .session-header {
-            background: linear-gradient(135deg, rgba(15, 52, 96, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
-            backdrop-filter: blur(10px);
-            padding: 12px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
-        }
-
-        .exit-btn, .menu-btn {
-            background: rgba(255, 215, 0, 0.1);
-            border: 1.5px solid rgba(255, 215, 0, 0.3);
-            color: #ffd700;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            padding: 8px 14px;
-            border-radius: 10px;
-        }
-
-        .menu-btn {
-            font-size: 18px;
-            padding: 6px 12px;
-        }
-
-        .exit-btn:hover, .menu-btn:hover {
-            background: rgba(255, 215, 0, 0.2);
-            border-color: #ffd700;
-        }
-
-        .progress-counter {
-            color: white;
-            font-size: 16px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* ===== EXERCISE CONTENT ===== */
-        .exercise-content {
-            padding: 24px 16px 120px;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .exercise-image-container {
-            max-width: 160px;
-            margin: 0 auto 20px;
-            background: linear-gradient(135deg,
-                rgba(255, 215, 0, 0.1) 0%,
-                rgba(255, 215, 0, 0.05) 100%);
-            border-radius: 16px;
-            padding: 12px;
-            border: 1px solid rgba(255, 215, 0, 0.2);
-        }
-
-        .exercise-image {
-            width: 100%;
-            height: 140px;
-            object-fit: contain;
-            border-radius: 10px;
-        }
-
-        .exercise-name {
-            font-size: 18px;
-            font-weight: 800;
-            margin-bottom: 20px;
-            color: white;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        /* ===== TIMER CONTAINER ===== */
-        .timer-container {
-            max-width: 300px;
-            margin: 0 auto;
-            display: none;
-        }
-
-        .timer-box {
-            background: linear-gradient(135deg, #ffd700 0%, #f4e285 100%);
-            border-radius: 14px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.4);
-        }
-
-        .timer-display {
-            font-size: 42px;
-            font-weight: 900;
-            color: #0a0e27;
-        }
-
-        .timer-label {
-            font-size: 14px;
-            color: #0a0e27;
-            font-weight: 700;
-            opacity: 0.7;
-        }
-
-        /* ===== STRENGTH DETAILS (FIXED) ===== */
-        #strengthDetails {
-            margin-top: 20px;
-            font-size: 16px;
-            font-weight: 700;
-            color: #ffd700;
-            letter-spacing: 0.5px;
-            background: linear-gradient(135deg,
-                rgba(255, 215, 0, 0.15) 0%,
-                rgba(255, 215, 0, 0.08) 100%);
-            padding: 14px 20px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 215, 0, 0.25);
-            display: inline-block;
-        }
-
-        /* ===== ACTION BUTTONS (COMPACT & RAISED) ===== */
-        .action-buttons {
-            position: fixed;
-            bottom: 20px;
-            left: 12px;
-            right: 12px;
-            display: flex;
-            gap: 10px;
-            z-index: 1000;
-        }
-
-        .pause-btn {
-            width: 56px;
-            height: 50px;
-            background: linear-gradient(135deg,
-                rgba(255, 255, 255, 0.1) 0%,
-                rgba(255, 255, 255, 0.05) 100%);
-            border: 1.5px solid rgba(255, 215, 0, 0.3);
-            border-radius: 14px;
-            color: #ffd700;
-            font-size: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .pause-btn:hover {
-            background: rgba(255, 215, 0, 0.15);
-            border-color: #ffd700;
-        }
-
-        .did-it-btn {
-            flex: 1;
-            background: linear-gradient(135deg, #ffd700 0%, #f4e285 100%);
-            border: none;
-            border-radius: 14px;
-            color: #0a0e27;
-            padding: 14px 20px;
-            font-size: 14px;
-            font-weight: 800;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.4);
-        }
-
-        .did-it-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 35px rgba(255, 215, 0, 0.5);
-        }
-
-        .did-it-btn:active {
-            transform: translateY(-1px) scale(0.99);
-        }
-
-        .did-it-btn.completed {
-            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-            color: white;
-            box-shadow: 0 6px 25px rgba(34, 197, 94, 0.4);
-        }
-
-        /* ===== UP NEXT SECTION ===== */
-        .up-next-section {
-            margin: 30px 16px 20px;
-            background: linear-gradient(135deg,
-                rgba(255, 255, 255, 0.08) 0%,
-                rgba(255, 255, 255, 0.03) 100%);
-            backdrop-filter: blur(10px);
-            border-radius: 14px;
-            padding: 14px;
-            border: 1px solid rgba(255, 215, 0, 0.15);
-            display: none;
-        }
-
-        .up-next-label {
-            font-size: 11px;
-            color: #ffd700;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }
-
-        .up-next-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .up-next-image {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
-            object-fit: contain;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 6px;
-            border: 1px solid rgba(255, 215, 0, 0.2);
-        }
-
-        .up-next-info {
-            flex: 1;
-            text-align: left;
-        }
-
-        .up-next-name {
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 4px;
-            color: white;
-        }
-
-        .up-next-details {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.6);
-            font-weight: 500;
-        }
-
-        /* ===== REST OVERLAY (FIXED) ===== */
-        .rest-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(10, 14, 39, 0.98) 0%, rgba(26, 31, 58, 0.98) 100%);
-            backdrop-filter: blur(20px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 200;
-            flex-direction: column;
-            padding: 20px;
-        }
-
-        .rest-overlay.active {
-            display: flex;
-        }
-
-        .rest-title {
-            font-size: 20px;
-            color: #ffd700;
-            margin-bottom: 30px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-        }
-
-        /* FIXED: Set Complete Badge - yuqorida alohida */
-        .set-complete-badge {
-            background: linear-gradient(135deg, #ffd700 0%, #f4e285 100%);
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 800;
-            color: #0a0e27;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
-        }
-
-        /* Rest Timer Circle */
-        .rest-timer-circle {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            border: 4px solid rgba(255, 215, 0, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            position: relative;
-            margin-bottom: 20px;
-            background: rgba(255, 215, 0, 0.05);
-            cursor: pointer;
-        }
-
-        .rest-timer-circle::before {
-            content: '';
-            position: absolute;
-            top: -4px;
-            left: -4px;
-            right: -4px;
-            bottom: -4px;
-            border-radius: 50%;
-            border: 4px solid transparent;
-            border-top-color: #ffd700;
-            animation: rotate 2s linear infinite;
-        }
-
-        @keyframes rotate {
-            to { transform: rotate(360deg); }
-        }
-
-        .rest-timer {
-            font-size: 56px;
-            font-weight: 900;
-            color: #ffd700;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-        }
-
-        .rest-skip-text {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.5);
-            margin-top: 10px;
-            font-weight: 500;
-        }
-
-        /* Up Next in Rest */
-        .rest-up-next {
-            margin-top: 30px;
-            text-align: center;
-        }
-
-        .rest-up-next-label {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .rest-up-next-name {
-            font-size: 14px;
-            font-weight: 700;
-            color: white;
-        }
-
-        /* ===== EXIT MODAL ===== */
-        .exit-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(10, 14, 39, 0.95);
-            backdrop-filter: blur(20px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 300;
-            padding: 20px;
-        }
-
-        .exit-modal.active {
-            display: flex;
-        }
-
-        .exit-modal-content {
-            background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%);
-            padding: 28px 24px;
-            border-radius: 20px;
-            max-width: 340px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-        }
-
-        .exit-modal-title {
-            font-size: 20px;
-            font-weight: 800;
-            color: #0a0e27;
-            margin-bottom: 12px;
-        }
-
-        .exit-modal-divider {
-            height: 3px;
-            background: repeating-linear-gradient(
-                90deg,
-                #ffd700 0px,
-                #ffd700 10px,
-                transparent 10px,
-                transparent 20px
-            );
-            margin: 16px 0;
-        }
-
-        .exit-modal-text {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 24px;
-            line-height: 1.6;
-        }
-
-        .exit-modal-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .exit-modal-btn {
-            padding: 14px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            border: none;
-        }
-
-        .save-exit-btn, .no-save-btn {
-            background: linear-gradient(135deg, #ffd700 0%, #f4e285 100%);
-            color: #0a0e27;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-        }
-
-        .save-exit-btn:hover, .no-save-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
-        }
-
-        .return-btn {
-            background: transparent;
-            color: #666;
-            border: none;
-            font-size: 13px;
-            text-transform: none;
-            font-weight: 600;
-        }
-
-        .return-btn:hover {
-            color: #333;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 360px) {
-            .session-header {
-                padding: 10px 12px;
-            }
-
-            .exit-btn {
-                font-size: 11px;
-                padding: 6px 10px;
-            }
-
-            .progress-counter {
-                font-size: 14px;
-            }
-
-            .exercise-content {
-                padding: 20px 12px 110px;
-            }
-
-            .exercise-image-container {
-                max-width: 140px;
-                padding: 10px;
-            }
-
-            .exercise-image {
-                height: 120px;
-            }
-
-            .exercise-name {
-                font-size: 16px;
-            }
-
-            .timer-display {
-                font-size: 36px;
-            }
-
-            #strengthDetails {
-                font-size: 14px;
-                padding: 12px 16px;
-            }
-
-            .action-buttons {
-                bottom: 16px;
-                left: 10px;
-                right: 10px;
-                gap: 8px;
-            }
-
-            .pause-btn {
-                width: 50px;
-                height: 46px;
-                font-size: 18px;
-            }
-
-            .did-it-btn {
-                padding: 12px 16px;
-                font-size: 12px;
-            }
-
-            .rest-timer-circle {
-                width: 180px;
-                height: 180px;
-            }
-
-            .rest-timer {
-                font-size: 48px;
-            }
-        }
-
-        @media (min-width: 500px) {
-            .exercise-content {
-                padding: 30px 20px 130px;
-            }
-
-            .exercise-image-container {
-                max-width: 180px;
-            }
-
-            .exercise-name {
-                font-size: 20px;
-            }
-
-            .action-buttons {
-                max-width: 400px;
-                left: 50%;
-                transform: translateX(-50%);
-                bottom: 24px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'apps/style/active_workout_style.css' %}">
 </head>
 <body>
 {% csrf_token %}
 
-<!-- Compact Header -->
 <div class="session-header">
     <button class="exit-btn" onclick="showExitModal()">Exit</button>
     <div class="progress-counter">
@@ -596,15 +18,12 @@
     <button class="menu-btn">☰</button>
 </div>
 
-<!-- Exercise Content -->
 <div class="exercise-content">
     <div class="exercise-image-container">
         <img src="{% static 'images/default_exercise.png' %}" alt="Exercise" class="exercise-image" id="exerciseImage">
     </div>
-
     <h2 class="exercise-name" id="exerciseName"></h2>
 
-    <!-- Timer for Cardio -->
     <div class="timer-container" id="timerContainer">
         <div class="timer-box">
             <div class="timer-display" id="timer">00:00</div>
@@ -612,13 +31,11 @@
         </div>
     </div>
 
-    <!-- FIXED: Strength Details Format -->
     <div id="strengthDetails" style="display:none;">
         Set <span id="currentSet">1</span> / <span id="totalSets"></span> • <span id="repsCount"></span> Reps
     </div>
 </div>
 
-<!-- Up Next Section -->
 <div class="up-next-section" id="upNext">
     <div class="up-next-label">Up Next</div>
     <div class="up-next-content">
@@ -630,39 +47,26 @@
     </div>
 </div>
 
-<!-- Compact Action Buttons -->
 <div class="action-buttons">
     <button class="pause-btn" id="pauseBtn" onclick="togglePause()">
         <span id="pauseIcon">⏸</span>
     </button>
-    <button class="did-it-btn" id="didItBtn" onclick="completeExercise()">
-        Did it
-    </button>
+    <button class="did-it-btn" id="didItBtn" onclick="completeExercise()">Did it</button>
 </div>
 
-<!-- FIXED: Rest Overlay -->
 <div class="rest-overlay" id="restOverlay">
     <div class="rest-title">Rest</div>
-
-    <!-- Set Complete Badge (alohida, aralashmaydi) -->
-    <div class="set-complete-badge" id="setCompleteBadge">
-        Set 1 Complete ✓
-    </div>
-
-    <!-- Timer Circle -->
+    <div class="set-complete-badge" id="setCompleteBadge">Set 1 Complete ✓</div>
     <div class="rest-timer-circle" onclick="skipRest()">
         <div class="rest-timer" id="restTimer">00:00</div>
         <div class="rest-skip-text">Tap to skip</div>
     </div>
-
-    <!-- Up Next Info -->
     <div class="rest-up-next">
         <div class="rest-up-next-label">Next Up</div>
         <div class="rest-up-next-name" id="restUpNextName">Set 2</div>
     </div>
 </div>
 
-<!-- Exit Modal -->
 <div class="exit-modal" id="exitModal">
     <div class="exit-modal-content">
         <h3 class="exit-modal-title">Finish Workout?</h3>
@@ -680,29 +84,23 @@
     // ==========================================
     // BACKEND INTEGRATION VARIABLES
     // ==========================================
-    const workoutId = {{ workout.id }};
+    const workoutId = {{ workout.pk }};
     const totalExercises = {{ total_exercises }};
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-    const workoutData = {
-        total_reps: {{ summary.total_reps|default:0 }},
-        total_weight: {{ summary.total_weight|default:0 }},
-        duration_seconds: {{ summary.duration_seconds|default:0 }},
-        total_calories: {{ summary.total_calories|default:0 }},
-        exercises_completed: {{ summary.exercises_completed|default:0 }}
-    };
 
     const exercises = [
         {% for ex in exercises %}
             {
-                id: {{ ex.exercise.id }},
-                name: "{{ ex.exercise.name|escapejs }}",
-                image: {% if ex.exercise.thumbnail %}"{{ ex.exercise.thumbnail.url }}"{% else %}null{% endif %},
+                id: {{ ex.exercise_id }},
+                name: "{{ ex.name|escapejs }}",
+                image: {% if ex.image %}"{{ ex.image }}"{% else %}null{% endif %},
                 type: "{{ ex.exercise_type|lower }}",
-                duration_minutes: {{ ex.duration_minutes|default:'null' }},
+                duration_minutes: {{ ex.duration_minutes|default:0 }},
                 calories_per_minute: {{ ex.calories_per_minute|default:10 }},
-                sets: {{ ex.sets|default:'null' }},
-                reps: {{ ex.reps|default:'null' }},
-                rest_seconds: {{ ex.rest_time|default:60 }}
+                sets: {{ ex.sets|default:1 }},
+                reps: {{ ex.reps|default:10 }},
+                rest_seconds: {{ ex.rest_seconds|default:60 }}
             }{% if not forloop.last %},{% endif %}
         {% endfor %}
     ];
@@ -711,18 +109,28 @@
     // STATE MANAGEMENT
     // ==========================================
     let currentExerciseIndex = 0;
+    let currentSet = 1; // Strength mashqlar uchun set hisoblagich
     let isPaused = false;
     let timerInterval = null;
     let restInterval = null;
     let timeLeft = 0;
     let exerciseStartTime = null;
+
     let totalCaloriesBurned = 0;
-    let totalDuration = 0;
+    let totalDurationSeconds = 0;
     let totalExercisesCompleted = 0;
-    let currentSet = 1;
 
     // ==========================================
-    // FUNCTIONS
+    // UTILITY FUNCTIONS
+    // ==========================================
+    function formatTime(totalSeconds) {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    // ==========================================
+    // MAIN LOGIC
     // ==========================================
 
     function loadExercise(index) {
@@ -732,26 +140,32 @@
         }
 
         currentExerciseIndex = index;
-        const exercise = exercises[index];
+        const ex = exercises[index];
 
+        // UI ni yangilash
         document.getElementById('current').textContent = index + 1;
-        document.getElementById('exerciseName').textContent = exercise.name;
+        document.getElementById('exerciseName').textContent = ex.name;
 
         const defaultImage = "{% static 'images/default_exercise.png' %}";
-        document.getElementById('exerciseImage').src = exercise.image || defaultImage;
+        document.getElementById('exerciseImage').src = ex.image || defaultImage;
 
-        currentSet = 1;
+        currentSet = 1; // Har yangi mashqda Set 1 dan boshlanadi
+        const didBtn = document.getElementById('didItBtn');
+        didBtn.classList.remove('completed');
+        didBtn.disabled = false;
+
+        // Timer/Set ma'lumotlarini tozalash
+        clearInterval(timerInterval);
+        document.getElementById('timerContainer').style.display = 'none';
         document.getElementById('strengthDetails').style.display = 'none';
 
-        const didItBtn = document.getElementById('didItBtn');
-        didItBtn.classList.remove('completed');
-        didItBtn.textContent = (exercise.type === 'strength') ? 'Set Done' : 'Did it';
-        didItBtn.disabled = false;
 
-        if (exercise.type === 'cardio') {
-            showCardioInterface(exercise.duration_minutes);
-        } else if (exercise.type === 'strength') {
-            showStrengthInterface(exercise.sets, exercise.reps);
+        if (ex.type === 'cardio') {
+            showCardioInterface(ex.duration_minutes);
+            didBtn.textContent = 'Did it';
+        } else if (ex.type === 'strength') {
+            showStrengthInterface(ex.sets, ex.reps);
+            didBtn.textContent = 'Set Done';
         }
 
         showUpNext(index);
@@ -760,22 +174,18 @@
 
     function showCardioInterface(minutes) {
         document.getElementById('timerContainer').style.display = 'flex';
-        document.getElementById('strengthDetails').style.display = 'none';
         timeLeft = minutes * 60;
         updateTimerDisplay();
         startTimer();
     }
 
     function showStrengthInterface(sets, reps) {
-    document.getElementById('timerContainer').style.display = 'none';
-    document.getElementById('strengthDetails').style.display = 'inline-block';
-    document.getElementById('totalSets').textContent = reps;  // reps = set soni
-    document.getElementById('repsCount').textContent = sets;   // sets = takrorlash soni
-    document.getElementById('currentSet').textContent = currentSet;
-
-    clearInterval(timerInterval);
-    document.getElementById('didItBtn').textContent = 'Set Done';
-}
+        document.getElementById('strengthDetails').style.display = 'inline-block';
+        document.getElementById('totalSets').textContent = sets;
+        document.getElementById('repsCount').textContent = reps;
+        document.getElementById('currentSet').textContent = currentSet;
+        clearInterval(timerInterval);
+    }
 
     function startTimer() {
         clearInterval(timerInterval);
@@ -786,16 +196,13 @@
             }
             if (timeLeft === 0) {
                 clearInterval(timerInterval);
-                completeExercise(true);
+                completeExercise(true); // Cardio: vaqt tugasa avtomatik tugatish
             }
         }, 1000);
     }
 
     function updateTimerDisplay() {
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        document.getElementById('timer').textContent =
-            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        document.getElementById('timer').textContent = formatTime(timeLeft);
     }
 
     function togglePause() {
@@ -804,61 +211,65 @@
     }
 
     function completeExercise(isAutoCompleted = false) {
-    const exercise = exercises[currentExerciseIndex];
-    const didItBtn = document.getElementById('didItBtn');
+        const ex = exercises[currentExerciseIndex];
+        const btn = document.getElementById('didItBtn');
 
-        if (exercise.type === 'cardio') {
+        if (ex.type === 'cardio') {
+            processExerciseCompletion(ex);
             clearInterval(timerInterval);
-            didItBtn.classList.add('completed');
-            didItBtn.textContent = '✓ Done';
-            didItBtn.disabled = true;
+            btn.classList.add('completed');
+            btn.textContent = '✓ Done';
+            btn.disabled = true;
 
-            processExerciseCompletion(exercise);
-            setTimeout(() => {
-                loadExercise(currentExerciseIndex + 1);
-            }, 800);
+            totalExercisesCompleted++;
 
-        } else if (exercise.type === 'strength') {
-            if (currentSet < exercise.reps) {
-                // Set tugadi, rest boshlanadi
-                startRest(exercise.rest_seconds, currentSet, exercise.reps);
-                currentSet++;
+            setTimeout(() => { loadExercise(currentExerciseIndex + 1); }, 800);
+
+        } else if (ex.type === 'strength') {
+            // Strength: Set mantiqi
+            if (currentSet < ex.sets) {
+                // Setni yakunlash va rest berish
+                startRest(ex.rest_seconds, currentSet, ex.sets);
+                currentSet++; // Keyingi Set ga o'tish
             } else {
-                // Oxirgi set tugadi
-               didItBtn.classList.add('completed');
-            didItBtn.textContent = '✓ Done';
-            didItBtn.disabled = true;
+                // Barcha Setlar tugadi, mashqni yakunlash
+                processExerciseCompletion(ex);
+                btn.classList.add('completed');
+                btn.textContent = '✓ Done';
+                btn.disabled = true;
 
-                processExerciseCompletion(exercise);
-                setTimeout(() => {
-                    loadExercise(currentExerciseIndex + 1);
-                }, 800);
+                totalExercisesCompleted++;
+
+                setTimeout(() => { loadExercise(currentExerciseIndex + 1); }, 800);
             }
         }
     }
 
-    function processExerciseCompletion(exercise) {
-        const exerciseDuration = Math.floor((Date.now() - exerciseStartTime) / 1000);
-        totalDuration += exerciseDuration;
+    function processExerciseCompletion(ex) {
+        const duration = Date.now() - exerciseStartTime;
+        const exerciseDuration = Math.floor(duration / 1000);
+        totalDurationSeconds += exerciseDuration;
 
-        if (exercise.type === 'cardio' && exercise.calories_per_minute) {
-            const caloriesBurned = (exerciseDuration / 60) * exercise.calories_per_minute;
+        if (ex.calories_per_minute) {
+            const caloriesBurned = (exerciseDuration / 60) * ex.calories_per_minute;
             totalCaloriesBurned += caloriesBurned;
         }
-
-        totalExercisesCompleted++;
     }
 
     function startRest(restSeconds, completedSet, totalSets) {
-        // Update set complete badge
         document.getElementById('setCompleteBadge').textContent = `Set ${completedSet} Complete ✓`;
 
-        // Update next info
         const nextSet = completedSet + 1;
-        if (nextSet <= totalSets) {
+
+        // Keyingi Set yoki Keyingi Mashq (agar setlar tugasa)
+        const nextExercise = exercises[currentExerciseIndex + 1];
+
+        if(nextSet <= totalSets){
             document.getElementById('restUpNextName').textContent = `Set ${nextSet} / ${totalSets}`;
+        } else if (nextExercise) {
+            document.getElementById('restUpNextName').textContent = `Keyingi Mashq: ${nextExercise.name}`;
         } else {
-            document.getElementById('restUpNextName').textContent = 'Next Exercise';
+            document.getElementById('restUpNextName').textContent = "Mashg'ulot yakunlanmoqda";
         }
 
         document.getElementById('restOverlay').classList.add('active');
@@ -881,37 +292,36 @@
     function skipRest() {
         clearInterval(restInterval);
         document.getElementById('restOverlay').classList.remove('active');
+        const ex = exercises[currentExerciseIndex];
 
-        const exercise = exercises[currentExerciseIndex];
-
-        if (exercise.type === 'strength' && currentSet <= exercise.sets) {
-            showStrengthInterface(exercise.sets, exercise.reps);
+        if (ex.type === 'strength' && currentSet <= ex.sets) {
+            // Agar rest tugagan bo'lsa, lekin hali setlar qolgan bo'lsa
+            showStrengthInterface(ex.sets, ex.reps);
         } else {
+            // Agar rest tugasa va setlar tugagan bo'lsa (yoki cardio bo'lsa, lekin bu yerda bo'lmaydi)
             loadExercise(currentExerciseIndex + 1);
         }
     }
 
     function showUpNext(index) {
         const upNextSection = document.getElementById('upNext');
-        const exercise = exercises[index];
+        upNextSection.style.display = 'none';
+        const ex = exercises[index];
 
-        // Strength mashqda keyingi set ko'rsatish
-        if (exercise && exercise.type === 'strength' && currentSet < exercise.sets) {
+        // 1. Agar Strength mashq bo'lsa va hali Setlar qolgan bo'lsa
+        if (ex.type === 'strength' && currentSet < ex.sets) {
             upNextSection.style.display = 'block';
-            document.getElementById('upNextName').textContent = exercise.name;
-            document.getElementById('upNextDetails').textContent = `Next: Set ${currentSet + 1}/${exercise.sets}`;
-            const defaultImage = "{% static 'images/default_exercise.png' %}";
-            document.getElementById('upNextImage').src = exercise.image || defaultImage;
+            document.getElementById('upNextName').textContent = ex.name;
+            document.getElementById('upNextDetails').textContent = `Next: Set ${currentSet + 1}/${ex.sets}`;
+            document.getElementById('upNextImage').src = ex.image || "{% static 'images/default_exercise.png' %}";
             return;
         }
 
-        // Keyingi mashq ko'rsatish
+        // 2. Keyingi mashqni ko'rsatish (agar mavjud bo'lsa)
         if (index < exercises.length - 1) {
             const next = exercises[index + 1];
             upNextSection.style.display = 'block';
-
-            const defaultImage = "{% static 'images/default_exercise.png' %}";
-            document.getElementById('upNextImage').src = next.image || defaultImage;
+            document.getElementById('upNextImage').src = next.image || "{% static 'images/default_exercise.png' %}";
             document.getElementById('upNextName').textContent = next.name;
 
             if (next.type === 'cardio') {
@@ -924,6 +334,9 @@
         }
     }
 
+    // ==========================================
+    // MODAL/EXIT LOGIC
+    // ==========================================
     function showExitModal() {
         document.getElementById('exitModal').classList.add('active');
         if (!isPaused) togglePause();
@@ -934,68 +347,87 @@
         if (isPaused) togglePause();
     }
 
+    function finishWorkout() {
+        const form = createExitForm(true, 'complete');
+        document.body.appendChild(form);
+        form.submit();
+    }
+
     function saveAndExit() {
-        const form = createExitForm(true);
+        const form = createExitForm(true, 'exit');
         document.body.appendChild(form);
         form.submit();
     }
 
     function exitWithoutSaving() {
-        const form = createExitForm(false);
+        const form = createExitForm(false, 'exit');
         document.body.appendChild(form);
         form.submit();
     }
 
-    function createExitForm(save) {
+    function createExitForm(save, action) {
         const form = document.createElement('form');
         form.method = 'POST';
+        // 'workout_start' URL nomini Django urls.py da tekshiring
         form.action = "{% url 'workout_start' workout.id %}";
 
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-        form.innerHTML = `<input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">`;
-        form.innerHTML += `<input type="hidden" name="action" value="exit">`;
-        form.innerHTML += `<input type="hidden" name="save_progress" value="${save ? 'true' : 'false'}">`;
-        form.innerHTML += `<input type="hidden" name="current_exercise_index" value="${currentExerciseIndex}">`;
-        form.innerHTML += `<input type="hidden" name="total_duration" value="${totalDuration}">`;
-        form.innerHTML += `<input type="hidden" name="total_calories" value="${totalCaloriesBurned.toFixed(2)}">`;
-        form.innerHTML += `<input type="hidden" name="exercises_completed" value="${totalExercisesCompleted}">`;
+        // CSRF Token
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = 'csrfmiddlewaretoken';
+        csrfInput.value = csrfToken;
+        form.appendChild(csrfInput);
+
+        // Action
+        const actionInput = document.createElement('input');
+        actionInput.type = 'hidden';
+        actionInput.name = 'action';
+        actionInput.value = action;
+        form.appendChild(actionInput);
+
+        // Save Progress
+        const saveInput = document.createElement('input');
+        saveInput.type = 'hidden';
+        saveInput.name = 'save_progress';
+        saveInput.value = save ? 'true' : 'false';
+        form.appendChild(saveInput);
+
+        // Natijalar
+        const durationInput = document.createElement('input');
+        durationInput.type = 'hidden';
+        durationInput.name = 'total_duration';
+        durationInput.value = totalDurationSeconds;
+        form.appendChild(durationInput);
+
+        const caloriesInput = document.createElement('input');
+        caloriesInput.type = 'hidden';
+        caloriesInput.name = 'total_calories';
+        caloriesInput.value = totalCaloriesBurned.toFixed(2);
+        form.appendChild(caloriesInput);
+
+        const completedInput = document.createElement('input');
+        completedInput.type = 'hidden';
+        completedInput.name = 'exercises_completed';
+        completedInput.value = totalExercisesCompleted;
+        form.appendChild(completedInput);
+
+        // Joriy index
+        if (action === 'exit' && save) {
+            const indexInput = document.createElement('input');
+            indexInput.type = 'hidden';
+            indexInput.name = 'current_exercise_index';
+            indexInput.value = currentExerciseIndex;
+            form.appendChild(indexInput);
+        }
 
         return form;
-    }
-
-    function finishWorkout() {
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = "{% url 'workout_complete' workout.id %}";
-
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-        form.innerHTML = `<input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">`;
-        form.innerHTML += `<input type="hidden" name="action" value="complete">`;
-        form.innerHTML += `<input type="hidden" name="total_duration" value="${totalDuration}">`;
-        form.innerHTML += `<input type="hidden" name="total_calories" value="${totalCaloriesBurned.toFixed(2)}">`;
-        form.innerHTML += `<input type="hidden" name="exercises_completed" value="${totalExercisesCompleted}">`;
-
-        document.body.appendChild(form);
-        form.submit();
-    }
-
-    function formatTime(seconds) {
-        const mins = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     }
 
     // ==========================================
     // INITIALIZATION
     // ==========================================
-    document.addEventListener('DOMContentLoaded', function () {
-        if (exercises.length > 0) {
-            const initialIndex = parseInt("{{ request.session.current_workout_index|default:0 }}");
-            loadExercise(initialIndex);
-        } else {
-            document.getElementById('exerciseName').textContent = 'No exercises found.';
-            document.getElementById('didItBtn').disabled = true;
-        }
+    document.addEventListener('DOMContentLoaded', () => {
+        loadExercise(0);
     });
 </script>
 </body>

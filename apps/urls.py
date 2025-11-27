@@ -22,9 +22,8 @@ from apps.views import (
     WorkoutDetailView,
     WorkoutStartView,
 )
-from django.urls import path
-
 from apps.views.users import AdminPageView
+from django.urls import path
 
 urlpatterns = [
 

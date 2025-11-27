@@ -1,525 +1,309 @@
+{# templates/exercises/exercise_detail.html #}
 {% extends 'base.html' %}
-
-
 
 {% block title %}{{ exercise.name|default:"Mashq Tafsilotlari" }}{% endblock %}
 
 {% block extra_css %}
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* Premium Background */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
-            color: #EAEAEA;
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* Animated particles background */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%);
-            animation: particleFloat 15s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        @keyframes particleFloat {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(20px, -20px); }
+            background: #0a0e1a;
         }
 
         .content-wrapper {
-            max-width: 500px;
-            margin: auto;
+            max-width: 650px;
+            margin: 40px auto;
             padding: 20px;
-            position: relative;
-            z-index: 1;
         }
 
-        /* Back Button */
+        .media-container {
+            border-radius: 18px;
+            overflow: hidden;
+            background: #0f1528;
+            padding: 0;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .5);
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+        }
+
+        .media-container img, .media-container video {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        /* Ko'rsatmalar media-konteyner ichida to'liq joy egallashi uchun */
+        .instructions-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0b1020;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            color: #e0e0e0;
+            z-index: 5;
+            border-radius: 18px;
+        }
+
+        .instructions-overlay h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .instructions-overlay ul {
+            line-height: 1.8;
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .instructions-overlay li {
+            margin-bottom: 8px;
+        }
+
+        /* Eski instructions-panel yashirildi */
+        .instructions-panel {
+            display: none !important;
+        }
+
+        .hidden {
+            display: none !important
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .action-btn {
+            padding: 14px 8px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            background: #14182b;
+            color: #fff;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .action-btn:hover:not(:disabled) {
+            background: #1c2340;
+            transform: translateY(-2px);
+        }
+
+        .action-btn.active {
+            background: #ffd700;
+            color: #000;
+            font-weight: 600;
+        }
+
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .back-button {
             position: fixed;
             top: 20px;
             left: 20px;
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg,
-                rgba(255, 215, 0, 0.2) 0%,
-                rgba(255, 215, 0, 0.1) 100%);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 215, 0, 0.3);
-            border-radius: 12px;
+            padding: 10px 16px;
+            background: rgba(255, 215, 0, 0.12);
+            border-radius: 10px;
+            border: none;
             color: #ffd700;
-            font-size: 24px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
+            font-size: 22px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            z-index: 100;
         }
 
         .back-button:hover {
-            background: linear-gradient(135deg,
-                rgba(255, 215, 0, 0.3) 0%,
-                rgba(255, 215, 0, 0.2) 100%);
-            transform: scale(1.1);
-            box-shadow: 0 8px 32px rgba(255, 215, 0, 0.3);
+            background: rgba(255, 215, 0, 0.25);
         }
 
-        /* Premium Header */
-        .exercise-header {
+        .page-title {
             text-align: center;
-            margin: 60px 0 40px 0;
-            animation: fadeInDown 0.6s ease;
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .exercise-title {
-            font-size: 36px;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
-            line-height: 1.3;
-            margin: 0;
-        }
-
-        /* Premium Media Container */
-        .media-container {
-            margin-bottom: 30px;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            background: linear-gradient(135deg,
-                rgba(255, 255, 255, 0.1) 0%,
-                rgba(255, 255, 255, 0.05) 100%);
-            backdrop-filter: blur(10px);
-            position: relative;
-            animation: fadeInUp 0.8s ease;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .media-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg,
-                rgba(255, 215, 0, 0.1) 0%,
-                transparent 100%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .media-container:hover::before {
-            opacity: 1;
-        }
-
-        .exercise-image {
-            width: 100%;
-            display: block;
-            object-fit: cover;
-            height: auto;
-            min-height: 350px;
-            transition: transform 0.4s ease;
-        }
-
-        .media-container:hover .exercise-image {
-            transform: scale(1.02);
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Premium Instructions Container */
-        .instructions-in-media-container {
-            padding: 30px;
-            background: linear-gradient(135deg,
-                rgba(26, 31, 58, 0.95) 0%,
-                rgba(15, 12, 41, 0.95) 100%);
-            backdrop-filter: blur(10px);
-            min-height: 400px;
-            overflow-y: auto;
-        }
-
-        .section-title {
-            font-size: 24px;
-            font-weight: 900;
-            margin-bottom: 25px;
-            background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
-            padding-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Premium Info Details */
-        .info-detail {
-            margin-bottom: 20px;
-            padding: 18px;
-            background: linear-gradient(135deg,
-                rgba(255, 215, 0, 0.15) 0%,
-                rgba(255, 215, 0, 0.08) 100%);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            border-left: 4px solid #ffd700;
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .info-detail:hover {
-            transform: translateX(5px);
-            box-shadow: 0 8px 24px rgba(255, 215, 0, 0.2);
-        }
-
-        .info-detail .info-label {
-            font-size: 12px;
-            color: rgba(255, 215, 0, 0.7);
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        .info-detail .info-value {
-            font-size: 18px;
-            font-weight: 700;
-            color: #EAEAEA;
-        }
-
-        /* Premium Instruction List */
-        .instruction-list {
-            list-style: none;
-            padding-left: 0;
-            margin-top: 25px;
-        }
-
-        .instruction-list li {
-            font-size: 16px;
-            line-height: 1.8;
-            margin-bottom: 18px;
-            position: relative;
-            padding-left: 40px;
-            padding: 15px 15px 15px 50px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            border-left: 3px solid rgba(255, 215, 0, 0.5);
-            transition: all 0.3s ease;
-        }
-
-        .instruction-list li:hover {
-            background: rgba(255, 215, 0, 0.1);
-            transform: translateX(5px);
-        }
-
-        .instruction-list li:before {
-            content: "⭐";
-            position: absolute;
-            left: 15px;
-            top: 15px;
-            color: #FFC300;
-            font-size: 22px;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.1); }
-        }
-
-        /* Premium Action Buttons */
-     /* Action buttons container — kichiklashtirilgan */
-.action-buttons {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px; /* 15px → 10px */
-    margin-bottom: 20px; /* 30px → 20px */
-    padding: 12px; /* 20px → 12px */
-    background: linear-gradient(135deg,
-        rgba(255, 255, 255, 0.1) 0%,
-        rgba(255, 255, 255, 0.05) 100%);
-    backdrop-filter: blur(10px);
-    border-radius: 16px; /* 20px → 16px */
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25); /* 8px 32px → 6px 24px */
-    border: 1px solid rgba(255, 215, 0, 0.1);
-    animation: fadeInUp 0.8s ease; /* 1s → 0.8s */
-}
-
-/* Har bir button — kichikroq */
-.action-btn {
-    flex: 1;
-    background: linear-gradient(135deg,
-        rgba(255, 215, 0, 0.1) 0%,
-        rgba(255, 215, 0, 0.05) 100%);
-    padding: 12px 8px; /* 18px 12px → 12px 8px */
-    border-radius: 12px; /* 16px → 12px */
-    border: 2px solid rgba(255, 215, 0, 0.25);
-    color: #EAEAEA;
-    font-size: 0.85rem; /* text kichraydi */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px; /* icon-text o'rtasi */
-    transition: all 0.25s ease; /* biroz tezroq animation */
-}
-
-/* Hover effekti ham kichikroq */
-.action-btn:hover {
-    background: linear-gradient(135deg,
-        rgba(255, 215, 0, 0.18) 0%,
-        rgba(255, 215, 0, 0.1) 100%);
-    transform: translateY(-3px); /* -5px → -3px */
-    box-shadow: 0 8px 26px rgba(255, 215, 0, 0.3); /* 12px 32px → 8px 26px */
-    border-color: rgba(255, 215, 0, 0.5);
-}
-
-/* Active holati kichiklashtirilgan */
-.action-btn.active {
-    background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
-    border-color: #ffd700;
-    transform: translateY(-3px); /* -5px → -3px */
-    box-shadow: 0 10px 28px rgba(255, 215, 0, 0.5);
-}
-
-        /* Favorite button special styling */
-        .favorite-toggle.favorited {
-            background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+            font-size: 28px;
+            margin-bottom: 24px;
             color: #fff;
-            border-color: #E74C3C;
-            box-shadow: 0 12px 40px rgba(231, 76, 60, 0.6);
+            font-weight: 600;
         }
 
-        .favorite-toggle.favorited .action-icon {
-            color: #fff;
-            animation: heartBeat 1s ease infinite;
-        }
-
-        @keyframes heartBeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .action-icon {
-            font-size: 32px;
-            margin-bottom: 8px;
-            color: #FFC300;
-            transition: all 0.3s ease;
-        }
-
-        .action-label {
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .exercise-title {
-                font-size: 24px;
-                letter-spacing: 1px;
-            }
-
+        /* Mobil adaptatsiya (media queries) */
+        @media (max-width: 1024px) {
             .content-wrapper {
+                max-width: 90%;
+                padding: 20px 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                max-width: 100%;
                 padding: 15px;
+                margin: 60px auto 20px;
+            }
+
+            .media-container {
+                aspect-ratio: 4/3;
+                border-radius: 14px;
+            }
+
+            .page-title {
+                font-size: 22px;
+                margin-bottom: 18px;
+                padding: 0 10px;
             }
 
             .action-buttons {
-                gap: 10px;
-                padding: 15px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
             }
 
             .action-btn {
-                padding: 15px 8px;
-            }
-
-            .action-icon {
-                font-size: 24px;
-                margin-bottom: 6px;
-            }
-
-            .action-label {
-                font-size: 10px;
-            }
-
-            .exercise-image {
-                min-height: 250px;
+                font-size: 13px;
+                padding: 12px 6px;
             }
 
             .back-button {
-                width: 40px;
-                height: 40px;
                 top: 15px;
                 left: 15px;
+                padding: 8px 12px;
+                font-size: 20px;
             }
 
-            .instruction-list li {
+            .instructions-overlay {
+                padding: 16px;
+            }
+
+            .instructions-overlay h3 {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content-wrapper {
+                padding: 10px;
+                margin: 50px auto 15px;
+            }
+
+            .media-container {
+                aspect-ratio: 1/1;
+                border-radius: 12px;
+            }
+
+            .page-title {
+                font-size: 20px;
+                margin-bottom: 16px;
+            }
+
+            .action-buttons {
+                gap: 6px;
+            }
+
+            .action-btn {
+                font-size: 12px;
+                padding: 10px 4px;
+                border-radius: 8px;
+            }
+
+            .back-button {
+                top: 10px;
+                left: 10px;
+                padding: 6px 10px;
+                font-size: 18px;
+            }
+
+            .instructions-overlay {
+                padding: 14px;
+            }
+
+            .instructions-overlay h3 {
+                font-size: 16px;
+                margin-bottom: 12px;
+            }
+
+            .instructions-overlay ul {
                 font-size: 14px;
-                padding: 12px 12px 12px 40px;
+                line-height: 1.6;
             }
         }
-        .exercise-detail-page .bottom-nav {
-    display: none !important;
-}
 
+        @media (min-width: 1400px) {
+            .content-wrapper {
+                max-width: 750px;
+            }
 
-        /* Scrollbar styling */
-        .instructions-in-media-container::-webkit-scrollbar {
-            width: 8px;
-        }
+            .page-title {
+                font-size: 32px;
+            }
 
-        .instructions-in-media-container::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-        }
-
-        .instructions-in-media-container::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #ffd700, #f39c12);
-            border-radius: 10px;
-        }
-
-        .instructions-in-media-container::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #ffed4e, #ffd700);
+            .action-btn {
+                font-size: 16px;
+                padding: 16px 10px;
+            }
         }
     </style>
 {% endblock %}
 
 {% block content %}
-    <!-- Back Button -->
     <button class="back-button" onclick="history.back()">‹</button>
 
     <div class="content-wrapper">
-        <div class="exercise-header">
-            <h1 class="exercise-title">{{ exercise.name|default:"Seated Dumbbell Overhead Press" }}</h1>
-        </div>
+        <h1 class="page-title">{{ exercise.name }}</h1>
 
-        <div class="media-container">
+        <div class="media-container" id="mediaContainer">
+            {# Placeholder #}
+            <div id="placeholder"
+                 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 64px; {% if exercise.thumbnail %}display:none;{% endif %}">
+                💪
+            </div>
 
-            {% if exercise.thumbnail %}
-                <img src="{{ exercise.thumbnail.url|default:'/static/img/seated_dumbbell_press.png' }}"
-                     alt="{{ exercise.name|default:'Seated Dumbbell Overhead Press' }}"
-                     class="exercise-image" id="exerciseImage">
-            {% else %}
-                <div style="height: 350px; background: linear-gradient(135deg, rgba(255,215,0,0.2) 0%, rgba(255,215,0,0.1) 100%); display: flex; align-items: center; justify-content: center; color: #ffd700; font-size: 64px;"
-                     id="exerciseImage">
-                    💪
-                </div>
-            {% endif %}
+            {# Rasm #}
+            <img id="exerciseImage"
+                 src="{{ exercise.thumbnail.url|default:'/mnt/data/3b8fd921-fc5e-4bbe-8fd4-3e5cfc15dd0e.png' }}"
+                 alt="{{ exercise.name }}"
+                 {% if not exercise.thumbnail %}style="display:none"{% endif %}>
 
+            {# Video #}
             {% if exercise.video %}
-                <video controls
-                       class="exercise-image hidden"
-                       id="exerciseVideo"
-                       src="{{ exercise.video.url }}"
-                       poster="{{ exercise.thumbnail.url|default:'' }}"
-                       loop muted playsinline>
-                    Sizning brauzeringiz video tegini qo'llab-quvvatlamaydi.
+                <video id="exerciseVideo" controls loop muted playsinline
+                       poster="{{ exercise.thumbnail.url|default:'' }}">
+                    <source src="{{ exercise.video.url }}" type="video/mp4">
+                    Your browser does not support the video tag.
                 </video>
+            {% else %}
+                <video id="exerciseVideo" class="hidden" controls loop muted playsinline style="display:none"></video>
             {% endif %}
 
-            <div class="instructions-in-media-container hidden" id="instructionsDisplay">
-                <h2 class="section-title">📝 Mashq Tafsilotlari</h2>
-
-                <div class="info-detail">
-                    <div class="info-label">Asosiy muskul</div>
-                    <div class="info-value">{{ exercise.primary_body_part|default:"Ma'lumot yo'q" }}</div>
-                </div>
-
-                <div class="info-detail">
-                    <div class="info-label">Yordamchi muskullar</div>
-                    <div class="info-value">{{ exercise.secondary_body_part|default:"Ma'lumot yo'q" }}</div>
-                </div>
-
-                <h2 class="section-title" style="margin-top: 30px;">💡 Bajarish Bo'yicha Ko'rsatmalar</h2>
-
-                <ul class="instruction-list">
-                    {% for instruction in instructions_list %}
-                        <li>{{ instruction }}</li>
-                    {% empty %}
-                        <li>Mashq uchun ko'rsatmalar mavjud emas.</li>
-                    {% endfor %}
-                </ul>
+            <div id="instructionsOverlay" class="instructions-overlay hidden">
+                <h3>📝 Mashq Tafsilotlari</h3>
+                {% if instructions_list %}
+                    <ul>
+                        {% for line in instructions_list %}
+                            <li>{{ line }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p style="color: #888">Ko'rsatmalar mavjud emas.</p>
+                {% endif %}
             </div>
 
         </div>
 
         <div class="action-buttons">
-        <body class="exercise-detail-page">
-
-
-            <button class="action-btn active" id="imageBtn" onclick="showContent('image')">
-                <div class="action-icon">🖼️</div>
-                <span class="action-label">Rasm</span>
-            </button>
-
-            <button class="action-btn"
-                    id="videoBtn"
-                    onclick="showContent('video')"
-                    {% if not exercise.video %}disabled{% endif %}>
-                <div class="action-icon">▶️</div>
-                <span class="action-label">Video</span>
-            </button>
-
-            <button class="action-btn" id="instructionsBtn" onclick="showContent('instructions')">
-                <div class="action-icon">📋</div>
-                <span class="action-label">Ko'rsatmalar</span>
-            </button>
-
-            <button class="action-btn favorite-toggle {% if is_favorited %}favorited{% endif %}" id="favoriteBtn">
-                <div class="action-icon" id="favoriteIcon">{% if is_favorited %}★{% else %}⭐{% endif %}</div>
-                <span class="action-label">Sevimli</span>
-            </button>
+            <button id="imageBtn" class="action-btn">📷 RASM</button>
+            <button id="videoBtn" class="action-btn" {% if not exercise.video %}disabled{% endif %}>🎥 VIDEO</button>
+            <button id="instructionsBtn" class="action-btn">📝 KO'RSATMALAR</button>
+            <button id="favoriteBtn"
+                    class="action-btn {% if is_favorited %}active{% endif %}">{{ is_favorited|yesno:"★,⭐" }}</button>
         </div>
 
     </div>
@@ -527,84 +311,82 @@
 
 {% block extra_js %}
     <script>
-        // Barcha kontent turlarini boshqaruvchi yagona funksiya
-        function showContent(type) {
-            const video = document.getElementById('exerciseVideo');
-            const image = document.getElementById('exerciseImage');
-            const instructionsDisplay = document.getElementById('instructionsDisplay');
+        (function () {
+            const img = document.getElementById('exerciseImage');
+            const vid = document.getElementById('exerciseVideo');
+            const ph = document.getElementById('placeholder');
+            const insOverlay = document.getElementById('instructionsOverlay');
 
-            // Tugmalar
-            const imageBtn = document.getElementById('imageBtn');
-            const videoBtn = document.getElementById('videoBtn');
-            const instructionsBtn = document.getElementById('instructionsBtn');
+            const btnImg = document.getElementById('imageBtn');
+            const btnVid = document.getElementById('videoBtn');
+            const btnIns = document.getElementById('instructionsBtn');
+            const btnFav = document.getElementById('favoriteBtn');
 
-            // Barcha kontent elementlarini vaqtinchalik ro'yxatga olish
-            const allContent = [video, image, instructionsDisplay].filter(el => el !== null);
-            const allBtns = [imageBtn, videoBtn, instructionsBtn].filter(el => el !== null);
-
-            // Barcha elementlarni yashirish
-            allContent.forEach(el => el.classList.add('hidden'));
-            allBtns.forEach(btn => btn.classList.remove('active'));
-
-            // Videoni to'xtatish
-            if (video) video.pause();
-
-            // Tanlangan kontentni ko'rsatish
-            if (type === 'image' && image) {
-                image.classList.remove('hidden');
-                imageBtn.classList.add('active');
-            } else if (type === 'video' && video) {
-                video.classList.remove('hidden');
-                video.play();
-                videoBtn.classList.add('active');
-            } else if (type === 'instructions' && instructionsDisplay) {
-                instructionsDisplay.classList.remove('hidden');
-                instructionsBtn.classList.add('active');
-            }
-        }
-
-        // Ko'rsatmalarga o'tish funksiyasi
-        function viewInstructions() {
-            showContent('instructions');
-        }
-
-
-        // Sevimli tugmasi mantig'i
-        document.getElementById('favoriteBtn').addEventListener('click', function () {
-            const icon = document.getElementById('favoriteIcon');
-            const btn = document.getElementById('favoriteBtn');
-
-            fetch("{% url 'toggle_favorite' exercise.pk %}", {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({})
-            }).then(r => r.json()).then(data => {
-
-                if (data.status === 'added') {
-                    icon.textContent = '★';
-                    btn.classList.add('favorited');
-                } else if (data.status === 'removed') {
-                    icon.textContent = '⭐';
-                    btn.classList.remove('favorited');
-                } else if (data.message === 'Login required') {
-                    alert("Iltimos, avval tizimga kiring.");
+            function hideAll() {
+                if (img) img.style.display = 'none';
+                if (vid) {
+                    vid.pause();
+                    vid.style.display = 'none';
+                    vid.currentTime = 0;
                 }
-            }).catch(err => console.error("Sevimli funksiyasi xatoligi:", err));
-        });
+                if (ph) ph.style.display = 'none';
+                insOverlay.classList.add('hidden');
 
-        // Sahifa yuklanganda
-        document.addEventListener('DOMContentLoaded', () => {
-            const video = document.getElementById('exerciseVideo');
-            const image = document.getElementById('exerciseImage');
-
-            if (video && (image && image.classList.contains('hidden') || !image)) {
-                showContent('video');
-            } else {
-                showContent('image');
+                [btnImg, btnVid, btnIns].forEach(b => b && b.classList.remove('active'));
             }
-        });
+
+            btnImg.addEventListener('click', () => {
+                hideAll();
+                if (img && img.getAttribute('src')) img.style.display = 'block'; else if (ph) ph.style.display = 'block';
+                btnImg.classList.add('active');
+            });
+
+            btnVid.addEventListener('click', () => {
+                hideAll();
+                if (vid && vid.querySelector('source') && vid.querySelector('source').getAttribute('src')) {
+                    vid.style.display = 'block';
+                    vid.play().catch(() => { /* autoplay denied */ });
+                } else if (ph) ph.style.display = 'block';
+                btnVid.classList.add('active');
+            });
+
+            btnIns.addEventListener('click', () => {
+                hideAll();
+                insOverlay.classList.remove('hidden');
+                btnIns.classList.add('active');
+            });
+
+            document.addEventListener('DOMContentLoaded', () => {
+                if (vid && vid.querySelector('source') && vid.querySelector('source').getAttribute('src')) {
+                    btnVid.click();
+                } else {
+                    btnImg.click();
+                }
+            });
+
+            // Favorite toggle (AJAX)
+            btnFav.addEventListener('click', function () {
+                fetch("{% url 'toggle_favorite' exercise.pk %}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({})
+                }).then(r => r.json()).then(data => {
+                    if (data.status === 'added') {
+                        btnFav.classList.add('active');
+                        btnFav.textContent = '★';
+                    } else if (data.status === 'removed') {
+                        btnFav.classList.remove('active');
+                        btnFav.textContent = '⭐';
+                    } else if (data.message === 'Login required') {
+                        alert("Iltimos, avval tizimga kiring.");
+                    }
+                }).catch(err => {
+                    console.error("Favorite toggle error:", err);
+                });
+            });
+        })();
     </script>
 {% endblock %}
