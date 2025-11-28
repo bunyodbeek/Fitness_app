@@ -1,16 +1,25 @@
-            {% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block title %}Mening Sevimlilarim{% endblock %}
 
 {% block extra_css %}
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        /* ==========================================
-               ✨ PREMIUM ANIMATIONS - all_workouts.html style
-               ========================================== */
+        body {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-        /* 1. Animated Background - Xuddi all_workouts kabi */
+        /* Animated particles background */
         body::before {
             content: '';
             position: fixed;
@@ -27,116 +36,192 @@
         }
 
         @keyframes particleFloat {
-            0%, 100% {
-                transform: translate(0, 0) scale(1);
-            }
-            33% {
-                transform: translate(30px, -30px) scale(1.1);
-            }
-            66% {
-                transform: translate(-20px, 20px) scale(0.9);
-            }
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
         }
 
-        /* 2. Page Header Animation */
-        {#.page-header {#}
-        {#    animation: slideDownHeader 0.6s cubic-bezier(0.4, 0, 0.2, 1);#}
-        {
-        #}#}
-
-        @keyframes slideDownHeader {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* ===== COMPACT HEADER - Program List Style ===== */
+        .page-header {
+            background: linear-gradient(135deg, rgba(15, 52, 96, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
         }
 
-        /* 3. Stats Card - Slide Down */
+        .back-btn {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
+            color: #ffd700;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 10px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+            transform: scale(1.05);
+        }
+
+        .page-title {
+            color: white;
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            flex: 1;
+            text-align: center;
+            background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .add-collection-btn {
+            background: linear-gradient(135deg, #ffd700, #f39c12);
+            border: none;
+            color: #1a1a2e;
+            font-size: 18px;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .add-collection-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            padding: 16px 12px;
+            padding-bottom: 90px;
+            position: relative;
+            z-index: 12;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ===== COMPACT STATS ===== */
         .favorite-stats {
-            animation: slideDownFade 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s backwards;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+            margin-bottom: 14px;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            border-radius: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        @keyframes slideDownFade {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .favorite-stats i {
+            color: #ffd700;
+            font-size: 14px;
         }
 
-        /* 4. Tabs Animation */
+        .favorite-stats span {
+            color: #ffd700;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        /* ===== COMPACT TABS ===== */
         .favorites-tabs {
-            animation: slideDownFade 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s backwards;
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            padding-bottom: 4px;
         }
 
-        /* 5. Favorite Cards - Slide Down (ASOSIY ANIMATION) */
-        .favorite-item {
-            animation: slideInDown 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 0;
-            animation-fill-mode: forwards;
+        .favorites-tabs::-webkit-scrollbar {
+            height: 3px;
         }
 
-        @keyframes slideInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .favorites-tabs::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
         }
 
-        /* Staggered Animation - Har bir card ketma-ket */
-        .favorite-item:nth-child(1), .edition-card:nth-child(1) {
-            animation-delay: 0.1s;
+        .tab-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.06));
+            border: 1.5px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 12px;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .favorite-item:nth-child(2), .edition-card:nth-child(2) {
-            animation-delay: 0.15s;
+        .tab-btn.active {
+            background: linear-gradient(135deg, #ffd700, #f39c12);
+            border-color: #ffd700;
+            color: #1a1a2e;
+            box-shadow: 0 2px 12px rgba(255, 215, 0, 0.3);
         }
 
-        .favorite-item:nth-child(3), .edition-card:nth-child(3) {
-            animation-delay: 0.2s;
+        .tab-btn:hover:not(.active) {
+            background: rgba(255, 215, 0, 0.1);
+            border-color: rgba(255, 215, 0, 0.3);
+            color: #ffd700;
         }
 
-        .favorite-item:nth-child(4), .edition-card:nth-child(4) {
-            animation-delay: 0.25s;
+        /* ===== FAVORITES GRID ===== */
+        .favorites-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
         }
 
-        .favorite-item:nth-child(5), .edition-card:nth-child(5) {
-            animation-delay: 0.3s;
+        /* ===== COMPACT FAVORITE CARD - Program Card Style ===== */
+        .favorite-card {
+            background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.08) 0%,
+            rgba(255, 255, 255, 0.03) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
-        .favorite-item:nth-child(6), .edition-card:nth-child(6) {
-            animation-delay: 0.35s;
-        }
-
-        .favorite-item:nth-child(7), .edition-card:nth-child(7) {
-            animation-delay: 0.4s;
-        }
-
-        .favorite-item:nth-child(8), .edition-card:nth-child(8) {
-            animation-delay: 0.45s;
-        }
-
-        .favorite-item:nth-child(9), .edition-card:nth-child(9) {
-            animation-delay: 0.5s;
-        }
-
-        .favorite-item:nth-child(10), .edition-card:nth-child(10) {
-            animation-delay: 0.55s;
-        }
-
-        /* 6. Shimmer Effect on Hover - all_workouts kabi */
-        .favorite-item::before, .edition-card::before {
+        .favorite-card::before {
             content: '';
             position: absolute;
             top: -100%;
@@ -146,245 +231,407 @@
             background: linear-gradient(
                     45deg,
                     transparent 0%,
-                    rgba(255, 255, 255, 0.1) 50%,
+                    rgba(255, 255, 255, 0.08) 50%,
                     transparent 100%
             );
-            transition: all 0.6s ease;
+            transition: all 0.5s ease;
             z-index: 1;
             pointer-events: none;
         }
 
-        .favorite-item:hover::before, .edition-card:hover::before {
+        .favorite-card:hover::before {
             top: 100%;
             left: 100%;
         }
 
-        /* 7. Empty State Animation */
-        .empty-state {
-            animation: fadeInUp 0.8s ease 0.4s backwards;
+        .favorite-card:hover {
+            border-color: rgba(255, 215, 0, 0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.25);
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .favorite-card:active {
+            transform: translateY(-2px) scale(0.99);
         }
 
-        .empty-state-icon {
-            animation: float 3s ease-in-out infinite;
+        /* ===== COMPACT CARD HEADER ===== */
+        .card-header {
+            position: relative;
+            height: 120px;
+            overflow: hidden;
         }
 
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0) rotate(0deg);
-            }
-            50% {
-                transform: translateY(-10px) rotate(5deg);
-            }
+        .card-thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: brightness(0.8);
         }
 
-        /* 8. Favorite Button Pulse - all_workouts kabi */
+        .favorite-card:hover .card-thumbnail {
+            transform: scale(1.1);
+            filter: brightness(0.9);
+        }
+
+        /* ===== COMPACT TITLE OVERLAY ===== */
+        .card-title-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top,
+            rgba(0, 0, 0, 0.9) 0%,
+            rgba(0, 0, 0, 0.5) 60%,
+            transparent 100%);
+            padding: 30px 14px 12px;
+            color: white;
+            z-index: 2;
+        }
+
+        .card-title-overlay h3 {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.5px;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-title-overlay p {
+            font-size: 11px;
+            color: #ffd700;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* ===== UNFAVORITE BUTTON ===== */
         .unfavorite-btn {
-            animation: heartBeatSubtle 2s ease-in-out infinite;
-        }
-
-        @keyframes heartBeatSubtle {
-            0%, 100% {
-                box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
-            }
-            50% {
-                box-shadow: 0 4px 30px rgba(255, 215, 0, 0.5);
-            }
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 32px;
+            height: 32px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            border: 1.5px solid rgba(255, 215, 0, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
         }
 
         .unfavorite-btn:hover {
-            animation: none;
+            background: rgba(255, 215, 0, 0.3);
+            border-color: #ffd700;
+            transform: scale(1.15) rotate(15deg);
         }
 
-        /* 9. Add Collection Button Pulse */
-        .add-collection-btn {
-            animation: pulse 2s ease-in-out infinite;
+        /* ===== COMPACT CARD INFO ===== */
+        .card-info {
+            padding: 12px 14px 14px;
+            position: relative;
+            z-index: 2;
         }
 
-        @keyframes pulse {
-            0%, 100% {
-                box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-            }
-            50% {
-                box-shadow: 0 4px 25px rgba(255, 215, 0, 0.7);
-            }
+        .card-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            font-weight: 400;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
-        .add-collection-btn:hover {
-            animation: none;
+        /* ===== COMPACT META ITEMS ===== */
+        .card-meta {
+            display: flex;
+            gap: 6px;
+            font-size: 10px;
+            flex-wrap: wrap;
         }
 
-        /* 10. Modal Slide Up - all_workouts style */
-        .collection-modal.active .collection-modal-content {
-            animation: slideUpBounce 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: rgba(255, 255, 255, 0.9);
+            background: linear-gradient(135deg,
+            rgba(255, 215, 0, 0.15) 0%,
+            rgba(255, 215, 0, 0.08) 100%);
+            padding: 6px 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 10px;
         }
 
-        @keyframes slideUpBounce {
-            from {
-                opacity: 0;
-                transform: translateY(100%);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .meta-item:hover {
+            background: rgba(255, 215, 0, 0.25);
+            border-color: rgba(255, 215, 0, 0.5);
+            color: #ffd700;
         }
 
-        .collection-modal.active {
-            animation: fadeIn 0.3s ease;
+        .meta-item span {
+            font-size: 11px;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+        /* ===== EDITIONS CONTAINER ===== */
+        .editions-container {
+            display: none;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 10px;
         }
 
-        /* 11. Save Options Modal - Bottom Sheet Style */
-        .save-options-modal.active .save-options-content {
-            animation: slideUpBottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        .editions-container.active {
+            display: flex;
         }
 
-        @keyframes slideUpBottom {
-            from {
-                transform: translateY(100%);
-            }
-            to {
-                transform: translateY(0);
-            }
+        /* ===== COMPACT EDITION CARD ===== */
+        .edition-card {
+            background: linear-gradient(135deg,
+            rgba(255, 215, 0, 0.08) 0%,
+            rgba(255, 215, 0, 0.03) 100%);
+            backdrop-filter: blur(10px);
+            border: 1.5px solid rgba(255, 215, 0, 0.25);
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.15);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* 12. Collections Modal Scale In */
-        .collections-modal.active .collections-modal-content {
-            animation: scaleIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        .edition-card:hover {
+            border-color: rgba(255, 215, 0, 0.6);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.3);
         }
 
-        @keyframes scaleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+        .edition-card::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                    45deg,
+                    transparent 0%,
+                    rgba(255, 255, 255, 0.08) 50%,
+                    transparent 100%
+            );
+            transition: all 0.5s ease;
+            z-index: 1;
+            pointer-events: none;
         }
 
-        /* 13. Exercise Items in Modal - Slide In Left */
-        .exercise-select-item {
-            animation: slideInLeft 0.4s ease backwards;
+        .edition-card:hover::before {
+            top: 100%;
+            left: 100%;
         }
 
-        .exercise-select-item:nth-child(1) {
-            animation-delay: 0.05s;
+        /* Edition Badge */
+        .edition-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, #ffd700, #f39c12);
+            color: #1a1a2e;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.4);
+            z-index: 10;
         }
 
-        .exercise-select-item:nth-child(2) {
-            animation-delay: 0.1s;
+        .edition-badge i {
+            font-size: 10px;
         }
 
-        .exercise-select-item:nth-child(3) {
-            animation-delay: 0.15s;
+        /* Edition Header */
+        .edition-header {
+            position: relative;
+            height: 120px;
+            overflow: hidden;
         }
 
-        .exercise-select-item:nth-child(4) {
-            animation-delay: 0.2s;
+        .edition-thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7);
+            transition: all 0.5s ease;
         }
 
-        .exercise-select-item:nth-child(5) {
-            animation-delay: 0.25s;
+        .edition-card:hover .edition-thumbnail {
+            transform: scale(1.1);
+            filter: brightness(0.85);
         }
 
-        .exercise-select-item:nth-child(6) {
-            animation-delay: 0.3s;
+        .edition-header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                    to bottom,
+                    rgba(0, 0, 0, 0.2) 0%,
+                    rgba(0, 0, 0, 0.7) 100%
+            );
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 14px;
         }
 
-        .exercise-select-item:nth-child(7) {
-            animation-delay: 0.35s;
+        .edition-thumbnail-title {
+            color: white;
+            font-size: 16px;
+            font-weight: 800;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+            line-height: 1.2;
         }
 
-        .exercise-select-item:nth-child(8) {
-            animation-delay: 0.4s;
+        /* Edition Body */
+        .edition-body {
+            padding: 14px;
         }
 
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+        .edition-info-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
-        /* 14. Collection Items Slide In */
-        .collection-item {
-            animation: slideInRight 0.3s ease backwards;
+        .edition-info-item {
+            flex: 1;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            border-radius: 10px;
+            padding: 8px;
+            text-align: center;
         }
 
-        .collection-item:nth-child(1) {
-            animation-delay: 0.05s;
+        .edition-info-label {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 4px;
+            font-weight: 600;
         }
 
-        .collection-item:nth-child(2) {
-            animation-delay: 0.1s;
+        .edition-info-value {
+            color: #ffd700;
+            font-size: 14px;
+            font-weight: 800;
         }
 
-        .collection-item:nth-child(3) {
-            animation-delay: 0.15s;
+        .edition-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
-        .collection-item:nth-child(4) {
-            animation-delay: 0.2s;
+        /* Edition Actions */
+        .edition-actions {
+            display: flex;
+            gap: 8px;
         }
 
-        .collection-item:nth-child(5) {
-            animation-delay: 0.25s;
+        .start-workout-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #ffd700, #f39c12);
+            color: #1a1a2e;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
 
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+        .start-workout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
         }
 
-        /* 15. Save Options - Slide Up */
-        .save-option {
-            animation: slideUpOption 0.3s ease backwards;
+        .start-workout-btn i {
+            font-size: 14px;
         }
 
-        .save-option:nth-child(1) {
-            animation-delay: 0.1s;
+        .view-details-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
+            color: #ffd700;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .save-option:nth-child(2) {
-            animation-delay: 0.15s;
+        .view-details-btn:hover {
+            background: rgba(255, 215, 0, 0.15);
+            border-color: #ffd700;
         }
 
-        .save-option:nth-child(3) {
-            animation-delay: 0.2s;
+        /* Locked State */
+        .edition-card.locked {
+            opacity: 0.7;
         }
 
-        @keyframes slideUpOption {
+        .edition-card.locked .start-workout-btn {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            cursor: not-allowed;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
                 transform: translateY(20px);
@@ -395,773 +642,60 @@
             }
         }
 
-        /* 16. Thumbnail Zoom on Hover - all_workouts style */
-        .favorite-thumbnail, .edition-thumbnail {
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .favorite-item:hover .favorite-thumbnail,
-        .edition-card:hover .edition-thumbnail {
-            transform: scale(1.15) rotate(2deg);
-            filter: brightness(1.1);
-        }
-
-        /* 17. Tab Button Shimmer */
-        .tab-btn {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tab-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                    90deg,
-                    transparent,
-                    rgba(255, 255, 255, 0.2),
-                    transparent
-            );
-            transition: left 0.5s ease;
-        }
-
-        .tab-btn:hover::before {
-            left: 100%;
-        }
-
-        /* 18. Stats Number Gradient Animation */
-        .favorite-stats span {
-            background: linear-gradient(
-                    90deg,
-                    #ffd700,
-                    #ffed4e,
-                    #ffd700
-            );
-            background-size: 200% 100%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradientShift 3s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-        }
-
-        /* 19. Back Button Hover - all_workouts style */
-        .back-btn {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .back-btn:hover {
-            animation: backArrowBounce 0.6s ease;
-        }
-
-        @keyframes backArrowBounce {
-            0%, 100% {
-                transform: translateX(0);
-            }
-            25% {
-                transform: translateX(-8px);
-            }
-            75% {
-                transform: translateX(-3px);
-            }
-        }
-
-        /* 20. Page Load Fade In */
-        .favorites-content {
-            animation: fadeInContent 0.5s ease;
-        }
-
-        @keyframes fadeInContent {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        /* ==========================================
-           ⚡ RESPONSIVE ANIMATIONS
-           ========================================== */
-
-        @media (max-width: 768px) {
-            /* Mobile da animation tezroq */
-            .favorite-item, .edition-card {
-                animation-duration: 0.4s;
-            }
-
-            .page-header {
-                animation-duration: 0.5s;
-            }
-
-            .favorite-stats,
-            .favorites-tabs {
-                animation-duration: 0.5s;
-            }
-        }
-
-        /* ==========================================
-           🎯 PERFORMANCE OPTIMIZATION
-           ========================================== */
-
-        /* Reduced motion preferences */
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        /* GPU Acceleration for smooth animations */
-        .favorite-item,
-        .edition-card,
-        .page-header,
-        .favorite-stats,
-        .favorites-tabs,
-        .favorite-thumbnail,
-        .edition-thumbnail,
-        .unfavorite-btn {
-            will-change: transform, opacity;
-        }
-
-        /* Global Stillar */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
-            font-family: 'Poppins', sans-serif;
-            min-height: 100vh;
-            position: relative;
-        }
-
-        /* Header - Premium Style */
-        .page-header {
-            background: linear-gradient(135deg, rgba(15, 52, 96, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
-            backdrop-filter: blur(10px);
-            padding: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
-        }
-
-        .back-btn {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(243, 156, 18, 0.1));
-            border: 2px solid rgba(255, 215, 0, 0.3);
-            color: #ffd700;
-            font-size: 22px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .back-btn:hover {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(243, 156, 18, 0.2));
-            border-color: #ffd700;
-            transform: translateX(-3px);
-        }
-
-        .page-title {
-            color: white;
-            font-size: 24px;
-            font-weight: 900;
-            text-transform: uppercase;
-            text-align: center;
-            letter-spacing: 4px;
-            background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
-            position: relative;
-            flex: 1;
-        }
-
-        /* ✨ YANGI - Add Collection Button */
-        .add-collection-btn {
-            background: linear-gradient(135deg, #ffd700, #f39c12);
-            border: none;
-            color: #1a1a2e;
-            font-size: 24px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-            font-weight: 900;
-        }
-
-        .add-collection-btn:hover {
-            transform: scale(1.1) rotate(90deg);
-            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6);
-        }
-
-        .add-collection-btn:active {
-            transform: scale(0.95);
-        }
-
-        /* Content Wrapper */
-        .favorites-content {
-            padding: 25px 20px;
-            padding-bottom: 100px;
-            position: relative;
-            z-index: 1;
-            max-width: 850px;
-            margin: 0 auto;
-        }
-
-        /* Statistika - Premium Card */
-        .favorite-stats {
-            color: #95a5a6;
-            font-size: 16px;
-            margin-bottom: 25px;
-            padding: 18px 24px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.06));
-            border-radius: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            font-weight: 500;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .favorite-stats span {
-            color: #ffd700;
-            font-weight: 700;
-            font-size: 22px;
-            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.4);
-            margin-left: 8px;
-        }
-
-        /* Tabs - Modern Style */
-        .favorites-tabs {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 28px;
-            overflow-x: auto;
-            padding-bottom: 5px;
-        }
-
-        .favorites-tabs::-webkit-scrollbar {
-            height: 4px;
-        }
-
-        .favorites-tabs::-webkit-scrollbar-thumb {
-            background: rgba(255, 215, 0, 0.3);
-            border-radius: 10px;
-        }
-
-        .tab-btn {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.06));
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            color: #95a5a6;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 20px;
-            white-space: nowrap;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-        }
-
-        .tab-btn.active {
-            background: linear-gradient(135deg, #ffd700, #f39c12);
-            border-color: #ffd700;
-            color: #1a1a2e;
-            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .tab-btn:hover:not(.active) {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.12), rgba(243, 156, 18, 0.12));
-            border-color: rgba(255, 215, 0, 0.4);
-            color: #ffd700;
-            transform: translateY(-1px);
-        }
-
-        /* Favorites List */
-        .favorites-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        /* Favorite Item - Premium Card Design */
-        .favorite-item {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.06));
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 18px;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(15px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .favorite-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .favorite-item:hover {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(243, 156, 18, 0.08));
-            border-color: rgba(255, 215, 0, 0.5);
-            transform: translateY(-4px);
-            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.25);
-        }
-
-        .favorite-item:hover::before {
-            opacity: 1;
-        }
-
-        .item-link-wrapper {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            padding: 18px;
-            width: 100%;
-            color: white;
-            padding-right: 70px;
-        }
-
-        /* Thumbnail - Enhanced */
-        .favorite-thumbnail {
-            width: 85px;
-            height: 85px;
-            border-radius: 14px;
-            object-fit: cover;
-            background: linear-gradient(135deg, #2c3e50, #34495e);
-            flex-shrink: 0;
-            margin-right: 18px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-            border: 2px solid rgba(255, 255, 255, 0.15);
-            transition: all 0.3s ease;
-        }
-
-        .favorite-item:hover .favorite-thumbnail {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
-            border-color: rgba(255, 215, 0, 0.4);
-        }
-
-        /* Info Section */
-        .favorite-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .favorite-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #ffd700;
-            margin-bottom: 8px;
-            line-height: 1.4;
-            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .favorite-meta {
-            font-size: 14px;
-            color: #95a5a6;
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
-
-        .favorite-meta i {
-            margin-right: 5px;
-            color: #ffd700;
-        }
-
-        .favorite-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .favorite-tag {
-            font-size: 11px;
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(243, 156, 18, 0.15));
-            color: #ffd700;
-            padding: 6px 12px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            display: inline-block;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.15);
-            transition: all 0.3s ease;
-        }
-
-        .favorite-tag:hover {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(243, 156, 18, 0.25));
-            transform: translateY(-1px);
-        }
-
-        /* Unfavorite Button - Premium Circular Design */
-        .unfavorite-btn {
-            position: absolute;
-            top: 50%;
-            right: 18px;
-            transform: translateY(-50%);
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(243, 156, 18, 0.2));
-            border: 3px solid rgba(255, 215, 0, 0.5);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            z-index: 20;
-            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
-        }
-
-        .unfavorite-btn:hover {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.4), rgba(243, 156, 18, 0.4));
-            border-color: #ffd700;
-            border-width: 3px;
-            transform: translateY(-50%) scale(1.2) rotate(15deg);
-            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.6);
-        }
-
-        .unfavorite-btn:active {
-            transform: translateY(-50%) scale(0.95);
-        }
-
-        /* Empty State - Enhanced */
-        .empty-state {
-            text-align: center;
-            padding: 80px 20px;
-            color: white;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.05));
-            border-radius: 20px;
-            border: 2px dashed rgba(255, 215, 0, 0.3);
-        }
-
         .empty-state-icon {
-            font-size: 80px;
-            margin-bottom: 25px;
-            animation: floatStar 3s ease-in-out infinite;
+            font-size: 60px;
+            margin-bottom: 20px;
+            filter: grayscale(100%);
+            opacity: 0.5;
+            animation: float 3s ease-in-out infinite;
         }
 
-        @keyframes floatStar {
-            0%, 100% {
-                transform: translateY(0) rotate(0deg);
-            }
-            50% {
-                transform: translateY(-10px) rotate(10deg);
-            }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
 
         .empty-state h3 {
-            font-size: 24px;
-            margin-bottom: 12px;
-            color: #ffd700;
-            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .empty-state p {
-            color: #95a5a6;
-            font-size: 16px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
         }
 
-        /* ==========================================
-           ✨ YANGI - PREMIUM EDITIONS CONTAINER
-           ========================================== */
-
-        /* Editions Container */
-        .editions-container {
-            display: none;
-            flex-direction: column;
-            gap: 20px;
-            margin-top: 10px;
-        }
-
-        .editions-container.active {
-            display: flex;
-        }
-
-        /* Edition Card - Premium Design */
+        /* ===== ANIMATION ===== */
+        .favorite-card,
         .edition-card {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(243, 156, 18, 0.08));
-            border: 3px solid rgba(255, 215, 0, 0.3);
-            border-radius: 20px;
-            padding: 0;
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(15px);
-            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.2);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: slideInDown 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 0;
             animation-fill-mode: forwards;
         }
 
-        .edition-card:hover {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(243, 156, 18, 0.15));
-            border-color: #ffd700;
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 15px 45px rgba(255, 215, 0, 0.4);
-        }
-
-        /* Edition Header with Thumbnail */
-        .edition-header {
-            position: relative;
-            height: 180px;
-            overflow: hidden;
-        }
-
-        .edition-thumbnail {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(0.7);
-            transition: all 0.6s ease;
-        }
-
-        .edition-card:hover .edition-thumbnail {
-            filter: brightness(0.9);
-            transform: scale(1.1);
-        }
-
-        /* Edition Header Overlay */
-        .edition-header-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(
-                    to bottom,
-                    rgba(0, 0, 0, 0.3) 0%,
-                    rgba(0, 0, 0, 0.7) 100%
-            );
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 18px;
-        }
-
-        /* One-Time Purchase Badge */
-        .edition-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: linear-gradient(135deg, #ffd700, #f39c12);
-            color: #1a1a2e;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
-            animation: badgePulse 2s ease-in-out infinite;
-            z-index: 10;
-        }
-
-        @keyframes badgePulse {
-            0%, 100% {
-                transform: scale(1);
-                box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
             }
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 6px 25px rgba(255, 215, 0, 0.7);
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        .edition-badge i {
-            font-size: 14px;
-        }
+        .favorite-card:nth-child(1), .edition-card:nth-child(1) { animation-delay: 0.05s; }
+        .favorite-card:nth-child(2), .edition-card:nth-child(2) { animation-delay: 0.1s; }
+        .favorite-card:nth-child(3), .edition-card:nth-child(3) { animation-delay: 0.15s; }
+        .favorite-card:nth-child(4), .edition-card:nth-child(4) { animation-delay: 0.2s; }
+        .favorite-card:nth-child(5), .edition-card:nth-child(5) { animation-delay: 0.25s; }
+        .favorite-card:nth-child(6), .edition-card:nth-child(6) { animation-delay: 0.3s; }
 
-        /* Edition Title on Thumbnail */
-        .edition-thumbnail-title {
-            color: white;
-            font-size: 24px;
-            font-weight: 900;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
-            margin-top: auto;
-            line-height: 1.2;
-        }
-
-        /* Edition Body */
-        .edition-body {
-            padding: 20px;
-        }
-
-        /* Edition Info */
-        .edition-info-row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 18px;
-        }
-
-        .edition-info-item {
-            flex: 1;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.08));
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 12px;
-            padding: 12px;
-            text-align: center;
-        }
-
-        .edition-info-label {
-            color: #95a5a6;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
-            font-weight: 600;
-        }
-
-        .edition-info-value {
-            color: #ffd700;
-            font-size: 18px;
-            font-weight: 800;
-            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
-        }
-
-        /* Edition Description */
-        .edition-description {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        /* Edition Actions */
-        .edition-actions {
-            display: flex;
-            gap: 12px;
-        }
-
-        /* Start Workout Button */
-        .start-workout-btn {
-            flex: 1;
-            background: linear-gradient(135deg, #ffd700, #f39c12);
-            color: #1a1a2e;
-            border: none;
-            padding: 16px;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .start-workout-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 35px rgba(255, 215, 0, 0.6);
-            background: linear-gradient(135deg, #ffed4e, #ffd700);
-        }
-
-        .start-workout-btn:active {
-            transform: translateY(-1px);
-        }
-
-        .start-workout-btn i {
-            font-size: 18px;
-        }
-
-        /* View Details Button */
-        .view-details-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 215, 0, 0.3);
-            color: #ffd700;
-            padding: 16px 24px;
-            border-radius: 14px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .view-details-btn:hover {
-            background: rgba(255, 215, 0, 0.15);
-            border-color: #ffd700;
-            transform: translateY(-2px);
-        }
-
-        /* Locked State */
-        .edition-card.locked {
-            opacity: 0.7;
-        }
-
-        .edition-card.locked .start-workout-btn {
-            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
-            cursor: not-allowed;
-        }
-
-        .edition-card.locked .start-workout-btn:hover {
-            transform: none;
-            box-shadow: 0 6px 20px rgba(149, 165, 166, 0.3);
-        }
-
-        /* ==========================================
-           ✨ YANGI - COLLECTION MODAL STYLES
-           ========================================== */
-
-        /* Modal Overlay */
+        /* ===== COLLECTION MODAL - Compact ===== */
         .collection-modal {
             position: fixed;
             top: 0;
@@ -1174,23 +708,27 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
-            animation: fadeIn 0.3s ease;
         }
 
         .collection-modal.active {
             display: flex;
+            animation: fadeIn 0.3s ease;
         }
 
-        /* Modal Content */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .collection-modal-content {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border-radius: 20px;
+            border-radius: 16px;
             width: 90%;
-            max-width: 500px;
-            max-height: 85vh;
+            max-width: 450px;
+            max-height: 80vh;
             overflow: hidden;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-            border: 2px solid rgba(255, 215, 0, 0.3);
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
             display: flex;
             flex-direction: column;
             animation: slideUp 0.4s ease;
@@ -1207,36 +745,35 @@
             }
         }
 
-        /* Modal Header */
         .modal-header {
             background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
-            padding: 20px;
+            padding: 14px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid rgba(255, 215, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
         }
 
         .modal-title {
             color: #ffd700;
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
         }
 
         .modal-close-btn {
             background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
             color: white;
-            width: 36px;
-            height: 36px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 20px;
+            font-size: 18px;
             transition: all 0.3s ease;
         }
 
@@ -1246,15 +783,14 @@
             transform: rotate(90deg);
         }
 
-        /* Modal Body */
         .modal-body {
-            padding: 25px;
+            padding: 16px;
             overflow-y: auto;
             flex: 1;
         }
 
         .modal-body::-webkit-scrollbar {
-            width: 6px;
+            width: 4px;
         }
 
         .modal-body::-webkit-scrollbar-thumb {
@@ -1262,29 +798,28 @@
             border-radius: 10px;
         }
 
-        /* Collection Name Input */
         .collection-name-group {
-            margin-bottom: 25px;
+            margin-bottom: 16px;
         }
 
         .collection-name-label {
             color: #ffd700;
-            font-size: 14px;
+            font-size: 11px;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: block;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
         }
 
         .collection-name-input {
             width: 100%;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.08));
-            border: 2px solid rgba(255, 215, 0, 0.3);
-            border-radius: 12px;
-            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            padding: 12px 14px;
             color: white;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             transition: all 0.3s ease;
         }
@@ -1292,39 +827,36 @@
         .collection-name-input:focus {
             outline: none;
             border-color: #ffd700;
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .collection-name-input::placeholder {
             color: rgba(255, 255, 255, 0.4);
         }
 
-        /* Exercise Select Section */
         .exercise-select-section {
-            margin-top: 25px;
+            margin-top: 16px;
         }
 
         .exercise-select-header {
             color: #ffd700;
-            font-size: 14px;
+            font-size: 11px;
             font-weight: 700;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
         }
 
         .exercise-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            max-height: 300px;
+            gap: 8px;
+            max-height: 250px;
             overflow-y: auto;
-            padding-right: 5px;
         }
 
         .exercise-list::-webkit-scrollbar {
-            width: 5px;
+            width: 4px;
         }
 
         .exercise-list::-webkit-scrollbar-thumb {
@@ -1332,37 +864,33 @@
             border-radius: 10px;
         }
 
-        /* Exercise Select Item */
         .exercise-select-item {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.05));
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
-            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1.5px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 10px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
         .exercise-select-item:hover {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(243, 156, 18, 0.1));
-            border-color: rgba(255, 215, 0, 0.4);
-            transform: translateX(5px);
+            background: rgba(255, 215, 0, 0.08);
+            border-color: rgba(255, 215, 0, 0.3);
         }
 
         .exercise-select-item.selected {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(243, 156, 18, 0.15));
+            background: rgba(255, 215, 0, 0.12);
             border-color: #ffd700;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
         }
 
-        /* Custom Checkbox */
         .exercise-checkbox {
-            width: 24px;
-            height: 24px;
-            border: 2px solid rgba(255, 215, 0, 0.5);
-            border-radius: 6px;
+            width: 20px;
+            height: 20px;
+            border: 1.5px solid rgba(255, 215, 0, 0.5);
+            border-radius: 5px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1378,7 +906,7 @@
 
         .exercise-checkbox-icon {
             color: #1a1a2e;
-            font-size: 16px;
+            font-size: 12px;
             font-weight: 900;
             display: none;
         }
@@ -1387,15 +915,13 @@
             display: block;
         }
 
-        /* Exercise Info in Modal */
         .exercise-select-thumbnail {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
             object-fit: cover;
             background: #2c3e50;
             flex-shrink: 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .exercise-select-info {
@@ -1405,9 +931,9 @@
 
         .exercise-select-name {
             color: white;
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 700;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
             display: -webkit-box;
             -webkit-line-clamp: 1;
             -webkit-box-orient: vertical;
@@ -1415,53 +941,51 @@
         }
 
         .exercise-select-meta {
-            color: #95a5a6;
-            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 11px;
             font-weight: 500;
         }
 
-        /* Modal Footer */
         .modal-footer {
-            padding: 20px 25px;
-            border-top: 2px solid rgba(255, 215, 0, 0.2);
-            background: linear-gradient(135deg, rgba(15, 52, 96, 0.5) 0%, rgba(22, 33, 62, 0.5) 100%);
+            padding: 14px 16px;
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
+            background: rgba(15, 52, 96, 0.3);
             display: flex;
-            gap: 12px;
+            gap: 10px;
         }
 
         .modal-btn {
             flex: 1;
-            padding: 14px 25px;
-            border-radius: 12px;
-            font-size: 16px;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 13px;
             font-weight: 800;
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             transition: all 0.3s ease;
             border: none;
         }
 
         .modal-btn-cancel {
             background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
             color: white;
         }
 
         .modal-btn-cancel:hover {
             background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.4);
         }
 
         .modal-btn-save {
             background: linear-gradient(135deg, #ffd700, #f39c12);
             color: #1a1a2e;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
         }
 
         .modal-btn-save:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
         }
 
         .modal-btn-save:disabled {
@@ -1482,103 +1006,325 @@
             }
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
+        /* ===== RESPONSIVE - TABLET ===== */
+        @media (min-width: 500px) {
+            .page-header {
+                padding: 14px 20px;
+            }
+
             .page-title {
                 font-size: 18px;
             }
 
-            .favorite-thumbnail, .edition-thumbnail {
-                width: 75px;
-                height: 75px;
+            .container {
+                padding: 20px 16px;
             }
 
-            .unfavorite-btn {
-                width: 42px;
-                height: 42px;
-            }
-
-            .collection-modal-content {
-                width: 95%;
-                max-height: 90vh;
-            }
-
-            .modal-body {
-                padding: 20px;
-            }
-
+            .card-header,
             .edition-header {
-                height: 150px;
+                height: 140px;
             }
 
+            .card-title-overlay h3,
+            .edition-thumbnail-title {
+                font-size: 18px;
+            }
+
+            .card-description,
+            .edition-description {
+                font-size: 13px;
+            }
+
+            .meta-item {
+                font-size: 11px;
+                padding: 7px 12px;
+            }
+        }
+
+        /* ===== RESPONSIVE - DESKTOP ===== */
+        @media (min-width: 768px) {
+            .page-header {
+                padding: 16px 24px;
+            }
+
+            .page-title {
+                font-size: 20px;
+                letter-spacing: 4px;
+            }
+
+            .back-btn,
+            .add-collection-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 22px;
+            }
+
+            .container {
+                padding: 24px 20px;
+            }
+
+            .favorites-list,
+            .editions-container.active {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
+            .card-header,
+            .edition-header {
+                height: 160px;
+            }
+
+            .card-title-overlay h3,
             .edition-thumbnail-title {
                 font-size: 20px;
             }
 
-            .edition-info-row {
-                flex-direction: column;
-                gap: 10px;
+            .card-info,
+            .edition-body {
+                padding: 16px 18px 18px;
             }
 
-            .edition-actions {
-                flex-direction: column;
+            .card-description,
+            .edition-description {
+                font-size: 14px;
+            }
+
+            .meta-item {
+                font-size: 12px;
+                padding: 8px 14px;
+            }
+
+            .empty-state {
+                grid-column: 1 / -1;
+            }
+        }
+
+        /* ===== RESPONSIVE - LARGE DESKTOP ===== */
+        @media (min-width: 1024px) {
+            .favorites-list,
+            .editions-container.active {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 24px;
+            }
+
+            .container {
+                padding: 30px 24px;
+            }
+
+            .card-header,
+            .edition-header {
+                height: 180px;
+            }
+
+            .card-title-overlay h3,
+            .edition-thumbnail-title {
+                font-size: 22px;
+            }
+        }
+
+        /* ===== VERY SMALL PHONES ===== */
+        @media (max-width: 360px) {
+            .page-header {
+                padding: 10px 12px;
+            }
+
+            .page-title {
+                font-size: 14px;
+                letter-spacing: 2px;
+            }
+
+            .back-btn,
+            .add-collection-btn {
+                width: 28px;
+                height: 28px;
+                font-size: 16px;
+            }
+
+            .container {
+                padding: 12px 10px;
+            }
+
+            .favorite-stats {
+                padding: 8px 12px;
+                font-size: 11px;
+            }
+
+            .favorite-stats span {
+                font-size: 12px;
+            }
+
+            .tab-btn {
+                padding: 6px 12px;
+                font-size: 10px;
+            }
+
+            .card-header,
+            .edition-header {
+                height: 100px;
+            }
+
+            .card-title-overlay,
+            .edition-header-overlay {
+                padding: 25px 12px 10px;
+            }
+
+            .card-title-overlay h3,
+            .edition-thumbnail-title {
+                font-size: 14px;
+            }
+
+            .card-title-overlay p {
+                font-size: 10px;
+            }
+
+            .card-info,
+            .edition-body {
+                padding: 10px 12px 12px;
+            }
+
+            .card-description,
+            .edition-description {
+                font-size: 11px;
+                margin-bottom: 10px;
+            }
+
+            .meta-item {
+                font-size: 9px;
+                padding: 5px 8px;
+                gap: 3px;
+            }
+
+            .meta-item span {
+                font-size: 10px;
+            }
+
+            .unfavorite-btn {
+                width: 28px;
+                height: 28px;
+                font-size: 14px;
+                top: 8px;
+                right: 8px;
+            }
+
+            .edition-info-row {
+                gap: 6px;
+            }
+
+            .edition-info-item {
+                padding: 6px;
+            }
+
+            .edition-info-label {
+                font-size: 8px;
+            }
+
+            .edition-info-value {
+                font-size: 12px;
+            }
+
+            .start-workout-btn {
+                padding: 10px;
+                font-size: 11px;
+            }
+
+            .view-details-btn {
+                padding: 10px 12px;
+                font-size: 10px;
+            }
+        }
+
+        /* GPU Acceleration */
+        .favorite-card,
+        .edition-card,
+        .card-thumbnail,
+        .edition-thumbnail,
+        .unfavorite-btn {
+            will-change: transform, opacity;
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
             }
         }
     </style>
 {% endblock %}
 
 {% block content %}
+    <!-- Compact Header -->
     <div class="page-header">
-        <button class="back-btn" onclick="window.history.back()">
-            <i class="fas fa-arrow-left"></i>
-        </button>
-        <h1 class="page-title">⭐ Mening Sevimlilarim</h1>
-        <!-- ✨ YANGI - Add Collection Button -->
+        <button class="back-btn" onclick="window.history.back()">‹</button>
+        <h1 class="page-title">⭐ SEVIMLILAR</h1>
         <button class="add-collection-btn" onclick="openCollectionModal()">+</button>
     </div>
 
-    <div class="favorites-content">
+    <div class="container">
+        <!-- Compact Stats -->
         <div class="favorite-stats">
-            <i class="fas fa-heart" style="color: #ffd700; margin-right: 8px;"></i>
+            <i class="fas fa-heart"></i>
             Umumiy Sevimlilar: <span id="total-favorites-count">{{ total_count }}</span>
         </div>
 
+        <!-- Compact Tabs -->
         <div class="favorites-tabs">
             <button class="tab-btn active" onclick="showTab(this, 'all')">
-                <i class="fas fa-th-large" style="margin-right: 6px;"></i> Barchasi
+                🎯 Barchasi
             </button>
             <button class="tab-btn" onclick="showTab(this, 'exercise')">
-                <i class="fas fa-dumbbell" style="margin-right: 6px;"></i> Mashqlar
+                💪 Mashqlar
             </button>
             <button class="tab-btn" onclick="showTab(this, 'editions')">
-                <i class="fas fa-crown" style="margin-right: 6px;"></i> bir martalik harid`
+                👑 Premium
             </button>
         </div>
 
-        <!-- MASHQLAR CONTAINER -->
+        <!-- MASHQLAR CONTAINER - Card Style -->
         <div class="favorites-list" id="favoritesList">
             {% for fav in favorites %}
-                <div class="favorite-item" data-id="{{ fav.id }}" data-exercise-id="{{ fav.exercise_id }}">
-                    <a href="{% url 'exercise_detail' fav.exercise_id %}" class="item-link-wrapper">
+                <div class="favorite-card" data-id="{{ fav.id }}" data-exercise-id="{{ fav.exercise_id }}">
+                    <!-- Card Header with Image -->
+                    <div class="card-header">
                         <img src="{{ fav.exercise.thumbnail.url|default_if_none:'/static/img/default-thumb.jpg' }}"
-                             alt="{{ fav.title }}" class="favorite-thumbnail">
+                             alt="{{ fav.exercise.name }}" class="card-thumbnail">
 
-                        <div class="favorite-info">
-                            <div class="favorite-title">{{ fav.exercise.name }}</div>
-                            <div class="favorite-meta">
-                                <i class="fas fa-dumbbell"></i> Mashq • {{ fav.exercise.primary_body_part }}
-                            </div>
-                            <div class="favorite-tags">
-                                <span class="favorite-tag">{{ fav.exercise.difficulty }}</span>
-                            </div>
+                        <button class="unfavorite-btn"
+                                onclick="event.stopPropagation(); event.preventDefault(); unfavorite({{ fav.id }}, this)"
+                                title="Sevimlidan o'chirish">
+                            ⭐
+                        </button>
+
+                        <a href="{% url 'exercise_detail' fav.exercise_id %}" class="card-title-overlay">
+                            <h3>{{ fav.exercise.name }}</h3>
+                            <p>💪 {{ fav.exercise.primary_body_part }}</p>
+                        </a>
+                    </div>
+
+                    <!-- Card Info -->
+                    <a href="{% url 'exercise_detail' fav.exercise_id %}" class="card-info">
+                        <p class="card-description">
+                            {{ fav.exercise.description|default:"Professional mashq bilan maqsadlaringizga erishing!"|truncatewords:12 }}
+                        </p>
+
+                        <div class="card-meta">
+                            <span class="meta-item">
+                                <span>🎯</span> {{ fav.exercise.difficulty|default:"O'rta" }}
+                            </span>
+                            <span class="meta-item">
+                                <span>🏋️</span> {{ fav.exercise.equipment|default:"Dumbbell" }}
+                            </span>
+                            {% if fav.exercise.sets %}
+                            <span class="meta-item">
+                                <span>📊</span> {{ fav.exercise.sets }} set
+                            </span>
+                            {% endif %}
                         </div>
                     </a>
-                    <button class="unfavorite-btn"
-                            onclick="event.stopPropagation(); event.preventDefault(); unfavorite({{ fav.id }}, this)"
-                            title="Sevimlidan o'chirish"
-                            aria-label="O'chirish">
-                        ⭐
-                    </button>
                 </div>
             {% empty %}
                 <div class="empty-state">
@@ -1589,32 +1335,28 @@
             {% endfor %}
         </div>
 
-        <!-- ==========================================
-             ✨ YANGI - PREMIUM EDITIONS CONTAINER
-             ========================================== -->
+        <!-- EDITIONS CONTAINER -->
         <div class="editions-container" id="editionsContainer">
             {% for edition in premium_editions %}
                 <div class="edition-card {% if not edition.is_purchased %}locked{% endif %}">
-                    <!-- One-Time Purchase Badge -->
+                    <!-- Badge -->
                     <div class="edition-badge">
                         <i class="fas fa-gem"></i>
-                        <span>ONE-TIME PURCHASE</span>
+                        <span>PREMIUM</span>
                     </div>
 
-                    <!-- Edition Header with Thumbnail -->
+                    <!-- Edition Header -->
                     <div class="edition-header">
                         <img src="{{ edition.thumbnail.url|default_if_none:'/static/img/default-program.jpg' }}"
                              alt="{{ edition.name }}"
                              class="edition-thumbnail">
                         <div class="edition-header-overlay">
-                            <div></div> <!-- Spacer -->
                             <h2 class="edition-thumbnail-title">{{ edition.name }}</h2>
                         </div>
                     </div>
 
                     <!-- Edition Body -->
                     <div class="edition-body">
-                        <!-- Edition Info Row -->
                         <div class="edition-info-row">
                             <div class="edition-info-item">
                                 <div class="edition-info-label">Hafta</div>
@@ -1625,33 +1367,28 @@
                                 <div class="edition-info-value">{{ edition.total_exercises }}</div>
                             </div>
                             <div class="edition-info-item">
-                                <div class="edition-info-label">Qiyinlik</div>
+                                <div class="edition-info-label">Daraja</div>
                                 <div class="edition-info-value">{{ edition.difficulty|upper }}</div>
                             </div>
                         </div>
 
-                        <!-- Description -->
                         <p class="edition-description">
-                            {{ edition.description|default:"Professional dastur bilan maqsadlaringizga erishing!" }}
+                            {{ edition.description|default:"Professional dastur bilan maqsadlaringizga erishing!"|truncatewords:12 }}
                         </p>
 
-                        <!-- Actions -->
                         <div class="edition-actions">
                             {% if edition.is_purchased %}
-                                <button class="start-workout-btn"
-                                        onclick="startWorkout({{ edition.id }})">
+                                <button class="start-workout-btn" onclick="startWorkout({{ edition.id }})">
                                     <i class="fas fa-play"></i>
-                                    <span>BOSHLASH</span>
+                                    BOSHLASH
                                 </button>
                             {% else %}
-                                <button class="start-workout-btn"
-                                        onclick="purchaseEdition({{ edition.id }})">
+                                <button class="start-workout-btn" onclick="purchaseEdition({{ edition.id }})">
                                     <i class="fas fa-lock"></i>
-                                    <span>SOTIB OLISH</span>
+                                    SOTIB OLISH
                                 </button>
                             {% endif %}
-                            <button class="view-details-btn"
-                                    onclick="viewEditionDetails({{ edition.id }})">
+                            <button class="view-details-btn" onclick="viewEditionDetails({{ edition.id }})">
                                 Batafsil
                             </button>
                         </div>
@@ -1667,41 +1404,28 @@
         </div>
     </div>
 
-    <!-- ==========================================
-         ✨ YANGI - COLLECTION MODAL
-         ========================================== -->
+    <!-- Collection Modal -->
     <div class="collection-modal" id="collectionModal">
         <div class="collection-modal-content">
-            <!-- Modal Header -->
             <div class="modal-header">
                 <h3 class="modal-title">📁 Yangi To'plam</h3>
                 <button class="modal-close-btn" onclick="closeCollectionModal()">×</button>
             </div>
 
-            <!-- Modal Body -->
             <div class="modal-body">
-                <!-- Collection Name Input -->
                 <div class="collection-name-group">
                     <label class="collection-name-label">To'plam nomi</label>
-                    <input
-                            type="text"
-                            class="collection-name-input"
-                            id="collectionNameInput"
-                            placeholder="Masalan: Chest Day Mashqlari"
-                            maxlength="50"
-                    >
+                    <input type="text" class="collection-name-input" id="collectionNameInput"
+                           placeholder="Masalan: Chest Day" maxlength="50">
                 </div>
 
-                <!-- Exercise Selection -->
                 <div class="exercise-select-section">
                     <div class="exercise-select-header">
                         Mashqlarni tanlang (<span id="selectedCount">0</span> tanlandi)
                     </div>
                     <div class="exercise-list" id="exerciseList">
-                        <!-- Django template bilan exercises list -->
                         {% for exercise in all_exercises %}
-                            <div class="exercise-select-item"
-                                 data-exercise-id="{{ exercise.id }}"
+                            <div class="exercise-select-item" data-exercise-id="{{ exercise.id }}"
                                  onclick="toggleExerciseSelection(this, {{ exercise.id }})">
                                 <div class="exercise-checkbox">
                                     <span class="exercise-checkbox-icon">✓</span>
@@ -1718,14 +1442,9 @@
                 </div>
             </div>
 
-            <!-- Modal Footer -->
             <div class="modal-footer">
-                <button class="modal-btn modal-btn-cancel" onclick="closeCollectionModal()">
-                    Bekor qilish
-                </button>
-                <button class="modal-btn modal-btn-save" id="saveCollectionBtn" onclick="saveCollection()" disabled>
-                    Saqlash
-                </button>
+                <button class="modal-btn modal-btn-cancel" onclick="closeCollectionModal()">Bekor</button>
+                <button class="modal-btn modal-btn-save" id="saveCollectionBtn" onclick="saveCollection()" disabled>Saqlash</button>
             </div>
         </div>
     </div>
@@ -1733,17 +1452,11 @@
 
 {% block extra_js %}
     <script>
-        // ==========================================
-        // MAVJUD FUNKSIYALAR
-        // ==========================================
-
-        // Tab switching with container toggle
+        // Tab switching
         function showTab(buttonElement, tab) {
-            // Update tab buttons
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             buttonElement.classList.add('active');
 
-            // Show/hide containers
             const favoritesList = document.getElementById('favoritesList');
             const editionsContainer = document.getElementById('editionsContainer');
 
@@ -1751,16 +1464,15 @@
                 favoritesList.style.display = 'none';
                 editionsContainer.classList.add('active');
             } else if (tab === 'exercise') {
-                favoritesList.style.display = 'flex';
+                favoritesList.style.display = '';
                 editionsContainer.classList.remove('active');
             } else {
-                // 'all' - show both
-                favoritesList.style.display = 'flex';
+                favoritesList.style.display = '';
                 editionsContainer.classList.add('active');
             }
         }
 
-        // Get CSRF token
+        // CSRF Token
         function getCookie(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -1776,103 +1488,70 @@
             return cookieValue;
         }
 
-        // Unfavorite funksiyasi
+        // Unfavorite
         function unfavorite(id, button) {
             if (confirm('Bu mashqni sevimlilardan olib tashlashni xohlaysizmi?')) {
-                const url = `/exercises/favorite/toggle/${id}/`;
-
-                fetch(url, {
+                fetch(`/exercises/favorite/toggle/${id}/`, {
                     method: 'DELETE',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken')
-                    }
+                    headers: { 'X-CSRFToken': getCookie('csrftoken') }
                 })
-                    .then(response => {
-                        if (response.status !== 200) {
-                            return response.json().then(err => {
-                                throw new Error(err.error || `Server xatosi: ${response.status}`);
-                            }).catch(() => {
-                                throw new Error(`Serverga ulanishda xato: Status ${response.status}`);
-                            });
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.success) {
-                            const item = button.closest('.favorite-item');
-                            item.style.animation = 'slideOutRight 0.4s ease forwards';
-
-                            setTimeout(() => {
-                                item.remove();
-
-                                const remainingItems = document.querySelectorAll('.favorite-item').length;
-                                if (remainingItems === 0) {
-                                    document.getElementById('favoritesList').innerHTML = `
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const card = button.closest('.favorite-card');
+                        card.style.animation = 'slideOutRight 0.4s ease forwards';
+                        setTimeout(() => {
+                            card.remove();
+                            const remaining = document.querySelectorAll('.favorite-card').length;
+                            if (remaining === 0) {
+                                document.getElementById('favoritesList').innerHTML = `
                                     <div class="empty-state">
                                         <div class="empty-state-icon">⭐</div>
                                         <h3>Sevimlilar ro'yxati bo'sh</h3>
                                         <p>O'zingizga yoqqan mashqlarni qo'shishni boshlang!</p>
                                     </div>
                                 `;
-                                }
-                            }, 400);
-
-                            const totalCountElement = document.getElementById('total-favorites-count');
-                            if (totalCountElement) {
-                                let currentCount = parseInt(totalCountElement.textContent);
-                                totalCountElement.textContent = currentCount > 0 ? currentCount - 1 : 0;
                             }
-                        } else {
-                            alert("O'chirishda xato: " + (data.error || "Noma'lum xato"));
+                        }, 400);
+
+                        const countEl = document.getElementById('total-favorites-count');
+                        if (countEl) {
+                            let count = parseInt(countEl.textContent);
+                            countEl.textContent = count > 0 ? count - 1 : 0;
                         }
-                    })
-                    .catch(err => {
-                        console.error("Unfavorite AJAX xatoligi:", err);
-                        alert("Sevimlidan o'chirishda kutilmagan xato yuz berdi: " + err.message);
-                    });
+                    }
+                })
+                .catch(err => console.error("Xato:", err));
             }
         }
 
-        // ==========================================
-        // ✨ YANGI - EDITION FUNKSIYALARI
-        // ==========================================
-
+        // Edition functions
         function startWorkout(editionId) {
-            // Workout boshlash
             window.location.href = `/workouts/edition/${editionId}/start/`;
         }
 
         function purchaseEdition(editionId) {
-            // Sotib olish sahifasiga o'tish
             window.location.href = `/payments/edition/${editionId}/purchase/`;
         }
 
         function viewEditionDetails(editionId) {
-            // Batafsil sahifaga o'tish
             window.location.href = `/workouts/edition/${editionId}/details/`;
         }
 
-        // ==========================================
-        // ✨ YANGI - COLLECTION MODAL FUNKSIYALARI
-        // ==========================================
-
+        // Collection Modal
         let selectedExercises = [];
 
-        // Modal ochish
         function openCollectionModal() {
             document.getElementById('collectionModal').classList.add('active');
-            document.body.style.overflow = 'hidden'; // Scroll ni bloklash
+            document.body.style.overflow = 'hidden';
             selectedExercises = [];
             updateSelectedCount();
             updateSaveButton();
         }
 
-        // Modal yopish
         function closeCollectionModal() {
             document.getElementById('collectionModal').classList.remove('active');
-            document.body.style.overflow = ''; // Scroll ni qayta yoqish
-
-            // Reset
+            document.body.style.overflow = '';
             document.getElementById('collectionNameInput').value = '';
             document.querySelectorAll('.exercise-select-item').forEach(item => {
                 item.classList.remove('selected');
@@ -1881,10 +1560,8 @@
             updateSelectedCount();
         }
 
-        // Exercise selection toggle
         function toggleExerciseSelection(element, exerciseId) {
             element.classList.toggle('selected');
-
             if (element.classList.contains('selected')) {
                 if (!selectedExercises.includes(exerciseId)) {
                     selectedExercises.push(exerciseId);
@@ -1892,103 +1569,71 @@
             } else {
                 selectedExercises = selectedExercises.filter(id => id !== exerciseId);
             }
-
             updateSelectedCount();
             updateSaveButton();
         }
 
-        // Tanlangan mashqlar sonini yangilash
         function updateSelectedCount() {
             document.getElementById('selectedCount').textContent = selectedExercises.length;
         }
 
-        // Save tugmasini faollashtirish/o'chirish
         function updateSaveButton() {
-            const collectionName = document.getElementById('collectionNameInput').value.trim();
-            const saveBtn = document.getElementById('saveCollectionBtn');
-
-            if (collectionName && selectedExercises.length > 0) {
-                saveBtn.disabled = false;
-            } else {
-                saveBtn.disabled = true;
-            }
+            const name = document.getElementById('collectionNameInput').value.trim();
+            const btn = document.getElementById('saveCollectionBtn');
+            btn.disabled = !(name && selectedExercises.length > 0);
         }
 
-        // Input change listener
-        document.addEventListener('DOMContentLoaded', function () {
-            const nameInput = document.getElementById('collectionNameInput');
-            if (nameInput) {
-                nameInput.addEventListener('input', updateSaveButton);
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('collectionNameInput');
+            if (input) input.addEventListener('input', updateSaveButton);
         });
 
-        // Collection saqlash
         function saveCollection() {
-            const collectionName = document.getElementById('collectionNameInput').value.trim();
+            const name = document.getElementById('collectionNameInput').value.trim();
+            if (!name || selectedExercises.length === 0) return;
 
-            if (!collectionName) {
-                alert("Iltimos, to'plam nomini kiriting!");
-                return;
-            }
+            const btn = document.getElementById('saveCollectionBtn');
+            btn.disabled = true;
+            btn.textContent = 'Saqlanmoqda...';
 
-            if (selectedExercises.length === 0) {
-                alert("Iltimos, kamida bitta mashq tanlang!");
-                return;
-            }
-
-            const saveBtn = document.getElementById('saveCollectionBtn');
-            saveBtn.disabled = true;
-            saveBtn.textContent = 'Saqlanmoqda...';
-
-            // Backend API ga so'rov
             fetch('/exercises/collection/create/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': getCookie('csrftoken')
                 },
-                body: JSON.stringify({
-                    name: collectionName,
-                    exercise_ids: selectedExercises
-                })
+                body: JSON.stringify({ name: name, exercise_ids: selectedExercises })
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(`"${collectionName}" to'plami muvaffaqiyatli yaratildi!`);
-                        closeCollectionModal();
-
-                        // Sahifani yangilash (yoki dinamik ravishda qo'shish)
-                        location.reload();
-                    } else {
-                        alert("Xato: " + (data.error || "Noma'lum xato"));
-                        saveBtn.disabled = false;
-                        saveBtn.textContent = 'Saqlash';
-                    }
-                })
-                .catch(err => {
-                    console.error("Collection saqlashda xato:", err);
-                    alert("To'plamni saqlashda xato yuz berdi!");
-                    saveBtn.disabled = false;
-                    saveBtn.textContent = 'Saqlash';
-                });
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`"${name}" to'plami yaratildi!`);
+                    closeCollectionModal();
+                    location.reload();
+                } else {
+                    alert("Xato: " + (data.error || "Noma'lum xato"));
+                    btn.disabled = false;
+                    btn.textContent = 'Saqlash';
+                }
+            })
+            .catch(err => {
+                console.error("Xato:", err);
+                btn.disabled = false;
+                btn.textContent = 'Saqlash';
+            });
         }
 
-        // ESC tugmasi bilan modal yopish
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'Escape') {
+        // ESC to close modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
                 const modal = document.getElementById('collectionModal');
-                if (modal && modal.classList.contains('active')) {
-                    closeCollectionModal();
-                }
+                if (modal && modal.classList.contains('active')) closeCollectionModal();
             }
         });
 
-        // Modal tashqarisiga bosish bilan yopish
-        document.getElementById('collectionModal').addEventListener('click', function (event) {
-            if (event.target === this) {
-                closeCollectionModal();
-            }
+        // Click outside to close
+        document.getElementById('collectionModal').addEventListener('click', function(e) {
+            if (e.target === this) closeCollectionModal();
         });
     </script>
 {% endblock %}

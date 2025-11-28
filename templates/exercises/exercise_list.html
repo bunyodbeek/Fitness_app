@@ -16,6 +16,8 @@
             background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
 
         /* Animated background */
@@ -42,44 +44,32 @@
             }
         }
 
-        /* Top Navigation - Modern Glass */
-        .top-nav {
+        /* ===== COMPACT HEADER - Match Body Parts Style ===== */
+        .page-header {
+            background: linear-gradient(135deg, rgba(15, 52, 96, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 20px;
-            background: linear-gradient(135deg, rgba(15, 52, 96, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
-            backdrop-filter: blur(10px);
-            color: white;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             border-bottom: 1px solid rgba(255, 215, 0, 0.1);
-        }
-
-        .top-nav h1 {
-            font-size: 24px;
-            margin: 0;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .back-btn, .action-btn {
             background: rgba(255, 215, 0, 0.1);
             border: 2px solid rgba(255, 215, 0, 0.3);
             color: #ffd700;
-            font-size: 24px;
+            font-size: 20px;
             cursor: pointer;
-            padding: 8px 12px;
+            padding: 8px;
             border-radius: 12px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -92,25 +82,39 @@
             box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
         }
 
-        /* Premium Search Bar */
+        .page-title {
+            color: white;
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-align: center;
+            background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        /* Compact Search Bar */
         .search-bar {
-            padding: 20px;
+            padding: 15px 16px;
             background: transparent;
             position: sticky;
-            top: 70px;
+            top: 64px;
             z-index: 50;
         }
 
         #searchInput {
             width: 100%;
-            padding: 16px 24px;
-            border-radius: 30px;
+            padding: 12px 20px;
+            border-radius: 25px;
             border: 2px solid rgba(255, 215, 0, 0.2);
             background: linear-gradient(135deg,
             rgba(255, 215, 0, 0.1) 0%,
             rgba(255, 215, 0, 0.05) 100%);
             backdrop-filter: blur(10px);
-            font-size: 16px;
+            font-size: 14px;
             outline: none;
             color: white;
             transition: all 0.3s ease;
@@ -133,25 +137,25 @@
         .container {
             position: relative;
             z-index: 1;
-        }
-
-        /* Premium Exercise Grid */
-        .exercises-grid {
-            padding: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
             max-width: 1400px;
             margin: 0 auto;
         }
 
-        /* Premium Exercise Card */
+        /* Compact Exercise Grid */
+        .exercises-grid {
+            padding: 15px 16px 100px 16px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
+        }
+
+        /* Compact Exercise Card */
         .exercise-card {
             background: linear-gradient(135deg,
             rgba(255, 255, 255, 0.1) 0%,
             rgba(255, 255, 255, 0.05) 100%);
             backdrop-filter: blur(10px);
-            border-radius: 20px;
+            border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             text-decoration: none;
@@ -182,7 +186,7 @@
         }
 
         .exercise-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-8px);
             box-shadow: 0 16px 48px rgba(255, 215, 0, 0.3);
             border-color: rgba(255, 215, 0, 0.5);
         }
@@ -190,7 +194,7 @@
         /* Exercise Image */
         .exercise-image {
             width: 100%;
-            height: 220px;
+            height: 160px;
             object-fit: cover;
             background: #1a1f3a;
             display: block;
@@ -203,14 +207,14 @@
 
         .exercise-placeholder {
             width: 100%;
-            height: 220px;
+            height: 160px;
             background: linear-gradient(135deg,
             rgba(255, 215, 0, 0.2) 0%,
             rgba(255, 215, 0, 0.1) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 64px;
+            font-size: 48px;
             color: rgba(255, 215, 0, 0.5);
             transition: transform 0.4s ease;
         }
@@ -221,43 +225,43 @@
 
         /* Exercise Info */
         .exercise-info {
-            padding: 20px;
+            padding: 12px;
             position: relative;
             z-index: 2;
         }
 
         .exercise-name {
-            font-size: 18px;
+            font-size: 13px;
             font-weight: 700;
             color: white;
             margin: 0;
-            line-height: 1.4;
+            line-height: 1.3;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
         }
 
         .exercise-details {
-            font-size: 0.85rem;
+            font-size: 10px;
             color: #ddd;
-            margin-left: 8px;
+            margin-left: 6px;
             font-weight: normal;
         }
 
-        /* Premium Favorite Button */
+        /* Compact Favorite Button */
         .favorite-icon {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 10px;
+            right: 10px;
             background: linear-gradient(135deg,
             rgba(255, 255, 255, 0.95) 0%,
             rgba(255, 255, 255, 0.85) 100%);
             backdrop-filter: blur(10px);
-            width: 45px;
-            height: 45px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 18px;
             cursor: pointer;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             z-index: 10;
@@ -285,7 +289,7 @@
             color: #ffd700;
             transition: all 0.3s ease;
             display: block;
-            font-size: 24px;
+            font-size: 20px;
             line-height: 1;
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
         }
@@ -299,19 +303,19 @@
         /* Empty State */
         .empty-state {
             text-align: center;
-            padding: 80px 20px;
+            padding: 60px 20px;
             color: rgba(255, 255, 255, 0.7);
         }
 
         .empty-state .icon {
-            font-size: 80px;
-            margin-bottom: 20px;
+            font-size: 60px;
+            margin-bottom: 15px;
             filter: grayscale(100%);
             opacity: 0.5;
         }
 
         .empty-state h3 {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 700;
             color: white;
             margin: 0;
@@ -345,7 +349,7 @@
         }
 
         /* ==========================================
-           ✨ YANGI - SAVE OPTIONS MODAL
+           SAVE OPTIONS MODAL
            ========================================== */
 
         /* Save Options Modal */
@@ -383,6 +387,15 @@
             }
         }
 
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
         .modal-handle {
             width: 40px;
             height: 4px;
@@ -393,10 +406,10 @@
 
         .modal-title {
             color: #ffd700;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 800;
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             text-transform: uppercase;
             letter-spacing: 2px;
         }
@@ -411,8 +424,8 @@
         .save-option {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.08));
             border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 18px 20px;
+            border-radius: 14px;
+            padding: 16px 18px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
@@ -427,14 +440,14 @@
         }
 
         .save-option-icon {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(243, 156, 18, 0.2));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 22px;
             flex-shrink: 0;
         }
 
@@ -444,14 +457,14 @@
 
         .save-option-title {
             color: white;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             margin-bottom: 4px;
         }
 
         .save-option-desc {
             color: #95a5a6;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
         }
 
@@ -502,7 +515,7 @@
 
         .collections-header {
             background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
-            padding: 20px;
+            padding: 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -511,7 +524,7 @@
 
         .collections-title {
             color: #ffd700;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1.5px;
@@ -521,8 +534,8 @@
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid rgba(255, 255, 255, 0.2);
             color: white;
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -539,7 +552,7 @@
         }
 
         .collections-body {
-            padding: 20px;
+            padding: 18px;
             overflow-y: auto;
             flex: 1;
         }
@@ -556,9 +569,9 @@
         .collection-item {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.08));
             border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 12px;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -571,67 +584,286 @@
 
         .collection-item-name {
             color: white;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
 
         .collection-item-count {
             color: #95a5a6;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
+        /* ===== RESPONSIVE - VERY SMALL PHONES ===== */
+        @media (max-width: 360px) {
+            .page-header {
+                padding: 10px 12px;
+            }
+
+            .page-title {
+                font-size: 14px;
+                letter-spacing: 2px;
+            }
+
+            .back-btn, .action-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 18px;
+            }
+
+            .search-bar {
+                padding: 12px;
+                top: 56px;
+            }
+
+            #searchInput {
+                padding: 10px 16px;
+                font-size: 13px;
+                border-radius: 20px;
+            }
+
             .exercises-grid {
-                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-                gap: 15px;
-                padding: 15px;
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 12px;
+                padding: 12px 12px 90px 12px;
             }
 
             .exercise-image,
             .exercise-placeholder {
-                height: 160px;
+                height: 140px;
+            }
+
+            .exercise-placeholder {
+                font-size: 40px;
+            }
+
+            .exercise-name {
+                font-size: 12px;
+            }
+
+            .exercise-details {
+                font-size: 9px;
+            }
+
+            .exercise-info {
+                padding: 10px;
+            }
+
+            .favorite-icon {
+                width: 34px;
+                height: 34px;
+                top: 8px;
+                right: 8px;
+            }
+
+            .favorite-icon span {
+                font-size: 16px;
+            }
+
+            .modal-title {
+                font-size: 15px;
+            }
+
+            .save-option {
+                padding: 14px 16px;
+            }
+
+            .save-option-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+
+            .save-option-title {
+                font-size: 14px;
+            }
+
+            .save-option-desc {
+                font-size: 11px;
+            }
+        }
+
+        /* ===== RESPONSIVE - TABLET ===== */
+        @media (min-width: 500px) {
+            .page-header {
+                padding: 14px 20px;
+            }
+
+            .page-title {
+                font-size: 18px;
+            }
+
+            .back-btn, .action-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 22px;
+            }
+
+            .search-bar {
+                padding: 18px 20px;
+                top: 68px;
+            }
+
+            #searchInput {
+                padding: 14px 22px;
+                font-size: 15px;
+            }
+
+            .exercises-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 18px;
+                padding: 18px 20px 110px 20px;
+            }
+
+            .exercise-image,
+            .exercise-placeholder {
+                height: 180px;
+            }
+
+            .exercise-placeholder {
+                font-size: 52px;
             }
 
             .exercise-name {
                 font-size: 14px;
             }
 
+            .exercise-details {
+                font-size: 11px;
+            }
+
             .exercise-info {
-                padding: 12px;
+                padding: 14px;
             }
 
             .favorite-icon {
-                width: 38px;
-                height: 38px;
-                top: 10px;
-                right: 10px;
+                width: 42px;
+                height: 42px;
+                top: 12px;
+                right: 12px;
             }
 
             .favorite-icon span {
-                font-size: 20px;
+                font-size: 22px;
+            }
+        }
+
+        /* ===== RESPONSIVE - DESKTOP ===== */
+        @media (min-width: 768px) {
+            .page-header {
+                padding: 16px 24px;
             }
 
-            .top-nav h1 {
-                font-size: 18px;
-                letter-spacing: 2px;
+            .page-title {
+                font-size: 20px;
+                letter-spacing: 4px;
             }
 
             .back-btn, .action-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 20px;
+                width: 48px;
+                height: 48px;
+                font-size: 24px;
+            }
+
+            .search-bar {
+                padding: 20px 24px;
+                top: 72px;
+            }
+
+            #searchInput {
+                padding: 16px 24px;
+                font-size: 16px;
+                border-radius: 30px;
+            }
+
+            .exercises-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 20px;
+                padding: 20px 24px 120px 24px;
+            }
+
+            .exercise-image,
+            .exercise-placeholder {
+                height: 200px;
+            }
+
+            .exercise-placeholder {
+                font-size: 56px;
+            }
+
+            .exercise-name {
+                font-size: 15px;
+            }
+
+            .exercise-details {
+                font-size: 12px;
+            }
+
+            .exercise-info {
+                padding: 16px;
+            }
+
+            .favorite-icon {
+                width: 45px;
+                height: 45px;
+                top: 14px;
+                right: 14px;
+            }
+
+            .favorite-icon span {
+                font-size: 24px;
+            }
+
+            .modal-title {
+                font-size: 18px;
+            }
+
+            .save-option {
+                padding: 18px 20px;
+            }
+
+            .save-option-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+
+            .save-option-title {
+                font-size: 16px;
+            }
+
+            .save-option-desc {
+                font-size: 13px;
+            }
+        }
+
+        /* GPU Acceleration */
+        .exercise-card,
+        .favorite-icon,
+        .exercise-image,
+        .exercise-placeholder {
+            will-change: transform;
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
             }
         }
     </style>
 {% endblock %}
 
 {% block content %}
-    <div class="top-nav">
+    <!-- Compact Header -->
+    <div class="page-header">
         <button class="back-btn" onclick="history.back()">‹</button>
-        <h1>{{ body_part.name }}</h1>
+        <h1 class="page-title">{{ body_part.name }}</h1>
         <button class="action-btn">⭐</button>
     </div>
 
@@ -681,9 +913,7 @@
         {% endif %}
     </div>
 
-    <!-- ==========================================
-         ✨ YANGI - SAVE OPTIONS MODAL
-         ========================================== -->
+    <!-- Save Options Modal -->
     <div class="save-options-modal" id="saveOptionsModal">
         <div class="save-options-content">
             <div class="modal-handle"></div>
@@ -720,9 +950,7 @@
         </div>
     </div>
 
-    <!-- ==========================================
-         ✨ YANGI - COLLECTIONS LIST MODAL
-         ========================================== -->
+    <!-- Collections List Modal -->
     <div class="collections-modal" id="collectionsModal">
         <div class="collections-modal-content">
             <div class="collections-header">
@@ -741,9 +969,9 @@
                     {% endfor %}
                 {% else %}
                     <div class="empty-state">
-                        <div class="empty-state-icon" style="font-size: 60px;">📁</div>
-                        <h3 style="font-size: 18px; color: #95a5a6;">To'plamlar yo'q</h3>
-                        <p style="font-size: 14px; color: #7f8c8d;">Yangi to'plam yarating</p>
+                        <div class="icon" style="font-size: 50px;">📁</div>
+                        <h3 style="font-size: 16px; color: #95a5a6;">To'plamlar yo'q</h3>
+                        <p style="font-size: 13px; color: #7f8c8d; margin-top: 8px;">Yangi to'plam yarating</p>
                     </div>
                 {% endif %}
             </div>
@@ -925,7 +1153,7 @@
         }
 
         function showSuccessMessage(message) {
-            // Simple alert (yoki custom toast notification)
+            // Simple toast notification
             const toast = document.createElement('div');
             toast.style.cssText = `
                 position: fixed;
@@ -934,9 +1162,10 @@
                 transform: translateX(-50%);
                 background: linear-gradient(135deg, #4caf50, #66bb6a);
                 color: white;
-                padding: 15px 30px;
+                padding: 12px 24px;
                 border-radius: 50px;
                 font-weight: 700;
+                font-size: 14px;
                 z-index: 9999;
                 box-shadow: 0 8px 30px rgba(76, 175, 80, 0.5);
                 animation: slideUpFade 0.3s ease;

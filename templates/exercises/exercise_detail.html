@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 
-
-
 {% block title %}{{ exercise.name|default:"Mashq Tafsilotlari" }}{% endblock %}
 
 {% block extra_css %}
@@ -45,21 +43,22 @@
             50% { transform: translate(20px, -20px); }
         }
 
+        /* Compact Content Wrapper */
         .content-wrapper {
             max-width: 500px;
             margin: auto;
-            padding: 20px;
+            padding: 15px 16px 100px 16px;
             position: relative;
             z-index: 1;
         }
 
-        /* Back Button */
+        /* Compact Back Button */
         .back-button {
             position: fixed;
-            top: 20px;
-            left: 20px;
-            width: 45px;
-            height: 45px;
+            top: 12px;
+            left: 16px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg,
                 rgba(255, 215, 0, 0.2) 0%,
                 rgba(255, 215, 0, 0.1) 100%);
@@ -67,7 +66,7 @@
             border: 2px solid rgba(255, 215, 0, 0.3);
             border-radius: 12px;
             color: #ffd700;
-            font-size: 24px;
+            font-size: 20px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -85,10 +84,11 @@
             box-shadow: 0 8px 32px rgba(255, 215, 0, 0.3);
         }
 
-        /* Premium Header */
+        /* Compact Header */
         .exercise-header {
             text-align: center;
-            margin: 60px 0 40px 0;
+            margin: 50px 0 25px 0;
+            padding: 0 10px;
             animation: fadeInDown 0.6s ease;
         }
 
@@ -104,7 +104,7 @@
         }
 
         .exercise-title {
-            font-size: 36px;
+            font-size: 22px;
             font-weight: 900;
             background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
             -webkit-background-clip: text;
@@ -116,12 +116,12 @@
             margin: 0;
         }
 
-        /* Premium Media Container */
+        /* Compact Media Container */
         .media-container {
-            margin-bottom: 30px;
-            border-radius: 24px;
+            margin-bottom: 20px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 215, 0, 0.2);
             background: linear-gradient(135deg,
                 rgba(255, 255, 255, 0.1) 0%,
@@ -162,12 +162,13 @@
             opacity: 1;
         }
 
+        /* Compact Exercise Image */
         .exercise-image {
             width: 100%;
             display: block;
             object-fit: cover;
             height: auto;
-            min-height: 350px;
+            min-height: 280px;
             transition: transform 0.4s ease;
         }
 
@@ -179,81 +180,81 @@
             display: none !important;
         }
 
-        /* Premium Instructions Container */
+        /* Compact Instructions Container */
         .instructions-in-media-container {
-            padding: 30px;
+            padding: 20px;
             background: linear-gradient(135deg,
                 rgba(26, 31, 58, 0.95) 0%,
                 rgba(15, 12, 41, 0.95) 100%);
             backdrop-filter: blur(10px);
-            min-height: 400px;
+            min-height: 320px;
+            max-height: 450px;
             overflow-y: auto;
         }
 
         .section-title {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 900;
-            margin-bottom: 25px;
+            margin-bottom: 18px;
             background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             border-bottom: 2px solid rgba(255, 215, 0, 0.3);
-            padding-bottom: 12px;
+            padding-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
-        /* Premium Info Details */
+        /* Compact Info Details */
         .info-detail {
-            margin-bottom: 20px;
-            padding: 18px;
+            margin-bottom: 15px;
+            padding: 14px;
             background: linear-gradient(135deg,
                 rgba(255, 215, 0, 0.15) 0%,
                 rgba(255, 215, 0, 0.08) 100%);
             backdrop-filter: blur(10px);
-            border-radius: 16px;
-            border-left: 4px solid #ffd700;
+            border-radius: 12px;
+            border-left: 3px solid #ffd700;
             border: 1px solid rgba(255, 215, 0, 0.2);
             transition: all 0.3s ease;
         }
 
         .info-detail:hover {
             transform: translateX(5px);
-            box-shadow: 0 8px 24px rgba(255, 215, 0, 0.2);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.2);
         }
 
         .info-detail .info-label {
-            font-size: 12px;
+            font-size: 11px;
             color: rgba(255, 215, 0, 0.7);
             text-transform: uppercase;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 700;
             letter-spacing: 1px;
         }
 
         .info-detail .info-value {
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 700;
             color: #EAEAEA;
         }
 
-        /* Premium Instruction List */
+        /* Compact Instruction List */
         .instruction-list {
             list-style: none;
             padding-left: 0;
-            margin-top: 25px;
+            margin-top: 18px;
         }
 
         .instruction-list li {
-            font-size: 16px;
-            line-height: 1.8;
-            margin-bottom: 18px;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 12px;
             position: relative;
-            padding-left: 40px;
-            padding: 15px 15px 15px 50px;
+            padding: 12px 12px 12px 40px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
+            border-radius: 10px;
             border-left: 3px solid rgba(255, 215, 0, 0.5);
             transition: all 0.3s ease;
         }
@@ -266,10 +267,10 @@
         .instruction-list li:before {
             content: "⭐";
             position: absolute;
-            left: 15px;
-            top: 15px;
+            left: 12px;
+            top: 12px;
             color: #FFC300;
-            font-size: 22px;
+            font-size: 18px;
             animation: pulse 2s ease-in-out infinite;
         }
 
@@ -278,66 +279,68 @@
             50% { opacity: 0.7; transform: scale(1.1); }
         }
 
-        /* Premium Action Buttons */
-     /* Action buttons container — kichiklashtirilgan */
-.action-buttons {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px; /* 15px → 10px */
-    margin-bottom: 20px; /* 30px → 20px */
-    padding: 12px; /* 20px → 12px */
-    background: linear-gradient(135deg,
-        rgba(255, 255, 255, 0.1) 0%,
-        rgba(255, 255, 255, 0.05) 100%);
-    backdrop-filter: blur(10px);
-    border-radius: 16px; /* 20px → 16px */
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25); /* 8px 32px → 6px 24px */
-    border: 1px solid rgba(255, 215, 0, 0.1);
-    animation: fadeInUp 0.8s ease; /* 1s → 0.8s */
-}
+        /* Compact Action Buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 12px;
+            background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            animation: fadeInUp 0.8s ease;
+        }
 
-/* Har bir button — kichikroq */
-.action-btn {
-    flex: 1;
-    background: linear-gradient(135deg,
-        rgba(255, 215, 0, 0.1) 0%,
-        rgba(255, 215, 0, 0.05) 100%);
-    padding: 12px 8px; /* 18px 12px → 12px 8px */
-    border-radius: 12px; /* 16px → 12px */
-    border: 2px solid rgba(255, 215, 0, 0.25);
-    color: #EAEAEA;
-    font-size: 0.85rem; /* text kichraydi */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px; /* icon-text o'rtasi */
-    transition: all 0.25s ease; /* biroz tezroq animation */
-}
+        .action-btn {
+            flex: 1;
+            background: linear-gradient(135deg,
+                rgba(255, 215, 0, 0.1) 0%,
+                rgba(255, 215, 0, 0.05) 100%);
+            padding: 12px 6px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 215, 0, 0.25);
+            color: #EAEAEA;
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
 
-/* Hover effekti ham kichikroq */
-.action-btn:hover {
-    background: linear-gradient(135deg,
-        rgba(255, 215, 0, 0.18) 0%,
-        rgba(255, 215, 0, 0.1) 100%);
-    transform: translateY(-3px); /* -5px → -3px */
-    box-shadow: 0 8px 26px rgba(255, 215, 0, 0.3); /* 12px 32px → 8px 26px */
-    border-color: rgba(255, 215, 0, 0.5);
-}
+        .action-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
 
-/* Active holati kichiklashtirilgan */
-.action-btn.active {
-    background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
-    border-color: #ffd700;
-    transform: translateY(-3px); /* -5px → -3px */
-    box-shadow: 0 10px 28px rgba(255, 215, 0, 0.5);
-}
+        .action-btn:not(:disabled):hover {
+            background: linear-gradient(135deg,
+                rgba(255, 215, 0, 0.18) 0%,
+                rgba(255, 215, 0, 0.1) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 26px rgba(255, 215, 0, 0.3);
+            border-color: rgba(255, 215, 0, 0.5);
+        }
+
+        .action-btn.active {
+            background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
+            border-color: #ffd700;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(255, 215, 0, 0.5);
+        }
 
         /* Favorite button special styling */
         .favorite-toggle.favorited {
             background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
             color: #fff;
             border-color: #E74C3C;
-            box-shadow: 0 12px 40px rgba(231, 76, 60, 0.6);
+            box-shadow: 0 10px 32px rgba(231, 76, 60, 0.5);
         }
 
         .favorite-toggle.favorited .action-icon {
@@ -351,72 +354,26 @@
         }
 
         .action-icon {
-            font-size: 32px;
-            margin-bottom: 8px;
+            font-size: 26px;
+            margin-bottom: 4px;
             color: #FFC300;
             transition: all 0.3s ease;
         }
 
         .action-label {
-            font-size: 12px;
+            font-size: 10px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .exercise-title {
-                font-size: 24px;
-                letter-spacing: 1px;
-            }
-
-            .content-wrapper {
-                padding: 15px;
-            }
-
-            .action-buttons {
-                gap: 10px;
-                padding: 15px;
-            }
-
-            .action-btn {
-                padding: 15px 8px;
-            }
-
-            .action-icon {
-                font-size: 24px;
-                margin-bottom: 6px;
-            }
-
-            .action-label {
-                font-size: 10px;
-            }
-
-            .exercise-image {
-                min-height: 250px;
-            }
-
-            .back-button {
-                width: 40px;
-                height: 40px;
-                top: 15px;
-                left: 15px;
-            }
-
-            .instruction-list li {
-                font-size: 14px;
-                padding: 12px 12px 12px 40px;
-            }
-        }
         .exercise-detail-page .bottom-nav {
-    display: none !important;
-}
-
+            display: none !important;
+        }
 
         /* Scrollbar styling */
         .instructions-in-media-container::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
 
         .instructions-in-media-container::-webkit-scrollbar-track {
@@ -432,11 +389,312 @@
         .instructions-in-media-container::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(135deg, #ffed4e, #ffd700);
         }
+
+        /* ===== RESPONSIVE - VERY SMALL PHONES ===== */
+        @media (max-width: 360px) {
+            .content-wrapper {
+                padding: 12px 12px 90px 12px;
+            }
+
+            .back-button {
+                width: 36px;
+                height: 36px;
+                top: 10px;
+                left: 12px;
+                font-size: 18px;
+            }
+
+            .exercise-header {
+                margin: 44px 0 20px 0;
+                padding: 0 8px;
+            }
+
+            .exercise-title {
+                font-size: 18px;
+                letter-spacing: 1.5px;
+            }
+
+            .media-container {
+                margin-bottom: 16px;
+                border-radius: 16px;
+            }
+
+            .exercise-image {
+                min-height: 240px;
+            }
+
+            .instructions-in-media-container {
+                padding: 16px;
+                min-height: 280px;
+                max-height: 400px;
+            }
+
+            .section-title {
+                font-size: 16px;
+                margin-bottom: 14px;
+                padding-bottom: 8px;
+                gap: 6px;
+            }
+
+            .info-detail {
+                margin-bottom: 12px;
+                padding: 12px;
+                border-radius: 10px;
+            }
+
+            .info-detail .info-label {
+                font-size: 10px;
+                margin-bottom: 5px;
+            }
+
+            .info-detail .info-value {
+                font-size: 13px;
+            }
+
+            .instruction-list {
+                margin-top: 14px;
+            }
+
+            .instruction-list li {
+                font-size: 12px;
+                margin-bottom: 10px;
+                padding: 10px 10px 10px 36px;
+                border-radius: 8px;
+            }
+
+            .instruction-list li:before {
+                left: 10px;
+                top: 10px;
+                font-size: 16px;
+            }
+
+            .action-buttons {
+                gap: 8px;
+                padding: 10px;
+                border-radius: 14px;
+                margin-bottom: 16px;
+            }
+
+            .action-btn {
+                padding: 10px 4px;
+                border-radius: 10px;
+                font-size: 0.75rem;
+            }
+
+            .action-icon {
+                font-size: 22px;
+                margin-bottom: 3px;
+            }
+
+            .action-label {
+                font-size: 9px;
+            }
+        }
+
+        /* ===== RESPONSIVE - TABLET ===== */
+        @media (min-width: 500px) {
+            .content-wrapper {
+                padding: 18px 20px 110px 20px;
+            }
+
+            .back-button {
+                width: 44px;
+                height: 44px;
+                top: 14px;
+                left: 20px;
+                font-size: 22px;
+            }
+
+            .exercise-header {
+                margin: 56px 0 28px 0;
+                padding: 0 12px;
+            }
+
+            .exercise-title {
+                font-size: 24px;
+                letter-spacing: 2.5px;
+            }
+
+            .media-container {
+                margin-bottom: 24px;
+                border-radius: 22px;
+            }
+
+            .exercise-image {
+                min-height: 320px;
+            }
+
+            .instructions-in-media-container {
+                padding: 24px;
+                min-height: 360px;
+                max-height: 500px;
+            }
+
+            .section-title {
+                font-size: 20px;
+                margin-bottom: 20px;
+                padding-bottom: 11px;
+            }
+
+            .info-detail {
+                margin-bottom: 16px;
+                padding: 16px;
+            }
+
+            .info-detail .info-label {
+                font-size: 12px;
+            }
+
+            .info-detail .info-value {
+                font-size: 16px;
+            }
+
+            .instruction-list li {
+                font-size: 15px;
+                margin-bottom: 14px;
+                padding: 13px 13px 13px 42px;
+            }
+
+            .instruction-list li:before {
+                left: 13px;
+                top: 13px;
+                font-size: 20px;
+            }
+
+            .action-buttons {
+                gap: 12px;
+                padding: 14px;
+            }
+
+            .action-btn {
+                padding: 14px 8px;
+                font-size: 0.85rem;
+            }
+
+            .action-icon {
+                font-size: 28px;
+                margin-bottom: 5px;
+            }
+
+            .action-label {
+                font-size: 11px;
+            }
+        }
+
+        /* ===== RESPONSIVE - DESKTOP ===== */
+        @media (min-width: 768px) {
+            .content-wrapper {
+                padding: 20px 24px 120px 24px;
+            }
+
+            .back-button {
+                width: 48px;
+                height: 48px;
+                top: 16px;
+                left: 24px;
+                font-size: 24px;
+            }
+
+            .exercise-header {
+                margin: 60px 0 30px 0;
+            }
+
+            .exercise-title {
+                font-size: 26px;
+                letter-spacing: 3px;
+            }
+
+            .media-container {
+                margin-bottom: 26px;
+                border-radius: 24px;
+            }
+
+            .exercise-image {
+                min-height: 350px;
+            }
+
+            .instructions-in-media-container {
+                padding: 26px;
+                min-height: 380px;
+                max-height: 520px;
+            }
+
+            .section-title {
+                font-size: 22px;
+                margin-bottom: 22px;
+                padding-bottom: 12px;
+            }
+
+            .info-detail {
+                margin-bottom: 18px;
+                padding: 18px;
+            }
+
+            .info-detail .info-label {
+                font-size: 12px;
+            }
+
+            .info-detail .info-value {
+                font-size: 17px;
+            }
+
+            .instruction-list li {
+                font-size: 16px;
+                margin-bottom: 16px;
+                padding: 14px 14px 14px 44px;
+            }
+
+            .instruction-list li:before {
+                left: 14px;
+                top: 14px;
+                font-size: 22px;
+            }
+
+            .action-buttons {
+                gap: 14px;
+                padding: 16px;
+            }
+
+            .action-btn {
+                padding: 16px 10px;
+                font-size: 0.9rem;
+            }
+
+            .action-icon {
+                font-size: 30px;
+                margin-bottom: 6px;
+            }
+
+            .action-label {
+                font-size: 12px;
+            }
+        }
+
+        /* GPU Acceleration */
+        .back-button,
+        .exercise-image,
+        .action-btn,
+        .info-detail,
+        .instruction-list li {
+            will-change: transform;
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 {% endblock %}
 
 {% block content %}
-    <!-- Back Button -->
+<body class="exercise-detail-page">
+    <!-- Compact Back Button -->
     <button class="back-button" onclick="history.back()">‹</button>
 
     <div class="content-wrapper">
@@ -451,7 +709,7 @@
                      alt="{{ exercise.name|default:'Seated Dumbbell Overhead Press' }}"
                      class="exercise-image" id="exerciseImage">
             {% else %}
-                <div style="height: 350px; background: linear-gradient(135deg, rgba(255,215,0,0.2) 0%, rgba(255,215,0,0.1) 100%); display: flex; align-items: center; justify-content: center; color: #ffd700; font-size: 64px;"
+                <div style="height: 280px; background: linear-gradient(135deg, rgba(255,215,0,0.2) 0%, rgba(255,215,0,0.1) 100%); display: flex; align-items: center; justify-content: center; color: #ffd700; font-size: 56px;"
                      id="exerciseImage">
                     💪
                 </div>
@@ -481,7 +739,7 @@
                     <div class="info-value">{{ exercise.secondary_body_part|default:"Ma'lumot yo'q" }}</div>
                 </div>
 
-                <h2 class="section-title" style="margin-top: 30px;">💡 Bajarish Bo'yicha Ko'rsatmalar</h2>
+                <h2 class="section-title" style="margin-top: 25px;">💡 Bajarish Bo'yicha Ko'rsatmalar</h2>
 
                 <ul class="instruction-list">
                     {% for instruction in instructions_list %}
@@ -495,9 +753,6 @@
         </div>
 
         <div class="action-buttons">
-        <body class="exercise-detail-page">
-
-
             <button class="action-btn active" id="imageBtn" onclick="showContent('image')">
                 <div class="action-icon">🖼️</div>
                 <span class="action-label">Rasm</span>
@@ -523,6 +778,7 @@
         </div>
 
     </div>
+</body>
 {% endblock %}
 
 {% block extra_js %}
@@ -567,7 +823,6 @@
         function viewInstructions() {
             showContent('instructions');
         }
-
 
         // Sevimli tugmasi mantig'i
         document.getElementById('favoriteBtn').addEventListener('click', function () {
