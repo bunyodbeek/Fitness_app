@@ -5,7 +5,6 @@ from apps.models.my_trainer import WorkoutSession
 from apps.models.workouts import Workout, WorkoutExercise
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.aggregates import Sum
-from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views import View
@@ -79,71 +78,66 @@ class WorkoutStartView(LoginRequiredMixin, View):
 
             workout = get_object_or_404(Workout, pk=pk)
 
-            workout_exercises = WorkoutExercise.objects.filter(workout=workout).order_by('order').select_related(
-                'exercise')
+            workout_exercises = WorkoutExercise.objects.filter(
+                workout=workout
+            ).order_by('order').select_related('exercise')
 
             if not workout_exercises.exists():
-                raise Http404("This workout has no exercises.")
+                return render(request, 'eror_page.html', {'error_message': "Ushbu mashg'ulotda mashqlar mavjud emas."})
 
             exercises_data = []
             for wex in workout_exercises:
 
-                if wex.sets > 0 or wex.reps > 0:
-                    exercise_type = 'strength'
-                elif wex.minutes > 0:
+                is_strength = wex.sets > 0 or wex.reps > 0
+                is_cardio = wex.minutes > 0
+
+                if is_cardio and not is_strength:
                     exercise_type = 'cardio'
                 else:
                     exercise_type = 'strength'
 
+                exercise_thumbnail_url = wex.exercise.thumbnail.url if wex.exercise.thumbnail else None
+
                 exercises_data.append({
-                    'exercise': wex.exercise,
-                    'sets': wex.sets,
-                    'reps': wex.reps,
+                    'exercise_id': wex.exercise.id,
+                    'name': wex.exercise.name,
+                    'image': exercise_thumbnail_url,
+
+                    'sets': wex.sets if wex.sets > 0 else 1,
+                    'reps': wex.reps if wex.reps > 0 else 10,
+
                     'duration_minutes': wex.minutes,
 
-                    'calories_per_minute': wex.exercise.calory if wex.exercise.calory > 0 else 10,
+                    'calories_per_minute': wex.exercise.calory if hasattr(wex.exercise,
+                                                                          'calory') and wex.exercise.calory > 0 else 10,
                     'exercise_type': exercise_type,
-
-                    'rest_time': 60
                 })
 
             context = {
                 'workout': workout,
                 'exercises': exercises_data,
-                'total_exercises': workout_exercises.count(),
+                'total_exercises': len(exercises_data),
             }
             return render(request, self.template_name, context)
 
-        except Http404:
-            return render(request, '404.html', {'message': "Workout not found or has no exercises."})
         except Exception as e:
 
-            return render(request, 'error.html', {'error_message': str(e)})
+            print(f"Server xatosi: {e}")
+            return render(request, 'eror_page.html', {'error_message': f"Noma'lum xato yuz berdi: {str(e)}"})
 
     def post(self, request, pk):
+
         action = request.POST.get('action')
-
-        total_duration = request.POST.get('total_duration', 0)
-        total_calories = request.POST.get('total_calories', 0)
-        exercises_completed = request.POST.get('exercises_completed', 0)
-
-        print(f"--- Workout Natijalari (ID: {pk}) ---")
-        print(f"Action: {action}")
-        print(f"Umumiy Davomiylik: {total_duration} soniya")
-        print(f"Yoqilgan Kaloriya: {total_calories} kcal")
-        print(f"Tugallangan Mashqlar: {exercises_completed}")
 
         if action == 'complete':
 
-            return redirect('workout_complete')
+            return redirect('program_list')
 
         elif action == 'exit':
             save_progress = request.POST.get('save_progress') == 'true'
 
             if save_progress:
-                current_exercise_index = request.POST.get('current_exercise_index', 0)
-
-                print(f"Progress saqlandi. Joriy index: {current_exercise_index}")
+                pass
 
             return redirect('program_list')
 

@@ -1,4 +1,12 @@
+import io
+import os
+import subprocess
+import threading
+
 from apps.models.base import CreatedBaseModel
+from django.core.files.base import File
+from django.core.files.storage import default_storage
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db.models import (
     CASCADE,
     CharField,
@@ -11,6 +19,7 @@ from django.db.models import (
     TextField,
 )
 from django.utils.translation import gettext_lazy as _
+from PIL import Image
 
 
 class MuscleGroup(TextChoices):
@@ -46,8 +55,8 @@ class Exercise(CreatedBaseModel):
     primary_body_part = CharField(_("Muscle Group"), choices=MuscleGroup.choices, default=MuscleGroup.SHOULDERS)
     secondary_body_part = CharField(_("Secondary Muscle"), choices=MuscleGroup.choices, null=True, blank=True)
     description = TextField(_("Description"), blank=True)
-    thumbnail = ImageField(_("Image"), upload_to='exercises/thumbnails/', blank=True, null=True)
-    video = FileField(upload_to='exercises/videos/', blank=True, null=True)
+    thumbnail = ImageField(_("Image"), upload_to='exercises/thumbnails/')
+    video = FileField(upload_to='exercises/videos/')
     difficulty = CharField(_("Difficulty"), max_length=20, choices=Difficulty.choices, default=Difficulty.INTERMEDIATE)
     calory = IntegerField(_("Calories"), default=0)
     duration = IntegerField(_("Duration"), default=0)
@@ -56,6 +65,82 @@ class Exercise(CreatedBaseModel):
         ordering = ['name']
         verbose_name = _("Exercise")
         verbose_name_plural = _("Exercises")
+
+    def _convert_video_in_background(self, input_path, final_name):
+        try:
+            base, _ = os.path.splitext(input_path)
+            tmp_output = base + "_conv.mp4"
+
+            cmd = [
+                "ffmpeg", "-y", "-i", input_path,
+                "-vcodec", "libx264", "-acodec", "aac",
+                tmp_output
+            ]
+            subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+            if os.path.exists(tmp_output):
+                with open(tmp_output, "rb") as f:
+                    storage_name = f"exercises/videos/{final_name}"
+
+                    default_storage.save(storage_name, File(f))
+
+                if os.path.exists(input_path):
+                    try:
+                        os.remove(input_path)
+                    except Exception:
+                        pass
+                try:
+                    os.remove(tmp_output)
+                except Exception:
+                    pass
+
+                from django.apps import apps
+                ExerciseModel = apps.get_model(self._meta.app_label, self.__class__.__name__)
+
+                ExerciseModel.objects.filter(pk=self.pk).update(video=storage_name)
+
+        except Exception as e:
+
+            print("Video convert error:", e)
+
+    def save(self, *args, **kwargs):
+
+        try:
+            if self.thumbnail and hasattr(self.thumbnail, 'file') and isinstance(self.thumbnail.file,
+                                                                                 InMemoryUploadedFile):
+                img = Image.open(self.thumbnail)
+                if img.mode != "RGB":
+                    img = img.convert("RGB")
+
+                buffer = io.BytesIO()
+                img.save(buffer, format="JPEG", quality=85)
+                buffer.seek(0)
+
+                new_name = os.path.splitext(self.thumbnail.name)[0] + ".jpg"
+                self.thumbnail = InMemoryUploadedFile(
+                    buffer,
+                    field_name='thumbnail',
+                    name=new_name,
+                    content_type='image/jpeg',
+                    size=buffer.getbuffer().nbytes,
+                    charset=None
+                )
+        except Exception as e:
+            print("Image convert error:", e)
+
+        super().save(*args, **kwargs)
+
+        try:
+            if self.video and not self.video.name.lower().endswith(".mp4"):
+                input_path = self.video.path
+
+                final_basename = f"exercise_{self.pk}.mp4"
+
+                t = threading.Thread(target=self._convert_video_in_background, args=(input_path, final_basename))
+                t.daemon = True
+                t.start()
+        except Exception as e:
+            print("Start video convert error:", e)
 
     def __str__(self):
         return self.name

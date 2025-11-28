@@ -109,15 +109,22 @@ class QuestionnaireSubmitAPIView(APIView):
             self.save_motivations(profile, data.get('motivation', []))
 
             login(request, user)
-
-            bot_send_message(telegram_id,
-                             f"🎉 Botimizga Muvaffaqiyatli Ro'yxatdan O'tish Tugallandi! 🎉\n\n"
-                             f"Sizning ma'lumotlaringiz:\n"
-                             f"━━━━━━━━━━━━━━━━━━━\n"
-                             f"👤 **Ism-Sharif:** {self.request.user.username}\n"
-                             f"🆔 **ID Raqamingiz:** {self.request.user.id}\n"
-                             f"━━━━━━━━━━━━━━━━━━━\n\n"
-                             f"Xush kelibsiz! Endi botning barcha imkoniyatlaridan foydalanishingiz mumkin. ✅")
+            bot_send_message(
+                telegram_id,
+                "🎉 **Ro‘yxatdan o‘tish muvaffaqiyatli yakunlandi!** 🎉\n\n"
+                "Sizning ma’lumotlaringiz saqlandi:\n"
+                "━━━━━━━━━━━━━━━━━━━\n"
+                f"👤 Foydalanuvchi: {self.request.user.profile.name}\n"
+                f"🆔 ID: {self.request.user.id}\n"
+                "━━━━━━━━━━━━━━━━━━━\n\n"
+                "💪 **Endi siz bizning Fitness Platformamizning to‘liq a’zosiz!**\n"
+                "Sizga quyidagilar ochildi:\n"
+                "• 🏋️‍♂️ Shaxsiy mashg‘ulotlar\n"
+                "• 📅 Kunlik darslar rejalari\n"
+                "• 🍎 Sog‘lom ovqatlanish bo‘yicha maslahatlar\n"
+                "• 📊 Progress kuzatuv statistikasi\n\n"
+                "🔥 *Bugun boshlang — ertangi kuningizni kuchliroq qiling!* 🏆"
+            )
 
             return Response({
                 'success': True,
