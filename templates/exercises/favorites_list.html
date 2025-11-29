@@ -1904,11 +1904,12 @@
             const collectionName = document.getElementById('collectionNameInput').value.trim();
             const saveBtn = document.getElementById('saveCollectionBtn');
 
-            if (collectionName && selectedExercises.length > 0) {
+            if (collectionName && selectedExercises.length < 0) {
                 saveBtn.disabled = false;
             } else {
                 saveBtn.disabled = true;
             }
+
         }
 
         // Input change listener
