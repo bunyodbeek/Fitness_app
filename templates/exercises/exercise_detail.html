@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ exercise.name|default:"Mashq Tafsilotlari" }}{% endblock %}
+{% block title %}{{ exercise.name|default:"Exercise details" }}{% endblock %}
+{% load i18n %}
 
 {% block extra_css %}
     <style>
@@ -755,7 +756,7 @@
         <div class="action-buttons">
             <button class="action-btn active" id="imageBtn" onclick="showContent('image')">
                 <div class="action-icon">🖼️</div>
-                <span class="action-label">Rasm</span>
+                <span class="action-label">Picture</span>
             </button>
 
             <button class="action-btn"
@@ -768,12 +769,12 @@
 
             <button class="action-btn" id="instructionsBtn" onclick="showContent('instructions')">
                 <div class="action-icon">📋</div>
-                <span class="action-label">Ko'rsatmalar</span>
+                <span class="action-label">Instructions</span>
             </button>
 
             <button class="action-btn favorite-toggle {% if is_favorited %}favorited{% endif %}" id="favoriteBtn">
                 <div class="action-icon" id="favoriteIcon">{% if is_favorited %}★{% else %}⭐{% endif %}</div>
-                <span class="action-label">Sevimli</span>
+                <span class="action-label">Favorite</span>
             </button>
         </div>
 

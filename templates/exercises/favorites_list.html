@@ -2,6 +2,8 @@
 {% load static %}
 
 {% block title %}Mening Sevimlilarim{% endblock %}
+{% load i18n %}
+
 
 {% block extra_css %}
     <style>
@@ -1260,7 +1262,7 @@
     <!-- Compact Header -->
     <div class="page-header">
         <button class="back-btn" onclick="window.history.back()">‹</button>
-        <h1 class="page-title">⭐ SEVIMLILAR</h1>
+        <h1 class="page-title">⭐ FAVORITES</h1>
         <button class="add-collection-btn" onclick="openCollectionModal()">+</button>
     </div>
 
@@ -1268,19 +1270,19 @@
         <!-- Compact Stats -->
         <div class="favorite-stats">
             <i class="fas fa-heart"></i>
-            Umumiy Sevimlilar: <span id="total-favorites-count">{{ total_count }}</span>
+            All favorites: <span id="total-favorites-count">{{ total_count }}</span>
         </div>
 
         <!-- Compact Tabs -->
         <div class="favorites-tabs">
             <button class="tab-btn active" onclick="showTab(this, 'all')">
-                🎯 Barchasi
+                🎯 All
             </button>
             <button class="tab-btn" onclick="showTab(this, 'exercise')">
-                💪 Mashqlar
+                💪 Exercises
             </button>
             <button class="tab-btn" onclick="showTab(this, 'editions')">
-                👑 Premium
+                👑 one-time purchase
             </button>
         </div>
 

@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load i18n %}
+
 {% load static %}
 
 {% block title %}Profil{% endblock %}
@@ -590,7 +592,7 @@
 {% block content %}
     <!-- Compact Header -->
     <div class="page-header">
-        <h1 class="page-title">👤 PROFIL</h1>
+        <h1 class="page-title">👤 PROFILE</h1>
     </div>
 
     <div class="container">
@@ -607,21 +609,21 @@
             <p class="user-subtitle">Fitness Journey</p>
         </div>
 
-        <!-- Compact Stats -->
-        <div class="stats-container">
-            <div class="stat-card">
-                <div class="stat-number">24</div>
-                <div class="stat-label">Kunlar</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">156</div>
-                <div class="stat-label">Mashqlar</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">12</div>
-                <div class="stat-label">Kg</div>
-            </div>
-        </div>
+{#        <!-- Compact Stats -->#}
+{#        <div class="stats-container">#}
+{#            <div class="stat-card">#}
+{#                <div class="stat-number">24</div>#}
+{#                <div class="stat-label">Kunlar</div>#}
+{#            </div>#}
+{#            <div class="stat-card">#}
+{#                <div class="stat-number">156</div>#}
+{#                <div class="stat-label">Mashqlar</div>#}
+{#            </div>#}
+{#            <div class="stat-card">#}
+{#                <div class="stat-number">12</div>#}
+{#                <div class="stat-label">Kg</div>#}
+{#            </div>#}
+{#        </div>#}
 
         <!-- Compact Menu Section -->
         <div class="menu-section">
@@ -631,8 +633,8 @@
                         <div class="menu-icon">👤</div>
                     </div>
                     <div class="menu-text-wrapper">
-                        <div class="menu-text">Profil</div>
-                        <div class="menu-subtitle">Ma'lumotlarni tahrirlash</div>
+                        <div class="menu-text">Profile</div>
+                        <div class="menu-subtitle">Edit information</div>
                     </div>
                     <div class="menu-arrow">›</div>
                 </div>
@@ -644,8 +646,8 @@
                         <div class="menu-icon">📈</div>
                     </div>
                     <div class="menu-text-wrapper">
-                        <div class="menu-text">Statistika</div>
-                        <div class="menu-subtitle">Natijalaringiz</div>
+                        <div class="menu-text">Statistics</div>
+                        <div class="menu-subtitle">your results</div>
                     </div>
                     <div class="menu-arrow">›</div>
                 </div>
@@ -657,8 +659,8 @@
                         <div class="menu-icon">⭐</div>
                     </div>
                     <div class="menu-text-wrapper">
-                        <div class="menu-text">Sevimlilar</div>
-                        <div class="menu-subtitle">Saqlangan mashqlar</div>
+                        <div class="menu-text">Favorites</div>
+                        <div class="menu-subtitle">Saved exercises</div>
                     </div>
                     <div class="menu-arrow">›</div>
                 </div>
@@ -670,25 +672,25 @@
                         <div class="menu-icon">⚙️</div>
                     </div>
                     <div class="menu-text-wrapper">
-                        <div class="menu-text">Sozlamalar</div>
-                        <div class="menu-subtitle">Barcha sozlamalar</div>
+                        <div class="menu-text">Settings</div>
+                        <div class="menu-subtitle">All settinngs</div>
                     </div>
                     <div class="menu-arrow">›</div>
                 </div>
             </div>
-
-            <div class="menu-card" onclick="">
-                <div class="menu-content">
-                    <div class="menu-icon-wrapper">
-                        <div class="menu-icon">💬</div>
-                    </div>
-                    <div class="menu-text-wrapper">
-                        <div class="menu-text">Yordam</div>
-                        <div class="menu-subtitle">Qo'llab-quvvatlash</div>
-                    </div>
-                    <div class="menu-arrow">›</div>
-                </div>
-            </div>
+{##}
+{#            <div class="menu-card" onclick="">#}
+{#                <div class="menu-content">#}
+{#                    <div class="menu-icon-wrapper">#}
+{#                        <div class="menu-icon">💬</div>#}
+{#                    </div>#}
+{#                    <div class="menu-text-wrapper">#}
+{#                        <div class="menu-text">Yordam</div>#}
+{#                        <div class="menu-subtitle">Qo'llab-quvvatlash</div>#}
+{#                    </div>#}
+{#                    <div class="menu-arrow">›</div>#}
+{#                </div>#}
+{#            </div>#}
         </div>
     </div>
 {% endblock %}

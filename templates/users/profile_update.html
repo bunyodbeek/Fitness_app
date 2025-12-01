@@ -1,10 +1,12 @@
+{% load i18n %}
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="{{ user.language|default:'uz' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Profilni Yangilash{% endblock %}</title>
+    <title>{% block title %}Profile Update{% endblock %}</title>
 
     <style>
         * {
@@ -392,8 +394,8 @@
                               d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                     </svg>
                 </div>
-                <h1 class="title">Profilni Yangilash</h1>
-                <p class="subtitle">Ma'lumotlaringizni tahrirlang</p>
+                <h1 class="title">Profile Update</h1>
+                <p class="subtitle">Edit your information </p>
             </div>
 
             <!-- Form -->
@@ -420,10 +422,10 @@
                 <!-- Buttons -->
                 <div class="buttons-wrapper">
                     <a href="{% url 'user_profile' %}" class="btn btn-cancel">
-                        Bekor qilish
+                        Cancel
                     </a>
                     <button type="submit" class="btn btn-submit">
-                        Saqlash
+                        Save
                     </button>
                 </div>
             </form>
