@@ -1,3 +1,4 @@
+from apps.models.my_trainer import WorkoutProgress
 from apps.models.workouts import Edition, Program, Workout
 from django.contrib import admin
 
@@ -22,3 +23,8 @@ class EditionAdmin(admin.ModelAdmin):
     search_fields = ("title",)
     ordering = ("program", "order")
     inlines = [WorkoutInline]
+
+
+@admin.register(WorkoutProgress)
+class WorkoutProgressAdmin(admin.ModelAdmin):
+    pass

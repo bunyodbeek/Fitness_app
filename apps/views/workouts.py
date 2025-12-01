@@ -1,7 +1,9 @@
 from datetime import timedelta
 
+from django.http import HttpResponseBadRequest
+
 from apps.models import Edition, Program
-from apps.models.my_trainer import WorkoutSession
+from apps.models.my_trainer import WorkoutSession, WorkoutProgress
 from apps.models.workouts import Workout, WorkoutExercise
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.aggregates import Sum
@@ -74,104 +76,85 @@ class WorkoutStartView(LoginRequiredMixin, View):
     template_name = 'workouts/active_workout.html'
 
     def get(self, request, pk):
-        try:
+        workout = get_object_or_404(Workout, pk=pk)
+        workout_exercises = (
+            WorkoutExercise.objects
+            .filter(workout=workout)
+            .select_related('exercise')
+            .order_by('order')
+        )
 
-            workout = get_object_or_404(Workout, pk=pk)
+        if not workout_exercises.exists():
+            return render(request, 'error_page.html', {
+                "error_message": "Ushbu workoutda mashqlar mavjud emas."
+            })
 
-            workout_exercises = WorkoutExercise.objects.filter(
-                workout=workout
-            ).order_by('order').select_related('exercise')
+        exercises_data = self._prepare_exercises_data(workout_exercises)
+        return render(request, self.template_name, {
+            "workout": workout,
+            "exercises": exercises_data,
+            "total_exercises": len(exercises_data)
+        })
 
-            if not workout_exercises.exists():
-                return render(request, 'eror_page.html', {'error_message': "Ushbu mashg'ulotda mashqlar mavjud emas."})
+    def _prepare_exercises_data(self, workout_exercises):
+        data = []
+        for wex in workout_exercises:
+            exercise = wex.exercise
 
-            exercises_data = []
-            for wex in workout_exercises:
+            is_strength = wex.sets > 0 or wex.reps > 0
+            is_cardio = wex.minutes > 0
+            exercise_type = "cardio" if is_cardio and not is_strength else "strength"
 
-                is_strength = wex.sets > 0 or wex.reps > 0
-                is_cardio = wex.minutes > 0
-
-                if is_cardio and not is_strength:
-                    exercise_type = 'cardio'
-                else:
-                    exercise_type = 'strength'
-
-                exercise_thumbnail_url = wex.exercise.thumbnail.url if wex.exercise.thumbnail else None
-
-                exercises_data.append({
-                    'exercise_id': wex.exercise.id,
-                    'name': wex.exercise.name,
-                    'image': exercise_thumbnail_url,
-
-                    'sets': wex.sets if wex.sets > 0 else 1,
-                    'reps': wex.reps if wex.reps > 0 else 10,
-
-                    'duration_minutes': wex.minutes,
-
-                    'calories_per_minute': wex.exercise.calory if hasattr(wex.exercise,
-                                                                          'calory') and wex.exercise.calory > 0 else 10,
-                    'exercise_type': exercise_type,
-                })
-
-            context = {
-                'workout': workout,
-                'exercises': exercises_data,
-                'total_exercises': len(exercises_data),
-            }
-            return render(request, self.template_name, context)
-
-        except Exception as e:
-
-            print(f"Server xatosi: {e}")
-            return render(request, 'eror_page.html', {'error_message': f"Noma'lum xato yuz berdi: {str(e)}"})
-
-    def post(self, request, pk):
-
-        action = request.POST.get('action')
-
-        if action == 'complete':
-
-            return redirect('program_list')
-
-        elif action == 'exit':
-            save_progress = request.POST.get('save_progress') == 'true'
-
-            if save_progress:
-                pass
-
-            return redirect('program_list')
-
-        return redirect('workout_detail', pk=pk)
+            data.append({
+                "exercise_id": exercise.id,
+                "name": exercise.name,
+                "image": exercise.thumbnail.url if exercise.thumbnail else None,
+                "sets": max(wex.sets, 1),
+                "reps": max(wex.reps, 10),
+                "duration_minutes": wex.minutes,
+                "rest_seconds": getattr(wex, 'rest_seconds', 60),
+                "calories_per_minute": max(exercise.calory, 10),
+                "exercise_type": exercise_type
+            })
+        return data
 
 
 class WorkoutCompleteView(LoginRequiredMixin, View):
+    template_name = "workouts/workout_complete.html"
 
     def post(self, request, pk):
         workout = get_object_or_404(Workout, pk=pk)
 
-        summary = request.session.get('workout_summary', {})
+        try:
+            total_calories = float(request.POST.get("total_calories", 0))
+            total_duration = int(request.POST.get("total_duration", 0))
+            exercises_completed = int(request.POST.get("exercises_completed", 0))
+        except (ValueError, TypeError):
+            return HttpResponseBadRequest("Invalid input data")
 
-        if 'workout_summary' in request.session:
-            del request.session['workout_summary']
-            request.session.modified = True
+        WorkoutProgress.objects.create(
+            user=request.user.profile,
+            workout=workout,
+            total_calories=total_calories,
+            total_duration_seconds=total_duration,
+            exercises_completed=exercises_completed
+        )
 
-        return render(request, "workouts/workout_complete.html", {
+        return render(request, self.template_name, {
             "workout": workout,
-            "summary": summary
+            "workout_summary": {
+                "total_calories": total_calories,
+                "duration_seconds": total_duration,
+                "exercises_completed": exercises_completed,
+                # Agar kerak bo'lsa, keyingi statistikalarni ham hisoblang:
+                "total_reps": 0,
+                "total_weight": 0
+            }
         })
 
     def get(self, request, pk):
         workout = get_object_or_404(Workout, pk=pk)
-        summary = request.session.get('workout_summary', {})
-
-        if 'workout_summary' in request.session:
-            del request.session['workout_summary']
-            request.session.modified = True
-
-        return render(request, "workouts/workout_complete.html", {
-            "workout": workout,
-            "summary": summary
-        })
+        return render(request, self.template_name, {"workout": workout})
 
 
 class MyTrainerView(LoginRequiredMixin, TemplateView):
