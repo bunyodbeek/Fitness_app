@@ -1,0 +1,283 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-30 13:15+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: apps/models/analytics.py:8
+msgid "Bot Started"
+msgstr ""
+
+#: apps/models/analytics.py:9
+msgid "Onboarding Completed"
+msgstr ""
+
+#: apps/models/analytics.py:10
+msgid "Workout Started"
+msgstr ""
+
+#: apps/models/analytics.py:11
+msgid "Workout Completed"
+msgstr ""
+
+#: apps/models/analytics.py:12
+msgid "Exercise Viewed"
+msgstr ""
+
+#: apps/models/analytics.py:13
+msgid "Exercise Favourited"
+msgstr ""
+
+#: apps/models/analytics.py:14
+msgid "Subscription Viewed"
+msgstr ""
+
+#: apps/models/analytics.py:15
+msgid "Payment Completed"
+msgstr ""
+
+#: apps/models/analytics.py:23
+msgid "UserActivity"
+msgstr ""
+
+#: apps/models/analytics.py:24
+msgid "UserActivities"
+msgstr ""
+
+#: apps/models/exercises.py:49
+msgid "Beginner"
+msgstr ""
+
+#: apps/models/exercises.py:50
+msgid "Intermediate"
+msgstr ""
+
+#: apps/models/exercises.py:51
+msgid "Advanced"
+msgstr ""
+
+#: apps/models/exercises.py:53 apps/models/favorites.py:8
+msgid "Name"
+msgstr ""
+
+#: apps/models/exercises.py:54
+msgid "Uzbek Name"
+msgstr ""
+
+#: apps/models/exercises.py:55
+msgid "Muscle Group"
+msgstr ""
+
+#: apps/models/exercises.py:56
+msgid "Secondary Muscle"
+msgstr ""
+
+#: apps/models/exercises.py:57 apps/models/favorites.py:10
+msgid "Description"
+msgstr ""
+
+#: apps/models/exercises.py:58
+msgid "Image"
+msgstr ""
+
+#: apps/models/exercises.py:60
+msgid "Difficulty"
+msgstr ""
+
+#: apps/models/exercises.py:61
+msgid "Calories"
+msgstr ""
+
+#: apps/models/exercises.py:62
+msgid "Duration"
+msgstr ""
+
+#: apps/models/exercises.py:66 apps/models/exercises.py:150
+msgid "Exercise"
+msgstr ""
+
+#: apps/models/exercises.py:67
+msgid "Exercises"
+msgstr ""
+
+#: apps/models/exercises.py:151
+msgid "Stem Number"
+msgstr ""
+
+#: apps/models/exercises.py:152
+msgid "Text"
+msgstr ""
+
+#: apps/models/exercises.py:153
+msgid "Uzbek Text"
+msgstr ""
+
+#: apps/models/exercises.py:158
+msgid "ExerciseInstruction"
+msgstr ""
+
+#: apps/models/exercises.py:159
+msgid "ExerciseInstructions"
+msgstr ""
+
+#: apps/models/favorites.py:9
+msgid "Icon"
+msgstr ""
+
+#: apps/models/favorites.py:15
+msgid "Favorite Collection"
+msgstr ""
+
+#: apps/models/favorites.py:16
+msgid "Favorite Collections"
+msgstr ""
+
+#: apps/models/favorites.py:30
+msgid "Notes"
+msgstr ""
+
+#: apps/models/favorites.py:35
+msgid "Sevimli"
+msgstr ""
+
+#: apps/models/favorites.py:36
+msgid "Sevimlilar"
+msgstr ""
+
+#: apps/models/payments.py:23 apps/models/payments.py:52
+msgid "User"
+msgstr ""
+
+#: apps/models/payments.py:24
+msgid "Start Date"
+msgstr ""
+
+#: apps/models/payments.py:25
+msgid "End Date"
+msgstr ""
+
+#: apps/models/payments.py:26
+msgid "Is Active"
+msgstr ""
+
+#: apps/models/payments.py:27
+msgid "Auto Renew"
+msgstr ""
+
+#: apps/models/payments.py:28
+msgid "monthly payment price"
+msgstr ""
+
+#: apps/models/payments.py:31 apps/models/payments.py:54
+msgid "Subscription"
+msgstr ""
+
+#: apps/models/payments.py:32
+msgid "Subscriptions"
+msgstr ""
+
+#: apps/models/payments.py:55
+msgid "Status"
+msgstr ""
+
+#: apps/models/payments.py:56
+msgid "Click Transaction ID"
+msgstr ""
+
+#: apps/models/payments.py:57
+msgid "Merchant Transaction ID"
+msgstr ""
+
+#: apps/models/payments.py:58
+msgid "Is Auto Payment"
+msgstr ""
+
+#: apps/models/payments.py:59
+msgid "Automatic payment attempt"
+msgstr ""
+
+#: apps/models/payments.py:60
+msgid "Additional Information"
+msgstr ""
+
+#: apps/models/payments.py:61
+msgid "Completed Date"
+msgstr ""
+
+#: apps/models/payments.py:64
+msgid "To'lov"
+msgstr ""
+
+#: apps/models/payments.py:65
+msgid "To'lovlar"
+msgstr ""
+
+#: apps/models/workouts.py:43
+msgid "Premium"
+msgstr ""
+
+#: templates/users/account_settings.html:10
+#: templates/users/account_settings.html:274
+#: templates/users/account_settings.html:291
+msgid "Obunani boshqarish"
+msgstr ""
+
+#: templates/users/account_settings.html:318
+msgid "Keyingi to'lov sanasi"
+msgstr ""
+
+#: templates/users/account_settings.html:329
+msgid "To'lov usuli"
+msgstr ""
+
+#: templates/users/account_settings.html:340
+msgid "Obuna narxi"
+msgstr ""
+
+#: templates/users/account_settings.html:357
+msgid "Obunani bekor qilish"
+msgstr ""
+
+#: templates/users/account_settings.html:359
+msgid "Bekor qilingandan so'ng, obuna"
+msgstr ""
+
+#: templates/users/account_settings.html:359
+msgid "da yakunlanadi"
+msgstr ""
+
+#: templates/users/account_settings.html:377
+msgid "Obunani qaytarish"
+msgstr ""
+
+#: templates/users/account_settings.html:387
+msgid "Orqaga"
+msgstr ""
+
+#: templates/users/language.html:11 templates/users/language.html:201
+#: templates/users/language.html:218
+msgid "Til sozlamalari"
+msgstr ""
+
+#: templates/users/language.html:221
+msgid ""
+"Ilovada qaysi tildan foydalanmoqchisiz? Tanlangan tilingiz butun ilova "
+"bo'ylab qo'llaniladi."
+msgstr ""
+
+#: templates/users/language.html:245
+msgid "Saqlash"
+msgstr ""
