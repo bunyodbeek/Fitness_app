@@ -1,7 +1,7 @@
             {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Mening Sevimlilarim{% endblock %}
+{% block title %}My favorites{% endblock %}
 
 {% block extra_css %}
     <style>
@@ -1529,7 +1529,7 @@
 
 {% block content %}
     <div class="page-header">
-        <h1 class="page-title">⭐ Mening Sevimlilarim</h1>
+        <h1 class="page-title">⭐ My favorites</h1>
         <!-- ✨ YANGI - Add Collection Button -->
         <button class="add-collection-btn" onclick="openCollectionModal()">+</button>
     </div>
@@ -1537,18 +1537,18 @@
     <div class="favorites-content">
         <div class="favorite-stats">
             <i class="fas fa-heart" style="color: #ffd700; margin-right: 8px;"></i>
-            Umumiy Sevimlilar: <span id="total-favorites-count">{{ total_count }}</span>
+            All favorite: <span id="total-favorites-count">{{ total_count }}</span>
         </div>
 
         <div class="favorites-tabs">
             <button class="tab-btn active" onclick="showTab(this, 'all')">
-                <i class="fas fa-th-large" style="margin-right: 6px;"></i> Barchasi
+                <i class="fas fa-th-large" style="margin-right: 6px;"></i> All
             </button>
             <button class="tab-btn" onclick="showTab(this, 'exercise')">
-                <i class="fas fa-dumbbell" style="margin-right: 6px;"></i> Mashqlar
+                <i class="fas fa-dumbbell" style="margin-right: 6px;"></i> Exercises
             </button>
             <button class="tab-btn" onclick="showTab(this, 'editions')">
-                <i class="fas fa-crown" style="margin-right: 6px;"></i> bir martalik harid
+                <i class="fas fa-crown" style="margin-right: 6px;"></i> one-time purchase
             </button>
         </div>
 
@@ -1572,16 +1572,16 @@
                     </a>
                     <button class="unfavorite-btn"
                             onclick="event.stopPropagation(); event.preventDefault(); unfavorite({{ fav.id }}, this)"
-                            title="Sevimlidan o'chirish"
-                            aria-label="O'chirish">
+                            title="Delete from favorites"
+                            aria-label="Delete">
                         ⭐
                     </button>
                 </div>
             {% empty %}
                 <div class="empty-state">
                     <div class="empty-state-icon">⭐</div>
-                    <h3>Sevimlilar ro'yxati bo'sh</h3>
-                    <p>O'zingizga yoqqan mashqlarni qo'shishni boshlang!</p>
+                    <h3>Favorite list is empty</h3>
+                    <p>Start adding favorite exericises!</p>
                 </div>
             {% endfor %}
         </div>
@@ -1614,22 +1614,22 @@
                         <!-- Edition Info Row -->
                         <div class="edition-info-row">
                             <div class="edition-info-item">
-                                <div class="edition-info-label">Hafta</div>
+                                <div class="edition-info-label">Week</div>
                                 <div class="edition-info-value">{{ edition.duration_weeks }}</div>
                             </div>
                             <div class="edition-info-item">
-                                <div class="edition-info-label">Mashqlar</div>
+                                <div class="edition-info-label">Exercises</div>
                                 <div class="edition-info-value">{{ edition.total_exercises }}</div>
                             </div>
                             <div class="edition-info-item">
-                                <div class="edition-info-label">Qiyinlik</div>
+                                <div class="edition-info-label">Level</div>
                                 <div class="edition-info-value">{{ edition.difficulty|upper }}</div>
                             </div>
                         </div>
 
                         <!-- Description -->
                         <p class="edition-description">
-                            {{ edition.description|default:"Professional dastur bilan maqsadlaringizga erishing!" }}
+                            {{ edition.description|default:"Gain your goal with the help of professional program!" }}
                         </p>
 
                         <!-- Actions -->
@@ -1658,7 +1658,7 @@
                 <div class="empty-state">
                     <div class="empty-state-icon">👑</div>
                     <h3>Premium Editionlar yo'q</h3>
-                    <p>Tez orada yangi dasturlar qo'shiladi!</p>
+                    <p>Will be soon!</p>
                 </div>
             {% endfor %}
         </div>
@@ -1671,7 +1671,7 @@
         <div class="collection-modal-content">
             <!-- Modal Header -->
             <div class="modal-header">
-                <h3 class="modal-title">📁 Yangi To'plam</h3>
+                <h3 class="modal-title">📁 New collection</h3>
                 <button class="modal-close-btn" onclick="closeCollectionModal()">×</button>
             </div>
 
@@ -1679,12 +1679,12 @@
             <div class="modal-body">
                 <!-- Collection Name Input -->
                 <div class="collection-name-group">
-                    <label class="collection-name-label">To'plam nomi</label>
+                    <label class="collection-name-label">name of collection</label>
                     <input
                             type="text"
                             class="collection-name-input"
                             id="collectionNameInput"
-                            placeholder="Masalan: Chest Day Mashqlari"
+                            placeholder="Exercise: Chest Day Exercises"
                             maxlength="50"
                     >
                 </div>
@@ -1692,7 +1692,7 @@
                 <!-- Exercise Selection -->
                 <div class="exercise-select-section">
                     <div class="exercise-select-header">
-                        Mashqlarni tanlang (<span id="selectedCount">0</span> tanlandi)
+                        select exercises (<span id="selectedCount">0</span> selected)
                     </div>
                     <div class="exercise-list" id="exerciseList">
                         <!-- Django template bilan exercises list -->
@@ -1718,10 +1718,10 @@
             <!-- Modal Footer -->
             <div class="modal-footer">
                 <button class="modal-btn modal-btn-cancel" onclick="closeCollectionModal()">
-                    Bekor qilish
+                    cancel
                 </button>
                 <button class="modal-btn modal-btn-save" id="saveCollectionBtn" onclick="saveCollection()" disabled>
-                    Saqlash
+                    Save
                 </button>
             </div>
         </div>
@@ -1773,9 +1773,8 @@
             return cookieValue;
         }
 
-        // Unfavorite funksiyasi
         function unfavorite(id, button) {
-            if (confirm('Bu mashqni sevimlilardan olib tashlashni xohlaysizmi?')) {
+            if (confirm('Do you want to delete from favorites?')) {
                 const url = `/exercises/favorite/toggle/${id}/`;
 
                 fetch(url, {
@@ -1807,8 +1806,8 @@
                                     document.getElementById('favoritesList').innerHTML = `
                                     <div class="empty-state">
                                         <div class="empty-state-icon">⭐</div>
-                                        <h3>Sevimlilar ro'yxati bo'sh</h3>
-                                        <p>O'zingizga yoqqan mashqlarni qo'shishni boshlang!</p>
+                                        <h3>Favorite collection is empty</h3>
+                                        <p>Start adding favorite exercises!</p>
                                     </div>
                                 `;
                                 }
