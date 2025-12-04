@@ -22,6 +22,7 @@ from apps.views import (
     WorkoutDetailView,
     WorkoutStartView,
 )
+from apps.views.favorite import AddExerciseToCollectionView
 from apps.views.users import AdminPageView, ChangeLanguageView
 from django.urls import path
 
@@ -56,6 +57,10 @@ urlpatterns = [
     path("bot/webhook/", TelegramWebhookView.as_view(), name="telegram_webhook"),
 
     path('panel/', AdminPageView.as_view(), name='admin_page'),
+
+    path('collection/<int:collection_id>/add-exercise/', AddExerciseToCollectionView.as_view(), name='add-exercise-to-collection'),
+
+    path("collection/", FavoritesListView.as_view(), name="favorites"),
 
     path('change/language/', ChangeLanguageView.as_view(), name='change_language'),
 ]

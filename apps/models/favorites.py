@@ -6,8 +6,7 @@ from django.utils.translation import gettext_lazy as _
 class FavoriteCollection(CreatedBaseModel):
     user = ForeignKey('apps.UserProfile', CASCADE, related_name='favorite_collections')
     name = CharField(_("Name"), max_length=100)
-    icon = CharField(_("Icon"), max_length=10, default="⭐")
-    description = TextField(_("Description"), blank=True)
+    description = TextField(_("Description"), blank=True, null=True)
 
     class Meta:
         ordering = ['-created_at']

@@ -1571,7 +1571,7 @@
                         </div>
                     </a>
                     <button class="unfavorite-btn"
-                            onclick="event.stopPropagation(); event.preventDefault(); unfavorite({{ fav.id }}, this)"
+                            onclick="event.stopPropagation(); event.preventDefault(); unfavorite({{ fav.exercise_id }}, this)"
                             title="Sevimlidan o'chirish"
                             aria-label="O'chirish">
                         ⭐
@@ -1776,10 +1776,10 @@
         // Unfavorite funksiyasi
         function unfavorite(id, button) {
             if (confirm('Bu mashqni sevimlilardan olib tashlashni xohlaysizmi?')) {
-                const url = `/exercises/favorite/toggle/${id}/`;
+                const url = `/en/exercises/favorite/toggle/${id}/`;
 
                 fetch(url, {
-                    method: 'DELETE',
+                    method: 'POST',
                     headers: {
                         'X-CSRFToken': getCookie('csrftoken')
                     }

@@ -1,20 +1,20 @@
 import traceback
 
 import requests
-from django.conf import settings
-from django.contrib import messages
-from django.http import HttpResponseRedirect
-from django.utils.translation import get_language, activate, gettext_lazy as _
-
 from apps.forms import UserProfileForm
 from apps.models import User, UserMotivation, UserProfile
 from apps.utils import bot_send_message
+from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.base import ContentFile
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
+from django.utils.translation import activate, get_language
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.generic import TemplateView, UpdateView
 from rest_framework import status

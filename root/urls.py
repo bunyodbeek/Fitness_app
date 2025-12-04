@@ -6,7 +6,7 @@ from django.urls import include, path
 
 urlpatterns = i18n_patterns(
     path('admin/', admin.site.urls),
-    path('', include('apps.urls')),     # BU YERGA i18n_patterns JOYLASHADI ❗
+    path('', include('apps.urls')),
     path('i18n/', include('django.conf.urls.i18n')),  # set_language
 )
 
