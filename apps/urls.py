@@ -1,12 +1,35 @@
-from django.urls import path
-from apps.views import *
+from apps.views import (
+    AnimationView,
+    EditionDetailView,
+    ExerciseDetailView,
+    ExercisesByMuscleView,
+    FavoritesListView,
+    MuscleGroupListView,
+    MyTrainerHistoryView,
+    MyTrainerView,
+    OnboardingView,
+    ProfileView,
+    ProgramDetailView,
+    ProgramListView,
+    ProgressView,
+    QuestionnaireSubmitAPIView,
+    SettingsView,
+    TelegramAuthAPIView,
+    TelegramWebhookView,
+    ToggleFavoriteView,
+    UpdateProfileView,
+    WorkoutCompleteView,
+    WorkoutDetailView,
+    WorkoutStartView,
+)
 from apps.views.users import AdminPageView
+from django.urls import path
 
 urlpatterns = [
     path('exercises/', MuscleGroupListView.as_view(), name='muscle_groups'),
     path('exercises/<str:muscle>/', ExercisesByMuscleView.as_view(), name='exercises_by_muscle'),
     path('exercises/detail/<int:exercise_id>/', ExerciseDetailView.as_view(), name='exercise_detail'),
-    path('favorite/toggle/<int:exercise_id>/', ToggleFavoriteView.as_view(), name='toggle_favorite'),
+    path('exercises/favorite/toggle/<int:exercise_id>/', ToggleFavoriteView.as_view(), name='toggle_favorite'),
     path('favorites/', FavoritesListView.as_view(), name='favorite_list_page'),
     path('api/questionnaire/submit/', QuestionnaireSubmitAPIView.as_view(), name='questionnaire_submit'),
 
@@ -28,6 +51,9 @@ urlpatterns = [
 
     path('my-trainer/', MyTrainerView.as_view(), name='my_trainer'),
     path('my-trainer/history/', MyTrainerHistoryView.as_view(), name='my_trainer_history'),
+    path('workout/<int:session_id>/detail/', WorkoutDetailView.as_view(), name='workout_session_detail'),
+
+    path("bot/webhook/", TelegramWebhookView.as_view(), name="telegram_webhook"),
 
     path('panel/', AdminPageView.as_view(), name='admin_page'),
 ]

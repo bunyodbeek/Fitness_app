@@ -332,12 +332,29 @@
             animation: slideUp 0.5s ease backwards;
         }
 
-        .exercise-card:nth-child(1) { animation-delay: 0.05s; }
-        .exercise-card:nth-child(2) { animation-delay: 0.1s; }
-        .exercise-card:nth-child(3) { animation-delay: 0.15s; }
-        .exercise-card:nth-child(4) { animation-delay: 0.2s; }
-        .exercise-card:nth-child(5) { animation-delay: 0.25s; }
-        .exercise-card:nth-child(6) { animation-delay: 0.3s; }
+        .exercise-card:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+
+        .exercise-card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .exercise-card:nth-child(3) {
+            animation-delay: 0.15s;
+        }
+
+        .exercise-card:nth-child(4) {
+            animation-delay: 0.2s;
+        }
+
+        .exercise-card:nth-child(5) {
+            animation-delay: 0.25s;
+        }
+
+        .exercise-card:nth-child(6) {
+            animation-delay: 0.3s;
+        }
 
         @keyframes slideUp {
             from {
@@ -983,15 +1000,9 @@
 
 {% block extra_js %}
     <script>
-        // ==========================================
-        // GLOBAL VARIABLES
-        // ==========================================
-        let currentExerciseId = null;
-        let currentIsFavorited = false;
-
-        // ==========================================
-        // CSRF TOKEN
-        // ==========================================
+        // ==========================
+        // CSRF TOKEN FUNCTION
+        // ==========================
         function getCookie(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -1009,22 +1020,28 @@
 
         const csrftoken = getCookie('csrftoken');
 
-        // ==========================================
-        // SAVE OPTIONS MODAL
-        // ==========================================
+        // ==========================
+        // GLOBAL VARIABLES
+        // ==========================
+        let currentExerciseId = null;
+        let currentIsFavorited = false;
+
+        // ==========================
+        // OPEN MODAL / DIRECT ACTION
+        // ==========================
         function showSaveOptions(exerciseId, isFavorited) {
             currentExerciseId = exerciseId;
             currentIsFavorited = isFavorited;
 
-            // Agar allaqachon favorited bo'lsa, o'chirish
+            // ⚠️ GET yubormaslik uchun <a> linkni bloklaymiz
+            event.preventDefault();
+
+            // Agar allaqachon favorited bo'lsa — faqat delete POST
             if (isFavorited) {
-                if (confirm('Bu mashqni sevimlilardan o\'chirmoqchimisiz?')) {
-                    removeFromFavorites(exerciseId);
-                }
+                removeFromFavorites(exerciseId);
                 return;
             }
 
-            // Modal ochish
             document.getElementById('saveOptionsModal').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
@@ -1034,11 +1051,9 @@
             document.body.style.overflow = '';
         }
 
-        // ==========================================
-        // SAVE FUNCTIONS
-        // ==========================================
-
-        // 1. Oddiy saqlash
+        // ==========================
+        // FAVORITE TOGGLE (POST)
+        // ==========================
         function saveToDefault() {
             const url = `/exercises/favorite/toggle/${currentExerciseId}/`;
 
@@ -1064,7 +1079,7 @@
             });
         }
 
-        // 2. O'chirish
+
         function removeFromFavorites(exerciseId) {
             const url = `/exercises/favorite/toggle/${exerciseId}/`;
 
@@ -1089,7 +1104,9 @@
             });
         }
 
-        // 3. Mavjud to'plamga
+        // ==========================
+        // COLLECTION
+        // ==========================
         function showCollections() {
             closeSaveOptions();
             document.getElementById('collectionsModal').classList.add('active');
@@ -1129,16 +1146,14 @@
             });
         }
 
-        // 4. Yangi to'plam yaratish
         function createNewCollection() {
             closeSaveOptions();
-            // Favorites sahifasiga o'tish (collection yaratish uchun)
-            window.location.href = '/exercises/favorites/?create_collection=true&exercise_id=' + currentExerciseId;
+            window.location.href = `/exercises/favorites/?create_collection=true&exercise_id=${currentExerciseId}`;
         }
 
-        // ==========================================
+        // ==========================
         // UI UPDATE
-        // ==========================================
+        // ==========================
         function updateFavoriteUI(exerciseId, isFavorited) {
             const favIcon = document.querySelector(`[data-exercise-id="${exerciseId}"]`);
             const iconSpan = document.getElementById(`fav-icon-${exerciseId}`);
@@ -1154,37 +1169,29 @@
             }
         }
 
+        // ==========================
+        // SUCCESS TOAST
+        // ==========================
         function showSuccessMessage(message) {
-            // Simple toast notification
             const toast = document.createElement('div');
             toast.style.cssText = `
-                position: fixed;
-                bottom: 100px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: linear-gradient(135deg, #4caf50, #66bb6a);
-                color: white;
-                padding: 12px 24px;
-                border-radius: 50px;
-                font-weight: 700;
-                font-size: 14px;
-                z-index: 9999;
-                box-shadow: 0 8px 30px rgba(76, 175, 80, 0.5);
-                animation: slideUpFade 0.3s ease;
-            `;
+            position: fixed; bottom: 100px; left: 50%;
+            transform: translateX(-50%);
+            background: #4caf50;
+            color: white; padding: 12px 24px;
+            border-radius: 50px; font-weight: 700;
+            z-index: 9999;
+        `;
             toast.textContent = message;
             document.body.appendChild(toast);
 
-            setTimeout(() => {
-                toast.style.animation = 'slideDownFade 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }, 2000);
+            setTimeout(() => toast.remove(), 2000);
         }
 
-        // ==========================================
-        // SEARCH FUNCTIONALITY
-        // ==========================================
-        document.getElementById('searchInput').addEventListener('input', function (e) {
+        // ==========================
+        // SEARCH FILTER
+        // ==========================
+        document.getElementById('searchInput')?.addEventListener('input', function (e) {
             const searchTerm = e.target.value.toLowerCase();
             const cards = document.querySelectorAll('.exercise-card');
 
@@ -1194,19 +1201,15 @@
             });
         });
 
-        // ==========================================
-        // MODAL CLOSE ON OUTSIDE CLICK
-        // ==========================================
-        document.getElementById('saveOptionsModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeSaveOptions();
-            }
+        // ==========================
+        // MODAL OUTSIDE CLICK
+        // ==========================
+        document.getElementById('saveOptionsModal')?.addEventListener('click', e => {
+            if (e.target === e.currentTarget) closeSaveOptions();
         });
 
-        document.getElementById('collectionsModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeCollectionsModal();
-            }
+        document.getElementById('collectionsModal')?.addEventListener('click', e => {
+            if (e.target === e.currentTarget) closeCollectionsModal();
         });
     </script>
 {% endblock %}

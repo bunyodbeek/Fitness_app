@@ -2,6 +2,7 @@ from apps.models import Exercise, Favorite
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -25,32 +26,23 @@ class FavoritesListView(LoginRequiredMixin, ListView):
         return qs
 
 
-class ToggleFavoriteView(LoginRequiredMixin, APIView):
-    login_url = '/login/'
+class ToggleFavoriteView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, exercise_id):
-        return self.toggle_favorite(request, exercise_id)
-
-    def delete(self, request, exercise_id):
-        return self.toggle_favorite(request, exercise_id)
-
-    def toggle_favorite(self, request, exercise_id):
         exercise = get_object_or_404(Exercise, pk=exercise_id)
-        user_profile = getattr(request.user, "profile", None)
-        if not user_profile:
-            return Response({'success': False, 'message': 'Profile topilmadi.'}, status=500)
+        user_profile = request.user.profile
 
-        favorite_instance, created = Favorite.objects.get_or_create(
+        favorite, created = Favorite.objects.get_or_create(
             user=user_profile,
             exercise=exercise
         )
-        if created:
-            status = 'added'
-        else:
-            favorite_instance.delete()
-            status = 'removed'
 
-        return Response({'success': True, 'status': status})
+        if not created:
+            favorite.delete()
+            return Response({'success': True, 'status': 'removed'})
+
+        return Response({'success': True, 'status': 'added'})
 
 #
 # class RemoveFavoriteView(LoginRequiredMixin, View):
