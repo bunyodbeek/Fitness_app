@@ -1,4 +1,4 @@
-from django.db.models import CASCADE, ForeignKey, Index, Model, FloatField
+from django.db.models import CASCADE, FloatField, ForeignKey, Index, Model
 from django.db.models.enums import TextChoices
 from django.db.models.fields import CharField, DateTimeField, DecimalField, IntegerField
 

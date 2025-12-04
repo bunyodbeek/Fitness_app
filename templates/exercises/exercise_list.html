@@ -332,12 +332,29 @@
             animation: slideUp 0.5s ease backwards;
         }
 
-        .exercise-card:nth-child(1) { animation-delay: 0.05s; }
-        .exercise-card:nth-child(2) { animation-delay: 0.1s; }
-        .exercise-card:nth-child(3) { animation-delay: 0.15s; }
-        .exercise-card:nth-child(4) { animation-delay: 0.2s; }
-        .exercise-card:nth-child(5) { animation-delay: 0.25s; }
-        .exercise-card:nth-child(6) { animation-delay: 0.3s; }
+        .exercise-card:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+
+        .exercise-card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .exercise-card:nth-child(3) {
+            animation-delay: 0.15s;
+        }
+
+        .exercise-card:nth-child(4) {
+            animation-delay: 0.2s;
+        }
+
+        .exercise-card:nth-child(5) {
+            animation-delay: 0.25s;
+        }
+
+        .exercise-card:nth-child(6) {
+            animation-delay: 0.3s;
+        }
 
         @keyframes slideUp {
             from {
@@ -917,38 +934,32 @@
 
     <!-- Save Options Modal -->
     <div class="save-options-modal" id="saveOptionsModal">
-        <div class="save-options-content">
-            <div class="modal-handle"></div>
-            <h3 class="modal-title">📁 Qayerga saqlaysiz?</h3>
+    <div class="save-options-content">
+    <div class="modal-handle"></div>
+    <h3 class="modal-title">📁 Qayerga saqlaysiz?</h3>
 
-            <div class="save-options-list">
-                <!-- Oddiy saqlash -->
-                <div class="save-option" onclick="saveToDefault()">
-                    <div class="save-option-icon">⭐</div>
-                    <div class="save-option-info">
-                        <div class="save-option-title">Oddiy saqlash</div>
-                        <div class="save-option-desc">Sevimlilarga qo'shish</div>
-                    </div>
-                </div>
+    <div class="save-options-list">
+    <!-- Oddiy saqlash -->
+    <div class="save-option" onclick="saveToDefault()">
+        <div class="save-option-icon">⭐</div>
+        <div class="save-option-info">
+            <div class="save-option-title">Oddiy saqlash</div>
+            <div class="save-option-desc">Sevimlilarga qo'shish</div>
+        </div>
+    </div>
 
-                <!-- Mavjud to'plamga -->
-                <div class="save-option" onclick="showCollections()">
-                    <div class="save-option-icon">📂</div>
-                    <div class="save-option-info">
-                        <div class="save-option-title">Mavjud to'plamga</div>
-                        <div class="save-option-desc">To'plamlardan birini tanlang</div>
-                    </div>
-                </div>
-
-                <!-- Yangi to'plam -->
-                <div class="save-option" onclick="createNewCollection()">
-                    <div class="save-option-icon">➕</div>
-                    <div class="save-option-info">
-                        <div class="save-option-title">Yangi to'plam</div>
-                        <div class="save-option-desc">Yangi to'plam yaratish</div>
-                    </div>
-                </div>
-            </div>
+    <!-- Mavjud to'plamga -->
+    <div class="save-option" onclick="showCollections()">
+        <div class="save-option-icon">📂</div>
+        <div class="save-option-info">
+            <div class="save-option-title">Mavjud to'plamga</div>
+            <div class="save-option-desc">To'plamlardan birini tanlang</div>
+        </div>
+    </div>
+    <div class="save-option" onclick="createCollection()">
+        <div class="save-option-icon">➕</div>
+        <div class="save-option-info">
+            <div class="save-option-title">Yangi to'plam</div>
         </div>
     </div>
 
@@ -966,7 +977,8 @@
                     {% for collection in user_collections %}
                         <div class="collection-item" onclick="saveToCollection({{ collection.id }})">
                             <div class="collection-item-name">{{ collection.name }}</div>
-                            <div class="collection-item-count">{{ collection.exercises.count }} ta mashq</div>
+                            <div class="collection-item-count">{{ collection.exercises.count|default:'0' }} ta mashq
+                            </div>
                         </div>
                     {% endfor %}
                 {% else %}
@@ -983,15 +995,9 @@
 
 {% block extra_js %}
     <script>
-        // ==========================================
-        // GLOBAL VARIABLES
-        // ==========================================
-        let currentExerciseId = null;
-        let currentIsFavorited = false;
-
-        // ==========================================
-        // CSRF TOKEN
-        // ==========================================
+        // ==========================
+        // CSRF TOKEN FUNCTION
+        // ==========================
         function getCookie(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -1009,22 +1015,28 @@
 
         const csrftoken = getCookie('csrftoken');
 
-        // ==========================================
-        // SAVE OPTIONS MODAL
-        // ==========================================
+        // ==========================
+        // GLOBAL VARIABLES
+        // ==========================
+        let currentExerciseId = null;
+        let currentIsFavorited = false;
+
+        // ==========================
+        // OPEN MODAL / DIRECT ACTION
+        // ==========================
         function showSaveOptions(exerciseId, isFavorited) {
             currentExerciseId = exerciseId;
             currentIsFavorited = isFavorited;
 
-            // Agar allaqachon favorited bo'lsa, o'chirish
+            // ⚠️ GET yubormaslik uchun <a> linkni bloklaymiz
+            event.preventDefault();
+
+            // Agar allaqachon favorited bo'lsa — faqat delete POST
             if (isFavorited) {
-                if (confirm('Bu mashqni sevimlilardan o\'chirmoqchimisiz?')) {
-                    removeFromFavorites(exerciseId);
-                }
+                removeFromFavorites(exerciseId);
                 return;
             }
 
-            // Modal ochish
             document.getElementById('saveOptionsModal').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
@@ -1034,13 +1046,11 @@
             document.body.style.overflow = '';
         }
 
-        // ==========================================
-        // SAVE FUNCTIONS
-        // ==========================================
-
-        // 1. Oddiy saqlash
+        // ==========================
+        // FAVORITE TOGGLE (POST)
+        // ==========================
         function saveToDefault() {
-            const url = `/exercises/favorite/toggle/${currentExerciseId}/`;
+            const url = `/en/exercises/favorite/toggle/${currentExerciseId}/`;
 
             fetch(url, {
                 method: 'POST',
@@ -1050,23 +1060,23 @@
                 },
                 body: JSON.stringify({})
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success' || data.status === 'added') {
-                    updateFavoriteUI(currentExerciseId, true);
-                    closeSaveOptions();
-                    showSuccessMessage('✓ Sevimlilarga qo\'shildi!');
-                }
-            })
-            .catch(err => {
-                console.error('Error:', err);
-                alert('Xatolik yuz berdi!');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success' || data.status === 'added') {
+                        updateFavoriteUI(currentExerciseId, true);
+                        closeSaveOptions();
+                        showSuccessMessage('✓ Sevimlilarga qo\'shildi!');
+                    }
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert('Xatolik yuz berdi!');
+                });
         }
 
-        // 2. O'chirish
+
         function removeFromFavorites(exerciseId) {
-            const url = `/exercises/favorite/toggle/${exerciseId}/`;
+            const url = `/en/exercises/favorite/toggle/${exerciseId}/`;
 
             fetch(url, {
                 method: 'POST',
@@ -1076,20 +1086,22 @@
                 },
                 body: JSON.stringify({})
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success' || data.status === 'removed') {
-                    updateFavoriteUI(exerciseId, false);
-                    showSuccessMessage('✓ Sevimlilardan o\'chirildi!');
-                }
-            })
-            .catch(err => {
-                console.error('Error:', err);
-                alert('Xatolik yuz berdi!');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success' || data.status === 'removed') {
+                        updateFavoriteUI(exerciseId, false);
+                        showSuccessMessage('✓ Sevimlilardan o\'chirildi!');
+                    }
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert('Xatolik yuz berdi!');
+                });
         }
 
-        // 3. Mavjud to'plamga
+        // ==========================
+        // COLLECTION
+        // ==========================
         function showCollections() {
             closeSaveOptions();
             document.getElementById('collectionsModal').classList.add('active');
@@ -1101,7 +1113,7 @@
         }
 
         function saveToCollection(collectionId) {
-            const url = `/exercises/collection/${collectionId}/add-exercise/`;
+            const url = `/en/collection/${collectionId}/add-exercise/`;
 
             fetch(url, {
                 method: 'POST',
@@ -1113,78 +1125,115 @@
                     exercise_id: currentExerciseId
                 })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    updateFavoriteUI(currentExerciseId, true);
-                    closeCollectionsModal();
-                    showSuccessMessage('✓ To\'plamga qo\'shildi!');
-                } else {
-                    alert('Xato: ' + (data.error || 'Noma\'lum xato'));
-                }
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateFavoriteUI(currentExerciseId, true);
+                        closeCollectionsModal();
+                        showSuccessMessage('✓ To\'plamga qo\'shildi!');
+                    } else {
+                        alert('Xato: ' + (data.error || 'Noma\'lum xato'));
+                    }
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert('Xatolik yuz berdi!');
+                });
+        }
+
+        function createCollection() {
+            closeSaveOptions()
+            const nameInput = document.getElementById('newCollectionName');
+            const collectionName = nameInput.value.trim();
+
+            if (!collectionName) {
+                alert('Iltimos, to‘plam nomini kiriting!');
+                return;
+            }
+
+            const url = '/en/collection/';
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: collectionName,
+                    exercise_id: currentExerciseId
+                })
             })
-            .catch(err => {
-                console.error('Error:', err);
-                alert('Xatolik yuz berdi!');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showSuccessMessage('✓ Yangi to\'plam yaratildi!');
+                        closeNewCollectionModal();
+                        // Agar kerak bo'lsa, avtomatik mashqni yangi collectionga qo'shish:
+                        updateFavoriteUI(currentExerciseId, true);
+                        // Collections modal yangilash:
+                        const collectionsBody = document.getElementById('collectionsBody');
+                        const newItem = document.createElement('div');
+                        newItem.className = 'collection-item';
+                        newItem.setAttribute('onclick', `saveToCollection(${data.collection_id})`);
+                        newItem.innerHTML = `
+                <div class="collection-item-name">${collectionName}</div>
+                <div class="collection-item-count">0 ta mashq</div>
+            `;
+                        collectionsBody.prepend(newItem);
+                    } else {
+                        alert('Xatolik: ' + (data.error || 'Noma\'lum xato'));
+                    }
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert('Xatolik yuz berdi!');
+                });
         }
 
-        // 4. Yangi to'plam yaratish
-        function createNewCollection() {
-            closeSaveOptions();
-            // Favorites sahifasiga o'tish (collection yaratish uchun)
-            window.location.href = '/exercises/favorites/?create_collection=true&exercise_id=' + currentExerciseId;
+        function closeNewCollectionModal() {
+            document.getElementById('newCollectionModal').classList.remove('active');
+            document.body.style.overflow = '';
         }
 
-        // ==========================================
-        // UI UPDATE
-        // ==========================================
         function updateFavoriteUI(exerciseId, isFavorited) {
             const favIcon = document.querySelector(`[data-exercise-id="${exerciseId}"]`);
-            const iconSpan = document.getElementById(`fav-icon-${exerciseId}`);
-
-            if (favIcon && iconSpan) {
+            if (favIcon) {
+                const iconSpan = favIcon.querySelector('span');
                 if (isFavorited) {
                     favIcon.classList.add('favorited');
-                    iconSpan.textContent = '★';
+                    if (iconSpan) iconSpan.textContent = '★';
                 } else {
                     favIcon.classList.remove('favorited');
-                    iconSpan.textContent = '⭐';
+                    if (iconSpan) iconSpan.textContent = '⭐';
                 }
             }
         }
 
+
+        // ==========================
+        // SUCCESS TOAST
+        // ==========================
         function showSuccessMessage(message) {
-            // Simple toast notification
             const toast = document.createElement('div');
             toast.style.cssText = `
-                position: fixed;
-                bottom: 100px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: linear-gradient(135deg, #4caf50, #66bb6a);
-                color: white;
-                padding: 12px 24px;
-                border-radius: 50px;
-                font-weight: 700;
-                font-size: 14px;
-                z-index: 9999;
-                box-shadow: 0 8px 30px rgba(76, 175, 80, 0.5);
-                animation: slideUpFade 0.3s ease;
-            `;
+            position: fixed; bottom: 100px; left: 50%;
+            transform: translateX(-50%);
+            background: #4caf50;
+            color: white; padding: 12px 24px;
+            border-radius: 50px; font-weight: 700;
+            z-index: 9999;
+        `;
             toast.textContent = message;
             document.body.appendChild(toast);
 
-            setTimeout(() => {
-                toast.style.animation = 'slideDownFade 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }, 2000);
+            setTimeout(() => toast.remove(), 2000);
         }
 
-        // ==========================================
-        // SEARCH FUNCTIONALITY
-        // ==========================================
-        document.getElementById('searchInput').addEventListener('input', function (e) {
+        // ==========================
+        // SEARCH FILTER
+        // ==========================
+        document.getElementById('searchInput')?.addEventListener('input', function (e) {
             const searchTerm = e.target.value.toLowerCase();
             const cards = document.querySelectorAll('.exercise-card');
 
@@ -1194,19 +1243,15 @@
             });
         });
 
-        // ==========================================
-        // MODAL CLOSE ON OUTSIDE CLICK
-        // ==========================================
-        document.getElementById('saveOptionsModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeSaveOptions();
-            }
+        // ==========================
+        // MODAL OUTSIDE CLICK
+        // ==========================
+        document.getElementById('saveOptionsModal')?.addEventListener('click', e => {
+            if (e.target === e.currentTarget) closeSaveOptions();
         });
 
-        document.getElementById('collectionsModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeCollectionsModal();
-            }
+        document.getElementById('collectionsModal')?.addEventListener('click', e => {
+            if (e.target === e.currentTarget) closeCollectionsModal();
         });
     </script>
 {% endblock %}

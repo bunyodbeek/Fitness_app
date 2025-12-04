@@ -1,6 +1,8 @@
 from apps.models import Favorite, UserProfile
 from django.contrib import admin
 
+from apps.models.favorites import FavoriteCollection
+
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
@@ -13,3 +15,7 @@ class UserProfileAdmin(admin.ModelAdmin):
 @admin.register(Favorite)
 class FavoriteAdmin(admin.ModelAdmin):
     list_display = ['user', 'exercise']
+
+@admin.register(FavoriteCollection)
+class FavoriteCollectionAdmin(admin.ModelAdmin):
+    pass

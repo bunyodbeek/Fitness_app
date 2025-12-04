@@ -1,2 +1,7 @@
 description kop tillik
 ADMIN pagega log in ozgartirish
+
+
+https://api.telegram.org/bot8105495454:AAEo0XWt9l-umJsKSpbbmrJPgeBDnGX6jBc/getWebhookInfo
+https://api.telegram.org/bot8105495454:AAEo0XWt9l-umJsKSpbbmrJPgeBDnGX6jBc/setWebhook?url=https://unglib-mountainously-corene.ngrok-free.dev/en/bot/webhook/
+

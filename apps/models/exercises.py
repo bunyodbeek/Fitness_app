@@ -106,7 +106,7 @@ class Exercise(CreatedBaseModel):
     def save(self, *args, **kwargs):
 
         try:
-            if self.thumbnail and hasattr(self.thumbnail, 'file') and isinstance(self.thumbnail.file,
+            if self.thumbnail and hasattr(self.thumbnail, 'file.txt') and isinstance(self.thumbnail.file,
                                                                                  InMemoryUploadedFile):
                 img = Image.open(self.thumbnail)
                 if img.mode != "RGB":

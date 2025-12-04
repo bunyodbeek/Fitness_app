@@ -1,4 +1,6 @@
 from django import forms
+from django.utils.translation import gettext_lazy as _
+from root import settings
 
 from .models import UserProfile
 
@@ -28,3 +30,14 @@ class UserProfileForm(forms.ModelForm):
         if height is not None and height <= 0:
             raise forms.ValidationError("Height must be greater than zero.")
         return height
+
+
+class LanguageSelectionForm(forms.Form):
+
+    LANGUAGE_CHOICES = settings.LANGUAGES
+
+    language = forms.ChoiceField(
+        choices=LANGUAGE_CHOICES,
+        widget=forms.RadioSelect,
+        label=_("Tilni tanlang")
+    )

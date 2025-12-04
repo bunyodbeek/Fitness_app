@@ -12,6 +12,3 @@ class ExerciseAdmin(admin.ModelAdmin):
     list_display = ("id", "name", "primary_body_part", "calory")
     list_filter = ("primary_body_part",)
     search_fields = ("name",)
-
-
-
