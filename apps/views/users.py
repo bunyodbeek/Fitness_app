@@ -1,16 +1,21 @@
 import traceback
 
 import requests
+from django.conf import settings
+from django.contrib import messages
+from django.http import HttpResponseRedirect
+from django.utils.translation import get_language, activate, gettext_lazy as _
+
 from apps.forms import UserProfileForm
 from apps.models import User, UserMotivation, UserProfile
 from apps.utils import bot_send_message
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.base import ContentFile
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.generic import TemplateView, UpdateView
 from rest_framework import status
 from rest_framework.response import Response
@@ -255,3 +260,53 @@ class ProgressView(LoginRequiredMixin, TemplateView):
 
 class AdminPageView(LoginRequiredMixin, TemplateView):
     template_name = 'admin_page/admin.html'
+
+
+@method_decorator(csrf_protect, name='dispatch')
+class ChangeLanguageView(LoginRequiredMixin, TemplateView):
+    template_name = 'users/language.html'
+
+    def _get_language_context(self):
+
+        current_language = get_language()
+        available_languages = []
+
+        for code, name in settings.LANGUAGES:
+            available_languages.append({
+                'code': code,
+                'name': str(name)
+            })
+
+        return {
+            'current_language': current_language,
+            'available_languages': available_languages,
+        }
+
+    def get(self, request, *args, **kwargs):
+
+        context = self._get_language_context()
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+
+        new_language_code = request.POST.get('language')
+        valid_codes = [lang[0] for lang in settings.LANGUAGES]
+
+        if new_language_code and new_language_code in valid_codes:
+
+            request.session['django_language'] = new_language_code
+
+            activate(new_language_code)
+
+            messages.success(request, _("Til muvaffaqiyatli saqlandi!"))
+
+            response = HttpResponseRedirect(reverse('settings'))
+
+            response.set_cookie(settings.LANGUAGE_COOKIE_NAME, new_language_code)
+
+            return response
+        else:
+            messages.error(request, _("Tanlangan til kodi noto'g'ri."))
+
+            context = self._get_language_context()
+            return render(request, self.template_name, context)

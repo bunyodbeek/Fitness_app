@@ -4,13 +4,10 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-urlpatterns = [
-    path('i18n/', include('django.conf.urls.i18n')),  # set_language
-]
-
-urlpatterns += i18n_patterns(
+urlpatterns = i18n_patterns(
     path('admin/', admin.site.urls),
     path('', include('apps.urls')),     # BU YERGA i18n_patterns JOYLASHADI ❗
+    path('i18n/', include('django.conf.urls.i18n')),  # set_language
 )
 
 # static files

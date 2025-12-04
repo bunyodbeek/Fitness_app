@@ -1,8 +1,9 @@
-from apps.models import Exercise, Favorite
-from apps.models.exercises import MuscleGroup
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import DetailView, ListView
+
+from apps.models import Exercise, Favorite
+from apps.models.exercises import MuscleGroup
 
 
 class MuscleGroupListView(View):
@@ -19,21 +20,16 @@ class MuscleGroupListView(View):
 
 
 class ExercisesByMuscleView(ListView):
-    model = Exercise
+    queryset = Exercise.objects.order_by('name')
     template_name = 'exercises/exercise_list.html'
     context_object_name = 'exercises'
 
     def get_queryset(self):
-
+        qs = super().get_queryset()
         muscle_name = self.kwargs['muscle']
-
-        queryset = Exercise.objects.filter(
-            primary_body_part__iexact=muscle_name
-        ).order_by('name')
-
+        qs = qs.filter(primary_body_part__iexact=muscle_name)
         self.muscle = muscle_name
-
-        return queryset
+        return qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -22,7 +22,7 @@ from apps.views import (
     WorkoutDetailView,
     WorkoutStartView,
 )
-from apps.views.users import AdminPageView
+from apps.views.users import AdminPageView, ChangeLanguageView
 from django.urls import path
 
 urlpatterns = [
@@ -56,4 +56,6 @@ urlpatterns = [
     path("bot/webhook/", TelegramWebhookView.as_view(), name="telegram_webhook"),
 
     path('panel/', AdminPageView.as_view(), name='admin_page'),
+
+    path('change/language/', ChangeLanguageView.as_view(), name='change_language'),
 ]

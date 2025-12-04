@@ -22,11 +22,11 @@ class AppsConfig(AppConfig):
         # # Avval eski webhook o'chiriladi, keyin yangi o'rnatiladi
 
         # bot.remove_webhook()
-        status = bot.set_webhook(WEBAPP_URL + '/bot/webhook/')
-
-        if status:
-            print(f"✅ Webhook o‘rnatildi: {WEBAPP_URL}/bot/webhook/")
-        else:
-            print("❌ Webhookni o‘rnatishda xatolik yuz berdi")
+        # status = bot.set_webhook(WEBAPP_URL + '/en/bot/webhook/')
+        #
+        # if status:
+        #     print(f"✅ Webhook o‘rnatildi: {WEBAPP_URL}/bot/webhook/")
+        # else:
+        #     print("❌ Webhookni o‘rnatishda xatolik yuz berdi")
 
 

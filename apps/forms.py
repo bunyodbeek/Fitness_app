@@ -1,5 +1,7 @@
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
+from root import settings
 from .models import UserProfile
 
 
@@ -28,3 +30,22 @@ class UserProfileForm(forms.ModelForm):
         if height is not None and height <= 0:
             raise forms.ValidationError("Height must be greater than zero.")
         return height
+
+
+class LanguageSelectionForm(forms.Form):
+    """Tilni tanlash uchun oddiy forma."""
+
+    # settings.LANGUAGES dan til kodlarini va nomlarini olamiz
+    LANGUAGE_CHOICES = settings.LANGUAGES
+
+    language = forms.ChoiceField(
+        choices=LANGUAGE_CHOICES,
+        widget=forms.RadioSelect, # HTML kodingizdagi kabi radio tugmalarini yaratadi
+        label=_("Tilni tanlang")
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Formada faqat 'language' maydoni bor.
+        # Agar default qiymat kiritish kerak bo'lsa, bu yerga qo'shish mumkin.
+        pass

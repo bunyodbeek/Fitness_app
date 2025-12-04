@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-30 13:15+0500\n"
+"POT-Creation-Date: 2025-12-04 10:02+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,11 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: apps/forms.py:44
+msgid "Tilni tanlang"
+msgstr ""
+
 #: apps/models/analytics.py:8
 msgid "Bot Started"
 msgstr ""
@@ -231,6 +236,14 @@ msgstr ""
 msgid "Premium"
 msgstr ""
 
+#: apps/views/users.py:301
+msgid "Til muvaffaqiyatli saqlandi!"
+msgstr ""
+
+#: apps/views/users.py:309
+msgid "Tanlangan til kodi noto'g'ri."
+msgstr ""
+
 #: templates/users/account_settings.html:10
 #: templates/users/account_settings.html:274
 #: templates/users/account_settings.html:291
@@ -269,17 +282,24 @@ msgstr ""
 msgid "Orqaga"
 msgstr ""
 
-#: templates/users/language.html:11 templates/users/language.html:201
-#: templates/users/language.html:218
+#: templates/users/language.html:8
 msgid "Til sozlamalari"
 msgstr ""
 
-#: templates/users/language.html:221
+#: templates/users/language.html:414
+msgid "TIL SOZLAMALARI"
+msgstr ""
+
+#: templates/users/language.html:426
+msgid "Til tanlang"
+msgstr ""
+
+#: templates/users/language.html:429
 msgid ""
 "Ilovada qaysi tildan foydalanmoqchisiz? Tanlangan tilingiz butun ilova "
 "bo'ylab qo'llaniladi."
 msgstr ""
 
-#: templates/users/language.html:245
+#: templates/users/language.html:452
 msgid "Saqlash"
 msgstr ""
