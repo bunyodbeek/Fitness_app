@@ -310,3 +310,8 @@ class ChangeLanguageView(LoginRequiredMixin, TemplateView):
 
             context = self._get_language_context()
             return render(request, self.template_name, context)
+
+
+#men qoshgan viewlar
+
+

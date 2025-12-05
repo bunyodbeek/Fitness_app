@@ -1,12 +1,9 @@
-{% load i18n %}
-
 <!DOCTYPE html>
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To'lovlar tarixi</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>To'lovlar Tarixi</title>
     <style>
         * {
             margin: 0;
@@ -15,211 +12,621 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f5f5f5;
-            color: #1a1a1a;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        .top-bar {
-            background: #2c3e50;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: white;
+        /* Animated background particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 90%, rgba(78, 205, 196, 0.05) 0%, transparent 50%);
+            animation: particleFloat 15s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
         }
 
-        .top-bar-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+        @keyframes particleFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
         }
 
-        .back-button {
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .top-bar h1 {
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .top-bar-actions {
-            display: flex;
-            gap: 20px;
-        }
-
-        .top-bar-actions i {
-            cursor: pointer;
-            font-size: 20px;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, rgba(15, 52, 96, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+            backdrop-filter: blur(10px);
             padding: 20px;
-        }
-
-        .page-title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        .transactions-card {
-            background: white;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-
-        .transaction-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 12px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .transaction-item:last-child {
-            border-bottom: none;
-        }
-
-        .transaction-left {
             display: flex;
             align-items: center;
             gap: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
         }
 
-        .transaction-icon {
+        .back-btn {
+            background: none;
+            border: none;
+            color: #ffd700;
+            font-size: 32px;
+            cursor: pointer;
+            padding: 0;
             width: 40px;
             height: 40px;
-            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            transition: all 0.3s ease;
+            font-weight: 900;
         }
 
-        .icon-refresh {
-            background: #f0f0ff;
-            color: #5b6fd8;
+        .back-btn:hover {
+            transform: translateX(-5px) scale(1.2);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
         }
 
-        .icon-plus {
-            background: #f0f0ff;
-            color: #5b6fd8;
+        .page-title {
+            color: white;
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            flex: 1;
+            text-align: center;
+            margin-right: 40px;
+            background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
         }
 
-        .transaction-content {
+        /* Content */
+        .payments-content {
+            padding: 20px;
+            padding-bottom: 120px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Summary Card */
+        .summary-card {
+            background: linear-gradient(135deg,
+                rgba(255, 215, 0, 0.15) 0%,
+                rgba(255, 215, 0, 0.08) 100%);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 25px;
+            padding: 30px 25px;
+            margin-bottom: 25px;
+            text-align: center;
+            transition: all 0.4s ease;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 2px 12px rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.6s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent);
+            transition: left 0.5s ease;
+        }
+
+        .summary-card:hover::before {
+            left: 100%;
+        }
+
+        .summary-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .summary-amount {
+            font-size: 42px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .summary-count {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding: 5px 0;
+            animation: slideInLeft 0.6s ease;
+        }
+
+        .filter-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-tab {
+            padding: 12px 24px;
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            border-radius: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .filter-tab:hover {
+            background: rgba(255, 215, 0, 0.15);
+            border-color: rgba(255, 215, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .filter-tab.active {
+            background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
+            border-color: #ffd700;
+            color: #0a0e27;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Payment Item */
+        .payment-item {
+            background: linear-gradient(135deg,
+                rgba(255, 215, 0, 0.15) 0%,
+                rgba(255, 215, 0, 0.08) 100%);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            border-radius: 25px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.4s ease;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 2px 8px rgba(255, 255, 255, 0.1);
+            animation: slideInRight 0.6s ease;
+            animation-fill-mode: both;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .payment-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent,
+                rgba(255, 215, 0, 0.1),
+                transparent);
+            transition: left 0.5s ease;
+        }
+
+        .payment-item:hover::before {
+            left: 100%;
+        }
+
+        .payment-item:hover {
+            border-color: rgba(255, 215, 0, 0.5);
+            transform: translateY(-5px);
+            box-shadow:
+                0 15px 40px rgba(255, 215, 0, 0.3),
+                inset 0 2px 16px rgba(255, 255, 255, 0.15);
+        }
+
+        .payment-item:nth-child(1) { animation-delay: 0.1s; }
+        .payment-item:nth-child(2) { animation-delay: 0.2s; }
+        .payment-item:nth-child(3) { animation-delay: 0.3s; }
+        .payment-item:nth-child(4) { animation-delay: 0.4s; }
+        .payment-item:nth-child(5) { animation-delay: 0.5s; }
+
+        .payment-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .payment-icon-wrapper {
+            width: 55px;
+            height: 55px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a3d5 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            box-shadow:
+                0 0 20px rgba(78, 205, 196, 0.4),
+                inset 0 2px 8px rgba(255, 255, 255, 0.3);
+        }
+
+        .payment-item.success .payment-icon-wrapper {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a3d5 100%);
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.4);
+        }
+
+        .payment-item.pending .payment-icon-wrapper {
+            background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .payment-item.failed .payment-icon-wrapper {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff4757 100%);
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .payment-item:hover .payment-icon-wrapper {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .payment-icon {
+            font-size: 28px;
+        }
+
+        .payment-info {
             flex: 1;
         }
 
-        .transaction-label {
-            font-size: 14px;
-            color: #999;
-            margin-bottom: 4px;
-        }
-
-        .transaction-amount {
+        .payment-plan {
             font-size: 16px;
-            font-weight: 600;
-            color: #1a1a1a;
-        }
-
-        .transaction-date {
-            text-align: right;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .bottom-button {
-            background: #2c3e50;
+            font-weight: 800;
             color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 16px;
-            font-size: 16px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .payment-date {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
             font-weight: 600;
-            width: 100%;
-            cursor: pointer;
-            margin-top: 20px;
         }
 
-        .bottom-button:hover {
-            background: #34495e;
+        .payment-amount {
+            font-size: 22px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: right;
         }
 
+        .payment-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+        }
+
+        .method-icon {
+            font-size: 18px;
+        }
+
+        .payment-status {
+            padding: 6px 16px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-success {
+            background: rgba(78, 205, 196, 0.2);
+            color: #4ecdc4;
+            border: 1px solid rgba(78, 205, 196, 0.4);
+        }
+
+        .status-pending {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            border: 1px solid rgba(255, 215, 0, 0.4);
+        }
+
+        .status-failed {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.4);
+        }
+
+        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            color: #999;
+            animation: fadeInUp 0.6s ease;
         }
 
-        .empty-state i {
-            font-size: 48px;
-            margin-bottom: 16px;
-            color: #ddd;
+        .empty-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
         }
 
-        .empty-state p {
-            font-size: 16px;
+        .empty-text {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 18px;
+                letter-spacing: 3px;
+            }
+
+            .summary-amount {
+                font-size: 36px;
+            }
+
+            .payment-plan {
+                font-size: 15px;
+            }
+
+            .payment-amount {
+                font-size: 20px;
+            }
+
+            .filter-tab {
+                padding: 10px 18px;
+                font-size: 12px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="top-bar">
-        <div class="top-bar-left">
-            <a href="settings.html" class="back-button"><i class="fas fa-arrow-left"></i></a>
-            <h1>Ftiness app</h1>
-        </div>
-        <div class="top-bar-actions">
-            <i class="fas fa-chevron-down"></i>
-            <i class="fas fa-ellipsis-v"></i>
-        </div>
+    <div class="page-header">
+        <button class="back-btn" onclick="history.back()">‹</button>
+        <h1 class="page-title">TO'LOVLAR TARIXI</h1>
     </div>
 
-    <div class="container">
-        <h2 class="page-title">To'lovlar tarixi</h2>
+    <div class="payments-content">
+        <!-- Summary Card -->
+        <div class="summary-card">
+            <div class="summary-label">Jami to'langan</div>
+            <div class="summary-amount">340,000 so'm</div>
+            <div class="summary-count">5 ta to'lov amalga oshirildi</div>
+        </div>
 
-        <!-- Transactions Card -->
-        <div class="transactions-card">
-            <div class="transaction-item">
-                <div class="transaction-left">
-                    <div class="transaction-icon icon-refresh">
-                        <i class="fas fa-sync-alt"></i>
-                    </div>
-                    <div class="transaction-content">
-                        <div class="transaction-label">Obuna yangilandi</div>
-                        <div class="transaction-amount">67 000 UZS</div>
-                    </div>
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <div class="filter-tab active">Hammasi</div>
+            <div class="filter-tab">Muvaffaqiyatli</div>
+            <div class="filter-tab">Kutilmoqda</div>
+            <div class="filter-tab">Bekor qilingan</div>
+        </div>
+
+        <!-- Payment Items -->
+        <div class="payment-item success">
+            <div class="payment-header">
+                <div class="payment-icon-wrapper">
+                    <div class="payment-icon">✓</div>
                 </div>
-                <div class="transaction-date">
-                    11/09/2025, 04:00
+                <div class="payment-info">
+                    <div class="payment-plan">3 oylik obuna</div>
+                    <div class="payment-date">15 Noyabr 2024, 14:23</div>
                 </div>
+                <div class="payment-amount">85,000 so'm</div>
             </div>
-
-            <div class="transaction-item">
-                <div class="transaction-left">
-                    <div class="transaction-icon icon-plus">
-                        <i class="fas fa-plus"></i>
-                    </div>
-                    <div class="transaction-content">
-                        <div class="transaction-label">Obuna sotib olindi</div>
-                        <div class="transaction-amount">67 000 UZS</div>
-                    </div>
+            <div class="payment-details">
+                <div class="payment-method">
+                    <span class="method-icon">💳</span>
+                    <span>Click</span>
                 </div>
-                <div class="transaction-date">
-                    08/08/2025, 01:04
-                </div>
+                <div class="payment-status status-success">Muvaffaqiyatli</div>
             </div>
         </div>
 
-        <button class="bottom-button">Orqaga</button>
+        <div class="payment-item success">
+            <div class="payment-header">
+                <div class="payment-icon-wrapper">
+                    <div class="payment-icon">✓</div>
+                </div>
+                <div class="payment-info">
+                    <div class="payment-plan">1 oylik obuna</div>
+                    <div class="payment-date">28 Oktyabr 2024, 10:15</div>
+                </div>
+                <div class="payment-amount">30,000 so'm</div>
+            </div>
+            <div class="payment-details">
+                <div class="payment-method">
+                    <span class="method-icon">💳</span>
+                    <span>Payme</span>
+                </div>
+                <div class="payment-status status-success">Muvaffaqiyatli</div>
+            </div>
+        </div>
+
+        <div class="payment-item pending">
+            <div class="payment-header">
+                <div class="payment-icon-wrapper">
+                    <div class="payment-icon">⏳</div>
+                </div>
+                <div class="payment-info">
+                    <div class="payment-plan">6 oylik obuna</div>
+                    <div class="payment-date">05 Dekabr 2024, 16:45</div>
+                </div>
+                <div class="payment-amount">150,000 so'm</div>
+            </div>
+            <div class="payment-details">
+                <div class="payment-method">
+                    <span class="method-icon">💳</span>
+                    <span>Uzum Bank</span>
+                </div>
+                <div class="payment-status status-pending">Kutilmoqda</div>
+            </div>
+        </div>
+
+        <div class="payment-item success">
+            <div class="payment-header">
+                <div class="payment-icon-wrapper">
+                    <div class="payment-icon">✓</div>
+                </div>
+                <div class="payment-info">
+                    <div class="payment-plan">1 oylik obuna</div>
+                    <div class="payment-date">12 Sentyabr 2024, 09:30</div>
+                </div>
+                <div class="payment-amount">30,000 so'm</div>
+            </div>
+            <div class="payment-details">
+                <div class="payment-method">
+                    <span class="method-icon">💳</span>
+                    <span>Click</span>
+                </div>
+                <div class="payment-status status-success">Muvaffaqiyatli</div>
+            </div>
+        </div>
+
+        <div class="payment-item failed">
+            <div class="payment-header">
+                <div class="payment-icon-wrapper">
+                    <div class="payment-icon">✕</div>
+                </div>
+                <div class="payment-info">
+                    <div class="payment-plan">1 yillik obuna</div>
+                    <div class="payment-date">20 Avgust 2024, 18:20</div>
+                </div>
+                <div class="payment-amount">300,000 so'm</div>
+            </div>
+            <div class="payment-details">
+                <div class="payment-method">
+                    <span class="method-icon">💳</span>
+                    <span>Payme</span>
+                </div>
+                <div class="payment-status status-failed">Bekor qilindi</div>
+            </div>
+        </div>
     </div>
+
+    <script>
+        // Filter functionality
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        const paymentItems = document.querySelectorAll('.payment-item');
+
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                filterTabs.forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                this.classList.add('active');
+
+                const filter = this.textContent.trim();
+
+                paymentItems.forEach(item => {
+                    if (filter === 'Hammasi') {
+                        item.style.display = 'block';
+                    } else if (filter === 'Muvaffaqiyatli' && item.classList.contains('success')) {
+                        item.style.display = 'block';
+                    } else if (filter === 'Kutilmoqda' && item.classList.contains('pending')) {
+                        item.style.display = 'block';
+                    } else if (filter === 'Bekor qilingan' && item.classList.contains('failed')) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Add click animation to payment items
+        paymentItems.forEach(item => {
+            item.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+            });
+        });
+    </script>
 </body>
 </html>
