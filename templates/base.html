@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -433,23 +434,23 @@
 <div class="bottom-nav">
     <a href="{% url 'muscle_groups' %}" class="nav-item {% if 'exercises' in request.path or 'muscle' in request.path %}active{% endif %}">
         <span class="icon">💪</span>
-        <span>Exercises</span>
+        <span>{% trans "Exercises" %}</span>
     </a>
     <a href="{% url 'program_list' %}" class="nav-item {% if 'program' in request.path %}active{% endif %}">
         <span class="icon">✅</span>
-        <span>Workouts</span>
+        <span>{% trans "Workouts" %}</span>
     </a>
     <a href="{% url 'my_trainer' %}" class="nav-item {% if 'my-trainer' in request.path %}active{% endif %}">
         <span class="icon">👤</span>
-        <span>My Trainer</span>
+        <span>{% trans "My Trainer" %}</span>
     </a>
     <a href="{% url 'favorite_list_page' %}" class="nav-item {% if 'favorites' in request.path %}active{% endif %}">
         <span class="icon">⭐</span>
-        <span>Favourites</span>
+        <span>{% trans "Favourites" %}</span>
     </a>
     <a href="{% url 'user_profile' %}" class="nav-item {% if 'profile' in request.path %}active{% endif %}">
         <span class="icon">👨</span>
-        <span>Profile</span>
+        <span>{% trans "Profile" %}</span>
     </a>
 </div>
 {% endblock %}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-04 10:02+0500\n"
+"POT-Creation-Date: 2025-12-05 12:14+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: apps/forms.py:44
+#: apps/forms.py:42
 msgid "Tilni tanlang"
 msgstr ""
 
@@ -92,7 +92,7 @@ msgstr ""
 msgid "Secondary Muscle"
 msgstr ""
 
-#: apps/models/exercises.py:57 apps/models/favorites.py:10
+#: apps/models/exercises.py:57 apps/models/favorites.py:9
 msgid "Description"
 msgstr ""
 
@@ -116,7 +116,7 @@ msgstr ""
 msgid "Exercise"
 msgstr ""
 
-#: apps/models/exercises.py:67
+#: apps/models/exercises.py:67 templates/base.html:437
 msgid "Exercises"
 msgstr ""
 
@@ -140,27 +140,23 @@ msgstr ""
 msgid "ExerciseInstructions"
 msgstr ""
 
-#: apps/models/favorites.py:9
-msgid "Icon"
-msgstr ""
-
-#: apps/models/favorites.py:15
+#: apps/models/favorites.py:14
 msgid "Favorite Collection"
 msgstr ""
 
-#: apps/models/favorites.py:16
+#: apps/models/favorites.py:15
 msgid "Favorite Collections"
 msgstr ""
 
-#: apps/models/favorites.py:30
+#: apps/models/favorites.py:29
 msgid "Notes"
 msgstr ""
 
-#: apps/models/favorites.py:35
+#: apps/models/favorites.py:34
 msgid "Sevimli"
 msgstr ""
 
-#: apps/models/favorites.py:36
+#: apps/models/favorites.py:35
 msgid "Sevimlilar"
 msgstr ""
 
@@ -242,6 +238,22 @@ msgstr ""
 
 #: apps/views/users.py:309
 msgid "Tanlangan til kodi noto'g'ri."
+msgstr ""
+
+#: templates/base.html:441
+msgid "Workouts"
+msgstr ""
+
+#: templates/base.html:445
+msgid "My Trainer"
+msgstr ""
+
+#: templates/base.html:449
+msgid "Favourites"
+msgstr ""
+
+#: templates/base.html:453
+msgid "Profile"
 msgstr ""
 
 #: templates/users/account_settings.html:10
