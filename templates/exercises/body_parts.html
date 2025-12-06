@@ -521,10 +521,10 @@
     <div class="body-container">
         <div class="body-image-wrapper">
             <!-- FRONT IMAGE -->
-            <img src="/media/body/model_man_frontside.png" alt="Body Front" class="body-image" id="frontImage">
+            <img src="{% static 'body/model_man_frontside.png' %}" alt="Body Front" class="body-image" id="frontImage">
 
             <!-- BACK IMAGE -->
-            <img src="/media/body/model_man_backside.png" alt="Body Back" class="body-image" id="backImage"
+            <img src="{% static 'body/model_man_backside.png' %}" alt="Body Back" class="body-image" id="backImage"
                  style="opacity:0; position:absolute; top:30px; left:15px; width:calc(100% - 30px);">
 
             <!-- ================= FRONT DOTS ================= -->
@@ -717,7 +717,7 @@
         // Preload back image
         window.addEventListener('load', function() {
             const backImg = new Image();
-            backImg.src = '/media/body/model_man_backside.png';
+            backImg.src = '{% static 'body/model_man_backside.png'  %}';
         });
     </script>
 {% endblock %}
