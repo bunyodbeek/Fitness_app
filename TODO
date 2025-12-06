@@ -5,3 +5,9 @@ ADMIN pagega log in ozgartirish
 https://api.telegram.org/bot8105495454:AAEo0XWt9l-umJsKSpbbmrJPgeBDnGX6jBc/getWebhookInfo
 https://api.telegram.org/bot8105495454:AAEo0XWt9l-umJsKSpbbmrJPgeBDnGX6jBc/setWebhook?url=https://unglib-mountainously-corene.ngrok-free.dev/en/bot/webhook/
 
+
+task (bunyodbek) :
+1. http://localhost:8000/en/exercises/ da chest, shoulders lar to'gri chiqsin (bir birini ustiga chiqib qomasin o'ngda chapda chiqsin)
+2 http://localhost:8000/en/exercises/cardio/ o'tganda like bosish yoki o'chirish real time da ishlasin
+3. http://localhost:8000/en/edition/1/ dizayn responsive bo'lsin va complete ham dizaynni o'zgartirish
+4. http://localhost:8000/en/workout/1/start/ shu joyidagi pauza qilishi to'gri ishlasin
