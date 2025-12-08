@@ -1,25 +1,26 @@
 from apps.models.base import CreatedBaseModel
-from django.db.models import CASCADE, SET_NULL, CharField, ForeignKey, TextField
+from django.db.models import CASCADE, SET_NULL, CharField, ForeignKey, TextField, ManyToManyField
 from django.utils.translation import gettext_lazy as _
 
 
 class FavoriteCollection(CreatedBaseModel):
     user = ForeignKey('apps.UserProfile', CASCADE, related_name='favorite_collections')
-    name = CharField(_("Name"), max_length=100)
-    description = TextField(_("Description"), blank=True, null=True)
+    name = CharField(max_length=100, verbose_name="Collection Name")
+    description = TextField(blank=True, null=True)
+    exercises = ManyToManyField('apps.Exercise', related_name='in_collections', blank=True)
 
     class Meta:
         ordering = ['-created_at']
-        unique_together = ('user', 'name')
-        verbose_name = _("Favorite Collection")
-        verbose_name_plural = _("Favorite Collections")
+        verbose_name = "Favorite Collection"
+        verbose_name_plural = "Favorite Collections"
+        unique_together = ['user', 'name']
 
     def __str__(self):
         return f"{self.user.name} - {self.name}"
 
     @property
-    def items_count(self):
-        return self.favorites.count()
+    def exercise_count(self):
+        return self.exercises.count()
 
 
 class Favorite(CreatedBaseModel):

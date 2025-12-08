@@ -9,7 +9,7 @@ class WorkoutSession(Model):
         IN_PROGRESS = 'in_progress', 'In Progress'
         ABANDONED = 'abandoned', 'Abandoned'
 
-    user = ForeignKey('apps.User', CASCADE, related_name='workout_sessions')
+    user = ForeignKey('apps.UserProfile', CASCADE, related_name='workout_sessions')
     workout = ForeignKey('apps.Workout', CASCADE, related_name='sessions')
     status = CharField(max_length=20, choices=StatusChoices.choices, default=StatusChoices.IN_PROGRESS)
 
@@ -35,7 +35,7 @@ class WorkoutSession(Model):
         ]
 
     def __str__(self):
-        return f"{self.user.username} - {self.workout.title} ({self.status})"
+        return f"{self.user.name} - {self.workout.title} ({self.status})"
 
     @property
     def duration_minutes(self):
@@ -69,7 +69,7 @@ class ExerciseLog(Model):
         verbose_name_plural = 'Exercise Logs'
 
     def __str__(self):
-        return f"{self.session.user.username} - {self.exercise.name}"
+        return f"{self.session.user.name} - {self.exercise.name}"
 
 
 class WorkoutProgress(Model):

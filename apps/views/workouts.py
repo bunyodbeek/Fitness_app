@@ -6,7 +6,7 @@ from apps.models.workouts import Workout, WorkoutExercise
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.aggregates import Sum
 from django.http import HttpResponseBadRequest
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
 from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
@@ -89,11 +89,49 @@ class WorkoutStartView(LoginRequiredMixin, View):
             })
 
         exercises_data = self._prepare_exercises_data(workout_exercises)
+
         return render(request, self.template_name, {
             "workout": workout,
             "exercises": exercises_data,
             "total_exercises": len(exercises_data)
         })
+
+    def post(self, request, pk):
+        action = request.POST.get("action")
+        save = request.POST.get("save_progress") == "true"
+
+        workout = get_object_or_404(Workout, pk=pk)
+
+        # Workout finished
+        if action == "complete":
+            WorkoutProgress.objects.update_or_create(
+                user=request.user.profile,
+                workout=workout,
+                defaults={
+                    "total_duration_seconds": int(request.POST.get("total_duration", 0)),
+                    "total_calories": float(request.POST.get("total_calories", 0)),
+                    "exercises_completed": int(request.POST.get("exercises_completed", 0)),
+                }
+            )
+            return redirect("workout_complete", pk)
+
+        # Exit with save
+        if action == "exit" and save:
+            WorkoutProgress.objects.update_or_create(
+                user=request.user.profile,
+                workout=workout,
+                defaults={
+                    "total_duration_seconds": int(request.POST.get("total_duration", 0)),
+                    "total_calories": float(request.POST.get("total_calories", 0)),
+                    "exercises_completed": int(request.POST.get("exercises_completed", 0)),
+                }
+            )
+            return redirect("program_list")
+
+        if action == "exit" and not save:
+            return redirect("program_list")
+
+        return HttpResponseBadRequest("Invalid request")
 
     def _prepare_exercises_data(self, workout_exercises):
         data = []
@@ -113,7 +151,7 @@ class WorkoutStartView(LoginRequiredMixin, View):
                 "duration_minutes": wex.minutes,
                 "rest_seconds": getattr(wex, 'rest_seconds', 60),
                 "calories_per_minute": max(exercise.calory, 10),
-                "exercise_type": exercise_type
+                "type": exercise_type,
             })
         return data
 
@@ -162,7 +200,7 @@ class MyTrainerView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = self.request.user
+        user = self.request.user.profile
 
         sessions = WorkoutSession.objects.filter(user=user)
         completed_sessions = sessions.filter(status='completed')
@@ -223,7 +261,7 @@ class MyTrainerHistoryView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = self.request.user
+        user = self.request.user.profile
 
         all_sessions = WorkoutSession.objects.filter(
             user=user
@@ -247,7 +285,7 @@ class WorkoutDetailView(LoginRequiredMixin, TemplateView):
                 'workout', 'workout__edition'
             ).prefetch_related('exercise_logs__exercise').get(
                 id=session_id,
-                user=self.request.user
+                user=self.request.user.profile
             )
 
             context['session'] = session

@@ -34,6 +34,7 @@ urlpatterns = [
     path('favorites/', FavoritesListView.as_view(), name='favorite_list_page'),
     path('api/questionnaire/submit/', QuestionnaireSubmitAPIView.as_view(), name='questionnaire_submit'),
 
+
     path('api/telegram-auth/', TelegramAuthAPIView.as_view(), name='telegram_auth'),
     path('miniapp/questionnaire/', OnboardingView.as_view(), name='onboarding'),
     path('users/profile/', ProfileView.as_view(), name='user_profile'),
