@@ -897,12 +897,10 @@
                     <a href="{% url 'exercise_detail' exercise.id %}" class="exercise-card" id="card-{{ exercise.id }}">
 
                         <div class="favorite-icon {% if exercise.is_favorited %}favorited{% endif %}"
-                             data-exercise-id="{{ exercise.id }}"
-                             onclick="event.preventDefault(); showSaveOptions({{ exercise.id }}, {{ exercise.is_favorited|yesno:'true,false' }})">
-
-                            <span id="fav-icon-{{ exercise.id }}">
-                                {% if exercise.is_favorited %}★{% else %}⭐{% endif %}
-                            </span>
+                             data-exercise-id="{{ exercise.id }}">
+    <span>
+        {% if exercise.is_favorited %}★{% else %}⭐{% endif %}
+    </span>
                         </div>
 
                         {% if exercise.thumbnail %}
@@ -915,9 +913,9 @@
                             <h3 class="exercise-name">
                                 {{ exercise.name }}
                                 <span class="exercise-details">
-                                    • {{ exercise.calory }} kcal
-                                    • {{ exercise.duration }} min
-                                </span>
+                                        • {{ exercise.calory }} kcal
+                                        • {{ exercise.duration }} min
+                                    </span>
                             </h3>
                         </div>
 
@@ -1016,27 +1014,50 @@
         const csrftoken = getCookie('csrftoken');
 
         // ==========================
-        // GLOBAL VARIABLES
+        // FAVORITE STATE TRACKER
         // ==========================
-        let currentExerciseId = null;
-        let currentIsFavorited = false;
+        // Har bir exercise ning holatini saqlaymiz
+        const exerciseFavoriteState = {};
 
         // ==========================
-        // OPEN MODAL / DIRECT ACTION
+        // INITIALIZE FAVORITE STATES
         // ==========================
-        function showSaveOptions(exerciseId, isFavorited) {
-            currentExerciseId = exerciseId;
-            currentIsFavorited = isFavorited;
+        document.addEventListener('DOMContentLoaded', function () {
+            // Barcha favorite iconlarni topamiz va holatini saqlaymiz
+            document.querySelectorAll('.favorite-icon').forEach(icon => {
+                const exerciseId = icon.getAttribute('data-exercise-id');
+                const isFavorited = icon.classList.contains('favorited');
+                exerciseFavoriteState[exerciseId] = isFavorited;
 
-            // ⚠️ GET yubormaslik uchun <a> linkni bloklaymiz
-            event.preventDefault();
+                // Event listener qo'shamiz
+                icon.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleFavoriteClick(exerciseId);
+                });
+            });
+        });
 
-            // Agar allaqachon favorited bo'lsa — faqat delete POST
+        // ==========================
+        // HANDLE FAVORITE CLICK
+        // ==========================
+        function handleFavoriteClick(exerciseId) {
+            const isFavorited = exerciseFavoriteState[exerciseId];
+
+            // Agar favorited bo'lsa - o'chiramiz
             if (isFavorited) {
                 removeFromFavorites(exerciseId);
-                return;
+            } else {
+                // Agar favorited bo'lmasa - modal ochib qo'shamiz
+                openSaveOptionsModal(exerciseId);
             }
+        }
 
+        // ==========================
+        // OPEN SAVE OPTIONS MODAL
+        // ==========================
+        function openSaveOptionsModal(exerciseId) {
+            window.currentExerciseId = exerciseId;
             document.getElementById('saveOptionsModal').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
@@ -1047,10 +1068,16 @@
         }
 
         // ==========================
-        // FAVORITE TOGGLE (POST)
+        // SAVE TO DEFAULT FAVORITES
         // ==========================
-        function saveToDefault() {
-            const url = `/en/exercises/favorite/toggle/${currentExerciseId}/`;
+        function saveToDefault(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            const exerciseId = window.currentExerciseId;
+            const url = `/en/exercises/favorite/toggle/${exerciseId}/`;
 
             fetch(url, {
                 method: 'POST',
@@ -1063,18 +1090,23 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success' || data.status === 'added') {
-                        updateFavoriteUI(currentExerciseId, true);
+                        updateFavoriteState(exerciseId, true);
                         closeSaveOptions();
                         showSuccessMessage('✓ Sevimlilarga qo\'shildi!');
+                    } else {
+                        console.error('Server error:', data);
+                        alert('Xatolik yuz berdi!');
                     }
                 })
                 .catch(err => {
-                    console.error('Error:', err);
+                    console.error('Fetch error:', err);
                     alert('Xatolik yuz berdi!');
                 });
         }
 
-
+        // ==========================
+        // REMOVE FROM FAVORITES
+        // ==========================
         function removeFromFavorites(exerciseId) {
             const url = `/en/exercises/favorite/toggle/${exerciseId}/`;
 
@@ -1089,20 +1121,50 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success' || data.status === 'removed') {
-                        updateFavoriteUI(exerciseId, false);
+                        updateFavoriteState(exerciseId, false);
                         showSuccessMessage('✓ Sevimlilardan o\'chirildi!');
+                    } else {
+                        console.error('Server error:', data);
+                        alert('Xatolik yuz berdi!');
                     }
                 })
                 .catch(err => {
-                    console.error('Error:', err);
+                    console.error('Fetch error:', err);
                     alert('Xatolik yuz berdi!');
                 });
         }
 
         // ==========================
-        // COLLECTION
+        // UPDATE FAVORITE STATE
         // ==========================
-        function showCollections() {
+        function updateFavoriteState(exerciseId, isFavorited) {
+            // State ni yangilaymiz
+            exerciseFavoriteState[exerciseId] = isFavorited;
+
+            // UI ni yangilaymiz
+            const favIcon = document.querySelector(`[data-exercise-id="${exerciseId}"]`);
+            if (favIcon) {
+                const iconSpan = favIcon.querySelector('span');
+
+                if (isFavorited) {
+                    favIcon.classList.add('favorited');
+                    if (iconSpan) iconSpan.textContent = '★';
+                } else {
+                    favIcon.classList.remove('favorited');
+                    if (iconSpan) iconSpan.textContent = '⭐';
+                }
+            }
+        }
+
+        // ==========================
+        // COLLECTIONS
+        // ==========================
+        function showCollections(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
             closeSaveOptions();
             document.getElementById('collectionsModal').classList.add('active');
         }
@@ -1112,7 +1174,13 @@
             document.body.style.overflow = '';
         }
 
-        function saveToCollection(collectionId) {
+        function saveToCollection(collectionId, event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            const exerciseId = window.currentExerciseId;
             const url = `/en/favorites/collection/${collectionId}/toggle/`;
 
             fetch(url, {
@@ -1122,13 +1190,13 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    exercise_id: currentExerciseId
+                    exercise_id: exerciseId
                 })
             })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.status === 'success') {
-                        updateFavoriteUI(currentExerciseId, true);
+                    if (data.success) {
+                        updateFavoriteState(exerciseId, true);
                         closeCollectionsModal();
                         showSuccessMessage('✓ To\'plamga qo\'shildi!');
                     } else {
@@ -1141,16 +1209,20 @@
                 });
         }
 
-        function createCollection() {
-            closeSaveOptions()
-            const nameInput = document.getElementById('newCollectionName');
-            const collectionName = nameInput.value.trim();
+        function createCollection(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
 
-            if (!collectionName) {
-                alert('Iltimos, to‘plam nomini kiriting!');
+            closeSaveOptions();
+            const collectionName = prompt('To\'plam nomini kiriting:');
+
+            if (!collectionName || !collectionName.trim()) {
                 return;
             }
 
+            const exerciseId = window.currentExerciseId;
             const url = '/en/collection/';
 
             fetch(url, {
@@ -1160,27 +1232,31 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    name: collectionName,
-                    exercise_id: currentExerciseId
+                    name: collectionName.trim(),
+                    exercise_id: exerciseId
                 })
             })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
                         showSuccessMessage('✓ Yangi to\'plam yaratildi!');
-                        closeNewCollectionModal();
-                        // Agar kerak bo'lsa, avtomatik mashqni yangi collectionga qo'shish:
-                        updateFavoriteUI(currentExerciseId, true);
-                        // Collections modal yangilash:
+                        updateFavoriteState(exerciseId, true);
+
+                        // Collections list ni yangilaymiz
                         const collectionsBody = document.getElementById('collectionsBody');
-                        const newItem = document.createElement('div');
-                        newItem.className = 'collection-item';
-                        newItem.setAttribute('onclick', `saveToCollection(${data.collection_id})`);
-                        newItem.innerHTML = `
-                <div class="collection-item-name">${collectionName}</div>
-                <div class="collection-item-count">0 ta mashq</div>
-            `;
-                        collectionsBody.prepend(newItem);
+                        if (collectionsBody) {
+                            const emptyState = collectionsBody.querySelector('.empty-state');
+                            if (emptyState) emptyState.remove();
+
+                            const newItem = document.createElement('div');
+                            newItem.className = 'collection-item';
+                            newItem.onclick = (e) => saveToCollection(data.collection_id, e);
+                            newItem.innerHTML = `
+                    <div class="collection-item-name">${collectionName}</div>
+                    <div class="collection-item-count">1 ta mashq</div>
+                `;
+                            collectionsBody.prepend(newItem);
+                        }
                     } else {
                         alert('Xatolik: ' + (data.error || 'Noma\'lum xato'));
                     }
@@ -1191,67 +1267,96 @@
                 });
         }
 
-        function closeNewCollectionModal() {
-            document.getElementById('newCollectionModal').classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        function updateFavoriteUI(exerciseId, isFavorited) {
-            const favIcon = document.querySelector(`[data-exercise-id="${exerciseId}"]`);
-            if (favIcon) {
-                const iconSpan = favIcon.querySelector('span');
-                if (isFavorited) {
-                    favIcon.classList.add('favorited');
-                    if (iconSpan) iconSpan.textContent = '★';
-                } else {
-                    favIcon.classList.remove('favorited');
-                    if (iconSpan) iconSpan.textContent = '⭐';
-                }
-            }
-        }
-
-
         // ==========================
-        // SUCCESS TOAST
+        // SUCCESS MESSAGE
         // ==========================
         function showSuccessMessage(message) {
             const toast = document.createElement('div');
             toast.style.cssText = `
-            position: fixed; bottom: 100px; left: 50%;
-            transform: translateX(-50%);
-            background: #4caf50;
-            color: white; padding: 12px 24px;
-            border-radius: 50px; font-weight: 700;
-            z-index: 9999;
-        `;
+        position: fixed;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+        color: white;
+        padding: 14px 28px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 14px;
+        z-index: 99999;
+        box-shadow: 0 8px 32px rgba(76, 175, 80, 0.4);
+        animation: toastSlideIn 0.3s ease;
+    `;
             toast.textContent = message;
             document.body.appendChild(toast);
 
-            setTimeout(() => toast.remove(), 2000);
+            setTimeout(() => {
+                toast.style.animation = 'toastSlideOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
         }
+
+        // Toast animations
+        const style = document.createElement('style');
+        style.textContent = `
+    @keyframes toastSlideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    }
+    @keyframes toastSlideOut {
+        from {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px);
+        }
+    }
+`;
+        document.head.appendChild(style);
 
         // ==========================
         // SEARCH FILTER
         // ==========================
-        document.getElementById('searchInput')?.addEventListener('input', function (e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const cards = document.querySelectorAll('.exercise-card');
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function (e) {
+                    const searchTerm = e.target.value.toLowerCase();
+                    const cards = document.querySelectorAll('.exercise-card');
 
-            cards.forEach(card => {
-                const name = card.querySelector('.exercise-name').textContent.toLowerCase();
-                card.style.display = name.includes(searchTerm) ? 'block' : 'none';
-            });
+                    cards.forEach(card => {
+                        const name = card.querySelector('.exercise-name').textContent.toLowerCase();
+                        card.style.display = name.includes(searchTerm) ? 'block' : 'none';
+                    });
+                });
+            }
         });
 
         // ==========================
         // MODAL OUTSIDE CLICK
         // ==========================
-        document.getElementById('saveOptionsModal')?.addEventListener('click', e => {
-            if (e.target === e.currentTarget) closeSaveOptions();
-        });
+        document.addEventListener('DOMContentLoaded', function () {
+            const saveModal = document.getElementById('saveOptionsModal');
+            if (saveModal) {
+                saveModal.addEventListener('click', function (e) {
+                    if (e.target === e.currentTarget) closeSaveOptions();
+                });
+            }
 
-        document.getElementById('collectionsModal')?.addEventListener('click', e => {
-            if (e.target === e.currentTarget) closeCollectionsModal();
+            const collectionsModal = document.getElementById('collectionsModal');
+            if (collectionsModal) {
+                collectionsModal.addEventListener('click', function (e) {
+                    if (e.target === e.currentTarget) closeCollectionsModal();
+                });
+            }
         });
     </script>
 {% endblock %}

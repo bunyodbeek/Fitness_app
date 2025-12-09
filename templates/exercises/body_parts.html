@@ -3,7 +3,6 @@
 {% block title %}Exercises - Body Parts{% endblock %}
 {% load i18n %}
 
-
 {% block extra_css %}
     <style>
         * {
@@ -114,9 +113,17 @@
         }
 
         /* ===== DOTS & LABELS - Compact Modern ===== */
-        .body-part-container {
+        .body-part-dot-container {
             position: absolute;
             z-index: 10;
+            display: flex;
+            align-items: center;
+            animation: fadeInPop 0.6s ease backwards;
+        }
+
+        .body-part-label-container {
+            position: absolute;
+            z-index: 9;
             display: flex;
             align-items: center;
             animation: fadeInPop 0.6s ease backwards;
@@ -131,14 +138,6 @@
                 opacity: 1;
                 transform: scale(1);
             }
-        }
-
-        .body-part-container.left-side {
-            flex-direction: row;
-        }
-
-        .body-part-container.right-side {
-            flex-direction: row-reverse;
         }
 
         /* Compact animated dots */
@@ -190,7 +189,8 @@
             rgba(255, 215, 0, 0) 100%);
             pointer-events: none;
             transition: all 0.3s ease;
-            position: relative;
+            position: absolute;
+            z-index: 8;
         }
 
         .dotted-line::after {
@@ -208,7 +208,7 @@
             transition: opacity 0.3s ease;
         }
 
-        .body-part-container:hover .dotted-line::after {
+        .body-part-dot-container:hover .dotted-line::after {
             opacity: 1;
         }
 
@@ -231,6 +231,7 @@
             letter-spacing: 0.5px;
             position: relative;
             overflow: hidden;
+            text-align: right;
         }
 
         .body-part-label::before {
@@ -247,11 +248,11 @@
             transition: left 0.5s ease;
         }
 
-        .body-part-container:hover .body-part-label::before {
+        .body-part-dot-container:hover .body-part-label::before {
             left: 100%;
         }
 
-        .body-part-container:hover .body-part-label {
+        .body-part-dot-container:hover .body-part-label {
             background: linear-gradient(135deg,
             rgba(255, 215, 0, 0.4) 0%,
             rgba(255, 215, 0, 0.25) 100%);
@@ -326,16 +327,16 @@
         }
 
         /* Staggered animation for dots */
-        .body-part-container:nth-child(1) { animation-delay: 0.1s; }
-        .body-part-container:nth-child(2) { animation-delay: 0.15s; }
-        .body-part-container:nth-child(3) { animation-delay: 0.2s; }
-        .body-part-container:nth-child(4) { animation-delay: 0.25s; }
-        .body-part-container:nth-child(5) { animation-delay: 0.3s; }
-        .body-part-container:nth-child(6) { animation-delay: 0.35s; }
-        .body-part-container:nth-child(7) { animation-delay: 0.4s; }
-        .body-part-container:nth-child(8) { animation-delay: 0.45s; }
-        .body-part-container:nth-child(9) { animation-delay: 0.5s; }
-        .body-part-container:nth-child(10) { animation-delay: 0.55s; }
+        .body-part-dot-container:nth-child(1) { animation-delay: 0.1s; }
+        .body-part-dot-container:nth-child(2) { animation-delay: 0.15s; }
+        .body-part-dot-container:nth-child(3) { animation-delay: 0.2s; }
+        .body-part-dot-container:nth-child(4) { animation-delay: 0.25s; }
+        .body-part-dot-container:nth-child(5) { animation-delay: 0.3s; }
+        .body-part-dot-container:nth-child(6) { animation-delay: 0.35s; }
+        .body-part-dot-container:nth-child(7) { animation-delay: 0.4s; }
+        .body-part-dot-container:nth-child(8) { animation-delay: 0.45s; }
+        .body-part-dot-container:nth-child(9) { animation-delay: 0.5s; }
+        .body-part-dot-container:nth-child(10) { animation-delay: 0.55s; }
 
         /* ===== RESPONSIVE - TABLET ===== */
         @media (min-width: 500px) {
@@ -467,10 +468,12 @@
                 padding: 4px 8px;
                 border-radius: 10px;
                 letter-spacing: 0.3px;
+                text-align: left;
             }
 
             .dotted-line {
                 height: 1px;
+                order: 2;
             }
 
             .rotate-btn {
@@ -530,129 +533,149 @@
             <!-- ================= FRONT DOTS ================= -->
             <div class="front-dots">
                 <!-- Cardio -->
-                <div class="body-part-container right-side" style="top:13%; right:3%;">
-                    <a href="{% url 'exercises_by_muscle' 'cardio' %}" class="body-part-label">Cardio</a>
+                <div class="body-part-dot-container" style="top: 5%; right: 5%;">
                     <a href="{% url 'exercises_by_muscle' 'cardio' %}" class="body-part-dot"></a>
+                </div>
+                <div class="body-part-label-container" style="top: 5%; right: 5%;">
+                    <a href="{% url 'exercises_by_muscle' 'cardio' %}" class="body-part-label">Cardio</a>
                 </div>
 
                 <!-- Shoulders -->
-                <div class="body-part-container left-side" style="top:25%; left:39%;">
+                <div class="body-part-dot-container" style="top: 25%; left: 40%;">
                     <a href="{% url 'exercises_by_muscle' 'shoulders' %}" class="body-part-dot"></a>
-                    <div class="dotted-line" style="width:35px;"></div>
+                </div>
+                <div class="body-part-label-container" style="top: 25%; left: 45%;">
                     <a href="{% url 'exercises_by_muscle' 'shoulders' %}" class="body-part-label">Shoulders</a>
                 </div>
 
                 <!-- Chest -->
-                <div class="body-part-container left-side" style="top:28%; left:45%;">
+                <div class="body-part-dot-container" style="top: 30%; left: 45%;">
                     <a href="{% url 'exercises_by_muscle' 'chest' %}" class="body-part-dot"></a>
-                    <div class="dotted-line" style="width:40px;"></div>
+                </div>
+                <div class="body-part-label-container" style="top: 30%; left: 50%;">
                     <a href="{% url 'exercises_by_muscle' 'chest' %}" class="body-part-label">Chest</a>
                 </div>
 
                 <!-- Biceps -->
-                <div class="body-part-container right-side" style="top:35%; right:15%;">
-                    <a href="{% url 'exercises_by_muscle' 'biceps' %}" class="body-part-label">Biceps</a>
-                    <div class="dotted-line" style="width:35px;"></div>
+                <div class="body-part-dot-container" style="top: 35%; right: 15%;">
                     <a href="{% url 'exercises_by_muscle' 'biceps' %}" class="body-part-dot"></a>
+                </div>
+                <div class="body-part-label-container" style="top: 35%; right: 20%;">
+                    <a href="{% url 'exercises_by_muscle' 'biceps' %}" class="body-part-label">Biceps</a>
                 </div>
 
                 <!-- Forearm -->
-                <div class="body-part-container left-side" style="top:42%; left:37%;">
+                <div class="body-part-dot-container" style="top: 42%; left: 37%;">
                     <a href="{% url 'exercises_by_muscle' 'forearm' %}" class="body-part-dot"></a>
-                    <div class="dotted-line" style="width:35px;"></div>
+                </div>
+                <div class="body-part-label-container" style="top: 42%; left: 42%;">
                     <a href="{% url 'exercises_by_muscle' 'forearm' %}" class="body-part-label">Forearm</a>
                 </div>
 
                 <!-- Abs -->
-                <div class="body-part-container right-side" style="top:38%; right:26%;">
-                    <a href="{% url 'exercises_by_muscle' 'abs' %}" class="body-part-label">Abs</a>
-                    <div class="dotted-line" style="width:35px;"></div>
+                <div class="body-part-dot-container" style="top: 38%; right: 26%;">
                     <a href="{% url 'exercises_by_muscle' 'abs' %}" class="body-part-dot"></a>
+                </div>
+                <div class="body-part-label-container" style="top: 38%; right: 31%;">
+                    <a href="{% url 'exercises_by_muscle' 'abs' %}" class="body-part-label">Abs</a>
                 </div>
 
                 <!-- Obliques -->
-                <div class="body-part-container left-side" style="top:42%; left:43%;">
+                <div class="body-part-dot-container" style="top: 42%; left: 43%;">
                     <a href="{% url 'exercises_by_muscle' 'obliques' %}" class="body-part-dot"></a>
-                    <div class="dotted-line" style="width:35px;"></div>
+                </div>
+                <div class="body-part-label-container" style="top: 42%; left: 48%;">
                     <a href="{% url 'exercises_by_muscle' 'obliques' %}" class="body-part-label">Obliques</a>
                 </div>
 
                 <!-- Abductors -->
-                <div class="body-part-container right-side" style="top:54%; right:13%;">
-                    <a href="{% url 'exercises_by_muscle' 'abductors' %}" class="body-part-label">Abductors</a>
-                    <div class="dotted-line" style="width:30px;"></div>
+                <div class="body-part-dot-container" style="top: 54%; right: 13%;">
                     <a href="{% url 'exercises_by_muscle' 'abductors' %}" class="body-part-dot"></a>
+                </div>
+                <div class="body-part-label-container" style="top: 54%; right: 18%;">
+                    <a href="{% url 'exercises_by_muscle' 'abductors' %}" class="body-part-label">Abductors</a>
                 </div>
 
                 <!-- Quads -->
-                <div class="body-part-container left-side" style="top:56%; left:42%;">
+                <div class="body-part-dot-container" style="top: 56%; left: 42%;">
                     <a href="{% url 'exercises_by_muscle' 'quads' %}" class="body-part-dot"></a>
-                    <div class="dotted-line" style="width:35px;"></div>
+                </div>
+                <div class="body-part-label-container" style="top: 56%; left: 47%;">
                     <a href="{% url 'exercises_by_muscle' 'quads' %}" class="body-part-label">Quads</a>
                 </div>
 
                 <!-- Adductors -->
-                <div class="body-part-container right-side" style="top:61%; right:18%;">
-                    <a href="{% url 'exercises_by_muscle' 'adductors' %}" class="body-part-label">Adductors</a>
-                    <div class="dotted-line" style="width:30px;"></div>
+                <div class="body-part-dot-container" style="top: 61%; right: 18%;">
                     <a href="{% url 'exercises_by_muscle' 'adductors' %}" class="body-part-dot"></a>
+                </div>
+                <div class="body-part-label-container" style="top: 61%; right: 23%;">
+                    <a href="{% url 'exercises_by_muscle' 'adductors' %}" class="body-part-label">Adductors</a>
                 </div>
             </div>
 
             <!-- ================= BACK DOTS ================= -->
             <div class="back-dots">
                 <!-- Cardio -->
-                <div class="body-part-container right-side" style="top:13%; right:3%;">
-                    <a href="{% url 'exercises_by_muscle' 'cardio' %}" class="body-part-label">Cardio</a>
+                <div class="body-part-dot-container" style="top: 5%; right: 5%;">
                     <a href="{% url 'exercises_by_muscle' 'cardio' %}" class="body-part-dot"></a>
+                </div>
+                <div class="body-part-label-container" style="top: 5%; right: 5%;">
+                    <a href="{% url 'exercises_by_muscle' 'cardio' %}" class="body-part-label">Cardio</a>
                 </div>
 
                 <!-- Traps -->
-                <div class="body-part-container left-side" style="top:25%; left:40%;">
+                <div class="body-part-dot-container" style="top: 25%; left: 40%;">
                     <a href="{% url 'exercises_by_muscle' 'traps' %}" class="body-part-dot"></a>
-                    <div class="dotted-line" style="width:40px;"></div>
+                </div>
+                <div class="body-part-label-container" style="top: 25%; left: 45%;">
                     <a href="{% url 'exercises_by_muscle' 'traps' %}" class="body-part-label">Traps</a>
                 </div>
 
                 <!-- Triceps -->
-                <div class="body-part-container left-side" style="top:33%; left:37%;">
+                <div class="body-part-dot-container" style="top: 33%; left: 37%;">
                     <a href="{% url 'exercises_by_muscle' 'triceps' %}" class="body-part-dot"></a>
-                    <div class="dotted-line" style="width:40px;"></div>
+                </div>
+                <div class="body-part-label-container" style="top: 33%; left: 42%;">
                     <a href="{% url 'exercises_by_muscle' 'triceps' %}" class="body-part-label">Triceps</a>
                 </div>
 
                 <!-- Lats -->
-                <div class="body-part-container right-side" style="top:30%; right:23%;">
-                    <a href="{% url 'exercises_by_muscle' 'lats' %}" class="body-part-label">Lats</a>
-                    <div class="dotted-line" style="width:35px;"></div>
+                <div class="body-part-dot-container" style="top: 30%; right: 23%;">
                     <a href="{% url 'exercises_by_muscle' 'lats' %}" class="body-part-dot"></a>
+                </div>
+                <div class="body-part-label-container" style="top: 30%; right: 28%;">
+                    <a href="{% url 'exercises_by_muscle' 'lats' %}" class="body-part-label">Lats</a>
                 </div>
 
                 <!-- Lower back -->
-                <div class="body-part-container right-side" style="top:42%; right:18%;">
-                    <a href="{% url 'exercises_by_muscle' 'lower_back' %}" class="body-part-label">Lower back</a>
-                    <div class="dotted-line" style="width:35px;"></div>
+                <div class="body-part-dot-container" style="top: 42%; right: 18%;">
                     <a href="{% url 'exercises_by_muscle' 'lower_back' %}" class="body-part-dot"></a>
+                </div>
+                <div class="body-part-label-container" style="top: 42%; right: 23%;">
+                    <a href="{% url 'exercises_by_muscle' 'lower_back' %}" class="body-part-label">Lower back</a>
                 </div>
 
                 <!-- Glutes -->
-                <div class="body-part-container right-side" style="top:49%; right:23%;">
-                    <a href="{% url 'exercises_by_muscle' 'glutes' %}" class="body-part-label">Glutes</a>
-                    <div class="dotted-line" style="width:30px;"></div>
+                <div class="body-part-dot-container" style="top: 49%; right: 23%;">
                     <a href="{% url 'exercises_by_muscle' 'glutes' %}" class="body-part-dot"></a>
+                </div>
+                <div class="body-part-label-container" style="top: 49%; right: 28%;">
+                    <a href="{% url 'exercises_by_muscle' 'glutes' %}" class="body-part-label">Glutes</a>
                 </div>
 
                 <!-- Hamstrings -->
-                <div class="body-part-container right-side" style="top:59%; right:18%;">
-                    <a href="{% url 'exercises_by_muscle' 'hamstrings' %}" class="body-part-label">Hamstrings</a>
-                    <div class="dotted-line" style="width:40px;"></div>
+                <div class="body-part-dot-container" style="top: 59%; right: 18%;">
                     <a href="{% url 'exercises_by_muscle' 'hamstrings' %}" class="body-part-dot"></a>
+                </div>
+                <div class="body-part-label-container" style="top: 59%; right: 23%;">
+                    <a href="{% url 'exercises_by_muscle' 'hamstrings' %}" class="body-part-label">Hamstrings</a>
                 </div>
 
                 <!-- Calves -->
-                <div class="body-part-container left-side" style="top:72%; left:40%;">
+                <div class="body-part-dot-container" style="top: 72%; left: 40%;">
                     <a href="{% url 'exercises_by_muscle' 'calves' %}" class="body-part-dot"></a>
-                    <div class="dotted-line" style="width:35px;"></div>
+                </div>
+                <div class="body-part-label-container" style="top: 72%; left: 45%;">
                     <a href="{% url 'exercises_by_muscle' 'calves' %}" class="body-part-label">Calves</a>
                 </div>
             </div>
@@ -717,7 +740,7 @@
         // Preload back image
         window.addEventListener('load', function() {
             const backImg = new Image();
-            backImg.src = '{% static 'apps/images/body/model_man_backside.png'  %}';
+            backImg.src = '{% static "apps/images/body/model_man_backside.png" %}';
         });
     </script>
 {% endblock %}
