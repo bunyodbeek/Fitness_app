@@ -24,8 +24,7 @@ class FavoritesListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         user_profile = self.request.user.profile
         context['total_count'] = Favorite.objects.filter(user=user_profile).count()
-        context['favorite_collections'] = FavoriteCollection.objects.filter(user=user_profile).prefetch_related(
-            'exercises').order_by('-created_at')
+        context['favorite_collections'] = FavoriteCollection.objects.filter(user=user_profile).order_by('-created_at')
         context['collections_count'] = context['favorite_collections'].count()
         context['all_exercises'] = [fav.exercise for fav in self.get_queryset()]
         return context
@@ -33,7 +32,7 @@ class FavoritesListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         qs = super().get_queryset()
         user = self.request.user
-        qs = qs.filter(user=user.profile).select_related('exercise')
+        qs = qs.filter(user=user.profile, collection__isnull=True).select_related('exercise')
         return qs
 
 
@@ -78,9 +77,10 @@ class FavoriteToggleAPIView(GenericAPIView):
             action = "removed"
             message = f'"{exercise.name}" mashqi "{collection.name}" toʻplamidan olib tashlandi.'
         else:
-            Favorite.objects.create(
-                user=user, collection=collection, exercise=exercise
-            )
+            obj, created = Favorite.objects.get_or_create(user=user, exercise=exercise)
+            obj.collection = collection
+            obj.save(update_fields=['collection'])
+
             action = "added"
             message = f'"{exercise.name}" mashqi "{collection.name}" toʻplamiga qoʻshildi.'
 

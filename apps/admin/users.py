@@ -20,4 +20,4 @@ class FavoriteAdmin(admin.ModelAdmin):
 class FavoriteCollectionAdmin(admin.ModelAdmin):
     list_display = ['name', 'user', 'exercise_count', 'created_at']
     list_filter = ['created_at']
-    filter_horizontal = ['exercises']
+    # filter_horizontal = ['exercises']

@@ -1127,7 +1127,7 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success) {
+                    if (data.status === 'success') {
                         updateFavoriteUI(currentExerciseId, true);
                         closeCollectionsModal();
                         showSuccessMessage('✓ To\'plamga qo\'shildi!');

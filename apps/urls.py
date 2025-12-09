@@ -59,7 +59,7 @@ urlpatterns = [
 
     path('panel/', AdminPageView.as_view(), name='admin_page'),
 
-    path('favorites/collection/<int:collection_id>/toggle/',FavoriteToggleAPIView.as_view(),name='favorite-toggle'),
+    path('favorites/collection/<int:collection_id>/toggle/', FavoriteToggleAPIView.as_view(), name='favorite-toggle'),
 
     path("collection/", FavoritesListView.as_view(), name="favorites"),
 

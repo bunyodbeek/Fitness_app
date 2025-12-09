@@ -1837,13 +1837,13 @@
 
                     <!-- Collection Exercises -->
                     <div class="collection-exercises">
-                        {% for exercise in collection.exercises.all %}
-                            <a href="{% url 'exercise_detail' exercise.id %}" class="collection-exercise-item">
-                                <img src="{{ exercise.thumbnail.url|default_if_none:'/static/img/default-thumb.jpg' }}"
-                                     alt="{{ exercise.name }}"
+                        {% for favorite in collection.favorites.all %}
+                            <a href="{% url 'exercise_detail' favorite.exercise.id %}" class="collection-exercise-item">
+                                <img src="{{ favorite.exercise.thumbnail.url|default_if_none:'/static/img/default-thumb.jpg' }}"
+                                     alt="{{ favorite.exercise.name }}"
                                      class="collection-exercise-thumb">
                                 <div class="collection-exercise-info">
-                                    <div class="collection-exercise-name">{{ exercise.name }}</div>
+                                    <div class="collection-exercise-name">{{ favorite.exercise.name }}</div>
                                 </div>
                             </a>
                         {% empty %}
@@ -2021,7 +2021,7 @@
 
         // Mashqni tanlash
         document.querySelectorAll('.exercise-select-item').forEach(item => {
-            item.addEventListener('click', function() {
+            item.addEventListener('click', function () {
                 this.classList.toggle('selected');
             });
         });
@@ -2108,14 +2108,18 @@
 
         // Placeholder funksiyalar (premium uchun)
 
-        function editCollection(id) { alert('Edit feature coming soon!'); }
+        function editCollection(id) {
+            alert('Edit feature coming soon!');
+        }
 
         function purchaseEdition(id) {
             alert('Purchase flow will be implemented soon.');
         }
+
         function startWorkout(id) {
             window.location.href = `/editions/${id}/start/`;
         }
+
         function viewEditionDetails(id) {
             window.location.href = `/editions/${id}/`;
         }
