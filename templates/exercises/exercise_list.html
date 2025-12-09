@@ -977,7 +977,7 @@
                     {% for collection in user_collections %}
                         <div class="collection-item" onclick="saveToCollection({{ collection.id }})">
                             <div class="collection-item-name">{{ collection.name }}</div>
-                            <div class="collection-item-count">{{ collection.exercises.count|default:'0' }} ta mashq
+                            <div class="collection-item-count">{{ collection.exercise_count|default:'0' }} ta mashq
                             </div>
                         </div>
                     {% endfor %}
@@ -1113,7 +1113,7 @@
         }
 
         function saveToCollection(collectionId) {
-            const url = `/en/collection/${collectionId}/add-exercise/`;
+            const url = `/en/favorites/collection/${collectionId}/toggle/`;
 
             fetch(url, {
                 method: 'POST',

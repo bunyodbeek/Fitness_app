@@ -1,7 +1,7 @@
 from apps.models import Exercise, Favorite
 from apps.models.exercises import MuscleGroup
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import DetailView, ListView, TemplateView, CreateView
+from django.views.generic import DetailView, ListView, TemplateView
 
 
 class MuscleGroupListView(TemplateView):
@@ -80,4 +80,3 @@ class ExerciseDetailView(LoginRequiredMixin, DetailView):
         else:
             context['is_favorited'] = False
         return context
-

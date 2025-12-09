@@ -1,7 +1,6 @@
 from apps.models import Favorite, UserProfile
-from django.contrib import admin
-
 from apps.models.favorites import FavoriteCollection
+from django.contrib import admin
 
 
 @admin.register(UserProfile)

@@ -1,3 +1,5 @@
+from django.urls import path
+
 from apps.views import (
     AnimationView,
     EditionDetailView,
@@ -22,9 +24,8 @@ from apps.views import (
     WorkoutDetailView,
     WorkoutStartView,
 )
-from apps.views.favorite import AddExerciseToCollectionView
+from apps.views.favorite import FavoriteToggleAPIView
 from apps.views.users import AdminPageView, ChangeLanguageView
-from django.urls import path
 
 urlpatterns = [
     path('exercises/', MuscleGroupListView.as_view(), name='muscle_groups'),
@@ -33,7 +34,6 @@ urlpatterns = [
     path('exercises/favorite/toggle/<int:exercise_id>/', ToggleFavoriteView.as_view(), name='toggle_favorite'),
     path('favorites/', FavoritesListView.as_view(), name='favorite_list_page'),
     path('api/questionnaire/submit/', QuestionnaireSubmitAPIView.as_view(), name='questionnaire_submit'),
-
 
     path('api/telegram-auth/', TelegramAuthAPIView.as_view(), name='telegram_auth'),
     path('miniapp/questionnaire/', OnboardingView.as_view(), name='onboarding'),
@@ -59,7 +59,7 @@ urlpatterns = [
 
     path('panel/', AdminPageView.as_view(), name='admin_page'),
 
-    path('collection/<int:collection_id>/add-exercise/', AddExerciseToCollectionView.as_view(), name='add-exercise-to-collection'),
+    path('favorites/collection/<int:collection_id>/toggle/',FavoriteToggleAPIView.as_view(),name='favorite-toggle'),
 
     path("collection/", FavoritesListView.as_view(), name="favorites"),
 

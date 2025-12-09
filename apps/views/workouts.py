@@ -6,7 +6,7 @@ from apps.models.workouts import Workout, WorkoutExercise
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.aggregates import Sum
 from django.http import HttpResponseBadRequest
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView

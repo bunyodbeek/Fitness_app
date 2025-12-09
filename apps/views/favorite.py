@@ -4,8 +4,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views import View
-from django.views.generic import ListView, CreateView
+from django.views.generic import CreateView, ListView
 from rest_framework import status
+from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -23,7 +24,8 @@ class FavoritesListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         user_profile = self.request.user.profile
         context['total_count'] = Favorite.objects.filter(user=user_profile).count()
-        context['favorite_collections'] = FavoriteCollection.objects.filter(user=user_profile).prefetch_related('exercises').order_by('-created_at')
+        context['favorite_collections'] = FavoriteCollection.objects.filter(user=user_profile).prefetch_related(
+            'exercises').order_by('-created_at')
         context['collections_count'] = context['favorite_collections'].count()
         context['all_exercises'] = [fav.exercise for fav in self.get_queryset()]
         return context
@@ -54,28 +56,32 @@ class ToggleFavoriteView(APIView):
         return Response({'success': True, 'status': 'added'})
 
 
-class FavoriteToggleAPIView(APIView):
+class FavoriteToggleAPIView(GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, collection_id):
-        exercise_id = request.data.get('exercise_id')
+        exercise_id = request.data.get("exercise_id")
         if not exercise_id:
             return Response(
-                {"status": "error", "message": "Mashq ID si taqdim etilmadi."},
+                {"message": "Mashq ID si yuborilmadi."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+        user = request.user.profile
+        collection = get_object_or_404(FavoriteCollection, id=collection_id, user=user)
         exercise = get_object_or_404(Exercise, id=exercise_id)
-        collection = get_object_or_404(FavoriteCollection, id=collection_id, user=request.user)
 
-        favorite = Favorite.objects.filter(user=request.user, exercise=exercise, collection=collection).first()
-        if favorite:
-            favorite.delete()
-            action = 'removed'
+        qs = Favorite.objects.filter(user=user, collection=collection, exercise=exercise)
+
+        if qs.exists():
+            qs.delete()
+            action = "removed"
             message = f'"{exercise.name}" mashqi "{collection.name}" toʻplamidan olib tashlandi.'
         else:
-            Favorite.objects.create(user=request.user, exercise=exercise, collection=collection)
-            action = 'added'
+            Favorite.objects.create(
+                user=user, collection=collection, exercise=exercise
+            )
+            action = "added"
             message = f'"{exercise.name}" mashqi "{collection.name}" toʻplamiga qoʻshildi.'
 
         return Response({
@@ -83,16 +89,12 @@ class FavoriteToggleAPIView(APIView):
             "action": action,
             "exercise_id": exercise.id,
             "collection_id": collection.id,
+            "items_count": collection.exercise_count,
             "message": message,
-            "items_count": collection.items_count
-        }, status=status.HTTP_200_OK)
+        })
 
 
 class AddExerciseToCollectionView(LoginRequiredMixin, View):
-    """
-    POST orqali mashqni belgilangan FavoriteCollection-ga qo'shadi.
-    """
-
     def post(self, request, collection_id, *args, **kwargs):
         try:
             data = json.loads(request.body)

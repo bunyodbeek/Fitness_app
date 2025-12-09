@@ -107,7 +107,7 @@ class Exercise(CreatedBaseModel):
 
         try:
             if self.thumbnail and hasattr(self.thumbnail, 'file.txt') and isinstance(self.thumbnail.file,
-                                                                                 InMemoryUploadedFile):
+                                                                                     InMemoryUploadedFile):
                 img = Image.open(self.thumbnail)
                 if img.mode != "RGB":
                     img = img.convert("RGB")

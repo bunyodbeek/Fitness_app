@@ -15,8 +15,8 @@ class AppsConfig(AppConfig):
             print("❌ BOT_TOKEN yoki WEBHOOK_URL topilmadi (.env ni tekshiring)")
             return
 
-        from telebot import TeleBot
-        bot = TeleBot(BOT_TOKEN)
+        # from telebot import TeleBot
+        # bot = TeleBot(BOT_TOKEN)
         #
         # # bot.set_my_description('darslik haqida')
         # # Avval eski webhook o'chiriladi, keyin yangi o'rnatiladi

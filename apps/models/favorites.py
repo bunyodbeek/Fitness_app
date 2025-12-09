@@ -1,5 +1,5 @@
 from apps.models.base import CreatedBaseModel
-from django.db.models import CASCADE, SET_NULL, CharField, ForeignKey, TextField, ManyToManyField
+from django.db.models import CASCADE, SET_NULL, CharField, ForeignKey, ManyToManyField, TextField
 from django.utils.translation import gettext_lazy as _
 
 

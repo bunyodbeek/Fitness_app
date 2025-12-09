@@ -2037,7 +2037,7 @@
             const selectedItems = document.querySelectorAll('.exercise-select-item.selected');
             const exerciseIds = Array.from(selectedItems).map(item => item.dataset.exerciseId);
 
-            fetch("{% url 'create_collection' %}", {
+            fetch("#", {
                 method: 'POST',
                 headers: {
                     'X-CSRFToken': csrfToken,
