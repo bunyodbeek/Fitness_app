@@ -424,9 +424,9 @@
         <!-- Subscription Card -->
         <div class="subscription-card">
             <div class="subscription-label">Obuna tugashiga</div>
-            <div class="subscription-days">{{ days_remaining|default:"19" }} kun</div>
+            <div class="subscription-days">{{ days_remaining}} kun</div>
             <div class="progress-container">
-                <div class="progress-bar" style="width: {{ subscription_progress|default:'63' }}%;"></div>
+                <div class="progress-bar" style="width: {{ subscription_progress|default:'20' }}%;"></div>
             </div>
         </div>
 
@@ -442,7 +442,7 @@
                 <div class="setting-text">Obunani boshqarish</div>
                 <div class="setting-arrow">›</div>
             </div>
-            <div class="setting-item" onclick="window.location.href=''">
+            <div class="setting-item" onclick="window.location.href='{% url 'payment_history' %}'">
                 <div class="setting-icon-wrapper"><div class="setting-icon">💳</div></div>
                 <div class="setting-text">To'lovlar tarixi</div>
                 <div class="setting-arrow">›</div>

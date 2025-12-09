@@ -1,5 +1,6 @@
 from django.urls import path
 
+from apps.bot.bot_view import TelegramWebhookView
 from apps.views import (
     AnimationView,
     EditionDetailView,
@@ -17,7 +18,6 @@ from apps.views import (
     QuestionnaireSubmitAPIView,
     SettingsView,
     TelegramAuthAPIView,
-    TelegramWebhookView,
     ToggleFavoriteView,
     UpdateProfileView,
     WorkoutCompleteView,
@@ -25,6 +25,7 @@ from apps.views import (
     WorkoutStartView,
 )
 from apps.views.favorite import FavoriteToggleAPIView
+from apps.views.payments import PaymentHistoryListView
 from apps.views.users import AdminPageView, ChangeLanguageView
 
 urlpatterns = [
@@ -64,4 +65,6 @@ urlpatterns = [
     path("collection/", FavoritesListView.as_view(), name="favorites"),
 
     path('change/language/', ChangeLanguageView.as_view(), name='change_language'),
+
+    path('payment/history/', PaymentHistoryListView.as_view(), name='payment_history'),
 ]

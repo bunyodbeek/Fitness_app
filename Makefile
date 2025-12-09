@@ -21,3 +21,6 @@ lang:
 
 compile:
 	django-admin compilemessages -i .venv
+
+webhook:
+	python3 setup_webhook.py

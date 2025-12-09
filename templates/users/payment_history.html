@@ -486,106 +486,27 @@
             <div class="filter-tab">Bekor qilingan</div>
         </div>
 
-        <!-- Payment Items -->
+        {% for payment in payment_history %}
         <div class="payment-item success">
             <div class="payment-header">
                 <div class="payment-icon-wrapper">
                     <div class="payment-icon">✓</div>
                 </div>
                 <div class="payment-info">
-                    <div class="payment-plan">3 oylik obuna</div>
+                    <div class="payment-plan">{{ payment.payment_method }}</div>
                     <div class="payment-date">15 Noyabr 2024, 14:23</div>
                 </div>
-                <div class="payment-amount">85,000 so'm</div>
+                <div class="payment-amount">{{ payment.amount }}</div>
             </div>
             <div class="payment-details">
                 <div class="payment-method">
                     <span class="method-icon">💳</span>
                     <span>Click</span>
                 </div>
-                <div class="payment-status status-success">Muvaffaqiyatli</div>
+                <div class="payment-status status-success">{{ payment.status }}</div>
             </div>
         </div>
-
-        <div class="payment-item success">
-            <div class="payment-header">
-                <div class="payment-icon-wrapper">
-                    <div class="payment-icon">✓</div>
-                </div>
-                <div class="payment-info">
-                    <div class="payment-plan">1 oylik obuna</div>
-                    <div class="payment-date">28 Oktyabr 2024, 10:15</div>
-                </div>
-                <div class="payment-amount">30,000 so'm</div>
-            </div>
-            <div class="payment-details">
-                <div class="payment-method">
-                    <span class="method-icon">💳</span>
-                    <span>Payme</span>
-                </div>
-                <div class="payment-status status-success">Muvaffaqiyatli</div>
-            </div>
-        </div>
-
-        <div class="payment-item pending">
-            <div class="payment-header">
-                <div class="payment-icon-wrapper">
-                    <div class="payment-icon">⏳</div>
-                </div>
-                <div class="payment-info">
-                    <div class="payment-plan">6 oylik obuna</div>
-                    <div class="payment-date">05 Dekabr 2024, 16:45</div>
-                </div>
-                <div class="payment-amount">150,000 so'm</div>
-            </div>
-            <div class="payment-details">
-                <div class="payment-method">
-                    <span class="method-icon">💳</span>
-                    <span>Uzum Bank</span>
-                </div>
-                <div class="payment-status status-pending">Kutilmoqda</div>
-            </div>
-        </div>
-
-        <div class="payment-item success">
-            <div class="payment-header">
-                <div class="payment-icon-wrapper">
-                    <div class="payment-icon">✓</div>
-                </div>
-                <div class="payment-info">
-                    <div class="payment-plan">1 oylik obuna</div>
-                    <div class="payment-date">12 Sentyabr 2024, 09:30</div>
-                </div>
-                <div class="payment-amount">30,000 so'm</div>
-            </div>
-            <div class="payment-details">
-                <div class="payment-method">
-                    <span class="method-icon">💳</span>
-                    <span>Click</span>
-                </div>
-                <div class="payment-status status-success">Muvaffaqiyatli</div>
-            </div>
-        </div>
-
-        <div class="payment-item failed">
-            <div class="payment-header">
-                <div class="payment-icon-wrapper">
-                    <div class="payment-icon">✕</div>
-                </div>
-                <div class="payment-info">
-                    <div class="payment-plan">1 yillik obuna</div>
-                    <div class="payment-date">20 Avgust 2024, 18:20</div>
-                </div>
-                <div class="payment-amount">300,000 so'm</div>
-            </div>
-            <div class="payment-details">
-                <div class="payment-method">
-                    <span class="method-icon">💳</span>
-                    <span>Payme</span>
-                </div>
-                <div class="payment-status status-failed">Bekor qilindi</div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 
     <script>

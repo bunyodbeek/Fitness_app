@@ -104,25 +104,3 @@ class UserMotivation(CreatedBaseModel):
     def __str__(self):
         return f"{self.user.name} - {self.get_motivation_display()}"
 
-
-class PaymentHistory(CreatedBaseModel):
-    class PaymentStatus(TextChoices):
-        PENDING = 'pending', 'Kutilmoqda'
-        COMPLETED = 'completed', 'To langan'
-        FAILED = 'failed', 'Muvaffaqiyatsiz'
-        REFUNDED = 'refunded', 'Qaytarilgan'
-
-    user = ForeignKey('apps.UserProfile', CASCADE, related_name='payment_history')
-    amount = DecimalField(max_digits=10, decimal_places=2)
-    payment_method = CharField(max_length=50)
-    status = CharField(max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.PENDING)
-    transaction_id = CharField(max_length=100, blank=True)
-    description = TextField(blank=True)
-
-    class Meta:
-        ordering = ['-created_at']
-        verbose_name = "To'lov tarixi"
-        verbose_name_plural = "To'lovlar tarixi"
-
-    def __str__(self):
-        return f"{self.user.name} - {self.amount} UZS - {self.get_status_display()}"
