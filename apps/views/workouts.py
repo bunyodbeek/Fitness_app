@@ -13,7 +13,7 @@ from django.views.generic import DetailView, ListView, TemplateView
 
 
 class AnimationView(TemplateView):
-    template_name = 'workouts/animation.html'
+    template_name = 'animation.html'
 
 
 class ProgramListView(ListView):
