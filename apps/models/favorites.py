@@ -20,7 +20,7 @@ class FavoriteCollection(CreatedBaseModel):
 
     @property
     def exercise_count(self):
-        return self.exercises.count()
+        return int(self.exercises.count())
 
 
 class Favorite(CreatedBaseModel):

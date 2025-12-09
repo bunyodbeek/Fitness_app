@@ -1815,7 +1815,6 @@
                             <h3 class="collection-title">📁 {{ collection.name }}</h3>
                             <div class="collection-meta">
                                 <i class="fas fa-dumbbell"></i> {{ collection.exercise_count }} exercise
-                                {% if collection.exercise_count != 1 %}s{% endif %}
                                 <span style="margin: 0 8px;">•</span>
                                 <i class="fas fa-clock"></i> {{ collection.created_at|date:"d M, Y" }}
                             </div>
@@ -1825,15 +1824,16 @@
                             <button class="collection-action-btn"
                                     onclick="editCollection({{ collection.id }})"
                                     title="Edit">
-                                <i class="fas fa-edit"></i>
+                                <i class="fas fa-edit"></i>✏️
                             </button>
                             <button class="collection-action-btn delete-btn"
                                     onclick="deleteCollection({{ collection.id }}, '{{ collection.name }}')"
                                     title="Delete">
-                                <i class="fas fa-trash"></i>
+                                <i class="fas fa-trash"></i>🗑️
                             </button>
                         </div>
                     </div>
+
 
                     <!-- Collection Exercises -->
                     <div class="collection-exercises">
@@ -2107,9 +2107,9 @@
         }
 
         // Placeholder funksiyalar (premium uchun)
-        function editCollection(id) {
-            alert('Edit feature coming soon!');
-        }
+
+        function editCollection(id) { alert('Edit feature coming soon!'); }
+
         function purchaseEdition(id) {
             alert('Purchase flow will be implemented soon.');
         }
