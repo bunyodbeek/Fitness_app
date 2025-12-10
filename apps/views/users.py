@@ -229,8 +229,8 @@ class SettingsView(LoginRequiredMixin, TemplateView):
         context['profile'] = profile
         subscription = Subscription.objects.filter(user=self.request.user.profile).first()
         context['days_remaining'] = subscription.days_remaining if subscription else 0
-        subscription_progres = (subscription.days_remaining / subscription.period()) * 100
-        context['subscription_progress'] = subscription_progres
+        # subscription_progres = (subscription.days_remaining / subscription.period()) * 100
+        # context['subscription_progress'] = subscription_progres
         return context
 
 
