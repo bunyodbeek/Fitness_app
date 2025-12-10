@@ -1,5 +1,5 @@
 from apps.models.my_trainer import WorkoutProgress
-from apps.models.workouts import Edition, Program, Workout
+from apps.models.workouts import Edition, Program, Workout, WorkoutExercise
 from django.contrib import admin
 
 
@@ -7,6 +7,10 @@ class WorkoutInline(admin.TabularInline):
     model = Workout
     extra = 1
 
+
+class WorkoutExerciseInline(admin.TabularInline):
+    model = WorkoutExercise
+    extra = 1
 
 @admin.register(Program)
 class ProgramAdmin(admin.ModelAdmin):
@@ -28,3 +32,9 @@ class EditionAdmin(admin.ModelAdmin):
 @admin.register(WorkoutProgress)
 class WorkoutProgressAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(Workout)
+class WorkoutModelAdmin(admin.ModelAdmin):
+    inlines = [WorkoutExerciseInline]
+
