@@ -1,19 +1,15 @@
 {% extends 'base.html' %}
-
 {% block title %}{{ body_part.name }} - Mashqlar{% endblock %}
-
 {% block bottom_nav %}{% endblock %}
 {% load i18n %}
-
-
 {% block extra_css %}
     <style>
+        /* ... (sizning oldingi CSS qismi o'zgarmasdan qoladi) ... */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -21,8 +17,6 @@
             position: relative;
             overflow-x: hidden;
         }
-
-        /* Animated background */
         body::before {
             content: '';
             position: fixed;
@@ -36,17 +30,10 @@
             pointer-events: none;
             z-index: 0;
         }
-
         @keyframes particleFloat {
-            0%, 100% {
-                transform: translate(0, 0);
-            }
-            50% {
-                transform: translate(20px, -20px);
-            }
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(20px, -20px); }
         }
-
-        /* ===== COMPACT HEADER - Match Body Parts Style ===== */
         .page-header {
             background: linear-gradient(135deg, rgba(15, 52, 96, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
             backdrop-filter: blur(10px);
@@ -60,7 +47,6 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             border-bottom: 1px solid rgba(255, 215, 0, 0.1);
         }
-
         .back-btn, .action-btn {
             background: rgba(255, 215, 0, 0.1);
             border: 2px solid rgba(255, 215, 0, 0.3);
@@ -76,14 +62,12 @@
             align-items: center;
             justify-content: center;
         }
-
         .back-btn:hover, .action-btn:hover {
             background: rgba(255, 215, 0, 0.2);
             border-color: #ffd700;
             transform: scale(1.1);
             box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
         }
-
         .page-title {
             color: white;
             font-size: 16px;
@@ -97,8 +81,6 @@
             flex: 1;
             margin: 0 10px;
         }
-
-        /* Compact Search Bar */
         .search-bar {
             padding: 15px 16px;
             background: transparent;
@@ -106,7 +88,6 @@
             top: 64px;
             z-index: 50;
         }
-
         #searchInput {
             width: 100%;
             padding: 12px 20px;
@@ -122,11 +103,9 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
-
         #searchInput::placeholder {
             color: rgba(255, 255, 255, 0.5);
         }
-
         #searchInput:focus {
             border-color: #ffd700;
             background: linear-gradient(135deg,
@@ -134,24 +113,18 @@
             rgba(255, 215, 0, 0.1) 100%);
             box-shadow: 0 8px 32px rgba(255, 215, 0, 0.3);
         }
-
-        /* Container */
         .container {
             position: relative;
             z-index: 1;
             max-width: 1400px;
             margin: 0 auto;
         }
-
-        /* Compact Exercise Grid */
         .exercises-grid {
             padding: 15px 16px 100px 16px;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 15px;
         }
-
-        /* Compact Exercise Card */
         .exercise-card {
             background: linear-gradient(135deg,
             rgba(255, 255, 255, 0.1) 0%,
@@ -167,7 +140,6 @@
             position: relative;
             border: 1px solid rgba(255, 215, 0, 0.1);
         }
-
         .exercise-card::before {
             content: '';
             position: absolute;
@@ -182,18 +154,14 @@
             transition: opacity 0.4s ease;
             z-index: 1;
         }
-
         .exercise-card:hover::before {
             opacity: 1;
         }
-
         .exercise-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 16px 48px rgba(255, 215, 0, 0.3);
             border-color: rgba(255, 215, 0, 0.5);
         }
-
-        /* Exercise Image */
         .exercise-image {
             width: 100%;
             height: 160px;
@@ -202,11 +170,9 @@
             display: block;
             transition: transform 0.4s ease;
         }
-
         .exercise-card:hover .exercise-image {
             transform: scale(1.05);
         }
-
         .exercise-placeholder {
             width: 100%;
             height: 160px;
@@ -220,18 +186,14 @@
             color: rgba(255, 215, 0, 0.5);
             transition: transform 0.4s ease;
         }
-
         .exercise-card:hover .exercise-placeholder {
             transform: scale(1.05);
         }
-
-        /* Exercise Info */
         .exercise-info {
             padding: 12px;
             position: relative;
             z-index: 2;
         }
-
         .exercise-name {
             font-size: 13px;
             font-weight: 700;
@@ -240,15 +202,12 @@
             line-height: 1.3;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
         }
-
         .exercise-details {
             font-size: 10px;
             color: #ddd;
             margin-left: 6px;
             font-weight: normal;
         }
-
-        /* Compact Favorite Button */
         .favorite-icon {
             position: absolute;
             top: 10px;
@@ -270,23 +229,18 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: 2px solid rgba(255, 215, 0, 0.3);
         }
-
         .favorite-icon:hover {
             transform: scale(1.15);
             box-shadow: 0 8px 32px rgba(255, 215, 0, 0.5);
         }
-
         .favorite-icon:active {
             transform: scale(0.95);
         }
-
-        /* Favorite States */
         .favorite-icon.favorited {
             background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
             border-color: #ffd700;
             box-shadow: 0 8px 32px rgba(255, 215, 0, 0.6);
         }
-
         .favorite-icon span {
             color: #ffd700;
             transition: all 0.3s ease;
@@ -295,67 +249,40 @@
             line-height: 1;
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
         }
-
         .favorite-icon.favorited span {
             color: white;
             transform: scale(1.1);
             filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
         }
-
-        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
             color: rgba(255, 255, 255, 0.7);
         }
-
         .empty-state .icon {
             font-size: 60px;
             margin-bottom: 15px;
             filter: grayscale(100%);
             opacity: 0.5;
         }
-
         .empty-state h3 {
             font-size: 18px;
             font-weight: 700;
             color: white;
             margin: 0;
         }
-
         .bottom-navigation {
             display: none !important;
         }
-
-        /* Animation */
         .exercise-card {
             animation: slideUp 0.5s ease backwards;
         }
-
-        .exercise-card:nth-child(1) {
-            animation-delay: 0.05s;
-        }
-
-        .exercise-card:nth-child(2) {
-            animation-delay: 0.1s;
-        }
-
-        .exercise-card:nth-child(3) {
-            animation-delay: 0.15s;
-        }
-
-        .exercise-card:nth-child(4) {
-            animation-delay: 0.2s;
-        }
-
-        .exercise-card:nth-child(5) {
-            animation-delay: 0.25s;
-        }
-
-        .exercise-card:nth-child(6) {
-            animation-delay: 0.3s;
-        }
-
+        .exercise-card:nth-child(1) { animation-delay: 0.05s; }
+        .exercise-card:nth-child(2) { animation-delay: 0.1s; }
+        .exercise-card:nth-child(3) { animation-delay: 0.15s; }
+        .exercise-card:nth-child(4) { animation-delay: 0.2s; }
+        .exercise-card:nth-child(5) { animation-delay: 0.25s; }
+        .exercise-card:nth-child(6) { animation-delay: 0.3s; }
         @keyframes slideUp {
             from {
                 opacity: 0;
@@ -366,12 +293,6 @@
                 transform: translateY(0);
             }
         }
-
-        /* ==========================================
-           SAVE OPTIONS MODAL
-           ========================================== */
-
-        /* Save Options Modal */
         .save-options-modal {
             position: fixed;
             bottom: 0;
@@ -383,11 +304,9 @@
             z-index: 2000;
             animation: fadeIn 0.3s ease;
         }
-
         .save-options-modal.active {
             display: block;
         }
-
         .save-options-content {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             border-radius: 20px 20px 0 0;
@@ -396,25 +315,14 @@
             box-shadow: 0 -10px 50px rgba(0, 0, 0, 0.8);
             border-top: 3px solid rgba(255, 215, 0, 0.3);
         }
-
         @keyframes slideUpModal {
-            from {
-                transform: translateY(100%);
-            }
-            to {
-                transform: translateY(0);
-            }
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
         }
-
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
-
         .modal-handle {
             width: 40px;
             height: 4px;
@@ -422,7 +330,6 @@
             border-radius: 10px;
             margin: 0 auto 20px;
         }
-
         .modal-title {
             color: #ffd700;
             font-size: 16px;
@@ -432,14 +339,11 @@
             text-transform: uppercase;
             letter-spacing: 2px;
         }
-
-        /* Save Options */
         .save-options-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
-
         .save-option {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.08));
             border: 2px solid rgba(255, 255, 255, 0.1);
@@ -451,13 +355,11 @@
             align-items: center;
             gap: 15px;
         }
-
         .save-option:hover {
             background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(243, 156, 18, 0.1));
             border-color: rgba(255, 215, 0, 0.4);
             transform: translateX(5px);
         }
-
         .save-option-icon {
             width: 45px;
             height: 45px;
@@ -469,25 +371,20 @@
             font-size: 22px;
             flex-shrink: 0;
         }
-
         .save-option-info {
             flex: 1;
         }
-
         .save-option-title {
             color: white;
             font-size: 15px;
             font-weight: 700;
             margin-bottom: 4px;
         }
-
         .save-option-desc {
             color: #95a5a6;
             font-size: 12px;
             font-weight: 500;
         }
-
-        /* Collections List Modal */
         .collections-modal {
             position: fixed;
             top: 0;
@@ -502,11 +399,9 @@
             z-index: 3000;
             animation: fadeIn 0.3s ease;
         }
-
         .collections-modal.active {
             display: flex;
         }
-
         .collections-modal-content {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             border-radius: 20px;
@@ -520,7 +415,6 @@
             flex-direction: column;
             animation: scaleIn 0.4s ease;
         }
-
         @keyframes scaleIn {
             from {
                 opacity: 0;
@@ -531,7 +425,6 @@
                 transform: scale(1);
             }
         }
-
         .collections-header {
             background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
             padding: 18px;
@@ -540,7 +433,6 @@
             align-items: center;
             border-bottom: 2px solid rgba(255, 215, 0, 0.2);
         }
-
         .collections-title {
             color: #ffd700;
             font-size: 16px;
@@ -548,7 +440,6 @@
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
-
         .collections-close-btn {
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid rgba(255, 255, 255, 0.2);
@@ -563,28 +454,23 @@
             font-size: 20px;
             transition: all 0.3s ease;
         }
-
         .collections-close-btn:hover {
             background: rgba(255, 255, 255, 0.2);
             border-color: #ffd700;
             transform: rotate(90deg);
         }
-
         .collections-body {
             padding: 18px;
             overflow-y: auto;
             flex: 1;
         }
-
         .collections-body::-webkit-scrollbar {
             width: 6px;
         }
-
         .collections-body::-webkit-scrollbar-thumb {
             background: rgba(255, 215, 0, 0.3);
             border-radius: 10px;
         }
-
         .collection-item {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.08));
             border: 2px solid rgba(255, 255, 255, 0.1);
@@ -594,284 +480,136 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-
         .collection-item:hover {
             background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(243, 156, 18, 0.15));
             border-color: rgba(255, 215, 0, 0.4);
             transform: translateX(5px);
         }
-
         .collection-item-name {
             color: white;
             font-size: 15px;
             font-weight: 700;
             margin-bottom: 5px;
         }
-
         .collection-item-count {
             color: #95a5a6;
             font-size: 12px;
             font-weight: 500;
         }
 
-        /* ===== RESPONSIVE - VERY SMALL PHONES ===== */
+        /* ===== NEW: Create Collection Modal ===== */
+        .collection-create-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 4000;
+        }
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            padding: 24px;
+            border-radius: 16px;
+            width: 85%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 2px solid rgba(255,215,0,0.3);
+        }
+        .modal-title {
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 16px;
+            font-size: 18px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .collection-input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 2px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-size: 15px;
+            margin-bottom: 20px;
+            outline: none;
+        }
+        .collection-input:focus {
+            border-color: #ffd700;
+            background: rgba(255,215,0,0.1);
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .modal-buttons button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-cancel {
+            background: rgba(255,255,255,0.1);
+            color: #ecf0f1;
+        }
+        .btn-cancel:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .btn-save {
+            background: linear-gradient(135deg, #ffd700, #f39c12);
+            color: #1a1a2e;
+        }
+        .btn-save:hover {
+            opacity: 0.9;
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 360px) {
-            .page-header {
-                padding: 10px 12px;
-            }
-
-            .page-title {
-                font-size: 14px;
-                letter-spacing: 2px;
-            }
-
-            .back-btn, .action-btn {
-                width: 36px;
-                height: 36px;
-                font-size: 18px;
-            }
-
-            .search-bar {
-                padding: 12px;
-                top: 56px;
-            }
-
-            #searchInput {
-                padding: 10px 16px;
-                font-size: 13px;
-                border-radius: 20px;
-            }
-
-            .exercises-grid {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-                gap: 12px;
-                padding: 12px 12px 90px 12px;
-            }
-
-            .exercise-image,
-            .exercise-placeholder {
-                height: 140px;
-            }
-
-            .exercise-placeholder {
-                font-size: 40px;
-            }
-
-            .exercise-name {
-                font-size: 12px;
-            }
-
-            .exercise-details {
-                font-size: 9px;
-            }
-
-            .exercise-info {
-                padding: 10px;
-            }
-
-            .favorite-icon {
-                width: 34px;
-                height: 34px;
-                top: 8px;
-                right: 8px;
-            }
-
-            .favorite-icon span {
-                font-size: 16px;
-            }
-
-            .modal-title {
-                font-size: 15px;
-            }
-
-            .save-option {
-                padding: 14px 16px;
-            }
-
-            .save-option-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 20px;
-            }
-
-            .save-option-title {
-                font-size: 14px;
-            }
-
-            .save-option-desc {
-                font-size: 11px;
-            }
+            .page-header { padding: 10px 12px; }
+            .page-title { font-size: 14px; letter-spacing: 2px; }
+            .back-btn, .action-btn { width: 36px; height: 36px; font-size: 18px; }
+            .search-bar { padding: 12px; top: 56px; }
+            #searchInput { padding: 10px 16px; font-size: 13px; }
+            .exercises-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; padding: 12px 12px 90px 12px; }
+            .exercise-image, .exercise-placeholder { height: 140px; }
+            .exercise-placeholder { font-size: 40px; }
+            .exercise-name { font-size: 12px; }
+            .exercise-details { font-size: 9px; }
+            .exercise-info { padding: 10px; }
+            .favorite-icon { width: 34px; height: 34px; top: 8px; right: 8px; }
+            .favorite-icon span { font-size: 16px; }
         }
-
-        /* ===== RESPONSIVE - TABLET ===== */
         @media (min-width: 500px) {
-            .page-header {
-                padding: 14px 20px;
-            }
-
-            .page-title {
-                font-size: 18px;
-            }
-
-            .back-btn, .action-btn {
-                width: 44px;
-                height: 44px;
-                font-size: 22px;
-            }
-
-            .search-bar {
-                padding: 18px 20px;
-                top: 68px;
-            }
-
-            #searchInput {
-                padding: 14px 22px;
-                font-size: 15px;
-            }
-
-            .exercises-grid {
-                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-                gap: 18px;
-                padding: 18px 20px 110px 20px;
-            }
-
-            .exercise-image,
-            .exercise-placeholder {
-                height: 180px;
-            }
-
-            .exercise-placeholder {
-                font-size: 52px;
-            }
-
-            .exercise-name {
-                font-size: 14px;
-            }
-
-            .exercise-details {
-                font-size: 11px;
-            }
-
-            .exercise-info {
-                padding: 14px;
-            }
-
-            .favorite-icon {
-                width: 42px;
-                height: 42px;
-                top: 12px;
-                right: 12px;
-            }
-
-            .favorite-icon span {
-                font-size: 22px;
-            }
+            .page-header { padding: 14px 20px; }
+            .page-title { font-size: 18px; }
+            .back-btn, .action-btn { width: 44px; height: 44px; font-size: 22px; }
+            .search-bar { padding: 18px 20px; top: 68px; }
+            #searchInput { padding: 14px 22px; font-size: 15px; }
+            .exercises-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 18px; padding: 18px 20px 110px 20px; }
+            .exercise-image, .exercise-placeholder { height: 180px; }
+            .exercise-placeholder { font-size: 52px; }
         }
-
-        /* ===== RESPONSIVE - DESKTOP ===== */
         @media (min-width: 768px) {
-            .page-header {
-                padding: 16px 24px;
-            }
-
-            .page-title {
-                font-size: 20px;
-                letter-spacing: 4px;
-            }
-
-            .back-btn, .action-btn {
-                width: 48px;
-                height: 48px;
-                font-size: 24px;
-            }
-
-            .search-bar {
-                padding: 20px 24px;
-                top: 72px;
-            }
-
-            #searchInput {
-                padding: 16px 24px;
-                font-size: 16px;
-                border-radius: 30px;
-            }
-
-            .exercises-grid {
-                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-                gap: 20px;
-                padding: 20px 24px 120px 24px;
-            }
-
-            .exercise-image,
-            .exercise-placeholder {
-                height: 200px;
-            }
-
-            .exercise-placeholder {
-                font-size: 56px;
-            }
-
-            .exercise-name {
-                font-size: 15px;
-            }
-
-            .exercise-details {
-                font-size: 12px;
-            }
-
-            .exercise-info {
-                padding: 16px;
-            }
-
-            .favorite-icon {
-                width: 45px;
-                height: 45px;
-                top: 14px;
-                right: 14px;
-            }
-
-            .favorite-icon span {
-                font-size: 24px;
-            }
-
-            .modal-title {
-                font-size: 18px;
-            }
-
-            .save-option {
-                padding: 18px 20px;
-            }
-
-            .save-option-icon {
-                width: 50px;
-                height: 50px;
-                font-size: 24px;
-            }
-
-            .save-option-title {
-                font-size: 16px;
-            }
-
-            .save-option-desc {
-                font-size: 13px;
-            }
+            .page-header { padding: 16px 24px; }
+            .page-title { font-size: 20px; letter-spacing: 4px; }
+            .back-btn, .action-btn { width: 48px; height: 48px; font-size: 24px; }
+            .search-bar { padding: 20px 24px; top: 72px; }
+            #searchInput { padding: 16px 24px; font-size: 16px; }
+            .exercises-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; padding: 20px 24px 120px 24px; }
+            .exercise-image, .exercise-placeholder { height: 200px; }
+            .exercise-placeholder { font-size: 56px; }
         }
-
-        /* GPU Acceleration */
-        .exercise-card,
-        .favorite-icon,
-        .exercise-image,
-        .exercise-placeholder {
-            will-change: transform;
-        }
-
-        /* Reduced motion */
         @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
+            *, *::before, *::after {
                 animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
             }
         }
@@ -881,50 +619,41 @@
 {% block content %}
     <!-- Compact Header -->
     <div class="page-header">
-        <button class="back-btn" onclick="history.back()">‹</button>
+        <button class="back-btn" onclick="history.back()">←</button>
         <h1 class="page-title">{{ body_part.name }}</h1>
-        <button class="action-btn">⭐</button>
+        <button class="action-btn">⚙️</button>
     </div>
-
     <div class="search-bar">
-        <input type="text" placeholder="🔍 Search exercises..." id="searchInput">
+        <input type="text" placeholder="🔎 Search exercises..." id="searchInput">
     </div>
-
     <div class="container">
         {% if exercises %}
             <div class="exercises-grid">
                 {% for exercise in exercises %}
                     <a href="{% url 'exercise_detail' exercise.id %}" class="exercise-card" id="card-{{ exercise.id }}">
-
                         <div class="favorite-icon {% if exercise.is_favorited %}favorited{% endif %}"
                              data-exercise-id="{{ exercise.id }}">
-    <span>
-        {% if exercise.is_favorited %}★{% else %}⭐{% endif %}
-    </span>
+                            <span>{% if exercise.is_favorited %}❤️{% else %}🤍{% endif %}</span>
                         </div>
-
                         {% if exercise.thumbnail %}
                             <img src="{{ exercise.thumbnail.url }}" alt="{{ exercise.name }}" class="exercise-image">
                         {% else %}
                             <div class="exercise-placeholder">💪</div>
                         {% endif %}
-
                         <div class="exercise-info">
                             <h3 class="exercise-name">
                                 {{ exercise.name }}
                                 <span class="exercise-details">
-                                        • {{ exercise.calory }} kcal
-                                        • {{ exercise.duration }} min
-                                    </span>
+                                    🔥 {{ exercise.calory }} kcal • ⏱️ {{ exercise.duration }} min
+                                </span>
                             </h3>
                         </div>
-
                     </a>
                 {% endfor %}
             </div>
         {% else %}
             <div class="empty-state">
-                <div class="icon">😔</div>
+                <div class="icon">🏋️</div>
                 <h3>Hali mashqlar qo'shilmagan</h3>
             </div>
         {% endif %}
@@ -932,32 +661,31 @@
 
     <!-- Save Options Modal -->
     <div class="save-options-modal" id="saveOptionsModal">
-    <div class="save-options-content">
-    <div class="modal-handle"></div>
-    <h3 class="modal-title">📁 Qayerga saqlaysiz?</h3>
-
-    <div class="save-options-list">
-    <!-- Oddiy saqlash -->
-    <div class="save-option" onclick="saveToDefault()">
-        <div class="save-option-icon">⭐</div>
-        <div class="save-option-info">
-            <div class="save-option-title">Oddiy saqlash</div>
-            <div class="save-option-desc">Sevimlilarga qo'shish</div>
-        </div>
-    </div>
-
-    <!-- Mavjud to'plamga -->
-    <div class="save-option" onclick="showCollections()">
-        <div class="save-option-icon">📂</div>
-        <div class="save-option-info">
-            <div class="save-option-title">Mavjud to'plamga</div>
-            <div class="save-option-desc">To'plamlardan birini tanlang</div>
-        </div>
-    </div>
-    <div class="save-option" onclick="createCollection()">
-        <div class="save-option-icon">➕</div>
-        <div class="save-option-info">
-            <div class="save-option-title">Yangi to'plam</div>
+        <div class="save-options-content">
+            <div class="modal-handle"></div>
+            <h3 class="modal-title">📍 Qayerga saqlaysiz?</h3>
+            <div class="save-options-list">
+                <div class="save-option" onclick="saveToDefault(event)">
+                    <div class="save-option-icon">🤍</div>
+                    <div class="save-option-info">
+                        <div class="save-option-title">Oddiy saqlash</div>
+                        <div class="save-option-desc">Sevimlilarga qo'shish</div>
+                    </div>
+                </div>
+                <div class="save-option" onclick="showCollections(event)">
+                    <div class="save-option-icon">📂</div>
+                    <div class="save-option-info">
+                        <div class="save-option-title">Mavjud to'plamga</div>
+                        <div class="save-option-desc">To'plamlardan birini tanlang</div>
+                    </div>
+                </div>
+                <div class="save-option" onclick="createCollection(event)">
+                    <div class="save-option-icon">➕</div>
+                    <div class="save-option-info">
+                        <div class="save-option-title">Yangi to'plam</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -968,396 +696,342 @@
                 <h3 class="collections-title">📂 To'plamlar</h3>
                 <button class="collections-close-btn" onclick="closeCollectionsModal()">×</button>
             </div>
-
             <div class="collections-body" id="collectionsBody">
-                <!-- Django template bilan to'plamlar -->
-                {% if user_collections %}
-                    {% for collection in user_collections %}
-                        <div class="collection-item" onclick="saveToCollection({{ collection.id }})">
-                            <div class="collection-item-name">{{ collection.name }}</div>
-                            <div class="collection-item-count">{{ collection.exercise_count|default:'0' }} ta mashq
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="empty-state">
-                        <div class="icon" style="font-size: 50px;">📁</div>
-                        <h3 style="font-size: 16px; color: #95a5a6;">To'plamlar yo'q</h3>
-                        <p style="font-size: 13px; color: #7f8c8d; margin-top: 8px;">Yangi to'plam yarating</p>
-                    </div>
-                {% endif %}
+                <!-- To'plamlar JS orqali yuklanadi -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Collection Modal -->
+    <div class="collection-create-modal" id="createCollectionModal">
+        <div class="modal-content">
+            <h3 class="modal-title">🆕 Yangi to'plam yaratish</h3>
+            <input type="text" id="newCollectionName" placeholder="To'plam nomi..." maxlength="50" class="collection-input">
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="closeCreateCollectionModal()">Bekor qilish</button>
+                <button class="btn-save" onclick="submitCreateCollection()">Saqlash</button>
             </div>
         </div>
     </div>
 {% endblock %}
 
 {% block extra_js %}
-    <script>
-        // ==========================
-        // CSRF TOKEN FUNCTION
-        // ==========================
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
+<script>
+    // ==========================
+    // HELPERS
+    // ==========================
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
                 }
             }
-            return cookieValue;
         }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
 
-        const csrftoken = getCookie('csrftoken');
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
 
-        // ==========================
-        // FAVORITE STATE TRACKER
-        // ==========================
-        // Har bir exercise ning holatini saqlaymiz
-        const exerciseFavoriteState = {};
+    // ==========================
+    // STATE
+    // ==========================
+    const exerciseFavoriteState = {};
+    let currentExerciseId = null;
 
-        // ==========================
-        // INITIALIZE FAVORITE STATES
-        // ==========================
-        document.addEventListener('DOMContentLoaded', function () {
-            // Barcha favorite iconlarni topamiz va holatini saqlaymiz
-            document.querySelectorAll('.favorite-icon').forEach(icon => {
-                const exerciseId = icon.getAttribute('data-exercise-id');
-                const isFavorited = icon.classList.contains('favorited');
-                exerciseFavoriteState[exerciseId] = isFavorited;
-
-                // Event listener qo'shamiz
-                icon.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleFavoriteClick(exerciseId);
-                });
+    // ==========================
+    // DOM READY
+    // ==========================
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.favorite-icon').forEach(icon => {
+            const exerciseId = icon.getAttribute('data-exercise-id');
+            const isFavorited = icon.classList.contains('favorited');
+            exerciseFavoriteState[exerciseId] = isFavorited;
+            icon.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                handleFavoriteClick(exerciseId);
             });
         });
 
-        // ==========================
-        // HANDLE FAVORITE CLICK
-        // ==========================
-        function handleFavoriteClick(exerciseId) {
-            const isFavorited = exerciseFavoriteState[exerciseId];
+        // Modal click outside
+        document.getElementById('saveOptionsModal').addEventListener('click', e => {
+            if (e.target === e.currentTarget) closeSaveOptions();
+        });
+        document.getElementById('collectionsModal').addEventListener('click', e => {
+            if (e.target === e.currentTarget) closeCollectionsModal();
+        });
+    });
 
-            // Agar favorited bo'lsa - o'chiramiz
+    // ==========================
+    // FAVORITE LOGIC
+    // ==========================
+    function handleFavoriteClick(exerciseId) {
+        const isFavorited = exerciseFavoriteState[exerciseId];
+        if (isFavorited) {
+            removeFromFavorites(exerciseId);
+        } else {
+            openSaveOptionsModal(exerciseId);
+        }
+    }
+
+    function openSaveOptionsModal(exerciseId) {
+        currentExerciseId = exerciseId;
+        document.getElementById('saveOptionsModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSaveOptions() {
+        document.getElementById('saveOptionsModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function saveToDefault(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        const url = `/en/exercises/favorite/toggle/${currentExerciseId}/`;
+        fetch(url, {
+            method: 'POST',
+            headers: { 'X-CSRFToken': csrftoken, 'Content-Type': 'application/json' },
+            body: JSON.stringify({})
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === 'success' || data.status === 'added') {
+                updateFavoriteState(currentExerciseId, true);
+                closeSaveOptions();
+                showSuccessMessage('❤️ Sevimlilarga qo‘shildi!');
+            } else throw new Error(data.error || 'Server xatosi');
+        })
+        .catch(err => {
+            console.error('Save default error:', err);
+            alert('Xatolik yuz berdi!');
+        });
+    }
+
+    function removeFromFavorites(exerciseId) {
+        const url = `/en/exercises/favorite/toggle/${exerciseId}/`;
+        fetch(url, {
+            method: 'POST',
+            headers: { 'X-CSRFToken': csrftoken, 'Content-Type': 'application/json' },
+            body: JSON.stringify({})
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === 'success' || data.status === 'removed') {
+                updateFavoriteState(exerciseId, false);
+                showSuccessMessage('🤍 Sevimlilardan o‘chirildi!');
+            } else throw new Error(data.error);
+        })
+        .catch(err => {
+            console.error('Remove favorite error:', err);
+            alert('Xatolik yuz berdi!');
+        });
+    }
+
+    function updateFavoriteState(exerciseId, isFavorited) {
+        exerciseFavoriteState[exerciseId] = isFavorited;
+        const favIcon = document.querySelector(`[data-exercise-id="${exerciseId}"]`);
+        if (favIcon) {
+            const span = favIcon.querySelector('span');
             if (isFavorited) {
-                removeFromFavorites(exerciseId);
+                favIcon.classList.add('favorited');
+                if (span) span.textContent = '❤️';
             } else {
-                // Agar favorited bo'lmasa - modal ochib qo'shamiz
-                openSaveOptionsModal(exerciseId);
+                favIcon.classList.remove('favorited');
+                if (span) span.textContent = '🤍';
             }
         }
+    }
 
-        // ==========================
-        // OPEN SAVE OPTIONS MODAL
-        // ==========================
-        function openSaveOptionsModal(exerciseId) {
-            window.currentExerciseId = exerciseId;
-            document.getElementById('saveOptionsModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
+    // ==========================
+    // COLLECTIONS
+    // ==========================
+    function showCollections(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
         }
+        closeSaveOptions();
+        const modal = document.getElementById('collectionsModal');
+        const body = document.getElementById('collectionsBody');
+        modal.classList.add('active');
 
-        function closeSaveOptions() {
-            document.getElementById('saveOptionsModal').classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        // ==========================
-        // SAVE TO DEFAULT FAVORITES
-        // ==========================
-        function saveToDefault(event) {
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-
-            const exerciseId = window.currentExerciseId;
-            const url = `/en/exercises/favorite/toggle/${exerciseId}/`;
-
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrftoken,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({})
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success' || data.status === 'added') {
-                        updateFavoriteState(exerciseId, true);
-                        closeSaveOptions();
-                        showSuccessMessage('✓ Sevimlilarga qo\'shildi!');
-                    } else {
-                        console.error('Server error:', data);
-                        alert('Xatolik yuz berdi!');
-                    }
-                })
-                .catch(err => {
-                    console.error('Fetch error:', err);
-                    alert('Xatolik yuz berdi!');
-                });
-        }
-
-        // ==========================
-        // REMOVE FROM FAVORITES
-        // ==========================
-        function removeFromFavorites(exerciseId) {
-            const url = `/en/exercises/favorite/toggle/${exerciseId}/`;
-
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrftoken,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({})
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success' || data.status === 'removed') {
-                        updateFavoriteState(exerciseId, false);
-                        showSuccessMessage('✓ Sevimlilardan o\'chirildi!');
-                    } else {
-                        console.error('Server error:', data);
-                        alert('Xatolik yuz berdi!');
-                    }
-                })
-                .catch(err => {
-                    console.error('Fetch error:', err);
-                    alert('Xatolik yuz berdi!');
-                });
-        }
-
-        // ==========================
-        // UPDATE FAVORITE STATE
-        // ==========================
-        function updateFavoriteState(exerciseId, isFavorited) {
-            // State ni yangilaymiz
-            exerciseFavoriteState[exerciseId] = isFavorited;
-
-            // UI ni yangilaymiz
-            const favIcon = document.querySelector(`[data-exercise-id="${exerciseId}"]`);
-            if (favIcon) {
-                const iconSpan = favIcon.querySelector('span');
-
-                if (isFavorited) {
-                    favIcon.classList.add('favorited');
-                    if (iconSpan) iconSpan.textContent = '★';
+        // Har doim AJAX orqali yangilaymiz
+        fetch('/en/favorites/collections/api/', {
+            headers: { 'X-CSRFToken': csrftoken }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && Array.isArray(data.collections)) {
+                if (data.collections.length > 0) {
+                    body.innerHTML = data.collections.map(col => `
+                        <div class="collection-item" onclick="saveToCollection(${col.id}, event)">
+                            <div class="collection-item-name">${escapeHtml(col.name)}</div>
+                            <div class="collection-item-count">${col.exercise_count || 0} ta mashq</div>
+                        </div>
+                    `).join('');
                 } else {
-                    favIcon.classList.remove('favorited');
-                    if (iconSpan) iconSpan.textContent = '⭐';
+                    body.innerHTML = `
+                        <div class="empty-state">
+                            <div class="icon" style="font-size: 50px;">📂</div>
+                            <h3 style="font-size: 16px; color: #95a5a6;">To'plamlar yo'q</h3>
+                            <p style="font-size: 13px; color: #7f8c8d; margin-top: 8px;">Yangi to'plam yarating</p>
+                        </div>`;
                 }
-            }
+            } else throw new Error('To‘plamlar yuklanmadi');
+        })
+        .catch(err => {
+            console.error('Collections fetch error:', err);
+            body.innerHTML = `<div class="empty-state"><p style="color:#fff">Xatolik: yuklanmadi</p></div>`;
+        });
+    }
+
+    function closeCollectionsModal() {
+        document.getElementById('collectionsModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function saveToCollection(collectionId, event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        const url = `/en/favorites/collection/${collectionId}/toggle/`;
+        fetch(url, {
+            method: 'POST',
+            headers: { 'X-CSRFToken': csrftoken, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ exercise_id: currentExerciseId })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                updateFavoriteState(currentExerciseId, true);
+                closeCollectionsModal();
+                showSuccessMessage('✅ To‘plamga qo‘shildi!');
+            } else throw new Error(data.error || 'Noma’lum xato');
+        })
+        .catch(err => {
+            console.error('Save to collection error:', err);
+            alert('Xatolik yuz berdi!');
+        });
+    }
+
+    // ==========================
+    // CREATE COLLECTION (MODAL)
+    // ==========================
+    function createCollection(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        closeSaveOptions();
+        document.getElementById('newCollectionName').value = '';
+        document.getElementById('createCollectionModal').style.display = 'flex';
+    }
+
+    function closeCreateCollectionModal() {
+        document.getElementById('createCollectionModal').style.display = 'none';
+    }
+
+    function submitCreateCollection() {
+        const input = document.getElementById('newCollectionName');
+        const name = input.value.trim();
+        if (!name) {
+            input.style.borderColor = '#e74c3c';
+            setTimeout(() => input.style.borderColor = '', 500);
+            return;
         }
 
-        // ==========================
-        // COLLECTIONS
-        // ==========================
-        function showCollections(event) {
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
+        fetch('/en/collection/', {
+            method: 'POST',
+            headers: { 'X-CSRFToken': csrftoken, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: name, exercise_id: currentExerciseId })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                showSuccessMessage('🆕 Yangi to‘plam yaratildi!');
+                updateFavoriteState(currentExerciseId, true);
 
-            closeSaveOptions();
-            document.getElementById('collectionsModal').classList.add('active');
+                // Collections modal ochiq bo‘lsa, yangi element qo‘shamiz
+                const modal = document.getElementById('collectionsModal');
+                if (modal.classList.contains('active')) {
+                    const body = document.getElementById('collectionsBody');
+                    const empty = body.querySelector('.empty-state');
+                    if (empty) empty.remove();
+                    const newItem = document.createElement('div');
+                    newItem.className = 'collection-item';
+                    newItem.onclick = (e) => saveToCollection(data.collection_id, e);
+                    newItem.innerHTML = `
+                        <div class="collection-item-name">${escapeHtml(name)}</div>
+                        <div class="collection-item-count">1 ta mashq</div>
+                    `;
+                    body.prepend(newItem);
+                }
+                closeCreateCollectionModal();
+            } else throw new Error(data.error);
+        })
+        .catch(err => {
+            console.error('Create collection error:', err);
+            alert('Xatolik yuz berdi!');
+        });
+    }
+
+    // ==========================
+    // MISC
+    // ==========================
+    function showSuccessMessage(text) {
+        const toast = document.createElement('div');
+        toast.textContent = text;
+        toast.style.cssText = `
+            position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white; padding: 14px 28px; border-radius: 50px;
+            font-weight: 700; font-size: 14px; z-index: 99999;
+            box-shadow: 0 8px 32px rgba(76,175,80,0.4);
+            animation: toastSlideIn 0.3s ease;
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.style.animation = 'toastSlideOut 0.3s ease';
+            setTimeout(() => toast.remove(), 300);
+        }, 2000);
+    }
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes toastSlideIn {
+            from { opacity:0; transform: translateX(-50%) translateY(20px); }
+            to { opacity:1; transform: translateX(-50%) translateY(0); }
         }
-
-        function closeCollectionsModal() {
-            document.getElementById('collectionsModal').classList.remove('active');
-            document.body.style.overflow = '';
+        @keyframes toastSlideOut {
+            from { opacity:1; transform: translateX(-50%) translateY(0); }
+            to { opacity:0; transform: translateX(-50%) translateY(-20px); }
         }
-
-        function saveToCollection(collectionId, event) {
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-
-            const exerciseId = window.currentExerciseId;
-            const url = `/en/favorites/collection/${collectionId}/toggle/`;
-
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrftoken,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    exercise_id: exerciseId
-                })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Serverdan kelgan data:", data);
-                    if (data.success) {
-                        updateFavoriteState(exerciseId, true);
-                        closeCollectionsModal();
-                        showSuccessMessage('✓ To\'plamga qo\'shildi!');
-                    } else {
-                        alert('Xato: ' + (data.error || 'Noma\'lum xato'));
-                    }
-                })
-                .catch(err => {
-                    console.error('Error:', err);
-                    alert('Xatolik yuz berdi!');
-                });
-        }
-
-        function createCollection(event) {
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-
-            closeSaveOptions();
-            const collectionName = prompt('To\'plam nomini kiriting:');
-
-            if (!collectionName || !collectionName.trim()) {
-                return;
-            }
-
-            const exerciseId = window.currentExerciseId;
-            const url = '/en/collection/';
-
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrftoken,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: collectionName.trim(),
-                    exercise_id: exerciseId
-                })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showSuccessMessage('✓ Yangi to\'plam yaratildi!');
-                        updateFavoriteState(exerciseId, true);
-
-                        // Collections list ni yangilaymiz
-                        const collectionsBody = document.getElementById('collectionsBody');
-                        if (collectionsBody) {
-                            const emptyState = collectionsBody.querySelector('.empty-state');
-                            if (emptyState) emptyState.remove();
-
-                            const newItem = document.createElement('div');
-                            newItem.className = 'collection-item';
-                            newItem.onclick = (e) => saveToCollection(data.collection_id, e);
-                            newItem.innerHTML = `
-                    <div class="collection-item-name">${collectionName}</div>
-                    <div class="collection-item-count">1 ta mashq</div>
-                `;
-                            collectionsBody.prepend(newItem);
-                        }
-                    } else {
-                        alert('Xatolik: ' + (data.error || 'Noma\'lum xato'));
-                    }
-                })
-                .catch(err => {
-                    console.error('Error:', err);
-                    alert('Xatolik yuz berdi!');
-                });
-        }
-
-        // ==========================
-        // SUCCESS MESSAGE
-        // ==========================
-        function showSuccessMessage(message) {
-            const toast = document.createElement('div');
-            toast.style.cssText = `
-        position: fixed;
-        bottom: 100px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
-        color: white;
-        padding: 14px 28px;
-        border-radius: 50px;
-        font-weight: 700;
-        font-size: 14px;
-        z-index: 99999;
-        box-shadow: 0 8px 32px rgba(76, 175, 80, 0.4);
-        animation: toastSlideIn 0.3s ease;
     `;
-            toast.textContent = message;
-            document.body.appendChild(toast);
+    document.head.appendChild(style);
 
-            setTimeout(() => {
-                toast.style.animation = 'toastSlideOut 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }, 2000);
-        }
-
-        // Toast animations
-        const style = document.createElement('style');
-        style.textContent = `
-    @keyframes toastSlideIn {
-        from {
-            opacity: 0;
-            transform: translateX(-50%) translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-    }
-    @keyframes toastSlideOut {
-        from {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-        to {
-            opacity: 0;
-            transform: translateX(-50%) translateY(-20px);
-        }
-    }
-`;
-        document.head.appendChild(style);
-
-        // ==========================
-        // SEARCH FILTER
-        // ==========================
-        document.addEventListener('DOMContentLoaded', function () {
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput) {
-                searchInput.addEventListener('input', function (e) {
-                    const searchTerm = e.target.value.toLowerCase();
-                    const cards = document.querySelectorAll('.exercise-card');
-
-                    cards.forEach(card => {
-                        const name = card.querySelector('.exercise-name').textContent.toLowerCase();
-                        card.style.display = name.includes(searchTerm) ? 'block' : 'none';
-                    });
-                });
-            }
+    // Search
+    document.addEventListener('DOMContentLoaded', () => {
+        const input = document.getElementById('searchInput');
+        input?.addEventListener('input', e => {
+            const term = e.target.value.toLowerCase().trim();
+            document.querySelectorAll('.exercise-card').forEach(card => {
+                const name = card.querySelector('.exercise-name').textContent.toLowerCase();
+                card.style.display = name.includes(term) ? 'block' : 'none';
+            });
         });
-
-        // ==========================
-        // MODAL OUTSIDE CLICK
-        // ==========================
-        document.addEventListener('DOMContentLoaded', function () {
-            const saveModal = document.getElementById('saveOptionsModal');
-            if (saveModal) {
-                saveModal.addEventListener('click', function (e) {
-                    if (e.target === e.currentTarget) closeSaveOptions();
-                });
-            }
-
-            const collectionsModal = document.getElementById('collectionsModal');
-            if (collectionsModal) {
-                collectionsModal.addEventListener('click', function (e) {
-                    if (e.target === e.currentTarget) closeCollectionsModal();
-                });
-            }
-        });
-    </script>
+    });
+</script>
 {% endblock %}
