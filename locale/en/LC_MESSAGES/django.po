@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-11 17:28+0500\n"
+"POT-Creation-Date: 2025-12-11 17:56+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,8 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: apps/forms.py:42
-msgid "Tilni tanlang"
+#: apps/forms.py:42 templates/users/language.html:426
+msgid "Select language"
 msgstr ""
 
 #: apps/models/analytics.py:8
@@ -139,11 +139,11 @@ msgid "ExerciseInstructions"
 msgstr ""
 
 #: apps/models/favorites.py:33
-msgid "Sevimli"
+msgid "Favorite"
 msgstr ""
 
 #: apps/models/favorites.py:34
-msgid "Sevimlilar"
+msgid "Favorites"
 msgstr ""
 
 #: apps/models/payments.py:61 apps/models/payments.py:100
@@ -199,11 +199,11 @@ msgid "Completed Date"
 msgstr ""
 
 #: apps/models/payments.py:112
-msgid "To'lov"
+msgid "Payment"
 msgstr ""
 
 #: apps/models/payments.py:113
-msgid "To'lovlar"
+msgid "Payments"
 msgstr ""
 
 #: apps/models/workouts.py:43
@@ -211,11 +211,11 @@ msgid "Premium"
 msgstr ""
 
 #: apps/views/users.py:305
-msgid "Til muvaffaqiyatli saqlandi!"
+msgid "Language saved successfully!"
 msgstr ""
 
 #: apps/views/users.py:313
-msgid "Tanlangan til kodi noto'g'ri."
+msgid "Selected language doesn't exist."
 msgstr ""
 
 #: templates/base.html:441
@@ -238,24 +238,96 @@ msgstr ""
 msgid "💪 EXERCISES"
 msgstr ""
 
+#: templates/exercises/body_parts.html:548
+msgid "Shoulders"
+msgstr ""
+
+#: templates/exercises/body_parts.html:556
+msgid "Chest"
+msgstr ""
+
+#: templates/exercises/body_parts.html:564
+msgid "Biceps"
+msgstr ""
+
+#: templates/exercises/body_parts.html:572
+msgid "Forearm"
+msgstr ""
+
+#: templates/exercises/body_parts.html:580
+msgid "Abs"
+msgstr ""
+
+#: templates/exercises/body_parts.html:588
+msgid "Obliques"
+msgstr ""
+
+#: templates/exercises/body_parts.html:596
+msgid "Abductors"
+msgstr ""
+
+#: templates/exercises/body_parts.html:604
+msgid "Quads"
+msgstr ""
+
+#: templates/exercises/body_parts.html:612
+msgid "Adductors"
+msgstr ""
+
+#: templates/exercises/body_parts.html:631
+msgid "Traps"
+msgstr ""
+
+#: templates/exercises/body_parts.html:639
+msgid "Triceps"
+msgstr ""
+
+#: templates/exercises/body_parts.html:647
+msgid "Lats"
+msgstr ""
+
+#: templates/exercises/body_parts.html:655
+msgid "Lower back"
+msgstr ""
+
+#: templates/exercises/body_parts.html:663
+msgid "Glutes"
+msgstr ""
+
+#: templates/exercises/body_parts.html:671
+msgid "Hamstrings"
+msgstr ""
+
+#: templates/exercises/body_parts.html:679
+msgid "Calves"
+msgstr ""
+
 #: templates/users/language.html:8
-msgid "Til sozlamalari"
-msgstr "Language Settings"
+msgid "Language settings"
+msgstr ""
 
 #: templates/users/language.html:414
-msgid "TIL SOZLAMALARI"
-msgstr "Language Settings"
-
-#: templates/users/language.html:426
-msgid "Til tanlang"
-msgstr "Choose the language"
+msgid "LANGUAGE SETTINGS"
+msgstr ""
 
 #: templates/users/language.html:429
 msgid ""
-"Ilovada qaysi tildan foydalanmoqchisiz? Tanlangan tilingiz butun ilova "
-"bo'ylab qo'llaniladi."
+"Which language do you want to use in the app? Your chosen language is "
+"optional throughout the app."
 msgstr ""
 
 #: templates/users/language.html:452
-msgid "Saqlash"
-msgstr "Save"
+msgid "Save"
+msgstr ""
+
+#~ msgid "Til sozlamalari"
+#~ msgstr "Language Settings"
+
+#~ msgid "TIL SOZLAMALARI"
+#~ msgstr "Language Settings"
+
+#~ msgid "Til tanlang"
+#~ msgstr "Choose the language"
+
+#~ msgid "Saqlash"
+#~ msgstr "Save"

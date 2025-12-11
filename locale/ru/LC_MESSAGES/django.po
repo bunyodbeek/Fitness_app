@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-11 17:28+0500\n"
+"POT-Creation-Date: 2025-12-11 17:56+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,244 +20,309 @@ msgstr ""
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: apps/forms.py:42
-msgid "Tilni tanlang"
-msgstr ""
+#: apps/forms.py:42 templates/users/language.html:426
+msgid "Select language"
+msgstr "Выберите язык"
 
 #: apps/models/analytics.py:8
 msgid "Bot Started"
-msgstr ""
+msgstr "Бот запущен"
 
 #: apps/models/analytics.py:9
 msgid "Onboarding Completed"
-msgstr ""
+msgstr "Онбординг завершён"
 
 #: apps/models/analytics.py:10
 msgid "Workout Started"
-msgstr ""
+msgstr "Тренировка начата"
 
 #: apps/models/analytics.py:11
 msgid "Workout Completed"
-msgstr ""
+msgstr "Тренировка завершена"
 
 #: apps/models/analytics.py:12
 msgid "Exercise Viewed"
-msgstr ""
+msgstr "Упражнение просмотрено"
 
 #: apps/models/analytics.py:13
 msgid "Exercise Favourited"
-msgstr ""
+msgstr "Упражнение добавлено в избранное"
 
 #: apps/models/analytics.py:14
 msgid "Subscription Viewed"
-msgstr ""
+msgstr "Просмотрена подписка"
 
 #: apps/models/analytics.py:15
 msgid "Payment Completed"
-msgstr ""
+msgstr "Платёж завершён"
 
 #: apps/models/analytics.py:23
 msgid "UserActivity"
-msgstr ""
+msgstr "Активность пользователя"
 
 #: apps/models/analytics.py:24
 msgid "UserActivities"
-msgstr ""
+msgstr "Активности пользователей"
 
 #: apps/models/exercises.py:49
 msgid "Beginner"
-msgstr ""
+msgstr "Начальный уровень"
 
 #: apps/models/exercises.py:50
 msgid "Intermediate"
-msgstr ""
+msgstr "Средний уровень"
 
 #: apps/models/exercises.py:51
 msgid "Advanced"
-msgstr ""
+msgstr "Продвинутый уровень"
 
 #: apps/models/exercises.py:53
 msgid "Name"
-msgstr ""
+msgstr "Название"
 
 #: apps/models/exercises.py:54
 msgid "Uzbek Name"
-msgstr ""
+msgstr "Название на узбекском"
 
 #: apps/models/exercises.py:55
 msgid "Muscle Group"
-msgstr ""
+msgstr "Мышечная группа"
 
 #: apps/models/exercises.py:56
 msgid "Secondary Muscle"
-msgstr ""
+msgstr "Дополнительная мышца"
 
 #: apps/models/exercises.py:57
 msgid "Description"
-msgstr ""
+msgstr "Описание"
 
 #: apps/models/exercises.py:58
 msgid "Image"
-msgstr ""
+msgstr "Изображение"
 
 #: apps/models/exercises.py:60
 msgid "Difficulty"
-msgstr ""
+msgstr "Сложность"
 
 #: apps/models/exercises.py:61
 msgid "Calories"
-msgstr ""
+msgstr "Калории"
 
 #: apps/models/exercises.py:62
 msgid "Duration"
-msgstr ""
+msgstr "Длительность"
 
 #: apps/models/exercises.py:66 apps/models/exercises.py:150
 msgid "Exercise"
-msgstr ""
+msgstr "Упражнение"
 
 #: apps/models/exercises.py:67 templates/base.html:437
 msgid "Exercises"
-msgstr ""
+msgstr "Упражнения"
 
 #: apps/models/exercises.py:151
 msgid "Stem Number"
-msgstr ""
+msgstr "Номер шага"
 
 #: apps/models/exercises.py:152
 msgid "Text"
-msgstr ""
+msgstr "Текст"
 
 #: apps/models/exercises.py:153
 msgid "Uzbek Text"
-msgstr ""
+msgstr "Текст на узбекском"
 
 #: apps/models/exercises.py:158
 msgid "ExerciseInstruction"
-msgstr ""
+msgstr "Инструкция упражнения"
 
 #: apps/models/exercises.py:159
 msgid "ExerciseInstructions"
-msgstr ""
+msgstr "Инструкции упражнений"
 
 #: apps/models/favorites.py:33
-msgid "Sevimli"
-msgstr ""
+msgid "Favorite"
+msgstr "Избранное"
 
 #: apps/models/favorites.py:34
-msgid "Sevimlilar"
-msgstr ""
+msgid "Favorites"
+msgstr "Избранные"
 
 #: apps/models/payments.py:61 apps/models/payments.py:100
 msgid "User"
-msgstr ""
+msgstr "Пользователь"
 
 #: apps/models/payments.py:63
 msgid "Start Date"
-msgstr ""
+msgstr "Дата начала"
 
 #: apps/models/payments.py:64
 msgid "End Date"
-msgstr ""
+msgstr "Дата окончания"
 
 #: apps/models/payments.py:65
 msgid "Is Active"
-msgstr ""
+msgstr "Активна"
 
 #: apps/models/payments.py:85 apps/models/payments.py:102
 msgid "Subscription"
-msgstr ""
+msgstr "Подписка"
 
 #: apps/models/payments.py:86
 msgid "Subscriptions"
-msgstr ""
+msgstr "Подписки"
 
 #: apps/models/payments.py:103
 msgid "Status"
-msgstr ""
+msgstr "Статус"
 
 #: apps/models/payments.py:104
 msgid "Click Transaction ID"
-msgstr ""
+msgstr "Click ID транзакции"
 
 #: apps/models/payments.py:105
 msgid "Merchant Transaction ID"
-msgstr ""
+msgstr "ID транзакции продавца"
 
 #: apps/models/payments.py:106
 msgid "Is Auto Payment"
-msgstr ""
+msgstr "Автоплатёж"
 
 #: apps/models/payments.py:107
 msgid "Automatic payment attempt"
-msgstr ""
+msgstr "Попытка автоматического платежа"
 
 #: apps/models/payments.py:108
 msgid "Additional Information"
-msgstr ""
+msgstr "Дополнительная информация"
 
 #: apps/models/payments.py:109
 msgid "Completed Date"
-msgstr ""
+msgstr "Дата завершения"
 
 #: apps/models/payments.py:112
-msgid "To'lov"
-msgstr ""
+msgid "Payment"
+msgstr "Платёж"
 
 #: apps/models/payments.py:113
-msgid "To'lovlar"
-msgstr ""
+msgid "Payments"
+msgstr "Платежи"
 
 #: apps/models/workouts.py:43
 msgid "Premium"
-msgstr ""
+msgstr "Премиум"
 
 #: apps/views/users.py:305
-msgid "Til muvaffaqiyatli saqlandi!"
-msgstr ""
+msgid "Language saved successfully!"
+msgstr "Язык успешно сохранён!"
 
 #: apps/views/users.py:313
-msgid "Tanlangan til kodi noto'g'ri."
-msgstr ""
+msgid "Selected language doesn't exist."
+msgstr "Выбранный язык не существует"
 
 #: templates/base.html:441
 msgid "Workouts"
-msgstr ""
+msgstr "Тренировки"
 
 #: templates/base.html:445
 msgid "My Trainer"
-msgstr ""
+msgstr "Мой тренер"
 
 #: templates/base.html:449
 msgid "Favourites"
-msgstr ""
+msgstr "Избранные"
 
 #: templates/base.html:453
 msgid "Profile"
-msgstr ""
+msgstr "Профиль"
 
 #: templates/exercises/body_parts.html:521
 msgid "💪 EXERCISES"
-msgstr ""
+msgstr "💪 УПРАЖНЕНИЯ"
+
+#: templates/exercises/body_parts.html:548
+msgid "Shoulders"
+msgstr "Плечи"
+
+#: templates/exercises/body_parts.html:556
+msgid "Chest"
+msgstr "Грудь"
+
+#: templates/exercises/body_parts.html:564
+msgid "Biceps"
+msgstr "Бицепс"
+
+#: templates/exercises/body_parts.html:572
+msgid "Forearm"
+msgstr "Предплечье"
+
+#: templates/exercises/body_parts.html:580
+msgid "Abs"
+msgstr "пресс"
+
+#: templates/exercises/body_parts.html:588
+msgid "Obliques"
+msgstr "Косые"
+
+#: templates/exercises/body_parts.html:596
+msgid "Abductors"
+msgstr "Похитители"
+
+#: templates/exercises/body_parts.html:604
+msgid "Quads"
+msgstr "Квадрицепсы"
+
+#: templates/exercises/body_parts.html:612
+msgid "Adductors"
+msgstr "Приводящие мышцы"
+
+#: templates/exercises/body_parts.html:631
+msgid "Traps"
+msgstr "Трапеции"
+
+#: templates/exercises/body_parts.html:639
+msgid "Triceps"
+msgstr "Трицепсы"
+
+#: templates/exercises/body_parts.html:647
+msgid "Lats"
+msgstr "Широчайшие мышцы спины"
+
+#: templates/exercises/body_parts.html:655
+msgid "Lower back"
+msgstr "Поясница"
+
+#: templates/exercises/body_parts.html:663
+msgid "Glutes"
+msgstr "Ягодичные мышцы"
+
+#: templates/exercises/body_parts.html:671
+msgid "Hamstrings"
+msgstr "Задняя поверхность бедра"
+
+#: templates/exercises/body_parts.html:679
+msgid "Calves"
+msgstr "Икроножные мышцы"
 
 #: templates/users/language.html:8
-msgid "Til sozlamalari"
-msgstr ""
+msgid "Language settings"
+msgstr "Настройки языка"
 
 #: templates/users/language.html:414
-msgid "TIL SOZLAMALARI"
-msgstr ""
-
-#: templates/users/language.html:426
-msgid "Til tanlang"
-msgstr ""
+msgid "LANGUAGE SETTINGS"
+msgstr "НАСТРОЙКИ ЯЗЫКА"
 
 #: templates/users/language.html:429
 msgid ""
-"Ilovada qaysi tildan foydalanmoqchisiz? Tanlangan tilingiz butun ilova "
-"bo'ylab qo'llaniladi."
+"Which language do you want to use in the app? Your chosen language is "
+"optional throughout the app."
 msgstr ""
+"Какой язык вы хотите использовать в приложении? Выбранный язык будет "
+"применён по всему приложению."
 
 #: templates/users/language.html:452
-msgid "Saqlash"
-msgstr ""
+msgid "Save"
+msgstr "Сохранить"
+
+#~ msgid "Til sozlamalari"
+#~ msgstr "Настройки языка"
