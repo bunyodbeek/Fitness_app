@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-11 17:56+0500\n"
+"POT-Creation-Date: 2025-12-11 18:36+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -106,7 +106,7 @@ msgstr ""
 msgid "Calories"
 msgstr ""
 
-#: apps/models/exercises.py:62
+#: apps/models/exercises.py:62 templates/workouts/workout_complete.html:120
 msgid "Duration"
 msgstr ""
 
@@ -318,6 +318,78 @@ msgstr ""
 
 #: templates/users/language.html:452
 msgid "Save"
+msgstr ""
+
+#: templates/workouts/edition_detail.html:540
+msgid "all exercises:"
+msgstr ""
+
+#: templates/workouts/edition_detail.html:561
+msgid "No exercises are included for this program."
+msgstr ""
+
+#: templates/workouts/edition_detail.html:570
+msgid "▶ Start Workout"
+msgstr ""
+
+#: templates/workouts/edition_list.html:742
+msgid "EDITIONS"
+msgstr ""
+
+#: templates/workouts/edition_list.html:782
+msgid "Tip:"
+msgstr ""
+
+#: templates/workouts/edition_list.html:782
+msgid "Complete each edition for 4-6 weeks before moving to the next"
+msgstr ""
+
+#: templates/workouts/edition_list.html:787
+msgid "Choose Your Edition"
+msgstr ""
+
+#: templates/workouts/edition_list.html:807
+msgid "No editions available"
+msgstr ""
+
+#: templates/workouts/edition_list.html:808
+msgid "Check back later for workout editions"
+msgstr ""
+
+#: templates/workouts/program_list.html:499
+msgid "WORKOUTS"
+msgstr ""
+
+#: templates/workouts/program_list.html:542
+msgid "No programs yet"
+msgstr ""
+
+#: templates/workouts/program_list.html:543
+msgid "New programs will be added soon"
+msgstr ""
+
+#: templates/workouts/workout_complete.html:105
+msgid "Workout Complete! 🎉"
+msgstr ""
+
+#: templates/workouts/workout_complete.html:107
+msgid "Great job! Successfully completed today's training"
+msgstr ""
+
+#: templates/workouts/workout_complete.html:112
+msgid "Workout"
+msgstr ""
+
+#: templates/workouts/workout_complete.html:116
+msgid "Sets  Done"
+msgstr ""
+
+#: templates/workouts/workout_complete.html:127
+msgid "Calories Burned"
+msgstr ""
+
+#: templates/workouts/workout_complete.html:131
+msgid "Completed"
 msgstr ""
 
 #~ msgid "Til sozlamalari"

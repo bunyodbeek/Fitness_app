@@ -2,6 +2,8 @@
 {% load static %}
 
 {% block title %}All Workouts{% endblock %}
+{% load i18n %}
+
 {% block extra_css %}
     <style>
         * {
@@ -494,7 +496,7 @@
 {% block content %}
     <!-- Compact Header -->
     <div class="page-header">
-        <h1 class="page-title">WORKOUTS</h1>
+        <h1 class="page-title">{% trans 'WORKOUTS' %}</h1>
     </div>
 
     <div class="container">
@@ -537,8 +539,8 @@
         {% else %}
             <div class="empty-state">
                 <div class="empty-state-icon">🏋️</div>
-                <h3>Hozircha dasturlar yo'q</h3>
-                <p>Tez orada yangi dasturlar qo'shiladi</p>
+                <h3>{% trans 'No programs yet' %}</h3>
+                <p>{% trans 'New programs will be added soon' %}</p>
             </div>
         {% endif %}
     </div>

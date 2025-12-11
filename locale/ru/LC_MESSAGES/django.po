@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-11 17:56+0500\n"
+"POT-Creation-Date: 2025-12-11 18:36+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -108,7 +108,7 @@ msgstr "Сложность"
 msgid "Calories"
 msgstr "Калории"
 
-#: apps/models/exercises.py:62
+#: apps/models/exercises.py:62 templates/workouts/workout_complete.html:120
 msgid "Duration"
 msgstr "Длительность"
 
@@ -323,6 +323,90 @@ msgstr ""
 #: templates/users/language.html:452
 msgid "Save"
 msgstr "Сохранить"
+
+#: templates/workouts/edition_detail.html:540
+#, fuzzy
+#| msgid "Exercises"
+msgid "all exercises:"
+msgstr "Упражнения"
+
+#: templates/workouts/edition_detail.html:561
+msgid "No exercises are included for this program."
+msgstr "В данную программу не включены никакие упражнения."
+
+#: templates/workouts/edition_detail.html:570
+msgid "▶ Start Workout"
+msgstr "▶ Начать тренировку"
+
+#: templates/workouts/edition_list.html:742
+msgid "EDITIONS"
+msgstr "ИЗДАНИЯ"
+
+#: templates/workouts/edition_list.html:782
+msgid "Tip:"
+msgstr ""
+
+#: templates/workouts/edition_list.html:782
+msgid "Complete each edition for 4-6 weeks before moving to the next"
+msgstr ""
+"Выполняйте каждое задание в течение 4-6 недель, прежде чем переходить к "
+"следующему."
+
+#: templates/workouts/edition_list.html:787
+msgid "Choose Your Edition"
+msgstr "Выберите свое издание"
+
+#: templates/workouts/edition_list.html:807
+msgid "No editions available"
+msgstr "Нет доступных выпусков"
+
+#: templates/workouts/edition_list.html:808
+msgid "Check back later for workout editions"
+msgstr "Загляните позже, чтобы посмотреть выпуски с тренировками."
+
+#: templates/workouts/program_list.html:499
+msgid "WORKOUTS"
+msgstr "Тренировки"
+
+#: templates/workouts/program_list.html:542
+msgid "No programs yet"
+msgstr "Пока нет программ"
+
+#: templates/workouts/program_list.html:543
+msgid "New programs will be added soon"
+msgstr "Вскоре будут добавлены новые программы"
+
+#: templates/workouts/workout_complete.html:105
+#, fuzzy
+#| msgid "Workout Completed"
+msgid "Workout Complete! 🎉"
+msgstr "Тренировка завершена"
+
+#: templates/workouts/workout_complete.html:107
+msgid "Great job! Successfully completed today's training"
+msgstr "Отличная работа! Сегодняшнее обучение успешно завершено."
+
+#: templates/workouts/workout_complete.html:112
+#, fuzzy
+#| msgid "Workouts"
+msgid "Workout"
+msgstr "Тренировки"
+
+#: templates/workouts/workout_complete.html:116
+msgid "set done"
+msgstr "готово"
+
+#: templates/workouts/workout_complete.html:127
+#, fuzzy
+#| msgid "Calories"
+msgid "Calories Burned"
+msgstr "Калории"
+
+#: templates/workouts/workout_complete.html:131
+#, fuzzy
+#| msgid "Completed Date"
+msgid "Completed"
+msgstr "Дата завершения"
 
 #~ msgid "Til sozlamalari"
 #~ msgstr "Настройки языка"

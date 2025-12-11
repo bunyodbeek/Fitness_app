@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block title %}{{ edition.name }}{% endblock %}
+{% load i18n %}
 
 {% block extra_css %}
     <style>
@@ -536,7 +537,7 @@
         <button class="back-btn" onclick="window.history.back()">‹</button>
         <div class="header-content">
             <h1>{{ edition.name }}</h1>
-            <p>Jami mashqlar: <span>{{ total_exercises }}</span></p>
+            <p>{% trans 'all exercises:' %} <span>{{ total_exercises }}</span></p>
         </div>
     </div>
 
@@ -557,7 +558,7 @@
         <div class="no-exercises">
             <div class="no-exercises-card">
                 <div class="no-exercises-icon">🏋️</div>
-                <div class="no-exercises-text">Bu programma uchun mashqlar qo'shilmagan.</div>
+                <div class="no-exercises-text">{% trans 'No exercises are included for this program.' %}</div>
             </div>
         </div>
     {% endif %}
@@ -566,7 +567,7 @@
     {% if workouts %}
         <div class="start-workout-container">
             <button class="start-workout-btn" onclick="startWorkout()">
-                ▶ Start Workout
+                {% trans '▶ Start Workout' %}
             </button>
         </div>
     {% endif %}
