@@ -6,12 +6,403 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Active Workout - {{ workout.title }}</title>
     <link rel="stylesheet" href="{% static 'apps/css/active_workout_style.css' %}">
+    <style>
+        /* === ASOSIY STILAR === */
+        body {
+            background: #0A0F2C;
+            color: white;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* Floating timer — yuqori o'ng burchakda, kichik */
+        .floating-timer {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: rgba(0, 0, 0, 0.65);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 700;
+            z-index: 100;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            min-width: 70px;
+            text-align: center;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* Header — o'rtada progress counter */
+        .session-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            background: #080B20;
+            border-bottom: 1px solid #1E2542;
+            position: relative;
+            z-index: 10;
+        }
+
+        .exit-btn {
+            background: #0F1535;
+            color: #FFD700;
+            border: 1px solid #FFD700;
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .exit-btn:hover {
+            background: #1E2542;
+        }
+
+        .progress-counter {
+            color: #FFD700;
+            font-size: 16px;
+            font-weight: 700;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Asosiy mashq kontent — markazda rasm + nom */
+        .exercise-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 32px 20px;
+            margin-top: 20px;
+        }
+
+        .exercise-image-container {
+            width: 120px;
+            height: 120px;
+            background: #0F1535;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .exercise-image {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .exercise-name {
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            margin: 0 0 16px 0;
+        }
+
+        #strengthDetails {
+            background: #0F1535;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #CCCCCC;
+            text-align: center;
+            margin-top: 8px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        /* Up Next blok — pastda, qora fon bilan */
+        #upNext {
+            background: #0F1535;
+            border: 1px solid #1E2542;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin: 20px 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .up-next-label {
+            font-size: 12px;
+            color: #FFD700;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .up-next-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .up-next-info {
+            flex: 1;
+        }
+
+        .up-next-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .up-next-details {
+            font-size: 12px;
+            color: #AAAAAA;
+            margin: 0;
+        }
+
+        /* Action buttons — pastda, keng, sarg'ish */
+        .action-buttons {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+            width: 90%;
+            max-width: 600px;
+            padding: 0 20px;
+            justify-content: center;
+        }
+
+        .pause-btn {
+            background: #0F1535;
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .pause-btn:hover {
+            background: #1E2542;
+        }
+
+        .did-it-btn {
+            flex: 1;
+            background: linear-gradient(90deg, #FFD700, #FFC107);
+            color: #0A0F2C;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+        }
+
+        .did-it-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 16px rgba(255, 215, 0, 0.4);
+        }
+
+        .did-it-btn.completed {
+            background: #1E2542;
+            color: #FFD700;
+            box-shadow: none;
+        }
+
+        /* Rest overlay — to'liq ekranni qoplab turadi */
+        .rest-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .rest-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .rest-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #FFD700;
+            margin-bottom: 16px;
+        }
+
+        .set-complete-badge {
+            background: #0F1535;
+            color: #FFD700;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .rest-timer-circle {
+            width: 120px;
+            height: 120px;
+            border: 3px solid #FFD700;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .rest-timer-circle:hover {
+            transform: scale(1.05);
+        }
+
+        .rest-timer {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            margin: 0;
+        }
+
+        .rest-skip-text {
+            font-size: 12px;
+            color: #AAAAAA;
+            margin-top: 8px;
+        }
+
+        .rest-up-next {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .rest-up-next-label {
+            font-size: 14px;
+            color: #FFD700;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .rest-up-next-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+        }
+
+        /* Exit modal — o'rtada */
+        .exit-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .exit-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .exit-modal-content {
+            background: #0F1535;
+            padding: 24px;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .exit-modal h3 {
+            color: #FFD700;
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+
+        .exit-modal p {
+            color: #AAAAAA;
+            margin-bottom: 20px;
+        }
+
+        .exit-modal-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .exit-modal button {
+            background: #0F1535;
+            color: white;
+            border: 1px solid #1E2542;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .exit-modal button:hover {
+            background: #1E2542;
+        }
+
+        .exit-modal button:first-child {
+            background: #FFD700;
+            color: #0A0F2C;
+            border: none;
+        }
+
+        .exit-modal button:first-child:hover {
+            background: #FFC107;
+        }
+    </style>
 </head>
 <body>
 <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 
+<!-- Floating Timer -->
+<div class="floating-timer" id="floatingTimer">00:00</div>
+
 <div class="session-header">
-    <button class="exit-btn" onclick="showExitModal()">Exit</button>
+    <button class="exit-btn" onclick="showExitModal()">EXIT</button>
     <div class="progress-counter">
         <span id="current">1</span> / <span id="total">{{ total_exercises }}</span>
     </div>
@@ -24,20 +415,13 @@
     </div>
     <h2 class="exercise-name" id="exerciseName"></h2>
 
-    <div class="timer-container" id="timerContainer" style="display:none;">
-        <div class="timer-box">
-            <div class="timer-display" id="timer">00:00</div>
-            <div class="timer-label">Min</div>
-        </div>
-    </div>
-
-    <div id="strengthDetails" style="display:none;">
+    <div id="strengthDetails" style="display:none; margin-top: 12px; color: #666; font-size: 14px;">
         Set <span id="currentSet">1</span> / <span id="totalSets"></span> • <span id="repsCount"></span> Reps
     </div>
 </div>
 
 <div class="up-next-section" id="upNext" style="display:none;">
-    <div class="up-next-label">Up Next</div>
+    <div class="up-next-label">UP NEXT</div>
     <div class="up-next-content">
         <img src="{% static 'images/default_exercise.png' %}" alt="Next" class="up-next-image" id="upNextImage">
         <div class="up-next-info">
@@ -51,7 +435,7 @@
     <button class="pause-btn" id="pauseBtn" onclick="togglePause()">
         <span id="pauseIcon">⏸</span>
     </button>
-    <button class="did-it-btn" id="didItBtn" onclick="completeExercise()">Did it</button>
+    <button class="did-it-btn" id="didItBtn" onclick="completeExercise()">Set Done</button>
 </div>
 
 <div class="rest-overlay" id="restOverlay">
@@ -81,214 +465,302 @@
 </div>
 
 <script>
-    // Backend ma'lumotlari
-    const workoutId = {{ workout.pk }};
-    const totalExercises = {{ total_exercises }};
-    const csrfToken = "{{ csrf_token }}";
-    const exercises = {{ exercises|safe }};
+        // Backend ma'lumotlar
+        const workoutId = {{ workout.pk }};
+        const totalExercises = {{ total_exercises }};
+        const csrfToken = "{{ csrf_token }}";
+        const exercises = {{ exercises|safe }};
 
-    // Asosiy holatlar
-    let currentExerciseIndex = 0;
-    let currentSet = 1;
-    let isPaused = false;
-    let timerInterval = null;
-    let restInterval = null;
-    let timeLeft = 0;
-    let exerciseStartTime = null;
-    let totalCaloriesBurned = 0;
-    let totalDurationSeconds = 0;
-    let totalExercisesCompleted = 0;
+        // Holatlar
+        let currentExerciseIndex = 0;
+        let currentSet = 1;
+        let isPaused = false;
+        let isResting = false;
+        let timerInterval = null;
+        let restInterval = null;
+        let restTimeLeft = 0;
+        let sessionStartTime = null; // ✅ BUTUN SEANS UCHUN
+        let exerciseStartTime = null; // ✅ JORIY MASHQ/SET UCHUN (faqat cardio uchun)
+        let totalCaloriesBurned = 0;
+        let totalDurationSeconds = 0;
+        let totalExercisesCompleted = 0;
 
-    // Formatlangan vaqt
-    const formatTime = (s) => {
+        // Yordamchi funksiyalar
+        const formatTime = (s) => {
         const m = Math.floor(s / 60);
         const sec = s % 60;
         return `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
     };
 
-    // Asosiy mashqni yuklash
-    const loadExercise = (index) => {
+        // === Asosiy: Mashqni yuklash ===
+        const loadExercise = (index) => {
         if (index >= exercises.length) return finishWorkout();
+
         const ex = exercises[index];
         currentExerciseIndex = index;
         currentSet = 1;
+        isResting = false;
+        isPaused = false;
 
+        // UI yangilash
         document.getElementById('current').textContent = index + 1;
         document.getElementById('exerciseName').textContent = ex.name;
         document.getElementById('exerciseImage').src = ex.image || "{% static 'images/default_exercise.png' %}";
 
+        // Tugmalar
         const didBtn = document.getElementById('didItBtn');
         didBtn.classList.remove('completed');
         didBtn.disabled = false;
+        didBtn.style.display = 'inline-flex';
+        didBtn.textContent = ex.type === 'cardio' ? 'Did it' : 'Set Done';
 
-        clearInterval(timerInterval);
-        document.getElementById('timerContainer').style.display = 'none';
+        const pauseBtn = document.getElementById('pauseBtn');
+        pauseBtn.style.display = 'inline-flex';
+        document.getElementById('pauseIcon').textContent = '⏸';
+
+        // Set details (faqat strength)
+        if (ex.type === 'strength') {
+        document.getElementById('strengthDetails').style.display = 'block';
+        document.getElementById('totalSets').textContent = ex.sets;
+        document.getElementById('repsCount').textContent = ex.reps;
+        document.getElementById('currentSet').textContent = 1;
+    } else {
         document.getElementById('strengthDetails').style.display = 'none';
+    }
 
+        // ✅ BUTUN SEANS UCHUN: faqat 1-marta
+        if (sessionStartTime === null) {
+        sessionStartTime = Date.now();
+        startSessionTimer(); // ✅ Floating timer uchun
+    }
+
+        // ✅ JORIY MASHQ UCHUN (faqat cardio avtomatik to'xtash uchun)
+        exerciseStartTime = Date.now(); // cardio uchun kerak
         if (ex.type === 'cardio') {
-            timeLeft = ex.duration_minutes * 60;
-            document.getElementById('timerContainer').style.display = 'flex';
-            updateTimer();
-            timerInterval = setInterval(() => {
-                if (!isPaused && timeLeft > 0) timeLeft--;
-                updateTimer();
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    completeExercise(true);
-                }
-            }, 1000);
-            didBtn.textContent = 'Did it';
-        } else {
-            document.getElementById('strengthDetails').style.display = 'block';
-            document.getElementById('totalSets').textContent = ex.sets;
-            document.getElementById('repsCount').textContent = ex.reps;
-            didBtn.textContent = 'Set Done';
-        }
+        startExerciseTimer(); // faqat cardio uchun
+    }
 
         showUpNext(index);
-        exerciseStartTime = Date.now();
     };
 
-    const updateTimer = () => {
-        document.getElementById('timer').textContent = formatTime(timeLeft);
+        // ✅ BUTUN SEANS UCHUN TIMER (floating-timer)
+        const startSessionTimer = () => {
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+        if (isPaused) return; // ❗ Restda ham davom etadi!
+
+        const elapsedSec = Math.floor((Date.now() - sessionStartTime) / 1000);
+        document.getElementById('floatingTimer').textContent = formatTime(elapsedSec);
+    }, 100);
     };
 
-    const togglePause = () => {
+        // ✅ JORIY CARDIO MASHQ UCHUN TIMER (faqat cardio avtomatik tugatish uchun)
+        const startExerciseTimer = () => {
+        const ex = exercises[currentExerciseIndex];
+        if (ex.type !== 'cardio') return;
+
+        const checkInterval = setInterval(() => {
+        if (isPaused || isResting) return;
+
+        const elapsedSec = Math.floor((Date.now() - exerciseStartTime) / 1000);
+        const totalTime = ex.duration_minutes * 60;
+        if (elapsedSec >= totalTime) {
+        clearInterval(checkInterval);
+        completeExercise(true);
+    }
+    }, 500);
+    };
+
+        // === Pause ===
+        const togglePause = () => {
+        if (isResting) return;
         isPaused = !isPaused;
         document.getElementById('pauseIcon').textContent = isPaused ? '▶' : '⏸';
     };
 
-    const completeExercise = (auto = false) => {
+        // === Mashqni tugatish (Set Done yoki Did it) ===
+        const completeExercise = (auto = false) => {
         const ex = exercises[currentExerciseIndex];
         const btn = document.getElementById('didItBtn');
+        btn.disabled = true;
 
-        const durationSec = Math.floor((Date.now() - exerciseStartTime) / 1000);
-        totalDurationSeconds += durationSec;
-        totalCaloriesBurned += (durationSec / 60) * ex.calories_per_minute;
-        totalExercisesCompleted += 1;
+        const exerciseDurationSec = Math.floor((Date.now() - exerciseStartTime) / 1000);
+
+        // ✅ Kaloriya: faqat strength oxirgi setda yoki cardio tugaganda
+        if (ex.type === 'cardio') {
+        // Cardio: to'liq davomiyligi bo'yicha
+        totalCaloriesBurned += ex.calories_per_minute * (exerciseDurationSec / 60);
+    } else if (ex.type === 'strength' && currentSet >= ex.sets) {
+        // Strength: faqat OXIRGI setda — butun mashq davomiyligi bo'yicha
+        // Lekin bizda har bir set uchun alohida davomiyligi yo'q.
+        // Shu sababli: taxminiy — `ex.duration_minutes` dan foydalanamiz
+        totalCaloriesBurned += ex.calories_per_minute * ex.duration_minutes;
+    }
 
         if (ex.type === 'strength' && currentSet < ex.sets) {
-            startRest(ex.rest_seconds, currentSet, ex.sets);
-            currentSet++;
-            return;
-        }
+        totalExercisesCompleted += 1;
+        startRest(ex.rest_seconds, currentSet, ex.sets);
+        currentSet++;
+        return;
+    }
 
+        // Oxirgi set yoki cardio — to'liq mashq yakunlandi
+        totalExercisesCompleted += 1;
         btn.classList.add('completed');
         btn.textContent = '✓ Done';
-        btn.disabled = true;
         setTimeout(() => loadExercise(currentExerciseIndex + 1), 800);
     };
 
-    const startRest = (restSec, completedSet, totalSets) => {
-        document.getElementById('setCompleteBadge').textContent = `Set ${completedSet} Complete ✓`;
-        const next = exercises[currentExerciseIndex + 1];
-        const nextText = next ? next.name : "Mashg'ulot yakunlanmoqda";
-        document.getElementById('restUpNextName').textContent = nextText;
-        document.getElementById('restOverlay').classList.add('active');
+        // === Rest boshlash ===
+        const startRest = (restSec, completedSet, totalSets) => {
+        isResting = true;
 
-        let restLeft = restSec;
-        document.getElementById('restTimer').textContent = formatTime(restLeft);
+        // Tugmalar yashiriladi
+        document.getElementById('didItBtn').style.display = 'none';
+        document.getElementById('pauseBtn').style.display = 'none';
+
+        // UI
+        document.getElementById('setCompleteBadge').textContent = `Set ${completedSet} Complete ✓`;
+        const ex = exercises[currentExerciseIndex];
+        const nextText = ex.type === 'strength'
+        ? `Set ${currentSet + 1}/${ex.sets}`
+        : (exercises[currentExerciseIndex + 1]?.name || "Workout Complete");
+        document.getElementById('restUpNextName').textContent = nextText;
+
+        document.getElementById('restOverlay').classList.add('active');
+        restTimeLeft = restSec;
+        document.getElementById('restTimer').textContent = formatTime(restTimeLeft);
+
+        clearInterval(restInterval);
         restInterval = setInterval(() => {
-            if (!isPaused && restLeft > 0) restLeft--;
-            document.getElementById('restTimer').textContent = formatTime(restLeft);
-            if (restLeft <= 0) skipRest();
-        }, 1000);
+        if (!isPaused) restTimeLeft--;
+        document.getElementById('restTimer').textContent = formatTime(restTimeLeft);
+        if (restTimeLeft <= 0) skipRest();
+    }, 1000);
     };
 
-    const skipRest = () => {
+        // === Restni o'tkazib yuborish ===
+        const skipRest = () => {
+        isResting = false;
+        isPaused = false;
         clearInterval(restInterval);
         document.getElementById('restOverlay').classList.remove('active');
+
+        // Tugmalar qayta paydo bo'ladi
+        const didBtn = document.getElementById('didItBtn');
+        didBtn.style.display = 'inline-flex';
+        didBtn.disabled = false;
+        didBtn.classList.remove('completed');
+
+        const pauseBtn = document.getElementById('pauseBtn');
+        pauseBtn.style.display = 'inline-flex';
+        document.getElementById('pauseIcon').textContent = '⏸';
+
         const ex = exercises[currentExerciseIndex];
         if (ex.type === 'strength' && currentSet <= ex.sets) {
-            document.getElementById('currentSet').textContent = currentSet;
-        } else {
-            loadExercise(currentExerciseIndex + 1);
-        }
+        document.getElementById('currentSet').textContent = currentSet;
+        exerciseStartTime = Date.now(); // ✅ Yangi set uchun (faqat davomiyligi statistika uchun, cardio emas)
+        // ✅ Floating timer 00:00 GA QAYTMAYDI — chunki sessionStartTime o'zgarmaydi!
+        startExerciseTimer(); // faqat cardio uchun, lekin strengthda ishlamaydi — muammo emas
+    } else {
+        loadExercise(currentExerciseIndex + 1);
+    }
     };
 
-    const showUpNext = (index) => {
+        // === Up Next ko'rsatish ===
+        const showUpNext = (index) => {
         const upNext = document.getElementById('upNext');
         const ex = exercises[index];
 
         if (ex.type === 'strength' && currentSet < ex.sets) {
-            upNext.style.display = 'block';
-            document.getElementById('upNextImage').src = ex.image || "{% static 'images/default_exercise.png' %}";
-            document.getElementById('upNextName').textContent = ex.name;
-            document.getElementById('upNextDetails').textContent = `Next: Set ${currentSet + 1}/${ex.sets}`;
-            return;
-        }
+        upNext.style.display = 'flex';
+        document.getElementById('upNextImage').src = ex.image || "{% static 'images/default_exercise.png' %}";
+        document.getElementById('upNextName').textContent = ex.name;
+        document.getElementById('upNextDetails').textContent = `Next: Set ${currentSet + 1}/${ex.sets}`;
+        return;
+    }
 
         if (index < exercises.length - 1) {
-            const next = exercises[index + 1];
-            upNext.style.display = 'block';
-            document.getElementById('upNextImage').src = next.image || "{% static 'images/default_exercise.png' %}";
-            document.getElementById('upNextName').textContent = next.name;
-            document.getElementById('upNextDetails').textContent = next.type === 'cardio'
-                ? `${next.duration_minutes} min`
-                : `${next.sets} sets × ${next.reps} reps`;
-        } else {
-            upNext.style.display = 'none';
-        }
+        const next = exercises[index + 1];
+        upNext.style.display = 'flex';
+        document.getElementById('upNextImage').src = next.image || "{% static 'images/default_exercise.png' %}";
+        document.getElementById('upNextName').textContent = next.name;
+        document.getElementById('upNextDetails').textContent = next.type === 'cardio'
+        ? `${next.duration_minutes} min`
+        : `${next.sets} sets × ${next.reps} reps`;
+    } else {
+        upNext.style.display = 'none';
+    }
     };
 
-    // Exit logic
-    const showExitModal = () => {
+        // === Exit modal ===
+        const showExitModal = () => {
         document.getElementById('exitModal').classList.add('active');
-        if (!isPaused) togglePause();
+        if (!isPaused && !isResting) togglePause();
     };
 
-    const returnToWorkout = () => {
+        const returnToWorkout = () => {
         document.getElementById('exitModal').classList.remove('active');
-        if (isPaused) togglePause();
+        if (isPaused && !isResting) togglePause();
     };
 
-    const createForm = (save, action) => {
+        const createForm = (save, action) => {
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = action === 'complete'
-            ? "{% url 'workout_complete' workout.id %}"
-            : "{% url 'workout_start' workout.id %}";
+        ? "{% url 'workout_complete' workout.id %}"
+        : "{% url 'workout_start' workout.id %}";
+
+        // ✅ Umumiy seans davomiyligini hisoblash
+        if (sessionStartTime) {
+        const elapsed = Math.floor((Date.now() - sessionStartTime) / 1000);
+        totalDurationSeconds = elapsed;
+    }
 
         const fields = {
-            csrfmiddlewaretoken: csrfToken,
-            action: action,
-            save_progress: save ? 'true' : 'false',
-            total_duration: totalDurationSeconds,
-            total_calories: totalCaloriesBurned.toFixed(2),
-            exercises_completed: totalExercisesCompleted,
-        };
+        csrfmiddlewaretoken: csrfToken,
+        action: action,
+        save_progress: save ? 'true' : 'false',
+        total_duration: totalDurationSeconds,
+        total_calories: totalCaloriesBurned.toFixed(2),
+        exercises_completed: totalExercisesCompleted,
+    };
 
         if (action === 'exit' && save) {
-            fields.current_exercise_index = currentExerciseIndex;
-        }
+        fields.current_exercise_index = currentExerciseIndex;
+        fields.current_set = currentSet;
+    }
 
         Object.entries(fields).forEach(([name, value]) => {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = name;
-            input.value = value;
-            form.appendChild(input);
-        });
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
+    });
 
         return form;
     };
 
-    const finishWorkout = () => {
+        const finishWorkout = () => {
         document.body.appendChild(createForm(true, 'complete'));
         document.forms[document.forms.length - 1].submit();
     };
 
-    const saveAndExit = () => {
+        const saveAndExit = () => {
         document.body.appendChild(createForm(true, 'exit'));
         document.forms[document.forms.length - 1].submit();
     };
 
-    const exitWithoutSaving = () => {
+        const exitWithoutSaving = () => {
         document.body.appendChild(createForm(false, 'exit'));
         document.forms[document.forms.length - 1].submit();
     };
 
-    document.addEventListener('DOMContentLoaded', () => loadExercise(0));
+        // === Ishga tushirish ===
+        document.addEventListener('DOMContentLoaded', () => {
+        loadExercise(0);
+    });
 </script>
 </body>
 </html>
