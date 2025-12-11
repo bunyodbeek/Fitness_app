@@ -183,7 +183,6 @@ class WorkoutCompleteView(LoginRequiredMixin, View):
                 "total_calories": total_calories,
                 "duration_seconds": total_duration,
                 "exercises_completed": exercises_completed,
-                # Agar kerak bo'lsa, keyingi statistikalarni ham hisoblang:
                 "total_reps": 0,
                 "total_weight": 0
             }

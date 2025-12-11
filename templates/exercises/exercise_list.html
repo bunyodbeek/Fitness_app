@@ -633,7 +633,7 @@
                     <a href="{% url 'exercise_detail' exercise.id %}" class="exercise-card" id="card-{{ exercise.id }}">
                         <div class="favorite-icon {% if exercise.is_favorited %}favorited{% endif %}"
                              data-exercise-id="{{ exercise.id }}">
-                            <span>{% if exercise.is_favorited %}❤️{% else %}🤍{% endif %}</span>
+                            <span>{% if exercise.is_favorited %}⭐️{% else %}★{% endif %}</span>
                         </div>
                         {% if exercise.thumbnail %}
                             <img src="{{ exercise.thumbnail.url }}" alt="{{ exercise.name }}" class="exercise-image">
@@ -666,7 +666,7 @@
             <h3 class="modal-title">📍 Qayerga saqlaysiz?</h3>
             <div class="save-options-list">
                 <div class="save-option" onclick="saveToDefault(event)">
-                    <div class="save-option-icon">🤍</div>
+                    <div class="save-option-icon">⭐</div>
                     <div class="save-option-info">
                         <div class="save-option-title">Oddiy saqlash</div>
                         <div class="save-option-desc">Sevimlilarga qo'shish</div>
@@ -811,7 +811,7 @@
             if (data.status === 'success' || data.status === 'added') {
                 updateFavoriteState(currentExerciseId, true);
                 closeSaveOptions();
-                showSuccessMessage('❤️ Sevimlilarga qo‘shildi!');
+                showSuccessMessage('⭐️ Sevimlilarga qo‘shildi!');
             } else throw new Error(data.error || 'Server xatosi');
         })
         .catch(err => {
@@ -831,7 +831,7 @@
         .then(data => {
             if (data.status === 'success' || data.status === 'removed') {
                 updateFavoriteState(exerciseId, false);
-                showSuccessMessage('🤍 Sevimlilardan o‘chirildi!');
+                showSuccessMessage('★ Sevimlilardan o‘chirildi!');
             } else throw new Error(data.error);
         })
         .catch(err => {
@@ -847,10 +847,10 @@
             const span = favIcon.querySelector('span');
             if (isFavorited) {
                 favIcon.classList.add('favorited');
-                if (span) span.textContent = '❤️';
+                if (span) span.textContent = '⭐️';
             } else {
                 favIcon.classList.remove('favorited');
-                if (span) span.textContent = '🤍';
+                if (span) span.textContent = '★';
             }
         }
     }
@@ -868,8 +868,7 @@
         const body = document.getElementById('collectionsBody');
         modal.classList.add('active');
 
-        // Har doim AJAX orqali yangilaymiz
-        fetch('/en/favorites/collections/api/', {
+        fetch('/en/collection/', {
             headers: { 'X-CSRFToken': csrftoken }
         })
         .then(r => r.json())

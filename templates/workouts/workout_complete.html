@@ -4,129 +4,165 @@
 {% block content %}
 
 <style>
-    body {
-        background: #111;
-        color: #fff;
-        font-family: 'Poppins', sans-serif;
-        margin: 0;
-        padding: 0;
+    /* Asosiy fonni base.html dan keyin qo'shish uchun */
+    .workout-complete-page {
+        background: #0A0F2C !important;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 20px;
+        box-sizing: border-box;
     }
 
     .complete-container {
-        max-width: 600px;
-        margin: 50px auto;
-        padding: 30px;
+        max-width: 400px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 32px 24px;
         text-align: center;
-        background: #1a1a1a;
-        border-radius: 15px;
-        box-shadow: 0 0 15px rgba(255, 223, 0, 0.15);
-        border: 1px solid #333;
+        background: #0F1535;
+        border-radius: 16px;
+        border: 1px solid #1E2542;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        font-family: 'Segoe UI', 'Poppins', sans-serif;
     }
 
     .complete-title {
         font-size: 28px;
-        font-weight: bold;
-        color: #f5c308;
-        margin-bottom: 10px;
-        text-shadow: 0 0 15px rgba(245, 195, 8, 0.7);
+        font-weight: 700;
+        color: #FFD700;
+        margin: 0 0 12px 0;
+        text-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
     }
 
     .complete-sub {
         font-size: 16px;
-        margin-bottom: 30px;
-        opacity: 0.85;
-        color: #ddd;
+        color: #AAAAAA;
+        margin-bottom: 24px;
+        line-height: 1.5;
     }
 
     .stats-box {
-        background: #141414;
-        border: 1px solid #333;
+        background: #080B20;
+        border: 1px solid #1E2542;
         padding: 20px;
-        border-radius: 15px;
+        border-radius: 12px;
         text-align: left;
-        margin-bottom: 25px;
+        margin-bottom: 24px;
     }
 
-    .stats-box div {
-        font-size: 16px;
-        margin: 8px 0;
+    .stats-row {
         display: flex;
         justify-content: space-between;
+        margin: 10px 0;
+        font-size: 15px;
     }
 
     .stats-label {
-        color: #aaa;
+        color: #8888AA;
     }
 
     .stats-value {
-        color: #f5c308;
-        font-weight: bold;
-    }
-
-    .btn-home {
-        width: 100%;
-        padding: 15px;
-        background: #f5c308;
-        color: #111;
-        font-weight: bold;
-        border-radius: 10px;
-        text-decoration: none;
-        display: block;
-        text-align: center;
-        font-size: 18px;
-        transition: 0.2s;
-    }
-
-    .btn-home:hover {
-        background: #ffdd3b;
-        color: #000;
-        transform: translateY(-2px);
+        color: #FFD700;
+        font-weight: 600;
     }
 
     .separator {
         height: 1px;
-        width: 100%;
-        background: #333;
-        margin: 25px 0;
+        background: #1E2542;
+        margin: 20px 0;
     }
 
-    /* Mobile */
-    @media (max-width: 480px) {
-        .complete-container {
-            margin: 20px;
-            padding: 20px;
-        }
-        .complete-title {
-            font-size: 24px;
-        }
+    .btn-home {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(90deg, #FFD700, #FFC107);
+        color: #0A0F2C;
+        font-weight: 700;
+        border: none;
+        border-radius: 12px;
+        font-size: 18px;
+        cursor: pointer;
+        text-decoration: none;
+        display: block;
+        text-align: center;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+    }
+
+    .btn-home:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(255, 215, 0, 0.4);
+        background: linear-gradient(90deg, #FFC107, #FFD700);
     }
 </style>
 
-<div class="complete-container">
+<div class="workout-complete-page">
+    <div class="complete-container">
 
-    <h2 class="complete-title">Workout Complete! 🎉</h2>
-    <p class="complete-sub">
-        Ajoyib ish! Bugungi mashg‘ulotni muvaffaqiyatli tugatdingiz.
-    </p>
+        <h1 class="complete-title">Workout Complete! 🎉</h1>
+        <p class="complete-sub">
+            Ajoyib ish! Bugungi mashg‘ulotni muvaffaqiyatli tugatdingiz.
+        </p>
 
-    <div class="stats-box">
-        <div><span class="stats-label">Workout:</span>
-            <span class="stats-value">{{ workout.title }}</span></div>
+        <div class="stats-box">
+            <div class="stats-row">
+                <span class="stats-label">Workout</span>
+                <span class="stats-value">{{ workout.title }}</span>
+            </div>
+            <div class="stats-row">
+                <span class="stats-label">Sets  Done</span>
+                <span class="stats-value">{{ workout_summary.exercises_completed }}</span>
+            </div>
+            <div class="stats-row">
+                <span class="stats-label">Duration</span>
+                <span class="stats-value" id="formatted-duration">
+                    <!-- JavaScript bilan to'ldiriladi -->
+                    {{ workout_summary.duration_seconds }} sec
+                </span>
+            </div>
+            <div class="stats-row">
+                <span class="stats-label">Calories Burned</span>
+                <span class="stats-value">{{ workout_summary.total_calories|floatformat:0 }} kcal</span>
+            </div>
+            <div class="stats-row">
+                <span class="stats-label">Completed</span>
+                <span class="stats-value" id="completion-time">
+                    <!-- JavaScript bilan hozirgi vaqt qo'shiladi -->
+                    Just now
+                </span>
+            </div>
+        </div>
 
-        <div><span class="stats-label">Total Exercises:</span>
-            <span class="stats-value">{{ workout.exercises.count }}</span></div>
+        <div class="separator"></div>
 
-        <div><span class="stats-label">Total Duration:</span>
-            <span class="stats-value">{{ workout_summary.duration_seconds }} sec</span></div>
+        <a href="{% url 'program_list' %}" class="btn-home">Back to Home</a>
 
-        <div><span class="stats-label">Completed On:</span>
-            <span class="stats-value">{{ completion_time }}</span></div>
     </div>
-
-    <div class="separator"></div>
-
-    <a href="{% url 'program_list' %}" class="btn-home">Back to Home</a>
-
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // 1. Duration ni formatlash: 522 → "8:42"
+        const durationSec = {{ workout_summary.duration_seconds|default:0 }};
+        const mins = Math.floor(durationSec / 60);
+        const secs = durationSec % 60;
+        const formattedDuration = `${mins}:${secs.toString().padStart(2, '0')}`;
+        document.getElementById('formatted-duration').textContent = formattedDuration;
+
+        // 2. Completion time — hozirgi vaqtni ko'rsatish (aniqroq)
+        const now = new Date();
+        const options = {
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        };
+        const formattedTime = now.toLocaleString('en-US', options).replace(',', '');
+        document.getElementById('completion-time').textContent = formattedTime;
+    });
+</script>
 
 {% endblock %}

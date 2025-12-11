@@ -62,7 +62,6 @@ urlpatterns = [
 
     path('favorites/collection/<int:collection_id>/toggle/', FavoriteToggleAPIView.as_view(), name='favorite-toggle'),
 
-    path("collection/", FavoritesListView.as_view(), name="favorites"),
 
     path('change/language/', ChangeLanguageView.as_view(), name='change_language'),
 
