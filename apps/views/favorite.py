@@ -1,9 +1,5 @@
-import json
-
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.views import View
 from django.views.generic import CreateView, ListView
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
@@ -85,36 +81,13 @@ class FavoriteToggleAPIView(GenericAPIView):
             message = f'"{exercise.name}" mashqi "{collection.name}" toʻplamiga qoʻshildi.'
 
         return Response({
-            "status": "success",
+            "success": True,
             "action": action,
             "exercise_id": exercise.id,
             "collection_id": collection.id,
             "items_count": collection.exercise_count,
             "message": message,
         })
-
-
-class AddExerciseToCollectionView(LoginRequiredMixin, View):
-    def post(self, request, collection_id, *args, **kwargs):
-        try:
-            data = json.loads(request.body)
-            exercise_id = data.get('exercise_id')
-        except json.JSONDecodeError:
-            return JsonResponse({'success': False, 'error': 'Yaroqsiz JSON.'}, status=400)
-
-        if not exercise_id:
-            return JsonResponse({'success': False, 'error': 'Mashq ID taqdim etilmadi.'}, status=400)
-
-        exercise = get_object_or_404(Exercise, id=exercise_id)
-        collection = get_object_or_404(FavoriteCollection, id=collection_id, user=request.user.profile)
-
-        if collection.favorites.filter(exercise=exercise).exists():
-            return JsonResponse({'success': False, 'error': 'Mashq allaqachon to‘plamda mavjud.'})
-
-        collection.favorites.create(user=request.user.profile, exercise=exercise)
-
-        return JsonResponse(
-            {'success': True, 'message': f'"{exercise.name}" mashqi "{collection.name}" to‘plamga qo‘shildi.'})
 
 
 class CreateCollectionVIew(CreateView):

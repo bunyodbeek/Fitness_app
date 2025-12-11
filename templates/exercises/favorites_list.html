@@ -2037,7 +2037,7 @@
             const selectedItems = document.querySelectorAll('.exercise-select-item.selected');
             const exerciseIds = Array.from(selectedItems).map(item => item.dataset.exerciseId);
 
-            fetch("#", {
+            fetch("/en/create/collection/", {
                 method: 'POST',
                 headers: {
                     'X-CSRFToken': csrfToken,
@@ -2052,8 +2052,7 @@
                 .then(data => {
                     if (data.success) {
                         closeCollectionModal();
-                        location.reload(); // oddiy variant — to'liq yangilash
-                        // Yoki: dinamik DOM yangilash ham qilish mumkin
+                        location.reload();
                     } else {
                         alert(data.error || 'Failed to create collection.');
                     }
@@ -2068,7 +2067,7 @@
         function unfavorite(favId, btn) {
             if (!confirm('Remove from favorites?')) return;
 
-            fetch(`/favorites/remove/${favId}/`, {
+            fetch(`/en/favorites/remove/${favId}/`, {
                 method: 'POST',
                 headers: {
                     'X-CSRFToken': csrfToken
