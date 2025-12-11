@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-05 12:14+0500\n"
+"POT-Creation-Date: 2025-12-11 17:28+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,7 +74,7 @@ msgstr ""
 msgid "Advanced"
 msgstr ""
 
-#: apps/models/exercises.py:53 apps/models/favorites.py:8
+#: apps/models/exercises.py:53
 msgid "Name"
 msgstr ""
 
@@ -90,7 +90,7 @@ msgstr ""
 msgid "Secondary Muscle"
 msgstr ""
 
-#: apps/models/exercises.py:57 apps/models/favorites.py:9
+#: apps/models/exercises.py:57
 msgid "Description"
 msgstr ""
 
@@ -138,91 +138,71 @@ msgstr ""
 msgid "ExerciseInstructions"
 msgstr ""
 
-#: apps/models/favorites.py:14
-msgid "Favorite Collection"
-msgstr ""
-
-#: apps/models/favorites.py:15
-msgid "Favorite Collections"
-msgstr ""
-
-#: apps/models/favorites.py:29
-msgid "Notes"
-msgstr ""
-
-#: apps/models/favorites.py:34
+#: apps/models/favorites.py:33
 msgid "Sevimli"
 msgstr "sevimli"
 
-#: apps/models/favorites.py:35
+#: apps/models/favorites.py:34
 msgid "Sevimlilar"
 msgstr ""
 
-#: apps/models/payments.py:23 apps/models/payments.py:52
+#: apps/models/payments.py:61 apps/models/payments.py:100
 msgid "User"
 msgstr ""
 
-#: apps/models/payments.py:24
+#: apps/models/payments.py:63
 msgid "Start Date"
 msgstr ""
 
-#: apps/models/payments.py:25
+#: apps/models/payments.py:64
 msgid "End Date"
 msgstr ""
 
-#: apps/models/payments.py:26
+#: apps/models/payments.py:65
 msgid "Is Active"
 msgstr ""
 
-#: apps/models/payments.py:27
-msgid "Auto Renew"
-msgstr ""
-
-#: apps/models/payments.py:28
-msgid "monthly payment price"
-msgstr ""
-
-#: apps/models/payments.py:31 apps/models/payments.py:54
+#: apps/models/payments.py:85 apps/models/payments.py:102
 msgid "Subscription"
 msgstr ""
 
-#: apps/models/payments.py:32
+#: apps/models/payments.py:86
 msgid "Subscriptions"
 msgstr ""
 
-#: apps/models/payments.py:55
+#: apps/models/payments.py:103
 msgid "Status"
 msgstr ""
 
-#: apps/models/payments.py:56
+#: apps/models/payments.py:104
 msgid "Click Transaction ID"
 msgstr ""
 
-#: apps/models/payments.py:57
+#: apps/models/payments.py:105
 msgid "Merchant Transaction ID"
 msgstr ""
 
-#: apps/models/payments.py:58
+#: apps/models/payments.py:106
 msgid "Is Auto Payment"
 msgstr ""
 
-#: apps/models/payments.py:59
+#: apps/models/payments.py:107
 msgid "Automatic payment attempt"
 msgstr ""
 
-#: apps/models/payments.py:60
+#: apps/models/payments.py:108
 msgid "Additional Information"
 msgstr ""
 
-#: apps/models/payments.py:61
+#: apps/models/payments.py:109
 msgid "Completed Date"
 msgstr ""
 
-#: apps/models/payments.py:64
+#: apps/models/payments.py:112
 msgid "To'lov"
 msgstr ""
 
-#: apps/models/payments.py:65
+#: apps/models/payments.py:113
 msgid "To'lovlar"
 msgstr ""
 
@@ -230,11 +210,11 @@ msgstr ""
 msgid "Premium"
 msgstr ""
 
-#: apps/views/users.py:301
+#: apps/views/users.py:305
 msgid "Til muvaffaqiyatli saqlandi!"
 msgstr ""
 
-#: apps/views/users.py:309
+#: apps/views/users.py:313
 msgid "Tanlangan til kodi noto'g'ri."
 msgstr ""
 
@@ -256,43 +236,9 @@ msgstr "Sevimlilar"
 msgid "Profile"
 msgstr "Profil"
 
-#: templates/users/account_settings.html:10
-#: templates/users/account_settings.html:274
-#: templates/users/account_settings.html:291
-msgid "Obunani boshqarish"
-msgstr ""
-
-#: templates/users/account_settings.html:318
-msgid "Keyingi to'lov sanasi"
-msgstr ""
-
-#: templates/users/account_settings.html:329
-msgid "To'lov usuli"
-msgstr ""
-
-#: templates/users/account_settings.html:340
-msgid "Obuna narxi"
-msgstr ""
-
-#: templates/users/account_settings.html:357
-msgid "Obunani bekor qilish"
-msgstr ""
-
-#: templates/users/account_settings.html:359
-msgid "Bekor qilingandan so'ng, obuna"
-msgstr ""
-
-#: templates/users/account_settings.html:359
-msgid "da yakunlanadi"
-msgstr ""
-
-#: templates/users/account_settings.html:377
-msgid "Obunani qaytarish"
-msgstr ""
-
-#: templates/users/account_settings.html:387
-msgid "Orqaga"
-msgstr ""
+#: templates/exercises/body_parts.html:521
+msgid "💪 EXERCISES"
+msgstr "💪 Mashqlar"
 
 #: templates/users/language.html:8
 msgid "Til sozlamalari"

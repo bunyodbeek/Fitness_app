@@ -24,7 +24,7 @@ from apps.views import (
     WorkoutDetailView,
     WorkoutStartView,
 )
-from apps.views.favorite import FavoriteToggleAPIView
+from apps.views.favorite import FavoriteToggleAPIView, CreateCollectionVIew
 from apps.views.payments import PaymentHistoryListView, ManageSubscriptionListView
 from apps.views.users import AdminPageView, ChangeLanguageView
 
@@ -62,7 +62,7 @@ urlpatterns = [
 
     path('favorites/collection/<int:collection_id>/toggle/', FavoriteToggleAPIView.as_view(), name='favorite-toggle'),
 
-    path("create/collection/", CreateCollectionVIew.as_view(), name="favorites"),
+    # path("create/collection/", CreateCollectionVIew.as_view(), name="favorites"),
 
     path('change/language/', ChangeLanguageView.as_view(), name='change_language'),
 
