@@ -2,15 +2,11 @@
 {% load static %}
 
 {% block title %}My favorites{% endblock %}
+{% load i18n %}
 
 {% block extra_css %}
     <style>
 
-        /* ==========================================
-               ✨ PREMIUM ANIMATIONS - all_workouts.html style
-               ========================================== */
-
-        /* 1. Animated Background - Xuddi all_workouts kabi */
         body::before {
             content: '';
             position: fixed;
@@ -1741,33 +1737,32 @@
 
 {% block content %}
     <div class="page-header">
-        <h1 class="page-title">⭐ My favorites</h1>
-        <!-- ✨ Add Collection Button -->
+        <h1 class="page-title">{% trans '⭐ My favorites'%}</h1>
         <button class="add-collection-btn" onclick="openCollectionModal()">+</button>
     </div>
 
     <div class="favorites-content">
         <div class="favorite-stats">
             <i class="fas fa-heart" style="color: #ffd700; margin-right: 8px;"></i>
-            All favorite: <span id="total-favorites-count">{{ total_count }}</span>
+            {% trans 'All favorites:' %} <span id="total-favorites-count">{{ total_count }}</span>
         </div>
 
         <!-- UPDATED TABS WITH COLLECTIONS -->
         <div class="favorites-tabs">
             <button class="tab-btn active" onclick="showTab(this, 'all')">
-                <i class="fas fa-th-large" style="margin-right: 6px;"></i> All
+                <i class="fas fa-th-large" style="margin-right: 6px;"></i> {% trans 'All' %}
             </button>
             <button class="tab-btn" onclick="showTab(this, 'exercise')">
-                <i class="fas fa-dumbbell" style="margin-right: 6px;"></i> Exercises
+                <i class="fas fa-dumbbell" style="margin-right: 6px;"></i> {% trans 'Exercises' %}
             </button>
             <button class="tab-btn" onclick="showTab(this, 'collections')">
-                <i class="fas fa-folder" style="margin-right: 6px;"></i> Collections
+                <i class="fas fa-folder" style="margin-right: 6px;"></i> {% trans 'Collections' %}
                 <span style="margin-left: 6px; background: rgba(255, 215, 0, 0.3); padding: 2px 8px; border-radius: 10px; font-size: 11px;">
                     {{ collections_count|default:0 }}
                 </span>
             </button>
             <button class="tab-btn" onclick="showTab(this, 'editions')">
-                <i class="fas fa-crown" style="margin-right: 6px;"></i> Premium
+                <i class="fas fa-crown" style="margin-right: 6px;"></i> {% trans 'one-time purchase' %}
             </button>
         </div>
 
@@ -1799,8 +1794,8 @@
             {% empty %}
                 <div class="empty-state">
                     <div class="empty-state-icon">⭐</div>
-                    <h3>Favorite collection is empty</h3>
-                    <p>Start adding your favorite exercises!</p>
+                    <h3>{% trans 'Favorite collection is empty' %}</h3>
+                    <p>{% trans 'Start adding your favorite exercises!' %}</p>
                 </div>
             {% endfor %}
         </div>
@@ -1809,7 +1804,6 @@
         <div class="collections-container" id="collectionsContainer">
             {% for collection in favorite_collections %}
                 <div class="collection-card" data-collection-id="{{ collection.id }}">
-                    <!-- Collection Header -->
                     <div class="collection-header">
                         <div class="collection-title-section">
                             <h3 class="collection-title">📁 {{ collection.name }}</h3>
@@ -1931,8 +1925,8 @@
             {% empty %}
                 <div class="empty-state">
                     <div class="empty-state-icon">👑</div>
-                    <h3>No Premium Editions</h3>
-                    <p>Coming soon!</p>
+                    <h3>{% trans 'No Premium Editions' %}</h3>
+                    <p>{% trans 'Coming soon!' %}</p>
                 </div>
             {% endfor %}
         </div>
@@ -1943,15 +1937,15 @@
         <div class="collection-modal-content">
             <!-- Modal Header -->
             <div class="modal-header">
-                <h3 class="modal-title" id="modalTitle">📁 New Collection</h3>
+                <h3 class="modal-title" id="modalTitle">📁 {% trans 'New Collection' %}</h3>
                 <button class="modal-close-btn" onclick="closeCollectionModal()">&times;</button>
             </div>
             <!-- Modal Body -->
             <div class="modal-body">
                 <div class="collection-name-group">
-                    <label class="collection-name-label" for="collectionName">Collection Name</label>
+                    <label class="collection-name-label" for="collectionName">{% trans 'Collection Name' %}</label>
                     <input type="text" id="collectionName" class="collection-name-input"
-                           placeholder="e.g., Legs & Glutes">
+                           placeholder="{% trans 'e.g., Legs & Glutes' %}">
                 </div>
 
                 <div class="exercise-select-section">
@@ -1974,7 +1968,7 @@
                                 </div>
                             </div>
                         {% empty %}
-                            <p style="color: #95a5a6; text-align: center;">No exercises to add.</p>
+                            <p style="color: #95a5a6; text-align: center;">{% trans 'No exercises to add.' %}</p>
                         {% endfor %}
                     </div>
                 </div>
@@ -1987,14 +1981,11 @@
         </div>
     </div>
 
-    <!-- Hidden input to pass CSRF token for AJAX -->
     {% csrf_token %}
 
     <script>
-        // CSRF token — Django AJAX uchun majburiy
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-        // Tab switching
         function showTab(button, tabName) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
@@ -2004,12 +1995,10 @@
             document.getElementById('editionsContainer').style.display = tabName === 'editions' ? 'flex' : 'none';
         }
 
-        // Modal ochish/yopish
         function openCollectionModal() {
             document.getElementById('collectionModal').classList.add('active');
             document.getElementById('modalTitle').textContent = '📁 New Collection';
             document.getElementById('collectionName').value = '';
-            // Barcha mashqlarni unselected qilish
             document.querySelectorAll('.exercise-select-item').forEach(item => {
                 item.classList.remove('selected');
             });
@@ -2019,14 +2008,12 @@
             document.getElementById('collectionModal').classList.remove('active');
         }
 
-        // Mashqni tanlash
         document.querySelectorAll('.exercise-select-item').forEach(item => {
             item.addEventListener('click', function () {
                 this.classList.toggle('selected');
             });
         });
 
-        // Collection yaratish (AJAX)
         function saveCollection() {
             const name = document.getElementById('collectionName').value.trim();
             if (!name) {
@@ -2063,7 +2050,6 @@
                 });
         }
 
-        // Sevimlilardan o'chirish
         function unfavorite(favId, btn) {
             if (!confirm('Remove from favorites?')) return;
 
@@ -2087,7 +2073,6 @@
                 });
         }
 
-        // Collection o'chirish
         function deleteCollection(collectionId, name) {
             if (!confirm(`Delete collection "${name}"? This cannot be undone.`)) return;
 
@@ -2105,7 +2090,6 @@
                 });
         }
 
-        // Placeholder funksiyalar (premium uchun)
 
         function editCollection(id) {
             alert('Edit feature coming soon!');
@@ -2123,7 +2107,6 @@
             window.location.href = `/editions/${id}/`;
         }
 
-        // Modal ESC tugmasi bilan yopish
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && document.getElementById('collectionModal').classList.contains('active')) {
                 closeCollectionModal();

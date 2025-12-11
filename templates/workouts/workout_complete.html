@@ -119,18 +119,16 @@
             <div class="stats-row">
                 <span class="stats-label">{% trans 'Duration' %}</span>
                 <span class="stats-value" id="formatted-duration">
-                    <!-- JavaScript bilan to'ldiriladi -->
-                    {{ workout_summary.duration_seconds }} sec
+                    {{ workout_summary.duration_seconds }} {% trans 'sec' %}
                 </span>
             </div>
             <div class="stats-row">
                 <span class="stats-label">{% trans 'Calories Burned' %}</span>
-                <span class="stats-value">{{ workout_summary.total_calories|floatformat:0 }} kcal</span>
+                <span class="stats-value">{{ workout_summary.total_calories|floatformat:0 }} {% trans 'kcal' %}</span>
             </div>
             <div class="stats-row">
                 <span class="stats-label">{% trans 'Completed' %}</span>
                 <span class="stats-value" id="completion-time">
-                    <!-- JavaScript bilan hozirgi vaqt qo'shiladi -->
                     Just now
                 </span>
             </div>
@@ -138,7 +136,7 @@
 
         <div class="separator"></div>
 
-        <a href="{% url 'program_list' %}" class="btn-home">Back to Home</a>
+        <a href="{% url 'program_list' %}" class="btn-home">{% trans 'Back to Home' %}</a>
 
     </div>
 </div>

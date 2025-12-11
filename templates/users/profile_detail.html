@@ -606,7 +606,7 @@
                 {% endif %}
             </div>
             <h2 class="user-name">{{ user.first_name|default:"User" }}</h2>
-            <p class="user-subtitle">Fitness Journey</p>
+            <p class="user-subtitle">{% trans 'Fitness Journey' %}</p>
         </div>
 
 {#        <!-- Compact Stats -->#}
@@ -633,8 +633,8 @@
                         <div class="menu-icon">👤</div>
                     </div>
                     <div class="menu-text-wrapper">
-                        <div class="menu-text">Profile</div>
-                        <div class="menu-subtitle">Edit information</div>
+                        <div class="menu-text">{% trans 'Profile' %}</div>
+                        <div class="menu-subtitle">{% trans 'Edit information' %}</div>
                     </div>
                     <div class="menu-arrow">›</div>
                 </div>
@@ -659,8 +659,8 @@
                         <div class="menu-icon">⭐</div>
                     </div>
                     <div class="menu-text-wrapper">
-                        <div class="menu-text">Favorites</div>
-                        <div class="menu-subtitle">Saved exercises</div>
+                        <div class="menu-text">{% trans 'Favorites' %}</div>
+                        <div class="menu-subtitle">{% trans 'Saved exercises' %}</div>
                     </div>
                     <div class="menu-arrow">›</div>
                 </div>
@@ -672,25 +672,25 @@
                         <div class="menu-icon">⚙️</div>
                     </div>
                     <div class="menu-text-wrapper">
-                        <div class="menu-text">Settings</div>
-                        <div class="menu-subtitle">All settinngs</div>
+                        <div class="menu-text">{% trans 'Settings' %}</div>
+                        <div class="menu-subtitle">{% trans 'All settings' %}</div>
                     </div>
                     <div class="menu-arrow">›</div>
                 </div>
             </div>
-{##}
-{#            <div class="menu-card" onclick="">#}
-{#                <div class="menu-content">#}
-{#                    <div class="menu-icon-wrapper">#}
-{#                        <div class="menu-icon">💬</div>#}
-{#                    </div>#}
-{#                    <div class="menu-text-wrapper">#}
-{#                        <div class="menu-text">Yordam</div>#}
-{#                        <div class="menu-subtitle">Qo'llab-quvvatlash</div>#}
-{#                    </div>#}
-{#                    <div class="menu-arrow">›</div>#}
-{#                </div>#}
-{#            </div>#}
+
+            <div class="menu-card" onclick="">
+                <div class="menu-content">
+                    <div class="menu-icon-wrapper">
+                        <div class="menu-icon">💬</div>
+                    </div>
+                    <div class="menu-text-wrapper">
+                        <div class="menu-text">Yordam</div>
+                        <div class="menu-subtitle">Qo'llab-quvvatlash</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

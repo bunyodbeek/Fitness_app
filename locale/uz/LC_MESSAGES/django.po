@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-11 18:36+0500\n"
+"POT-Creation-Date: 2025-12-11 19:52+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -115,6 +115,7 @@ msgid "Exercise"
 msgstr ""
 
 #: apps/models/exercises.py:67 templates/base.html:437
+#: templates/exercises/favorites_list.html:1756
 msgid "Exercises"
 msgstr "Mashqlar"
 
@@ -144,7 +145,7 @@ msgstr ""
 msgid "Favorite"
 msgstr "Sevimlilar"
 
-#: apps/models/favorites.py:34
+#: apps/models/favorites.py:34 templates/users/profile_detail.html:662
 #, fuzzy
 #| msgid "Favourites"
 msgid "Favorites"
@@ -236,7 +237,7 @@ msgstr "Mening Murabbiyim"
 msgid "Favourites"
 msgstr "Sevimlilar"
 
-#: templates/base.html:453
+#: templates/base.html:453 templates/users/profile_detail.html:636
 msgid "Profile"
 msgstr "Profil"
 
@@ -308,7 +309,63 @@ msgstr ""
 msgid "Calves"
 msgstr ""
 
-#: templates/users/language.html:8
+#: templates/exercises/favorites_list.html:1740
+#, fuzzy
+#| msgid "Favourites"
+msgid "⭐ My favorites"
+msgstr "Sevimlilar"
+
+#: templates/exercises/favorites_list.html:1747
+#, fuzzy
+#| msgid "Favourites"
+msgid "All favorites:"
+msgstr "Sevimlilar"
+
+#: templates/exercises/favorites_list.html:1753
+msgid "All"
+msgstr ""
+
+#: templates/exercises/favorites_list.html:1759
+msgid "Collections"
+msgstr ""
+
+#: templates/exercises/favorites_list.html:1765
+msgid "one-time purchase"
+msgstr ""
+
+#: templates/exercises/favorites_list.html:1797
+msgid "Favorite collection is empty"
+msgstr ""
+
+#: templates/exercises/favorites_list.html:1798
+msgid "Start adding your favorite exercises!"
+msgstr ""
+
+#: templates/exercises/favorites_list.html:1928
+msgid "No Premium Editions"
+msgstr ""
+
+#: templates/exercises/favorites_list.html:1929
+msgid "Coming soon!"
+msgstr ""
+
+#: templates/exercises/favorites_list.html:1940
+msgid "New Collection"
+msgstr ""
+
+#: templates/exercises/favorites_list.html:1946
+msgid "Collection Name"
+msgstr ""
+
+#: templates/exercises/favorites_list.html:1948
+msgid "e.g., Legs & Glutes"
+msgstr ""
+
+#: templates/exercises/favorites_list.html:1971
+msgid "No exercises to add."
+msgstr ""
+
+#: templates/users/language.html:8 templates/users/settings.html:471
 msgid "Language settings"
 msgstr ""
 
@@ -322,8 +379,88 @@ msgid ""
 "optional throughout the app."
 msgstr ""
 
-#: templates/users/language.html:452
+#: templates/users/language.html:452 templates/users/profile_update.html:428
 msgid "Save"
+msgstr ""
+
+#: templates/users/profile_detail.html:609
+msgid "Fitness Journey"
+msgstr ""
+
+#: templates/users/profile_detail.html:637 templates/users/settings.html:437
+msgid "Edit information"
+msgstr ""
+
+#: templates/users/profile_detail.html:663
+#, fuzzy
+#| msgid "Exercises"
+msgid "Saved exercises"
+msgstr "Mashqlar"
+
+#: templates/users/profile_detail.html:675
+msgid "Settings"
+msgstr ""
+
+#: templates/users/profile_detail.html:676
+msgid "All settings"
+msgstr ""
+
+#: templates/users/profile_update.html:397
+#, fuzzy
+#| msgid "Profile"
+msgid "Profile Update"
+msgstr "Profil"
+
+#: templates/users/profile_update.html:398
+msgid "Edit your information"
+msgstr ""
+
+#: templates/users/profile_update.html:425
+msgid "Cancel"
+msgstr ""
+
+#: templates/users/settings.html:420
+msgid "SETTINGS"
+msgstr ""
+
+#: templates/users/settings.html:426
+msgid "Until the end of the subscription"
+msgstr ""
+
+#: templates/users/settings.html:427
+msgid "day"
+msgstr ""
+
+#: templates/users/settings.html:436
+msgid "✏️"
+msgstr ""
+
+#: templates/users/settings.html:441
+msgid "⚙️"
+msgstr ""
+
+#: templates/users/settings.html:442
+msgid "Manage subscription"
+msgstr ""
+
+#: templates/users/settings.html:446
+msgid "💳"
+msgstr ""
+
+#: templates/users/settings.html:447
+msgid "Payment history"
+msgstr ""
+
+#: templates/users/settings.html:456
+msgid "Contract"
+msgstr ""
+
+#: templates/users/settings.html:466
+msgid "Call"
+msgstr ""
+
+#: templates/users/settings.html:479
+msgid "About app"
 msgstr ""
 
 #: templates/workouts/edition_detail.html:540
@@ -396,15 +533,27 @@ msgstr "Mashqlar"
 msgid "Sets  Done"
 msgstr ""
 
-#: templates/workouts/workout_complete.html:127
+#: templates/workouts/workout_complete.html:122
+msgid "sec"
+msgstr ""
+
+#: templates/workouts/workout_complete.html:126
 msgid "Calories Burned"
 msgstr ""
 
-#: templates/workouts/workout_complete.html:131
+#: templates/workouts/workout_complete.html:127
+msgid "kcal"
+msgstr ""
+
+#: templates/workouts/workout_complete.html:130
 #, fuzzy
 #| msgid "Workout Completed"
 msgid "Completed"
 msgstr "Mashq Tugadi"
+
+#: templates/workouts/workout_complete.html:139
+msgid "Back to Home"
+msgstr ""
 
 #~ msgid "Sevimli"
 #~ msgstr "sevimli"

@@ -394,8 +394,8 @@
                               d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                     </svg>
                 </div>
-                <h1 class="title">Profile Update</h1>
-                <p class="subtitle">Edit your information </p>
+                <h1 class="title">{% trans 'Profile Update' %}</h1>
+                <p class="subtitle">{% trans 'Edit your information' %} </p>
             </div>
 
             <!-- Form -->
@@ -422,10 +422,10 @@
                 <!-- Buttons -->
                 <div class="buttons-wrapper">
                     <a href="{% url 'user_profile' %}" class="btn btn-cancel">
-                        Cancel
+                        {% trans 'Cancel' %}
                     </a>
                     <button type="submit" class="btn btn-submit">
-                        Save
+                        {% trans 'Save' %}
                     </button>
                 </div>
             </form>
