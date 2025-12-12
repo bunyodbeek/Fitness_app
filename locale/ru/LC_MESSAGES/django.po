@@ -364,11 +364,11 @@ msgstr "упражнение не найдено"
 
 #: templates/users/cancel_subscription.html:5
 msgid "Obunani bekor qilish"
-msgstr ""
+msgstr "Отменить подписку?"
 
 #: templates/users/cancel_subscription.html:429
 msgid "CANCEL"
-msgstr ""
+msgstr "ОТМЕНА"
 
 #: templates/users/cancel_subscription.html:437
 #, fuzzy
@@ -378,33 +378,32 @@ msgstr "Управление подпиской"
 
 #: templates/users/cancel_subscription.html:440
 msgid ""
-"You are about to cancel your subscription. This action will stop your "
-"subscription services."
+"Вы собираетесь отменить подписку. Это действие прекратит предоставление вам услуг по подписке."
 msgstr ""
 
 #: templates/users/cancel_subscription.html:446
 msgid "As a result of cancellation:"
-msgstr ""
+msgstr "В результате отмены:"
 
 #: templates/users/cancel_subscription.html:449
 msgid "You will lose access to all premium features"
-msgstr ""
+msgstr "Вы потеряете доступ ко всем премиум-функциям."
 
 #: templates/users/cancel_subscription.html:450
 msgid "Your personal training programs will be deleted"
-msgstr ""
+msgstr "Ваши программы персональных тренировок будут удалены."
 
 #: templates/users/cancel_subscription.html:451
 msgid "Your statistics and results will not be saved"
-msgstr ""
+msgstr "Ваша статистика и результаты не будут сохранены."
 
 #: templates/users/cancel_subscription.html:460
 msgid "Back"
-msgstr ""
+msgstr "Назад"
 
 #: templates/users/cancel_subscription.html:464
 msgid "Confirm"
-msgstr ""
+msgstr "Подтверждать"
 
 #: templates/users/cancel_subscription.html:486
 msgid "Are you sure you want to cancel your subscription?"
@@ -439,15 +438,15 @@ msgstr "История платежей"
 #: templates/users/payment_history.html:477
 #: templates/users/payment_history.html:479
 msgid "All paid"
-msgstr ""
+msgstr "Все оплачено"
 
 #: templates/users/payment_history.html:485
 msgid "Successful"
-msgstr ""
+msgstr "Успешный"
 
 #: templates/users/payment_history.html:486
 msgid "Pending"
-msgstr ""
+msgstr "В ожидании"
 
 #: templates/users/payment_history.html:487
 #, fuzzy
@@ -642,7 +641,7 @@ msgid "Back to Home"
 msgstr "Вернуться на главную"
 
 #~ msgid "Til sozlamalari"
-#~ msgstr "Настройки языка"
+    #~ msgstr "Настройки языка"
 
 #~ msgid "set done"
 #~ msgstr "готово"
