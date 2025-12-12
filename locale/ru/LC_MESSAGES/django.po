@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-11 19:52+0500\n"
+"POT-Creation-Date: 2025-12-12 18:02+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -318,6 +318,7 @@ msgid "All favorites:"
 msgstr "Избранные"
 
 #: templates/exercises/favorites_list.html:1753
+#: templates/users/payment_history.html:484
 msgid "All"
 msgstr "Все"
 
@@ -361,6 +362,54 @@ msgstr "например, ноги и ягодицы"
 msgid "No exercises to add."
 msgstr "упражнение не найдено"
 
+#: templates/users/cancel_subscription.html:5
+msgid "Obunani bekor qilish"
+msgstr ""
+
+#: templates/users/cancel_subscription.html:429
+msgid "CANCEL"
+msgstr ""
+
+#: templates/users/cancel_subscription.html:437
+#, fuzzy
+#| msgid "Subscription"
+msgid "Cancel subscription"
+msgstr "Управление подпиской"
+
+#: templates/users/cancel_subscription.html:440
+msgid ""
+"You are about to cancel your subscription. This action will stop your "
+"subscription services."
+msgstr ""
+
+#: templates/users/cancel_subscription.html:446
+msgid "As a result of cancellation:"
+msgstr ""
+
+#: templates/users/cancel_subscription.html:449
+msgid "You will lose access to all premium features"
+msgstr ""
+
+#: templates/users/cancel_subscription.html:450
+msgid "Your personal training programs will be deleted"
+msgstr ""
+
+#: templates/users/cancel_subscription.html:451
+msgid "Your statistics and results will not be saved"
+msgstr ""
+
+#: templates/users/cancel_subscription.html:460
+msgid "Back"
+msgstr ""
+
+#: templates/users/cancel_subscription.html:464
+msgid "Confirm"
+msgstr ""
+
+#: templates/users/cancel_subscription.html:486
+msgid "Are you sure you want to cancel your subscription?"
+msgstr ""
+
 #: templates/users/language.html:8 templates/users/settings.html:471
 msgid "Language settings"
 msgstr "Настройки языка"
@@ -380,6 +429,35 @@ msgstr ""
 #: templates/users/language.html:452 templates/users/profile_update.html:428
 msgid "Save"
 msgstr "Сохранить"
+
+#: templates/users/payment_history.html:471 templates/users/settings.html:447
+#, fuzzy
+#| msgid "Payments"
+msgid "Payment history"
+msgstr "История платежей"
+
+#: templates/users/payment_history.html:477
+#: templates/users/payment_history.html:479
+msgid "All paid"
+msgstr ""
+
+#: templates/users/payment_history.html:485
+msgid "Successful"
+msgstr ""
+
+#: templates/users/payment_history.html:486
+msgid "Pending"
+msgstr ""
+
+#: templates/users/payment_history.html:487
+#, fuzzy
+#| msgid "Cancel"
+msgid "Canceled"
+msgstr "отменить"
+
+#: templates/users/payment_history.html:498
+msgid "November 15, 2024, 14:23"
+msgstr ""
 
 #: templates/users/profile_detail.html:609
 msgid "Fitness Journey"
@@ -454,12 +532,6 @@ msgstr "Управление подпиской"
 #: templates/users/settings.html:446
 msgid "💳"
 msgstr ""
-
-#: templates/users/settings.html:447
-#, fuzzy
-#| msgid "Payments"
-msgid "Payment history"
-msgstr "История платежей"
 
 #: templates/users/settings.html:456
 msgid "Contract"
