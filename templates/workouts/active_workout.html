@@ -8,32 +8,69 @@
     <link rel="stylesheet" href="{% static 'apps/css/active_workout_style.css' %}">
     <style>
         /* === ASOSIY STILAR === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background: #0A0F2C;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
             color: white;
-            font-family: 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
         }
 
-        /* Floating timer — yuqori o'ng burchakda, kichik */
+        /* Animated background particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 90%, rgba(78, 205, 196, 0.05) 0%, transparent 50%);
+            animation: particleFloat 15s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        /* Floating timer — yuqori o'ng burchakda */
         .floating-timer {
             position: fixed;
-            top: 16px;
+            top: 70px;
             right: 16px;
-            background: rgba(0, 0, 0, 0.65);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 16px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.08) 100%);
+            backdrop-filter: blur(10px);
+            color: #ffd700;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 15px;
             font-weight: 700;
             z-index: 100;
-            backdrop-filter: blur(6px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            min-width: 70px;
+            box-shadow: 0 4px 16px rgba(255, 215, 0, 0.2);
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
+            min-width: 75px;
             text-align: center;
-            font-family: 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .floating-timer.hidden {
+            opacity: 0;
+            pointer-events: none;
         }
 
         /* Header — o'rtada progress counter */
@@ -41,65 +78,97 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 20px;
-            background: #080B20;
-            border-bottom: 1px solid #1E2542;
-            position: relative;
-            z-index: 10;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, rgba(15, 52, 96, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .exit-btn {
-            background: #0F1535;
-            color: #FFD700;
-            border: 1px solid #FFD700;
-            padding: 6px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
+            background: rgba(255, 215, 0, 0.1);
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
+            color: #ffd700;
+            padding: 8px 18px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
         }
 
         .exit-btn:hover {
-            background: #1E2542;
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+            transform: translateY(-1px);
         }
 
         .progress-counter {
-            color: #FFD700;
-            font-size: 16px;
+            color: #ffd700;
+            font-size: 15px;
             font-weight: 700;
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
+            letter-spacing: 0.5px;
         }
 
         .menu-btn {
-            background: none;
-            border: none;
-            color: white;
+            background: rgba(255, 215, 0, 0.1);
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
+            color: #ffd700;
             font-size: 20px;
             cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            transition: all 0.3s ease;
         }
 
-        /* Asosiy mashq kontent — markazda rasm + nom */
+        .menu-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+        }
+
+        /* Asosiy mashq kontent */
         .exercise-content {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 32px 20px;
-            margin-top: 20px;
+            padding: 40px 20px 200px 20px;
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
         }
 
         .exercise-image-container {
-            width: 120px;
-            height: 120px;
-            background: #0F1535;
-            border-radius: 16px;
+            width: 130px;
+            height: 130px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.12) 0%, rgba(255, 215, 0, 0.06) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             overflow: hidden;
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .exercise-image-container:hover {
+            transform: scale(1.05);
+            border-color: rgba(255, 215, 0, 0.5);
         }
 
         .exercise-image {
@@ -109,48 +178,76 @@
         }
 
         .exercise-name {
-            font-size: 24px;
-            font-weight: 700;
+            font-size: 26px;
+            font-weight: 800;
             text-align: center;
             margin: 0 0 16px 0;
+            background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
         }
 
         #strengthDetails {
-            background: #0F1535;
-            padding: 8px 16px;
-            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.12) 0%, rgba(255, 215, 0, 0.06) 100%);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: 12px;
             font-size: 14px;
-            color: #CCCCCC;
+            color: rgba(255, 255, 255, 0.8);
             text-align: center;
-            margin-top: 8px;
+            margin-top: 12px;
             width: 100%;
-            max-width: 300px;
+            max-width: 320px;
+            border: 1.5px solid rgba(255, 215, 0, 0.2);
+            font-weight: 600;
         }
 
-        /* Up Next blok — pastda, qora fon bilan */
+        #strengthDetails span {
+            color: #ffd700;
+            font-weight: 700;
+        }
+
+        /* Up Next blok */
         #upNext {
-            background: #0F1535;
-            border: 1px solid #1E2542;
-            border-radius: 12px;
-            padding: 12px 16px;
-            margin: 20px 20px 0;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.12) 0%, rgba(255, 215, 0, 0.06) 100%);
+            backdrop-filter: blur(10px);
+            border: 1.5px solid rgba(255, 215, 0, 0.25);
+            border-radius: 14px;
+            padding: 14px 18px;
+            margin: 20px 16px 0;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        #upNext:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 215, 0, 0.4);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
         }
 
         .up-next-label {
-            font-size: 12px;
-            color: #FFD700;
-            font-weight: 600;
+            font-size: 11px;
+            color: #ffd700;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             margin-right: 8px;
         }
 
         .up-next-image {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
             object-fit: cover;
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.15);
         }
 
         .up-next-info {
@@ -158,25 +255,27 @@
         }
 
         .up-next-name {
-            font-size: 16px;
-            font-weight: 600;
-            margin: 0;
+            font-size: 15px;
+            font-weight: 700;
+            margin: 0 0 3px 0;
+            color: white;
         }
 
         .up-next-details {
             font-size: 12px;
-            color: #AAAAAA;
+            color: rgba(255, 255, 255, 0.65);
             margin: 0;
+            font-weight: 500;
         }
 
-        /* Action buttons — pastda, keng, sarg'ish */
+        /* Action buttons — ✅ YUQORIROQDA */
         .action-buttons {
             position: fixed;
-            bottom: 20px;
+            bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 12px;
+            gap: 14px;
             z-index: 10;
             width: 90%;
             max-width: 600px;
@@ -185,60 +284,94 @@
         }
 
         .pause-btn {
-            background: #0F1535;
-            color: white;
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            font-size: 20px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.08) 100%);
+            backdrop-filter: blur(10px);
+            color: #ffd700;
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
+            font-size: 22px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(255, 215, 0, 0.15);
         }
 
         .pause-btn:hover {
-            background: #1E2542;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, rgba(255, 215, 0, 0.15) 100%);
+            border-color: #ffd700;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.25);
+        }
+
+        .pause-btn:active {
+            transform: translateY(0);
         }
 
         .did-it-btn {
             flex: 1;
-            background: linear-gradient(90deg, #FFD700, #FFC107);
-            color: #0A0F2C;
+            background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
+            color: #1a1a2e;
             border: none;
-            padding: 16px 24px;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 700;
+            padding: 16px 28px;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 800;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .did-it-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+            transition: left 0.4s ease;
+        }
+
+        .did-it-btn:hover::before {
+            left: 100%;
         }
 
         .did-it-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 6px 16px rgba(255, 215, 0, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 35px rgba(255, 215, 0, 0.5);
+        }
+
+        .did-it-btn:active {
+            transform: translateY(0) scale(0.99);
         }
 
         .did-it-btn.completed {
-            background: #1E2542;
-            color: #FFD700;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.08) 100%);
+            color: #ffd700;
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
             box-shadow: none;
         }
 
-        /* Rest overlay — to'liq ekranni qoplab turadi */
+        /* Rest overlay */
         .rest-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.85);
+            background: linear-gradient(135deg, rgba(10, 14, 39, 0.97) 0%, rgba(26, 31, 58, 0.97) 100%);
+            backdrop-filter: blur(20px);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -252,74 +385,136 @@
         .rest-overlay.active {
             opacity: 1;
             pointer-events: all;
+            animation: overlayFadeIn 0.3s ease;
+        }
+
+        @keyframes overlayFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .rest-title {
-            font-size: 32px;
-            font-weight: 700;
-            color: #FFD700;
-            margin-bottom: 16px;
+            font-size: 38px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
         }
 
         .set-complete-badge {
-            background: #0F1535;
-            color: #FFD700;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 20px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.08) 100%);
+            backdrop-filter: blur(10px);
+            color: #ffd700;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 4px 16px rgba(255, 215, 0, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
+        /* ✅ REST TIMER KATTALASHTIRISH */
         .rest-timer-circle {
-            width: 120px;
-            height: 120px;
-            border: 3px solid #FFD700;
+            width: 200px;
+            height: 200px;
+            border: 5px solid #ffd700;
             border-radius: 50%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: transform 0.2s ease;
+            transition: all 0.3s ease;
+            margin: 25px 0;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.08) 0%, rgba(255, 215, 0, 0.03) 100%);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.3), inset 0 0 20px rgba(255, 215, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rest-timer-circle::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .rest-timer-circle:hover {
             transform: scale(1.05);
+            border-color: #ffc107;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.5), inset 0 0 30px rgba(255, 215, 0, 0.15);
+        }
+
+        .rest-timer-circle:active {
+            transform: scale(0.98);
         }
 
         .rest-timer {
-            font-size: 28px;
-            font-weight: 700;
-            color: white;
+            font-size: 52px;
+            font-weight: 800;
+            color: #ffd700;
             margin: 0;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 4px 20px rgba(255, 215, 0, 0.5);
         }
 
         .rest-skip-text {
-            font-size: 12px;
-            color: #AAAAAA;
-            margin-top: 8px;
+            font-size: 14px;
+            color: rgba(255, 215, 0, 0.7);
+            margin-top: 12px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .rest-up-next {
-            margin-top: 20px;
+            margin-top: 35px;
             text-align: center;
         }
 
         .rest-up-next-label {
-            font-size: 14px;
-            color: #FFD700;
-            font-weight: 600;
-            margin-bottom: 8px;
+            font-size: 13px;
+            color: #ffd700;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
         }
 
         .rest-up-next-name {
-            font-size: 20px;
-            font-weight: 700;
+            font-size: 24px;
+            font-weight: 800;
             color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* Exit modal — o'rtada */
+        /* Exit modal */
         .exit-modal {
             position: fixed;
             top: 0;
@@ -465,35 +660,57 @@
 </div>
 
 <script>
-        // Backend ma'lumotlar
-        const workoutId = {{ workout.pk }};
-        const totalExercises = {{ total_exercises }};
-        const csrfToken = "{{ csrf_token }}";
-        const exercises = {{ exercises|safe }};
+    // Backend ma'lumotlar
+    const workoutId = {{ workout.pk }};
+    const totalExercises = {{ total_exercises }};
+    const csrfToken = "{{ csrf_token }}";
+    const exercises = {{ exercises|safe }};
 
-        // Holatlar
-        let currentExerciseIndex = 0;
-        let currentSet = 1;
-        let isPaused = false;
-        let isResting = false;
-        let timerInterval = null;
-        let restInterval = null;
-        let restTimeLeft = 0;
-        let sessionStartTime = null; // ✅ BUTUN SEANS UCHUN
-        let exerciseStartTime = null; // ✅ JORIY MASHQ/SET UCHUN (faqat cardio uchun)
-        let totalCaloriesBurned = 0;
-        let totalDurationSeconds = 0;
-        let totalExercisesCompleted = 0;
+    // ✅ TO'G'RILANGAN TIMER LOGIKASI
+    let currentExerciseIndex = 0;
+    let currentSet = 1;
+    let isPaused = false;
+    let isResting = false;
+    let timerInterval = null;
+    let restInterval = null;
+    let restTimeLeft = 0;
 
-        // Yordamchi funksiyalar
-        const formatTime = (s) => {
+    // ✅ YANGI: Umumiy trenirovka vaqti uchun
+    let sessionStartTime = null;  // Trenirovka boshlangan vaqt
+    let totalPausedTime = 0;      // Umumiy pause qilingan vaqt (millisekunda)
+    let pauseStartTime = null;    // Pause boshlangan vaqt
+
+    let totalCaloriesBurned = 0;
+    let totalDurationSeconds = 0;
+    let totalExercisesCompleted = 0;
+
+    // Yordamchi funksiyalar
+    const formatTime = (s) => {
         const m = Math.floor(s / 60);
         const sec = s % 60;
         return `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
     };
 
-        // === Asosiy: Mashqni yuklash ===
-        const loadExercise = (index) => {
+    // ✅ YANGI: Haqiqiy o'tgan vaqtni hisoblash (pause vaqtini hisobga olgan holda)
+    const getElapsedSeconds = () => {
+        if (!sessionStartTime) return 0;
+
+        const now = Date.now();
+        let totalElapsed = now - sessionStartTime;
+
+        // Agar hozir pause holatida bo'lsa
+        if (isPaused && pauseStartTime) {
+            totalElapsed -= (now - pauseStartTime);
+        }
+
+        // Umumiy pause vaqtini ayirish
+        totalElapsed -= totalPausedTime;
+
+        return Math.floor(totalElapsed / 1000);
+    };
+
+    // === Asosiy: Mashqni yuklash ===
+    const loadExercise = (index) => {
         if (index >= exercises.length) return finishWorkout();
 
         const ex = exercises[index];
@@ -520,100 +737,88 @@
 
         // Set details (faqat strength)
         if (ex.type === 'strength') {
-        document.getElementById('strengthDetails').style.display = 'block';
-        document.getElementById('totalSets').textContent = ex.sets;
-        document.getElementById('repsCount').textContent = ex.reps;
-        document.getElementById('currentSet').textContent = 1;
-    } else {
-        document.getElementById('strengthDetails').style.display = 'none';
-    }
+            document.getElementById('strengthDetails').style.display = 'block';
+            document.getElementById('totalSets').textContent = ex.sets;
+            document.getElementById('repsCount').textContent = ex.reps;
+            document.getElementById('currentSet').textContent = 1;
+        } else {
+            document.getElementById('strengthDetails').style.display = 'none';
+        }
 
-        // ✅ BUTUN SEANS UCHUN: faqat 1-marta
+        // ✅ Trenirovka faqat birinchi marta boshlanganda
         if (sessionStartTime === null) {
-        sessionStartTime = Date.now();
-        startSessionTimer(); // ✅ Floating timer uchun
-    }
-
-        // ✅ JORIY MASHQ UCHUN (faqat cardio avtomatik to'xtash uchun)
-        exerciseStartTime = Date.now(); // cardio uchun kerak
-        if (ex.type === 'cardio') {
-        startExerciseTimer(); // faqat cardio uchun
-    }
+            sessionStartTime = Date.now();
+            startSessionTimer();
+        }
 
         showUpNext(index);
     };
 
-        // ✅ BUTUN SEANS UCHUN TIMER (floating-timer)
-        const startSessionTimer = () => {
+    // ✅ TO'G'RILANGAN TIMER
+    const startSessionTimer = () => {
         clearInterval(timerInterval);
         timerInterval = setInterval(() => {
-        if (isPaused) return; // ❗ Restda ham davom etadi!
-
-        const elapsedSec = Math.floor((Date.now() - sessionStartTime) / 1000);
-        document.getElementById('floatingTimer').textContent = formatTime(elapsedSec);
-    }, 100);
+            // Pause yoki rest paytida timer to'xtaydi
+            if (!isPaused && !isResting) {
+                const elapsedSec = getElapsedSeconds();
+                document.getElementById('floatingTimer').textContent = formatTime(elapsedSec);
+            }
+        }, 100);
     };
 
-        // ✅ JORIY CARDIO MASHQ UCHUN TIMER (faqat cardio avtomatik tugatish uchun)
-        const startExerciseTimer = () => {
-        const ex = exercises[currentExerciseIndex];
-        if (ex.type !== 'cardio') return;
-
-        const checkInterval = setInterval(() => {
-        if (isPaused || isResting) return;
-
-        const elapsedSec = Math.floor((Date.now() - exerciseStartTime) / 1000);
-        const totalTime = ex.duration_minutes * 60;
-        if (elapsedSec >= totalTime) {
-        clearInterval(checkInterval);
-        completeExercise(true);
-    }
-    }, 500);
-    };
-
-        // === Pause ===
-        const togglePause = () => {
+    // ✅ TO'G'RILANGAN PAUSE
+    const togglePause = () => {
         if (isResting) return;
-        isPaused = !isPaused;
-        document.getElementById('pauseIcon').textContent = isPaused ? '▶' : '⏸';
+
+        if (!isPaused) {
+            // Pause boshlash
+            isPaused = true;
+            pauseStartTime = Date.now();
+            document.getElementById('pauseIcon').textContent = '▶';
+        } else {
+            // Pause tugashi
+            isPaused = false;
+            if (pauseStartTime) {
+                totalPausedTime += (Date.now() - pauseStartTime);
+                pauseStartTime = null;
+            }
+            document.getElementById('pauseIcon').textContent = '⏸';
+        }
     };
 
-        // === Mashqni tugatish (Set Done yoki Did it) ===
-        const completeExercise = (auto = false) => {
+    // === Mashqni tugatish (Set Done yoki Did it) ===
+    const completeExercise = (auto = false) => {
         const ex = exercises[currentExerciseIndex];
         const btn = document.getElementById('didItBtn');
         btn.disabled = true;
 
-        const exerciseDurationSec = Math.floor((Date.now() - exerciseStartTime) / 1000);
-
-        // ✅ Kaloriya: faqat strength oxirgi setda yoki cardio tugaganda
+        // ✅ Kaloriya hisoblash
         if (ex.type === 'cardio') {
-        // Cardio: to'liq davomiyligi bo'yicha
-        totalCaloriesBurned += ex.calories_per_minute * (exerciseDurationSec / 60);
-    } else if (ex.type === 'strength' && currentSet >= ex.sets) {
-        // Strength: faqat OXIRGI setda — butun mashq davomiyligi bo'yicha
-        // Lekin bizda har bir set uchun alohida davomiyligi yo'q.
-        // Shu sababli: taxminiy — `ex.duration_minutes` dan foydalanamiz
-        totalCaloriesBurned += ex.calories_per_minute * ex.duration_minutes;
-    }
+            totalCaloriesBurned += ex.calories_per_minute * ex.duration_minutes;
+        } else if (ex.type === 'strength' && currentSet >= ex.sets) {
+            totalCaloriesBurned += ex.calories_per_minute * ex.duration_minutes;
+        }
 
         if (ex.type === 'strength' && currentSet < ex.sets) {
-        totalExercisesCompleted += 1;
-        startRest(ex.rest_seconds, currentSet, ex.sets);
-        currentSet++;
-        return;
-    }
+            totalExercisesCompleted += 1;
+            startRest(ex.rest_seconds, currentSet, ex.sets);
+            currentSet++;
+            return;
+        }
 
-        // Oxirgi set yoki cardio — to'liq mashq yakunlandi
+        // Oxirgi set yoki cardio
         totalExercisesCompleted += 1;
         btn.classList.add('completed');
         btn.textContent = '✓ Done';
         setTimeout(() => loadExercise(currentExerciseIndex + 1), 800);
     };
 
-        // === Rest boshlash ===
-        const startRest = (restSec, completedSet, totalSets) => {
+    // === Rest boshlash ===
+    const startRest = (restSec, completedSet, totalSets) => {
         isResting = true;
+
+        // ✅ Floating timer yashirish
+        document.getElementById('floatingTimer').classList.add('hidden');
 
         // Tugmalar yashiriladi
         document.getElementById('didItBtn').style.display = 'none';
@@ -623,8 +828,8 @@
         document.getElementById('setCompleteBadge').textContent = `Set ${completedSet} Complete ✓`;
         const ex = exercises[currentExerciseIndex];
         const nextText = ex.type === 'strength'
-        ? `Set ${currentSet + 1}/${ex.sets}`
-        : (exercises[currentExerciseIndex + 1]?.name || "Workout Complete");
+            ? `Set ${currentSet + 1}/${ex.sets}`
+            : (exercises[currentExerciseIndex + 1]?.name || "Workout Complete");
         document.getElementById('restUpNextName').textContent = nextText;
 
         document.getElementById('restOverlay').classList.add('active');
@@ -633,18 +838,20 @@
 
         clearInterval(restInterval);
         restInterval = setInterval(() => {
-        if (!isPaused) restTimeLeft--;
-        document.getElementById('restTimer').textContent = formatTime(restTimeLeft);
-        if (restTimeLeft <= 0) skipRest();
-    }, 1000);
+            restTimeLeft--;
+            document.getElementById('restTimer').textContent = formatTime(restTimeLeft);
+            if (restTimeLeft <= 0) skipRest();
+        }, 1000);
     };
 
-        // === Restni o'tkazib yuborish ===
-        const skipRest = () => {
+    // === Restni o'tkazib yuborish ===
+    const skipRest = () => {
         isResting = false;
-        isPaused = false;
         clearInterval(restInterval);
         document.getElementById('restOverlay').classList.remove('active');
+
+        // ✅ Floating timer ko'rsatish
+        document.getElementById('floatingTimer').classList.remove('hidden');
 
         // Tugmalar qayta paydo bo'ladi
         const didBtn = document.getElementById('didItBtn');
@@ -658,107 +865,101 @@
 
         const ex = exercises[currentExerciseIndex];
         if (ex.type === 'strength' && currentSet <= ex.sets) {
-        document.getElementById('currentSet').textContent = currentSet;
-        exerciseStartTime = Date.now(); // ✅ Yangi set uchun (faqat davomiyligi statistika uchun, cardio emas)
-        // ✅ Floating timer 00:00 GA QAYTMAYDI — chunki sessionStartTime o'zgarmaydi!
-        startExerciseTimer(); // faqat cardio uchun, lekin strengthda ishlamaydi — muammo emas
-    } else {
-        loadExercise(currentExerciseIndex + 1);
-    }
+            document.getElementById('currentSet').textContent = currentSet;
+        } else {
+            loadExercise(currentExerciseIndex + 1);
+        }
     };
 
-        // === Up Next ko'rsatish ===
-        const showUpNext = (index) => {
+    // === Up Next ko'rsatish ===
+    const showUpNext = (index) => {
         const upNext = document.getElementById('upNext');
         const ex = exercises[index];
 
         if (ex.type === 'strength' && currentSet < ex.sets) {
-        upNext.style.display = 'flex';
-        document.getElementById('upNextImage').src = ex.image || "{% static 'images/default_exercise.png' %}";
-        document.getElementById('upNextName').textContent = ex.name;
-        document.getElementById('upNextDetails').textContent = `Next: Set ${currentSet + 1}/${ex.sets}`;
-        return;
-    }
+            upNext.style.display = 'flex';
+            document.getElementById('upNextImage').src = ex.image || "{% static 'images/default_exercise.png' %}";
+            document.getElementById('upNextName').textContent = ex.name;
+            document.getElementById('upNextDetails').textContent = `Next: Set ${currentSet + 1}/${ex.sets}`;
+            return;
+        }
 
         if (index < exercises.length - 1) {
-        const next = exercises[index + 1];
-        upNext.style.display = 'flex';
-        document.getElementById('upNextImage').src = next.image || "{% static 'images/default_exercise.png' %}";
-        document.getElementById('upNextName').textContent = next.name;
-        document.getElementById('upNextDetails').textContent = next.type === 'cardio'
-        ? `${next.duration_minutes} min`
-        : `${next.sets} sets × ${next.reps} reps`;
-    } else {
-        upNext.style.display = 'none';
-    }
+            const next = exercises[index + 1];
+            upNext.style.display = 'flex';
+            document.getElementById('upNextImage').src = next.image || "{% static 'images/default_exercise.png' %}";
+            document.getElementById('upNextName').textContent = next.name;
+            document.getElementById('upNextDetails').textContent = next.type === 'cardio'
+                ? `${next.duration_minutes} min`
+                : `${next.sets} sets × ${next.reps} reps`;
+        } else {
+            upNext.style.display = 'none';
+        }
     };
 
-        // === Exit modal ===
-        const showExitModal = () => {
+    // === Exit modal ===
+    const showExitModal = () => {
         document.getElementById('exitModal').classList.add('active');
         if (!isPaused && !isResting) togglePause();
     };
 
-        const returnToWorkout = () => {
+    const returnToWorkout = () => {
         document.getElementById('exitModal').classList.remove('active');
         if (isPaused && !isResting) togglePause();
     };
 
-        const createForm = (save, action) => {
+    const createForm = (save, action) => {
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = action === 'complete'
-        ? "{% url 'workout_complete' workout.id %}"
-        : "{% url 'workout_start' workout.id %}";
+            ? "{% url 'workout_complete' workout.id %}"
+            : "{% url 'workout_start' workout.id %}";
 
         // ✅ Umumiy seans davomiyligini hisoblash
-        if (sessionStartTime) {
-        const elapsed = Math.floor((Date.now() - sessionStartTime) / 1000);
-        totalDurationSeconds = elapsed;
-    }
+        totalDurationSeconds = getElapsedSeconds();
 
         const fields = {
-        csrfmiddlewaretoken: csrfToken,
-        action: action,
-        save_progress: save ? 'true' : 'false',
-        total_duration: totalDurationSeconds,
-        total_calories: totalCaloriesBurned.toFixed(2),
-        exercises_completed: totalExercisesCompleted,
-    };
+            csrfmiddlewaretoken: csrfToken,
+            action: action,
+            save_progress: save ? 'true' : 'false',
+            total_duration: totalDurationSeconds,
+            total_calories: totalCaloriesBurned.toFixed(2),
+            exercises_completed: totalExercisesCompleted,
+        };
 
         if (action === 'exit' && save) {
-        fields.current_exercise_index = currentExerciseIndex;
-        fields.current_set = currentSet;
-    }
+            fields.current_exercise_index = currentExerciseIndex;
+            fields.current_set = currentSet;
+        }
 
         Object.entries(fields).forEach(([name, value]) => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = name;
-        input.value = value;
-        form.appendChild(input);
-    });
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            input.value = value;
+            form.appendChild(input);
+        });
 
         return form;
     };
 
-        const finishWorkout = () => {
+    const finishWorkout = () => {
         document.body.appendChild(createForm(true, 'complete'));
         document.forms[document.forms.length - 1].submit();
     };
 
-        const saveAndExit = () => {
+    const saveAndExit = () => {
         document.body.appendChild(createForm(true, 'exit'));
         document.forms[document.forms.length - 1].submit();
     };
 
-        const exitWithoutSaving = () => {
+    const exitWithoutSaving = () => {
         document.body.appendChild(createForm(false, 'exit'));
         document.forms[document.forms.length - 1].submit();
     };
 
-        // === Ishga tushirish ===
-        document.addEventListener('DOMContentLoaded', () => {
+    // === Ishga tushirish ===
+    document.addEventListener('DOMContentLoaded', () => {
         loadExercise(0);
     });
 </script>
