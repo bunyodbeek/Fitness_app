@@ -107,29 +107,23 @@ class WorkoutStartView(LoginRequiredMixin, View):
 
         workout = get_object_or_404(Workout, pk=pk)
 
-        # Workout finished
         if action == "complete":
-            WorkoutProgress.objects.update_or_create(
+            WorkoutProgress.objects.create(
                 user=request.user.profile,
                 workout=workout,
-                defaults={
-                    "total_duration_seconds": int(request.POST.get("total_duration", 0)),
-                    "total_calories": float(request.POST.get("total_calories", 0)),
-                    "exercises_completed": int(request.POST.get("exercises_completed", 0)),
-                }
+                total_duration_seconds=int(request.POST.get("total_duration", 0)),
+                total_calories=float(request.POST.get("total_calories", 0)),
+                exercises_completed=int(request.POST.get("exercises_completed", 0))
             )
             return redirect("workout_complete", pk)
 
-        # Exit with save
         if action == "exit" and save:
-            WorkoutProgress.objects.update_or_create(
+            WorkoutProgress.objects.create(
                 user=request.user.profile,
                 workout=workout,
-                defaults={
-                    "total_duration_seconds": int(request.POST.get("total_duration", 0)),
-                    "total_calories": float(request.POST.get("total_calories", 0)),
-                    "exercises_completed": int(request.POST.get("exercises_completed", 0)),
-                }
+                total_duration_seconds=int(request.POST.get("total_duration", 0)),
+                total_calories=float(request.POST.get("total_calories", 0)),
+                exercises_completed=int(request.POST.get("exercises_completed", 0))
             )
             return redirect("program_list")
 
