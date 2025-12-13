@@ -12,11 +12,10 @@ from apps.views.users import (
 from apps.views.workouts import (
     AnimationView,
     EditionDetailView,
-    MyTrainerHistoryView,
+    MyTrainerDetailView,
     MyTrainerView,
     ProgramDetailView,
     ProgramListView,
     WorkoutCompleteView,
-    WorkoutDetailView,
     WorkoutStartView,
 )

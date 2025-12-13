@@ -3,7 +3,7 @@ import os
 import subprocess
 import threading
 
-from apps.models.base import CreatedBaseModel
+from PIL import Image
 from django.core.files.base import File
 from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -19,7 +19,8 @@ from django.db.models import (
     TextField,
 )
 from django.utils.translation import gettext_lazy as _
-from PIL import Image
+
+from apps.models.base import CreatedBaseModel
 
 
 class MuscleGroup(TextChoices):

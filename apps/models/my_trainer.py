@@ -71,14 +71,3 @@ class ExerciseLog(Model):
     def __str__(self):
         return f"{self.session.user.name} - {self.exercise.name}"
 
-
-class WorkoutProgress(Model):
-    user = ForeignKey('apps.UserProfile', on_delete=CASCADE)
-    workout = ForeignKey('apps.Workout', on_delete=CASCADE)
-    total_calories = FloatField(default=0)
-    total_duration_seconds = IntegerField(default=0)
-    exercises_completed = IntegerField(default=0)
-    completed_at = DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.user} - {self.workout} progress"

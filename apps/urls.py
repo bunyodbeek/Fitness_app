@@ -8,7 +8,7 @@ from apps.views import (
     ExercisesByMuscleView,
     FavoritesListView,
     MuscleGroupListView,
-    MyTrainerHistoryView,
+    MyTrainerDetailView,
     MyTrainerView,
     OnboardingView,
     ProfileView,
@@ -21,7 +21,6 @@ from apps.views import (
     ToggleFavoriteView,
     UpdateProfileView,
     WorkoutCompleteView,
-    WorkoutDetailView,
     WorkoutStartView,
 )
 from apps.views.favorite import FavoriteToggleAPIView, CreateCollectionView
@@ -48,13 +47,11 @@ urlpatterns = [
     path('', AnimationView.as_view(), name='animation'),
     path('program/<int:pk>/', ProgramDetailView.as_view(), name='program_detail'),
     path('edition/<int:pk>/', EditionDetailView.as_view(), name='edition_detail'),
-    path('workout/<int:pk>/', WorkoutDetailView.as_view(), name='workout_detail'),
     path('workout/<int:pk>/start/', WorkoutStartView.as_view(), name='workout_start'),
     path('workout/<int:pk>/complete/', WorkoutCompleteView.as_view(), name='workout_complete'),
 
     path('my-trainer/', MyTrainerView.as_view(), name='my_trainer'),
-    path('my-trainer/history/', MyTrainerHistoryView.as_view(), name='my_trainer_history'),
-    path('workout/<int:session_id>/detail/', WorkoutDetailView.as_view(), name='workout_session_detail'),
+    path('my-trainer/history/', MyTrainerDetailView.as_view(), name='my_trainer_history'),
 
     path("bot/webhook/", TelegramWebhookView.as_view(), name="telegram_webhook"),
 

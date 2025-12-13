@@ -3,6 +3,8 @@ from apps.models.exercises import MuscleGroup
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView, ListView, TemplateView
 
+from apps.models.my_trainer import WorkoutSession
+
 
 class MuscleGroupListView(TemplateView):
     template_name = 'exercises/body_parts.html'
@@ -80,4 +82,6 @@ class ExerciseDetailView(LoginRequiredMixin, DetailView):
         else:
             context['is_favorited'] = False
         return context
+
+
 

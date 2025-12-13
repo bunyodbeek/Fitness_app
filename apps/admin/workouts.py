@@ -1,5 +1,4 @@
-from apps.models.my_trainer import WorkoutProgress
-from apps.models.workouts import Edition, Program, Workout, WorkoutExercise
+from apps.models.workouts import Edition, Program, Workout, WorkoutExercise, WorkoutProgress
 from django.contrib import admin
 
 

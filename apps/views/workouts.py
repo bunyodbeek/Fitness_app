@@ -1,8 +1,8 @@
 from datetime import timedelta
 
 from apps.models import Edition, Program
-from apps.models.my_trainer import WorkoutProgress, WorkoutSession
-from apps.models.workouts import Workout, WorkoutExercise
+from apps.models.my_trainer import WorkoutSession
+from apps.models.workouts import Workout, WorkoutExercise, WorkoutProgress
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.aggregates import Sum
 from django.http import HttpResponseBadRequest
@@ -253,8 +253,8 @@ class MyTrainerView(LoginRequiredMixin, TemplateView):
         return streak
 
 
-class MyTrainerHistoryView(LoginRequiredMixin, TemplateView):
-    template_name = 'my_trainer/my_trainer_history.html'
+class MyTrainerDetailView(LoginRequiredMixin, TemplateView):
+    template_name = 'my_trainer/my_trainer_detail.html'
     login_url = '/accounts/login/'
 
     def get_context_data(self, **kwargs):
@@ -270,26 +270,3 @@ class MyTrainerHistoryView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class WorkoutDetailView(LoginRequiredMixin, TemplateView):
-    template_name = 'my_trainer/workouts_detail.html'
-    login_url = '/accounts/login/'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        session_id = kwargs.get('session_id')
-
-        try:
-            session = WorkoutSession.objects.select_related(
-                'workout', 'workout__edition'
-            ).prefetch_related('exercise_logs__exercise').get(
-                id=session_id,
-                user=self.request.user.profile
-            )
-
-            context['session'] = session
-            context['exercise_logs'] = session.exercise_logs.all()
-
-        except WorkoutSession.DoesNotExist:
-            context['error'] = 'Workout session not found'
-
-        return context
