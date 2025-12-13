@@ -1,6 +1,8 @@
 from apps.models import Payment, Subscription
 from django.contrib import admin
 
+from apps.models.payments import SubscriptionPlan
+
 
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
@@ -11,4 +13,6 @@ class SubscriptionAdmin(admin.ModelAdmin):
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ['user', 'status', 'is_auto_payment', 'auto_payment_attempt', 'created_at', 'completed_at']
 
-
+@admin.register(SubscriptionPlan)
+class SubscriptionPlanAdmin(admin.ModelAdmin):
+    pass

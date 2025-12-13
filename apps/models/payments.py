@@ -81,6 +81,10 @@ class Subscription(Model):
         return max(0, delta.days)
 
 
+    def total_days(self):
+        return max((self.end_date - self.start_date).days, 1)
+
+
     class Meta:
         verbose_name = _("Subscription")
         verbose_name_plural = _("Subscriptions")

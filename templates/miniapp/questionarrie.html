@@ -181,44 +181,6 @@
             margin-top: 14px;
         }
 
-        /* debug panel */
-        #debug {
-            white-space: pre-wrap;
-            background: #1e272e;
-            color: #f5f6fa;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 14px;
-            font-family: monospace;
-            font-size: 13px;
-            display: none;
-        }
-
-        .nav-row {
-            display: flex;
-            gap: 12px;
-            margin-top: 12px;
-            justify-content: center;
-        }
-
-        .nav-row button {
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .nav-prev {
-            background: #34495e;
-            color: #fff;
-        }
-
-        .nav-next {
-            background: #f1c40f;
-            color: #2c3e50;
-        }
-
         @media (min-width: 720px) {
             h1 {
                 font-size: 26px;
@@ -320,14 +282,6 @@
             <button class="continue-btn" id="submitBtn">Build My Plan</button>
         </div>
     </div>
-
-    <!-- Small nav for testing/back -->
-    <div class="nav-row" aria-hidden="true">
-        <button class="nav-prev" id="prevBtn">&larr; Prev</button>
-        <button class="nav-next" id="nextBtn">Next &rarr;</button>
-    </div>
-
-    <div id="debug" aria-live="polite"></div>
 </div>
 
 <script>
@@ -363,17 +317,8 @@
     };
 
     // DOM refs
-    const dbg = document.getElementById('debug');
     const totalSteps = 7;
     let currentStep = 1;
-
-    function updateDebug() {
-        dbg.style.display = 'block';
-        dbg.textContent = '🔍 Debug info (live):\n\n' +
-            'Telegram initDataUnsafe:\n' + JSON.stringify(tg?.initDataUnsafe || {}, null, 2) +
-            '\n\nformData:\n' + JSON.stringify(formData, null, 2) +
-            '\n\ncurrentStep: ' + currentStep;
-    }
 
     // -- Progress handling ---------------------------------------------------
     function updateProgress() {
@@ -391,17 +336,11 @@
 
         currentStep = step;
         updateProgress();
-        updateDebug();
     }
 
     function nextStep() {
         if (currentStep >= totalSteps) return;
         showStep(currentStep + 1);
-    }
-
-    function prevStep() {
-        if (currentStep <= 1) return;
-        showStep(currentStep - 1);
     }
 
     // -- Helpers for option selection ---------------------------------------
@@ -432,8 +371,6 @@
             if (fieldName === 'goal') {
                 document.getElementById('finalGoal').innerHTML = value.replace(/_/g, ' ').toUpperCase();
             }
-
-            updateDebug();
 
             if (autoNext) {
                 // tiny delay so UI shows selected state
@@ -466,7 +403,6 @@
                 formData.motivation.splice(idx, 1);
                 btn.classList.remove('selected');
             }
-            updateDebug();
         });
 
         document.getElementById('motivationContinue').addEventListener('click', () => {
@@ -485,7 +421,6 @@
         weightInput.addEventListener('input', (e) => {
             const v = Number(e.target.value || 0);
             if (!isNaN(v)) formData.weight = v;
-            updateDebug();
         });
 
         document.getElementById('weightNext').addEventListener('click', () => {
@@ -497,19 +432,12 @@
                 return;
             }
             formData.weight = w;
-            updateDebug();
             nextStep();
         });
     }
 
-    // -- Prev/Next nav (optional, for testing) ------------------------------
-    document.getElementById('prevBtn').addEventListener('click', prevStep);
-    document.getElementById('nextBtn').addEventListener('click', nextStep);
-
     // -- Submit handler -----------------------------------------------------
     async function submitQuestionnaire() {
-        updateDebug();
-
         // minimal validation before submit
         if (!formData.telegram_id) {
             if (tg && tg.showAlert) tg.showAlert('Error: Telegram ID not found. Please restart the bot.');
@@ -583,7 +511,6 @@
 
     // initial UI update
     updateProgress();
-    updateDebug();
 
     // If you want, pre-fill some UI from existing formData (e.g., highlight selected if loaded)
     (function initialHighlight() {
