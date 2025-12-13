@@ -2026,45 +2026,42 @@
             });
         });
 
+        // Collection yaratish (AJAX)
         function saveCollection() {
             const name = document.getElementById('collectionName').value.trim();
             if (!name) {
-                alert('Collection nomini kiriting');
+                alert('Please enter a collection name.');
                 return;
             }
 
             const selectedItems = document.querySelectorAll('.exercise-select-item.selected');
-            const exerciseIds = Array.from(selectedItems).map(i => i.dataset.exerciseId);
-
-            const formData = new FormData();
-            formData.append("name", name);
-
-            exerciseIds.forEach(id => {
-                formData.append("exercise_ids[]", id);
-            });
+            const exerciseIds = Array.from(selectedItems).map(item => item.dataset.exerciseId);
 
             fetch("/en/create/collection/", {
-                method: "POST",
+                method: 'POST',
                 headers: {
-                    "X-CSRFToken": csrfToken
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json',
                 },
-                body: formData
+                body: JSON.stringify({
+                    name: name,
+                    exercise_ids: exerciseIds
+                })
             })
-                .then(r => r.json())
+                .then(response => response.json())
                 .then(data => {
                     if (data.success) {
                         closeCollectionModal();
                         location.reload();
                     } else {
-                        alert(data.error);
+                        alert(data.error || 'Failed to create collection.');
                     }
                 })
-                .catch(err => {
-                    console.error(err);
-                    alert("Xatolik yuz berdi");
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Something went wrong. Please try again.');
                 });
         }
-
 
         // Sevimlilardan o'chirish
         function unfavorite(favId, btn) {

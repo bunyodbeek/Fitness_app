@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% trans "Til sozlamalari" %}</title>
+    <title>{% trans "Language settings" %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -411,7 +411,7 @@
 <body>
 <div class="page-header">
     <a href="{% url 'settings' %}" class="back-btn">‹</a>
-    <h1 class="page-title">{% trans "TIL SOZLAMALARI" %}</h1>
+    <h1 class="page-title">{% trans "LANGUAGE SETTINGS" %}</h1>
 </div>
 
 <div class="settings-content">
@@ -423,10 +423,10 @@
         {% endfor %}
     {% endif %}
 
-    <h2 class="page-subtitle">{% trans "Til tanlang" %}</h2>
+    <h2 class="page-subtitle">{% trans "Select language" %}</h2>
 
     <p class="description">
-        {% trans "Ilovada qaysi tildan foydalanmoqchisiz? Tanlangan tilingiz butun ilova bo'ylab qo'llaniladi." %}
+        {% trans "Which language do you want to use in the app? Your chosen language is optional throughout the app." %}
     </p>
 
     <form method="post" id="languageForm">
@@ -449,7 +449,7 @@
 
         <button type="submit" class="bottom-button">
             <i class="fas fa-save"></i>
-            <span>{% trans "Saqlash" %}</span>
+            <span>{% trans "Save" %}</span>
         </button>
     </form>
 </div>

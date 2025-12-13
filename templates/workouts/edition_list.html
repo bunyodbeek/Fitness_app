@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}{{ program.title }} - Editions{% endblock %}
+{% load i18n %}
 
 {% block bottom_nav %}{% endblock %}
 {% block extra_css %}
@@ -738,7 +739,7 @@
 <!-- Compact Top Navigation -->
 <div class="top-nav">
     <button class="back-btn" onclick="goBack()">‹</button>
-    <h1>EDITIONS</h1>
+    <h1>{% trans 'EDITIONS' %}</h1>
     <span></span>
 </div>
 
@@ -778,12 +779,12 @@
     <p class="info-text">{{ program.description|default:"Transform your body with this comprehensive workout program designed for all fitness levels."|truncatewords:25 }}</p>
 
     <div class="info-highlight">
-        💡 <strong>Tip:</strong> Complete each edition for 4-6 weeks before moving to the next.
+        💡 <strong>{% trans 'Tip:' %}</strong> {% trans 'Complete each edition for 4-6 weeks before moving to the next' %}
     </div>
 </div>
 
 <!-- Section Title -->
-<div class="section-title">Choose Your Edition</div>
+<div class="section-title">{% trans 'Choose Your Edition' %}</div>
 
 <!-- Compact Editions List -->
 <div class="editions-list">
@@ -803,8 +804,8 @@
     {% empty %}
     <div class="empty-state">
         <div class="icon">📋</div>
-        <h3>No editions available</h3>
-        <p>Check back later for workout editions</p>
+        <h3>{% trans 'No editions available' %}</h3>
+        <p>{% trans 'Check back later for workout editions' %}</p>
     </div>
     {% endfor %}
 </div>

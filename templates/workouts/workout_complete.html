@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
 
@@ -101,35 +102,33 @@
 <div class="workout-complete-page">
     <div class="complete-container">
 
-        <h1 class="complete-title">Workout Complete! 🎉</h1>
+        <h1 class="complete-title">{% trans 'Workout Complete! 🎉' %}</h1>
         <p class="complete-sub">
-            Ajoyib ish! Bugungi mashg‘ulotni muvaffaqiyatli tugatdingiz.
+{% trans "Great job! Successfully completed today's training" %}
         </p>
 
         <div class="stats-box">
             <div class="stats-row">
-                <span class="stats-label">Workout</span>
+                <span class="stats-label">{% trans 'Workout' %}</span>
                 <span class="stats-value">{{ workout.title }}</span>
             </div>
             <div class="stats-row">
-                <span class="stats-label">Sets  Done</span>
+                <span class="stats-label">{% trans 'Sets  Done' %}</span>
                 <span class="stats-value">{{ workout_summary.exercises_completed }}</span>
             </div>
             <div class="stats-row">
-                <span class="stats-label">Duration</span>
+                <span class="stats-label">{% trans 'Duration' %}</span>
                 <span class="stats-value" id="formatted-duration">
-                    <!-- JavaScript bilan to'ldiriladi -->
-                    {{ workout_summary.duration_seconds }} sec
+                    {{ workout_summary.duration_seconds }} {% trans 'sec' %}
                 </span>
             </div>
             <div class="stats-row">
-                <span class="stats-label">Calories Burned</span>
-                <span class="stats-value">{{ workout_summary.total_calories|floatformat:0 }} kcal</span>
+                <span class="stats-label">{% trans 'Calories Burned' %}</span>
+                <span class="stats-value">{{ workout_summary.total_calories|floatformat:0 }} {% trans 'kcal' %}</span>
             </div>
             <div class="stats-row">
-                <span class="stats-label">Completed</span>
+                <span class="stats-label">{% trans 'Completed' %}</span>
                 <span class="stats-value" id="completion-time">
-                    <!-- JavaScript bilan hozirgi vaqt qo'shiladi -->
                     Just now
                 </span>
             </div>
@@ -137,7 +136,7 @@
 
         <div class="separator"></div>
 
-        <a href="{% url 'program_list' %}" class="btn-home">Back to Home</a>
+        <a href="{% url 'program_list' %}" class="btn-home">{% trans 'Back to Home' %}</a>
 
     </div>
 </div>

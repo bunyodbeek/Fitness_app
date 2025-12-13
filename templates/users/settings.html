@@ -417,14 +417,14 @@
 {% block content %}
     <div class="page-header">
         <button class="back-btn" onclick="window.location.href='{% url 'user_profile' %}'">‹</button>
-        <h1 class="page-title">SETTINGS</h1>
+        <h1 class="page-title">{% trans 'SETTINGS' %}</h1>
     </div>
 
     <div class="settings-content">
         <!-- Subscription Card -->
         <div class="subscription-card">
-            <div class="subscription-label">Obuna tugashiga</div>
-            <div class="subscription-days">{{ days_remaining}} kun</div>
+            <div class="subscription-label">{% trans 'Until the end of the subscription' %}</div>
+            <div class="subscription-days">{{ days_remaining}} {% trans 'day' %}</div>
             <div class="progress-container">
                 <div class="progress-bar" style="width: {{ subscription_progress }}%;"></div>
             </div>
@@ -433,18 +433,18 @@
         <!-- Account Settings -->
         <div class="settings-group">
             <div class="setting-item" onclick="window.location.href='{% url 'profile_update' %}'">
-                <div class="setting-icon-wrapper"><div class="setting-icon">✏️</div></div>
-                <div class="setting-text">Ma'lumotlarni o'zgartirish</div>
+                <div class="setting-icon-wrapper"><div class="setting-icon">{% trans '✏️' %}</div></div>
+                <div class="setting-text">{% trans "Edit information" %}</div>
                 <div class="setting-arrow">›</div>
             </div>
             <div class="setting-item" onclick="window.location.href='{% url 'manage_subscription' %}'">
-                <div class="setting-icon-wrapper"><div class="setting-icon">⚙️</div></div>
-                <div class="setting-text">Obunani boshqarish</div>
+                <div class="setting-icon-wrapper"><div class="setting-icon">{% trans '⚙️' %}</div></div>
+                <div class="setting-text">{% trans 'Manage subscription' %}</div>
                 <div class="setting-arrow">›</div>
             </div>
             <div class="setting-item" onclick="window.location.href='{% url 'payment_history' %}'">
-                <div class="setting-icon-wrapper"><div class="setting-icon">💳</div></div>
-                <div class="setting-text">To'lovlar tarixi</div>
+                <div class="setting-icon-wrapper"><div class="setting-icon">{% trans '💳' %}</div></div>
+                <div class="setting-text">{% trans "Payment history" %}</div>
                 <div class="setting-arrow">›</div>
             </div>
         </div>
@@ -453,7 +453,7 @@
         <div class="settings-group">
             <div class="setting-item" onclick="">
                 <div class="setting-icon-wrapper"><div class="setting-icon">📄</div></div>
-                <div class="setting-text">Shartnoma</div>
+                <div class="setting-text">{% trans 'Contract' %}</div>
                 <div class="setting-arrow">›</div>
             </div>
             <div class="setting-item" onclick=" ">
@@ -463,12 +463,12 @@
             </div>
             <div class="setting-item" onclick="">
                 <div class="setting-icon-wrapper"><div class="setting-icon">💬</div></div>
-                <div class="setting-text">Aloqa</div>
+                <div class="setting-text">{% trans 'Call' %}</div>
                 <div class="setting-arrow">›</div>
             </div>
             <div class="setting-item" onclick="window.location.href='{% url 'change_language' %}'">
                 <div class="setting-icon-wrapper"><div class="setting-icon">🌐</div></div>
-                <div class="setting-text">Til sozlamalari</div>
+                <div class="setting-text">{% trans 'Language settings' %}</div>
                 <div class="setting-arrow">›</div>
             </div>
         </div>
@@ -476,14 +476,14 @@
         <div class="settings-group">
             <div class="setting-item" onclick="">
                 <div class="setting-icon-wrapper"><div class="setting-icon">ℹ️</div></div>
-                <div class="setting-text">Ilova haqida</div>
+                <div class="setting-text">{% trans 'About app' %}</div>
                 <div class="setting-arrow">›</div>
             </div>
-            <div class="setting-item logout" onclick="logout()">
-                <div class="setting-icon-wrapper"><div class="setting-icon">🚪</div></div>
-                <div class="setting-text">Chiqish</div>
-                <div class="setting-arrow">›</div>
-            </div>
+{#            <div class="setting-item logout" onclick="logout()">#}
+{#                <div class="setting-icon-wrapper"><div class="setting-icon">🚪</div></div>#}
+{#                <div class="setting-text">Chiqish</div>#}
+{#                <div class="setting-arrow">›</div>#}
+{#            </div>#}
         </div>
     </div>
 {% endblock %}

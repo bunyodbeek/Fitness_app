@@ -113,8 +113,8 @@ class Payment(CreatedBaseModel):
     completed_at = DateTimeField(_("Completed Date"), blank=True, null=True)
 
     class Meta:
-        verbose_name = _("To'lov")
-        verbose_name_plural = _("To'lovlar")
+        verbose_name = _("Payment")
+        verbose_name_plural = _("Payments")
 
     def mark_as_completed(self):
         self.status = self.PaymentStatus.COMPLETED

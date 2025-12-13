@@ -313,7 +313,7 @@ class ChangeLanguageView(LoginRequiredMixin, TemplateView):
 
             activate(new_language_code)
 
-            messages.success(request, _("Til muvaffaqiyatli saqlandi!"))
+            messages.success(request, _("Language saved successfully!"))
 
             response = HttpResponseRedirect(reverse('settings'))
 
@@ -321,7 +321,7 @@ class ChangeLanguageView(LoginRequiredMixin, TemplateView):
 
             return response
         else:
-            messages.error(request, _("Tanlangan til kodi noto'g'ri."))
+            messages.error(request, _("Selected language doesn't exist."))
 
             context = self._get_language_context()
             return render(request, self.template_name, context)

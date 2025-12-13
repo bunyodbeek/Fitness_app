@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-11 17:28+0500\n"
+"POT-Creation-Date: 2025-12-12 18:02+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,17 +18,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: apps/forms.py:42
-msgid "Tilni tanlang"
-msgstr ""
+#: apps/forms.py:42 templates/users/language.html:426
+msgid "Select language"
+msgstr "Tilni tanlang"
 
 #: apps/models/analytics.py:8
 msgid "Bot Started"
-msgstr ""
+msgstr "Bot ishga tushdi"
 
 #: apps/models/analytics.py:9
 msgid "Onboarding Completed"
-msgstr ""
+msgstr "Sorovnoma yakunlandi"
 
 #: apps/models/analytics.py:10
 msgid "Workout Started"
@@ -104,17 +104,18 @@ msgstr ""
 
 #: apps/models/exercises.py:61
 msgid "Calories"
-msgstr ""
+msgstr "Kaloriyalar"
 
-#: apps/models/exercises.py:62
+#: apps/models/exercises.py:62 templates/workouts/workout_complete.html:120
 msgid "Duration"
-msgstr ""
+msgstr "Davomiylik"
 
 #: apps/models/exercises.py:66 apps/models/exercises.py:150
 msgid "Exercise"
-msgstr ""
+msgstr "Mashq"
 
 #: apps/models/exercises.py:67 templates/base.html:437
+#: templates/exercises/favorites_list.html:1756
 msgid "Exercises"
 msgstr "Mashqlar"
 
@@ -124,11 +125,11 @@ msgstr ""
 
 #: apps/models/exercises.py:152
 msgid "Text"
-msgstr ""
+msgstr "Matn"
 
 #: apps/models/exercises.py:153
 msgid "Uzbek Text"
-msgstr ""
+msgstr "O'zbekcha matn"
 
 #: apps/models/exercises.py:158
 msgid "ExerciseInstruction"
@@ -139,24 +140,28 @@ msgid "ExerciseInstructions"
 msgstr ""
 
 #: apps/models/favorites.py:33
-msgid "Sevimli"
-msgstr "sevimli"
+#, fuzzy
+#| msgid "Favourites"
+msgid "Favorite"
+msgstr "Sevimlilar"
 
-#: apps/models/favorites.py:34
-msgid "Sevimlilar"
-msgstr ""
+#: apps/models/favorites.py:34 templates/users/profile_detail.html:662
+#, fuzzy
+#| msgid "Favourites"
+msgid "Favorites"
+msgstr "Sevimlilar"
 
 #: apps/models/payments.py:61 apps/models/payments.py:100
 msgid "User"
-msgstr ""
+msgstr "Foydalanuvchi"
 
 #: apps/models/payments.py:63
 msgid "Start Date"
-msgstr ""
+msgstr "Boshlangan sanasi"
 
 #: apps/models/payments.py:64
 msgid "End Date"
-msgstr ""
+msgstr "Tugash sanasi"
 
 #: apps/models/payments.py:65
 msgid "Is Active"
@@ -164,15 +169,15 @@ msgstr ""
 
 #: apps/models/payments.py:85 apps/models/payments.py:102
 msgid "Subscription"
-msgstr ""
+msgstr "Obuna"
 
 #: apps/models/payments.py:86
 msgid "Subscriptions"
-msgstr ""
+msgstr "Obunalar"
 
 #: apps/models/payments.py:103
 msgid "Status"
-msgstr ""
+msgstr "Holati"
 
 #: apps/models/payments.py:104
 msgid "Click Transaction ID"
@@ -196,27 +201,27 @@ msgstr ""
 
 #: apps/models/payments.py:109
 msgid "Completed Date"
-msgstr ""
+msgstr "Tugallangan sanasi"
 
 #: apps/models/payments.py:112
-msgid "To'lov"
-msgstr ""
+msgid "Payment"
+msgstr "To'lov"
 
 #: apps/models/payments.py:113
-msgid "To'lovlar"
-msgstr ""
+msgid "Payments"
+msgstr "To'lovlar"
 
 #: apps/models/workouts.py:43
 msgid "Premium"
 msgstr ""
 
 #: apps/views/users.py:305
-msgid "Til muvaffaqiyatli saqlandi!"
-msgstr ""
+msgid "Language saved successfully!"
+msgstr "Til muvoffaqqiyatli saqlandi"
 
 #: apps/views/users.py:313
-msgid "Tanlangan til kodi noto'g'ri."
-msgstr ""
+msgid "Selected language doesn't exist."
+msgstr "Tanlangan til mavjud emas"
 
 #: templates/base.html:441
 #, fuzzy
@@ -232,7 +237,7 @@ msgstr "Mening Murabbiyim"
 msgid "Favourites"
 msgstr "Sevimlilar"
 
-#: templates/base.html:453
+#: templates/base.html:453 templates/users/profile_detail.html:636
 msgid "Profile"
 msgstr "Profil"
 
@@ -240,24 +245,412 @@ msgstr "Profil"
 msgid "💪 EXERCISES"
 msgstr "💪 Mashqlar"
 
-#: templates/users/language.html:8
-msgid "Til sozlamalari"
+#: templates/exercises/body_parts.html:548
+msgid "Shoulders"
+msgstr "Yelka"
+
+#: templates/exercises/body_parts.html:556
+msgid "Chest"
+msgstr "Ko'krak"
+
+#: templates/exercises/body_parts.html:564
+msgid "Biceps"
+msgstr "Biseps"
+
+#: templates/exercises/body_parts.html:572
+msgid "Forearm"
+msgstr "Bilak"
+
+#: templates/exercises/body_parts.html:580
+msgid "Abs"
+msgstr "Qorin muskullari"
+
+#: templates/exercises/body_parts.html:588
+msgid "Obliques"
+msgstr "Yon qorin muskullari"
+
+#: templates/exercises/body_parts.html:596
+msgid "Abductors"
+msgstr "Abduktorlar"
+
+#: templates/exercises/body_parts.html:604
+msgid "Quads"
+msgstr "Kvadriseps"
+
+#: templates/exercises/body_parts.html:612
+msgid "Adductors"
+msgstr "Adduktorlar "
+
+#: templates/exercises/body_parts.html:631
+msgid "Traps"
+msgstr "Trapetsiya muskullari"
+
+#: templates/exercises/body_parts.html:639
+msgid "Triceps"
+msgstr "Triceps"
+
+#: templates/exercises/body_parts.html:647
+msgid "Lats"
+msgstr "Latissimus"
+
+#: templates/exercises/body_parts.html:655
+msgid "Lower back"
+msgstr "bel"
+
+#: templates/exercises/body_parts.html:663
+msgid "Glutes"
+msgstr "Dumba muskullari"
+
+#: templates/exercises/body_parts.html:671
+msgid "Hamstrings"
+msgstr "Son orqa muskullari"
+
+#: templates/exercises/body_parts.html:679
+msgid "Calves"
+msgstr "Boldir muskullari"
+
+#: templates/exercises/favorites_list.html:1740
+#, fuzzy
+#| msgid "Favourites"
+msgid "⭐ My favorites"
+msgstr "Sevimlilar"
+
+#: templates/exercises/favorites_list.html:1747
+#, fuzzy
+#| msgid "Favourites"
+msgid "All favorites:"
+msgstr "Sevimlilar"
+
+#: templates/exercises/favorites_list.html:1753
+#: templates/users/payment_history.html:484
+msgid "All"
+msgstr "Hammasi"
+
+#: templates/exercises/favorites_list.html:1759
+msgid "Collections"
+msgstr "To'plamlar"
+
+#: templates/exercises/favorites_list.html:1765
+msgid "one-time purchase"
+msgstr "Bir martalik harid"
+
+#: templates/exercises/favorites_list.html:1797
+msgid "Favorite collection is empty"
+msgstr "Sevimlilar to'plami bo'sh"
+
+#: templates/exercises/favorites_list.html:1798
+msgid "Start adding your favorite exercises!"
+msgstr "Yoqtirgan mashqlaringizni qo'shishni boshlang"
+
+#: templates/exercises/favorites_list.html:1928
+msgid "No Premium Editions"
+msgstr "Premium nashrlar yo'q"
+
+#: templates/exercises/favorites_list.html:1929
+msgid "Coming soon!"
+msgstr "Tez orada "
+
+#: templates/exercises/favorites_list.html:1940
+msgid "New Collection"
+msgstr "Yangi to'plam"
+
+#: templates/exercises/favorites_list.html:1946
+msgid "Collection Name"
+msgstr "To'plam nomi"
+
+#: templates/exercises/favorites_list.html:1948
+msgid "e.g., Legs & Glutes"
+msgstr "masalan, oyoqlar va glutalar"
+
+#: templates/exercises/favorites_list.html:1971
+msgid "No exercises to add."
+msgstr "Qo'shish uchun mashqlar yo'q."
+
+#: templates/users/cancel_subscription.html:5
+msgid "Obunani bekor qilish"
+msgstr "Obunani bekor qilish"
+
+#: templates/users/cancel_subscription.html:429
+msgid "CANCEL"
 msgstr ""
+
+#: templates/users/cancel_subscription.html:437
+#, fuzzy
+#| msgid "Manage subscription"
+msgid "Cancel subscription"
+msgstr "Obunani boshqarish"
+
+#: templates/users/cancel_subscription.html:440
+msgid ""
+"You are about to cancel your subscription. This action will stop your "
+"subscription services."
+msgstr ""
+
+#: templates/users/cancel_subscription.html:446
+msgid "As a result of cancellation:"
+msgstr ""
+
+#: templates/users/cancel_subscription.html:449
+msgid "You will lose access to all premium features"
+msgstr "Barcha premium funksiyalarga kirish imkoniyatini yo'qotasiz"
+
+#: templates/users/cancel_subscription.html:450
+msgid "Your personal training programs will be deleted"
+msgstr ""
+
+#: templates/users/cancel_subscription.html:451
+msgid "Your statistics and results will not be saved"
+msgstr "Sizning statistika va natijalaringiz saqlanmaydi"
+
+#: templates/users/cancel_subscription.html:460
+msgid "Back"
+msgstr "ortga"
+
+#: templates/users/cancel_subscription.html:464
+msgid "Confirm"
+msgstr ""
+
+#: templates/users/cancel_subscription.html:486
+msgid "Are you sure you want to cancel your subscription?"
+msgstr ""
+
+#: templates/users/language.html:8 templates/users/settings.html:471
+msgid "Language settings"
+msgstr "Til sozlamalari"
 
 #: templates/users/language.html:414
-msgid "TIL SOZLAMALARI"
-msgstr ""
-
-#: templates/users/language.html:426
-msgid "Til tanlang"
-msgstr ""
+msgid "LANGUAGE SETTINGS"
+msgstr "Til sozlamalari"
 
 #: templates/users/language.html:429
 msgid ""
-"Ilovada qaysi tildan foydalanmoqchisiz? Tanlangan tilingiz butun ilova "
-"bo'ylab qo'llaniladi."
+"Which language do you want to use in the app? Your chosen language is "
+"optional throughout the app."
+msgstr ""
+"Dasturda qaysi tildan foydalanmoqchisiz? Tanlagan tilingiz butun ilova "
+"bo'yicha amal qiladi"
+
+#: templates/users/language.html:452 templates/users/profile_update.html:428
+msgid "Save"
+msgstr "Saqlash"
+
+#: templates/users/payment_history.html:471 templates/users/settings.html:447
+msgid "Payment history"
+msgstr "To'lovlar tarixi"
+
+#: templates/users/payment_history.html:477
+#: templates/users/payment_history.html:479
+msgid "All paid"
+msgstr "Jami to'langan"
+
+#: templates/users/payment_history.html:485
+msgid "Successful"
+msgstr "Muvoffaqqiyatli"
+
+#: templates/users/payment_history.html:486
+msgid "Pending"
+msgstr "Kutilmoqda"
+
+#: templates/users/payment_history.html:487
+#, fuzzy
+#| msgid "Cancel"
+msgid "Canceled"
+msgstr "Bekor qilish"
+
+#: templates/users/payment_history.html:498
+msgid "November 15, 2024, 14:23"
 msgstr ""
 
-#: templates/users/language.html:452
-msgid "Saqlash"
+#: templates/users/profile_detail.html:609
+msgid "Fitness Journey"
 msgstr ""
+
+#: templates/users/profile_detail.html:637 templates/users/settings.html:437
+msgid "Edit information"
+msgstr "Malumotlarni tahrirlash"
+
+#: templates/users/profile_detail.html:663
+#, fuzzy
+#| msgid "Exercises"
+msgid "Saved exercises"
+msgstr "Mashqlar"
+
+#: templates/users/profile_detail.html:675
+msgid "Settings"
+msgstr "Sozlamalar"
+
+#: templates/users/profile_detail.html:676
+msgid "All settings"
+msgstr "Barcha sozlamalar"
+
+#: templates/users/profile_update.html:397
+#, fuzzy
+#| msgid "Profile"
+msgid "Profile Update"
+msgstr "Profil"
+
+#: templates/users/profile_update.html:398
+msgid "Edit your information"
+msgstr "Malumotlarni o'zgartirish"
+
+#: templates/users/profile_update.html:425
+msgid "Cancel"
+msgstr "Bekor qilish"
+
+#: templates/users/settings.html:420
+msgid "SETTINGS"
+msgstr "SOZLAMALAR"
+
+#: templates/users/settings.html:426
+msgid "Until the end of the subscription"
+msgstr "Obuna tugashiga"
+
+#: templates/users/settings.html:427
+msgid "day"
+msgstr ""
+
+#: templates/users/settings.html:436
+msgid "✏️"
+msgstr ""
+
+#: templates/users/settings.html:441
+msgid "⚙️"
+msgstr ""
+
+#: templates/users/settings.html:442
+msgid "Manage subscription"
+msgstr "Obunani boshqarish"
+
+#: templates/users/settings.html:446
+msgid "💳"
+msgstr ""
+
+#: templates/users/settings.html:456
+msgid "Contract"
+msgstr "Shartnoma"
+
+#: templates/users/settings.html:466
+msgid "Call"
+msgstr "Bog'lanish"
+
+#: templates/users/settings.html:479
+msgid "About app"
+msgstr "Dastur haqida"
+
+#: templates/workouts/edition_detail.html:540
+#, fuzzy
+#| msgid "Exercises"
+msgid "all exercises:"
+msgstr "Mashqlar"
+
+#: templates/workouts/edition_detail.html:561
+msgid "No exercises are included for this program."
+msgstr ""
+
+#: templates/workouts/edition_detail.html:570
+msgid "▶ Start Workout"
+msgstr "▶ Mashg'ulotni boshlash"
+
+#: templates/workouts/edition_list.html:742
+msgid "EDITIONS"
+msgstr ""
+
+#: templates/workouts/edition_list.html:782
+msgid "Tip:"
+msgstr ""
+
+#: templates/workouts/edition_list.html:782
+msgid "Complete each edition for 4-6 weeks before moving to the next"
+msgstr ""
+
+#: templates/workouts/edition_list.html:787
+msgid "Choose Your Edition"
+msgstr ""
+
+#: templates/workouts/edition_list.html:807
+msgid "No editions available"
+msgstr ""
+
+#: templates/workouts/edition_list.html:808
+msgid "Check back later for workout editions"
+msgstr ""
+
+#: templates/workouts/program_list.html:499
+msgid "WORKOUTS"
+msgstr "Mashqlar"
+
+#: templates/workouts/program_list.html:542
+msgid "No programs yet"
+msgstr "Hozircha dasturlar mavjud emas"
+
+#: templates/workouts/program_list.html:543
+msgid "New programs will be added soon"
+msgstr "Yangi dasturlar tez orada qo'shiladi"
+
+#: templates/workouts/workout_complete.html:105
+#, fuzzy
+#| msgid "Workout Completed"
+msgid "Workout Complete! 🎉"
+msgstr "Mashq Tugadi"
+
+#: templates/workouts/workout_complete.html:107
+msgid "Great job! Successfully completed today's training"
+msgstr "Ajoyib! Bugungi mashg'ulot muvoffaqqiyatli tugatildi"
+
+#: templates/workouts/workout_complete.html:112
+#, fuzzy
+#| msgid "Workout Started"
+msgid "Workout"
+msgstr "Mashqlar"
+
+#: templates/workouts/workout_complete.html:116
+msgid "Sets  Done"
+msgstr "Mashq bajarildi"
+
+#: templates/workouts/workout_complete.html:122
+msgid "sec"
+msgstr "sekund"
+
+#: templates/workouts/workout_complete.html:126
+msgid "Calories Burned"
+msgstr "Sarflangan kaloriyalar"
+
+#: templates/workouts/workout_complete.html:127
+msgid "kcal"
+msgstr "kal"
+
+#: templates/workouts/workout_complete.html:130
+#, fuzzy
+#| msgid "Workout Completed"
+msgid "Completed"
+msgstr "Mashq Tugadi"
+
+#: templates/workouts/workout_complete.html:139
+msgid "Back to Home"
+msgstr "Oqaga qaytish"
+
+#~ msgid "BEKOR QILISH"
+#~ msgstr "BEKOR QILISH"
+
+#~ msgid ""
+#~ "Siz obunani bekor qilmoqchisiz. Ushbu amal obuna xizmatlarini to'xtatadi."
+#~ msgstr ""
+#~ "Siz obunani bekor qilmoqchisiz. Ushbu amal obuna xizmatlarini to'xtatadi."
+
+#~ msgid "Bekor qilish natijasida:"
+#~ msgstr "Bekor qilish natijasida:"
+
+#~ msgid "Shaxsiy mashg'ulot dasturlaringiz o'chiriladi"
+#~ msgstr "Shaxsiy mashg'ulot dasturlaringiz o'chiriladi"
+
+#~ msgid "back"
+#~ msgstr "ortga"
+
+#~ msgid "Tasdiqlash"
+#~ msgstr "Tasdiqlash"
+
+#~ msgid "Rostdan ham obunani bekor qilmoqchimisiz?"
+#~ msgstr "Rostdan ham obunani bekor qilmoqchimisiz?"
+
+#~ msgid "Sevimli"
+#~ msgstr "sevimli"

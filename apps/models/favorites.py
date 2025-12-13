@@ -30,8 +30,8 @@ class Favorite(CreatedBaseModel):
     class Meta:
         ordering = ['-created_at']
         unique_together = ('user', 'exercise')
-        verbose_name = _("Sevimli")
-        verbose_name_plural = _("Sevimlilar")
+        verbose_name = _("Favorite")
+        verbose_name_plural = _("Favorites")
 
     def __str__(self):
         return f"{self.user.name}"

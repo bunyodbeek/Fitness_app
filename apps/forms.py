@@ -39,5 +39,5 @@ class LanguageSelectionForm(forms.Form):
     language = forms.ChoiceField(
         choices=LANGUAGE_CHOICES,
         widget=forms.RadioSelect,
-        label=_("Tilni tanlang")
+        label=_("Select language")
     )
