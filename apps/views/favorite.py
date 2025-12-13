@@ -1,5 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import transaction
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.views import View
 from django.views.generic import CreateView, ListView
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, ListAPIView
@@ -90,24 +93,49 @@ class FavoriteToggleAPIView(GenericAPIView):
         })
 
 
-class CreateCollectionVIew(CreateView):
+class CreateCollectionView(View):
+    @transaction.atomic
+    def post(self, request):
+        name = request.POST.get("name")
+        exercise_id = request.POST.get("exercise_id")
+        exercise_ids = request.POST.getlist("exercise_ids[]")
 
-    def get(self, request, *args, **kwargs):
-        create_collection = request.GET.get("create_collection")
-        exercise_id = request.GET.get("exercise_id")
+        if not name:
+            return JsonResponse(
+                {"success": False, "error": "Collection nomi yuborilmadi"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        if create_collection == "true" and exercise_id:
-            context = self.get_context_data(exercise_id=exercise_id)
-            return self.render_to_response(context)
+        user = request.user.profile
 
-        return super().get(request, *args, **kwargs)
+        collection = FavoriteCollection.objects.create(
+            user=user,
+            name=name
+        )
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        exercise_id = kwargs.get("exercise_id")
-        context["exercise_id"] = exercise_id
-        context["user_collections"] = self.request.user.profile.favorite_collections.all()
-        return context
+        all_exercise_ids = []
 
+        if exercise_id:
+            all_exercise_ids.append(int(exercise_id))
 
+        for ex_id in exercise_ids:
+            all_exercise_ids.append(int(ex_id))
 
+        for ex_id in set(all_exercise_ids):
+            exercise = get_object_or_404(Exercise, id=ex_id)
+
+            favorite, created = Favorite.objects.get_or_create(
+                user=user,
+                exercise=exercise,
+                defaults={"collection": collection}
+            )
+
+            if not created and favorite.collection is None:
+                favorite.collection = collection
+                favorite.save(update_fields=["collection"])
+
+        return JsonResponse({
+            "success": True,
+            "collection_id": collection.id,
+            "name": collection.name
+        }, status=status.HTTP_201_CREATED)

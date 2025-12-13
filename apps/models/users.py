@@ -14,7 +14,6 @@ from django.db.models import (
     IntegerField,
     OneToOneField,
     TextChoices,
-    TextField,
 )
 
 
@@ -52,7 +51,7 @@ class UserProfile(CreatedBaseModel):
     is_premium = BooleanField(default=False)
     name = CharField(max_length=100, default='User')
     avatar = ImageField(upload_to='avatars/', blank=True, null=True)
-    gender = CharField(max_length=10, choices=Gender.choices, default=Gender.MALE)
+    gender = CharField(max_length=10,   choices=Gender.choices, default=Gender.MALE)
     birth_date = DateField(null=True, blank=True)
     weight = DecimalField(max_digits=5, decimal_places=1, null=True, blank=True)
     height = DecimalField(max_digits=5, decimal_places=1, null=True, blank=True)
@@ -60,7 +59,6 @@ class UserProfile(CreatedBaseModel):
     fitness_goal = CharField(max_length=20, choices=FitnessGoal.choices, blank=True)
     workout_days_per_week = IntegerField(null=True, blank=True)
     unit_system = CharField(max_length=10, choices=UnitSystem.choices, default=UnitSystem.METRIC)
-    language = CharField(max_length=5, choices=Language.choices, default=Language.UZBEK)
     onboarding_completed = BooleanField(default=False)
 
     class Meta:

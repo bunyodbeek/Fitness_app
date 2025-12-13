@@ -227,11 +227,22 @@ class SettingsView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         profile, _ = UserProfile.objects.get_or_create(user=self.request.user)
         context['profile'] = profile
-        subscription = Subscription.objects.filter(user=self.request.user.profile).first()
-        context['days_remaining'] = subscription.days_remaining if subscription else 0
-        # subscription_progres = (subscription.days_remaining / subscription.period()) * 100
-        # context['subscription_progress'] = subscription_progres
+        subscription = Subscription.objects.filter(user=profile).first()
+        if subscription:
+            days_remaining = subscription.days_remaining()
+            total_days = subscription.total_days()
+            if total_days > 0:
+                subscription_progress = int((days_remaining / total_days) * 100)
+            else:
+                subscription_progress = 0
+        else:
+            days_remaining = 0
+            subscription_progress = 0
+
+        context['days_remaining'] = days_remaining
+        context['subscription_progress'] = subscription_progress
         return context
+
 
 
 class ProgressView(LoginRequiredMixin, TemplateView):

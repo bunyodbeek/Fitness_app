@@ -55,6 +55,11 @@ class EditionDetailView(DetailView):
     template_name = 'workouts/edition_detail.html'
     context_object_name = 'edition'
 
+    def get(self, request, *args, **kwargs):
+        if not request.user.profile.is_premium:
+            return redirect('premium_page')
+        return super().get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 

@@ -42,7 +42,7 @@ class ExercisesByMuscleView(ListView):
                 'exercise_id', flat=True)
             for exercise in context['exercises']:
                 exercise.is_favorited = exercise.id in favorite_ids
-            context['user_collections'] = user_profile.favorite_collections.all()
+            context['collections'] = user_profile.favorite_collections.all()
         else:
             for exercise in context['exercises']:
                 exercise.is_favorited = False
@@ -80,3 +80,4 @@ class ExerciseDetailView(LoginRequiredMixin, DetailView):
         else:
             context['is_favorited'] = False
         return context
+
