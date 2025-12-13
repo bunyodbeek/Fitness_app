@@ -1,7 +1,13 @@
+
+
+<!-- ============================================ -->
+<!-- FILE 2: workout_days.html (SWIPEABLE PAGES) -->
+<!-- ============================================ -->
 {% extends 'base.html' %}
-{% load static i18n %}
+{% load static %}
 
 {% block title %}Workout Days{% endblock %}
+{% load i18n %}
 
 {% block extra_css %}
     <style>
@@ -17,7 +23,7 @@
             color: white;
             min-height: 100vh;
             position: relative;
-            overflow-x: hidden; /* asosiy skrollni yashirish */
+            overflow-x: hidden;
         }
 
         body::before {
@@ -27,10 +33,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background:
-                    radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%),
-                    radial-gradient(circle at 40% 90%, rgba(78, 205, 196, 0.05) 0%, transparent 50%);
+            background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 90%, rgba(78, 205, 196, 0.05) 0%, transparent 50%);
             animation: particleFloat 15s ease-in-out infinite;
             pointer-events: none;
             z-index: 0;
@@ -72,6 +77,34 @@
             transition: all 0.3s ease;
             border-radius: 10px;
             flex-shrink: 0;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+        }
+
+
+        .back-btn {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
+            color: #ffd700;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
         }
 
         .header-content {
@@ -126,25 +159,19 @@
             overflow: hidden;
             padding-bottom: 120px;
             z-index: 1;
-            /* scrollbar yashirish */
-            scrollbar-width: none; /* Firefox */
-        }
-
-        .workout-days-container::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, Edge */
         }
 
         .workout-days-wrapper {
             display: flex;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             touch-action: pan-y;
-            cursor: grab;
-            /* Hech qanday tugmalar, hech qanday cheklash yo'q — faqat sudralish */
         }
 
         .workout-day {
-            min-width: 100vw; /* har bir kunni ekran kengligiga teng qilish */
+            min-width: 100%;
             padding: 14px 12px;
             opacity: 0.3;
+            transition: opacity 0.4s ease;
             pointer-events: none;
         }
 
@@ -153,10 +180,49 @@
             pointer-events: auto;
         }
 
-        /* Tugmalar o'chirildi — .nav-arrows butunlay yo'q! */
+        .nav-arrows {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 8px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .nav-arrow {
+            background: rgba(255, 215, 0, 0.15);
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
+            color: #ffd700;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            pointer-events: auto;
+        }
+
+        .nav-arrow:hover {
+            background: rgba(255, 215, 0, 0.25);
+            border-color: #ffd700;
+        }
+
+        .nav-arrow.disabled {
+            opacity: 0.2;
+            pointer-events: none;
+        }
 
         .exercise-card {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.12) 0%, rgba(255, 215, 0, 0.06) 100%);
+            background: linear-gradient(135deg,
+                rgba(255, 215, 0, 0.12) 0%,
+                rgba(255, 215, 0, 0.06) 100%);
             backdrop-filter: blur(10px);
             margin-bottom: 10px;
             padding: 12px;
@@ -172,6 +238,12 @@
             animation: fadeInUp 0.5s ease backwards;
         }
 
+        .exercise-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 215, 0, 0.5);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
+        }
+
         .exercise-img {
             width: 56px;
             height: 56px;
@@ -180,6 +252,11 @@
             border: 1.5px solid rgba(255, 215, 0, 0.35);
             box-shadow: 0 0 12px rgba(255, 215, 0, 0.2);
             flex-shrink: 0;
+        }
+
+        .exercise-info {
+            flex: 1;
+            min-width: 0;
         }
 
         .exercise-info h3 {
@@ -240,9 +317,20 @@
             margin-bottom: 60px;
         }
 
+        .start-workout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 35px rgba(255, 215, 0, 0.5);
+        }
+
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @media (min-width: 768px) {
@@ -250,12 +338,11 @@
                 max-width: 800px;
                 margin: 0 auto;
             }
-            .workout-day {
-                min-width: 100%; /* desktopda 100% container */
-            }
+
             .start-workout-btn {
                 max-width: 400px;
                 margin: 0 auto 70px;
+                display: block;
             }
         }
     </style>
@@ -263,40 +350,47 @@
 
 {% block content %}
     <div class="edition-header">
-        <button class="back-btn" onclick="window.history.back()">←</button>
+        <button class="back-btn" onclick="window.history.back()">‹</button>
         <div class="header-content">
             <h1 id="dayTitle">{% trans 'DAY 1' %}</h1>
-            <p id="daySubtitle">{% trans 'Chest & Triceps' %}</p>
+            <p id="daySubtitle">{# {{ day.body_part }} #}{% trans 'Chest & Triceps' %}</p>
         </div>
     </div>
 
     <div class="day-indicators" id="dayIndicators"></div>
 
-    <!-- Tugmalar (← →) butunlay OLIB TASHLANDI -->
     <div class="workout-days-container">
+        <div class="nav-arrows">
+            <button class="nav-arrow" id="prevDay" onclick="previousDay()">‹</button>
+            <button class="nav-arrow" id="nextDay" onclick="nextDay()">›</button>
+        </div>
+
         <div class="workout-days-wrapper" id="workoutDaysWrapper">
-            <!-- Kunlar -->
+            {# {% for day in workout_days %} #}
             <div class="workout-day" data-day="1" data-title="{% trans 'DAY 1' %}" data-subtitle="{% trans 'Chest & Triceps' %}">
-                <a href="#" class="exercise-card">
-                    <img src="{% static 'images/bench-press.jpg' %}" class="exercise-img" alt="Bench Press">
+                {# {% for workout in day.workouts %} #}
+                <a href="{# {% url 'exercise_detail' workout.exercise.id %} #}" class="exercise-card">
+                    <img src="{# {{ workout.exercise.thumbnail.url }} #}" class="exercise-img" alt="">
                     <div class="exercise-info">
-                        <h3>Bench Press</h3>
-                        <p><strong>4×12</strong> • Chest</p>
+                        <h3>{# {{ workout.exercise.name }} #}Bench Press</h3>
+                        <p><strong>{# {{ workout.sets }}×{{ workout.reps }} #}4×12</strong> • Chest</p>
                     </div>
-                    <span class="exercise-arrow">→</span>
+                    <span class="exercise-arrow">›</span>
                 </a>
+                {# {% endfor %} #}
             </div>
+
             <div class="workout-day" data-day="2" data-title="{% trans 'DAY 2' %}" data-subtitle="{% trans 'Back & Biceps' %}">
                 <a href="#" class="exercise-card">
-                    <img src="{% static 'images/deadlift.jpg' %}" class="exercise-img" alt="Deadlift">
+                    <img src="" class="exercise-img" alt="">
                     <div class="exercise-info">
                         <h3>Deadlift</h3>
                         <p><strong>4×10</strong> • Back</p>
                     </div>
-                    <span class="exercise-arrow">→</span>
+                    <span class="exercise-arrow">›</span>
                 </a>
             </div>
-            <!-- Boshqa kunlarni qo'shish mumkin -->
+            {# {% endfor %} #}
         </div>
     </div>
 
@@ -310,115 +404,116 @@
 {% block extra_js %}
     <script>
         let currentDay = 0;
-        const wrapper = document.getElementById('workoutDaysWrapper');
-        const workoutDays = document.querySelectorAll('.workout-day');
-        const totalDays = workoutDays.length;
+        let totalDays = {# {{ workout_days|length }} #}16;
         let startX = 0;
-        let currentOffset = 0;
+        let currentX = 0;
         let isDragging = false;
 
+        const wrapper = document.getElementById('workoutDaysWrapper');
+        const workoutDays = document.querySelectorAll('.workout-day');
+        const prevBtn = document.getElementById('prevDay');
+        const nextBtn = document.getElementById('nextDay');
         const indicatorsContainer = document.getElementById('dayIndicators');
         const dayTitle = document.getElementById('dayTitle');
         const daySubtitle = document.getElementById('daySubtitle');
 
-        // Indikatorlar
         function initIndicators() {
+            // Faqat 2 ta indicator - current va next day
             indicatorsContainer.innerHTML = '';
-            for (let i = 0; i < totalDays; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'day-dot';
-                if (i === currentDay) dot.classList.add('active');
-                dot.addEventListener('click', () => goToDay(i));
-                indicatorsContainer.appendChild(dot);
+
+            // Current day indicator
+            const currentDot = document.createElement('div');
+            currentDot.className = 'day-dot active';
+            indicatorsContainer.appendChild(currentDot);
+
+            // Next day indicator (agar mavjud bo'lsa)
+            if (currentDay < totalDays - 1) {
+                const nextDot = document.createElement('div');
+                nextDot.className = 'day-dot';
+                indicatorsContainer.appendChild(nextDot);
             }
         }
 
-        function updateUI() {
-            // Faqat indikator va sarlavha yangilanadi — sudralish CSS orqali boshqariladi
-            workoutDays.forEach((day, i) => day.classList.toggle('active', i === currentDay));
-            document.querySelectorAll('.day-dot').forEach((dot, i) => dot.classList.toggle('active', i === currentDay));
+        function updateView() {
+            wrapper.style.transform = `translateX(-${currentDay * 100}%)`;
 
-            const active = workoutDays[currentDay];
-            if (active) {
-                dayTitle.textContent = active.dataset.title;
-                daySubtitle.textContent = active.dataset.subtitle;
+            workoutDays.forEach((day, index) => {
+                day.classList.toggle('active', index === currentDay);
+            });
+
+            // Indicators ni yangilash
+            initIndicators();
+
+            const activeDay = workoutDays[currentDay];
+            if (activeDay) {
+                dayTitle.textContent = activeDay.dataset.title;
+                daySubtitle.textContent = activeDay.dataset.subtitle;
+            }
+
+            prevBtn.classList.toggle('disabled', currentDay === 0);
+            nextBtn.classList.toggle('disabled', currentDay === totalDays - 1);
+        }
+
+        function previousDay() {
+            if (currentDay > 0) {
+                currentDay--;
+                updateView();
             }
         }
 
-        function goToDay(index) {
-            if (index < 0 || index >= totalDays) return;
-            currentDay = index;
-            wrapper.style.transform = `translateX(-${currentDay * 100}vw)`;
-            wrapper.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-            updateUI();
+        function nextDay() {
+            if (currentDay < totalDays - 1) {
+                currentDay++;
+                updateView();
+            }
         }
 
-        // Drag boshlash
-        function startDrag(clientX) {
+        function goToDay(dayIndex) {
+            currentDay = dayIndex;
+            updateView();
+        }
+
+        // Touch/Swipe - telefon ekranida surganda ishlaydi
+        let touchStartTime = 0;
+
+        wrapper.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            touchStartTime = Date.now();
             isDragging = true;
-            startX = clientX;
-            currentOffset = 0;
-            wrapper.style.transition = 'none';
-            wrapper.style.cursor = 'grabbing';
-        }
+        }, { passive: true });
 
-        // Drag davomida
-        function drag(clientX) {
+        wrapper.addEventListener('touchmove', (e) => {
             if (!isDragging) return;
-            currentOffset = clientX - startX;
-            const translateX = -currentDay * window.innerWidth + currentOffset;
-            wrapper.style.transform = `translateX(${translateX}px)`;
-        }
+            currentX = e.touches[0].clientX;
+        }, { passive: true });
 
-        // Drag tugashi
-        function endDrag() {
+        wrapper.addEventListener('touchend', () => {
             if (!isDragging) return;
             isDragging = false;
-            wrapper.style.cursor = 'grab';
 
-            const threshold = window.innerWidth * 0.2;
-            if (Math.abs(currentOffset) > threshold) {
-                if (currentOffset < 0 && currentDay < totalDays - 1) {
-                    currentDay++;
-                } else if (currentOffset > 0 && currentDay > 0) {
-                    currentDay--;
+            const diff = startX - currentX;
+            const touchDuration = Date.now() - touchStartTime;
+            const threshold = 50; // minimum swipe distance
+            const velocityThreshold = 300; // ms for quick swipe
+
+            // Agar tez swipe qilsa yoki yetarli masofaga siljisa
+            if (Math.abs(diff) > threshold || touchDuration < velocityThreshold) {
+                if (diff > 30 && currentDay < totalDays - 1) {
+                    nextDay();
+                } else if (diff < -30 && currentDay > 0) {
+                    previousDay();
                 }
             }
-
-            // Qaytish
-            wrapper.style.transform = `translateX(-${currentDay * 100}vw)`;
-            wrapper.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-            updateUI();
-        }
-
-        // Touch
-        wrapper.addEventListener('touchstart', e => startDrag(e.touches[0].clientX));
-        wrapper.addEventListener('touchmove', e => {
-            e.preventDefault();
-            drag(e.touches[0].clientX);
-        }, { passive: false });
-        wrapper.addEventListener('touchend', endDrag);
-
-        // Mouse
-        wrapper.addEventListener('mousedown', e => startDrag(e.clientX));
-        window.addEventListener('mousemove', e => drag(e.clientX));
-        window.addEventListener('mouseup', endDrag);
-
-        // Boshlash
-        document.addEventListener('DOMContentLoaded', () => {
-            if (totalDays === 0) return;
-            initIndicators();
-            updateUI();
-            wrapper.style.cursor = 'grab';
-            wrapper.style.transform = `translateX(0)`;
         });
 
         function startWorkout() {
-            const dayId = workoutDays[currentDay]?.getAttribute('data-day');
-            if (dayId) {
-                window.location.href = `{% url 'workout_start' %}?day=${dayId}`;
-            }
+            const dayId = workoutDays[currentDay].getAttribute('data-day');
+            window.location.href = `{# {% url 'workout_start' %} #}` + dayId;
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initIndicators();
+            updateView();
+        });
     </script>
 {% endblock %}
-
