@@ -74,7 +74,7 @@ class ExerciseLog(Model):
 
 class WorkoutProgress(Model):
     user = ForeignKey('apps.UserProfile', on_delete=CASCADE)
-    workout = ForeignKey('Workout', on_delete=CASCADE)
+    workout = ForeignKey('apps.Workout', on_delete=CASCADE)
     total_calories = FloatField(default=0)
     total_duration_seconds = IntegerField(default=0)
     exercises_completed = IntegerField(default=0)
