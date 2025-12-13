@@ -1,12 +1,13 @@
+<!-- ========================================== -->
+<!-- FILE 1: my_trainer.html (DASHBOARD PAGE) -->
+<!-- ========================================== -->
 {% extends 'base.html' %}
 {% load static %}
+
+{% block title %}My Trainer{% endblock %}
 {% load i18n %}
 
-{% block content %}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Trainer - Progress Tracking</title>
+{% block extra_css %}
     <style>
         * {
             margin: 0;
@@ -15,16 +16,14 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             color: white;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
-            padding-bottom: 80px;
         }
 
-        /* Animated background */
         body::before {
             content: '';
             position: fixed;
@@ -33,7 +32,8 @@
             right: 0;
             bottom: 0;
             background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%);
+                        radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 90%, rgba(78, 205, 196, 0.05) 0%, transparent 50%);
             animation: particleFloat 15s ease-in-out infinite;
             pointer-events: none;
             z-index: 0;
@@ -41,620 +41,327 @@
 
         @keyframes particleFloat {
             0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(20px, -20px) scale(1.05); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
         }
 
-        /* Header */
-        .page-header {
+        .trainer-header {
             background: linear-gradient(135deg, rgba(15, 52, 96, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
             backdrop-filter: blur(10px);
-            padding: 20px;
             text-align: center;
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
         }
 
-        .page-title {
-            font-size: 28px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 3px;
+        .trainer-header h1 {
+            font-size: 16px;
+            font-weight: 800;
             background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        /* Container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+        .premium-badge {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
+            color: #1a1a2e;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .dashboard-container {
+            padding: 20px 16px 20px;
             position: relative;
             z-index: 1;
         }
 
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg,
-                rgba(255, 215, 0, 0.15) 0%,
-                rgba(255, 215, 0, 0.08) 100%);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px;
-            border: 2px solid rgba(255, 215, 0, 0.3);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        .plan-section {
             text-align: center;
-            transition: all 0.3s ease;
-            animation: fadeInUp 0.6s ease backwards;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg,
+                rgba(255, 215, 0, 0.08) 0%,
+                rgba(255, 215, 0, 0.03) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1.5px solid rgba(255, 215, 0, 0.15);
         }
 
-        .stat-card:nth-child(1) { animation-delay: 0.1s; }
-        .stat-card:nth-child(2) { animation-delay: 0.2s; }
-        .stat-card:nth-child(3) { animation-delay: 0.3s; }
-        .stat-card:nth-child(4) { animation-delay: 0.4s; }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .plan-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
         }
 
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.4);
-            border-color: rgba(255, 215, 0, 0.6);
-        }
-
-        .stat-icon {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-
-        .stat-value {
-            font-size: 32px;
+        .plan-name {
+            font-size: 28px;
             font-weight: 900;
+            background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+        }
+
+        .plan-change-btn {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
             color: #ffd700;
-            margin-bottom: 5px;
+            font-size: 22px;
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            margin-left: 10px;
+        }
+
+        .plan-change-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+            transform: rotate(180deg);
+        }
+
+        .progress-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 16px;
+            gap: 30px;
+        }
+
+        .stat-box {
+            text-align: center;
+            flex: 1;
+            max-width: 100px;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 900;
+            color: white;
+            line-height: 1;
+            margin-bottom: 6px;
         }
 
         .stat-label {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Section Header */
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 30px 0 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
-        }
-
-        .section-title {
-            font-size: 20px;
-            font-weight: 800;
-            color: #ffd700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .view-all-btn {
-            background: transparent;
-            border: 2px solid rgba(255, 215, 0, 0.4);
-            color: #ffd700;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .view-all-btn:hover {
-            background: rgba(255, 215, 0, 0.1);
-            border-color: #ffd700;
-            transform: scale(1.05);
-        }
-
-        /* Workout Cards */
-        .workouts-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .workout-card {
-            background: linear-gradient(135deg,
-                rgba(15, 52, 96, 0.8) 0%,
-                rgba(22, 33, 62, 0.8) 100%);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px;
-            border: 2px solid rgba(255, 215, 0, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            animation: fadeInLeft 0.6s ease backwards;
-        }
-
-        .workout-card:nth-child(1) { animation-delay: 0.1s; }
-        .workout-card:nth-child(2) { animation-delay: 0.2s; }
-        .workout-card:nth-child(3) { animation-delay: 0.3s; }
-        .workout-card:nth-child(4) { animation-delay: 0.4s; }
-        .workout-card:nth-child(5) { animation-delay: 0.5s; }
-
-        @keyframes fadeInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .workout-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.3);
-            border-color: rgba(255, 215, 0, 0.5);
-        }
-
-        .workout-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .workout-name {
-            font-size: 18px;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 5px;
-        }
-
-        .workout-date {
-            font-size: 13px;
+            font-size: 11px;
             color: rgba(255, 255, 255, 0.6);
             font-weight: 600;
-        }
-
-        .workout-status {
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
+            line-height: 1.3;
         }
 
-        .status-completed {
-            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+        .progress-circle {
+            position: relative;
+            width: 180px;
+            height: 180px;
+        }
+
+        .circle-bg {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(255, 215, 0, 0.05);
+            border: 10px solid rgba(255, 215, 0, 0.15);
+            position: relative;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+        }
+
+        .circle-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 100%;
+        }
+
+        .circle-main {
+            font-size: 32px;
+            font-weight: 900;
             color: white;
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+            line-height: 1;
+            margin-bottom: 4px;
         }
 
-        .status-in-progress {
-            background: linear-gradient(135deg, #ff9800 0%, #ffa726 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+        .circle-sub {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+            text-transform: uppercase;
         }
 
-        /* Workout Stats */
-        .workout-stats {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .workout-stat {
+        .circle-help {
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            color: #ffd700;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 600;
-        }
-
-        .workout-stat-icon {
-            font-size: 18px;
-            color: #ffd700;
-        }
-
-        .workout-stat-value {
-            color: white;
             font-weight: 700;
+            margin: 10px auto 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        /* Empty State */
-        .empty-state {
+        .circle-help:hover {
+            background: rgba(255, 215, 0, 0.25);
+            border-color: #ffd700;
+        }
+
+        .go-btn-container {
+            padding: 40px 16px 100px;
             text-align: center;
-            padding: 60px 20px;
-            animation: fadeIn 0.8s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .empty-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-            opacity: 0.3;
-        }
-
-        .empty-title {
-            font-size: 24px;
-            font-weight: 800;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 10px;
-        }
-
-        .empty-text {
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 30px;
-        }
-
-        .start-workout-btn {
+        .go-btn {
+            width: 100%;
+            max-width: 400px;
+            padding: 18px 24px;
             background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
             border: none;
-            color: #1a1a2e;
-            padding: 15px 40px;
-            border-radius: 30px;
+            border-radius: 14px;
             font-size: 16px;
-            font-weight: 900;
-            cursor: pointer;
+            font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 2px;
-            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.5);
+            color: #1a1a2e;
+            cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.4);
+            margin: 0 auto 20px;
+            display: block;
         }
 
-        .start-workout-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 50px rgba(255, 215, 0, 0.7);
-        }
-
-        /* Bottom Navigation */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(135deg, rgba(15, 52, 96, 0.98) 0%, rgba(22, 33, 62, 0.98) 100%);
-            backdrop-filter: blur(20px);
-            padding: 12px 0;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.5);
-            border-top: 1px solid rgba(255, 215, 0, 0.1);
-            z-index: 1000;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            color: rgba(255, 255, 255, 0.6);
-            text-decoration: none;
-            font-size: 12px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            padding: 8px 15px;
-            border-radius: 12px;
-        }
-
-        .nav-item:hover {
-            color: #ffd700;
+        .go-btn:hover {
             transform: translateY(-2px);
+            box-shadow: 0 10px 35px rgba(255, 215, 0, 0.5);
         }
 
-        .nav-item.active {
-            color: #ffd700;
-            background: rgba(255, 215, 0, 0.1);
+        .go-btn:active {
+            transform: scale(0.98);
         }
 
-        .nav-icon {
-            font-size: 24px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
+        @media (min-width: 768px) {
+            .dashboard-container {
+                max-width: 600px;
+                margin: 0 auto;
             }
 
-            .page-title {
-                font-size: 24px;
+            .go-btn-container {
+                max-width: 600px;
+                margin: 0 auto;
             }
 
-            .section-title {
-                font-size: 18px;
-            }
-
-            .workout-name {
-                font-size: 16px;
-            }
-
-            .workout-stats {
-                gap: 15px;
+            .go-btn {
+                max-width: 400px;
             }
         }
 
-        @media (max-width: 480px) {
-            .stat-value {
+        @media (max-width: 360px) {
+            .stat-number {
+                font-size: 30px;
+            }
+
+            .progress-circle {
+                width: 150px;
+                height: 150px;
+            }
+
+            .circle-main {
                 font-size: 28px;
             }
 
-            .workout-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
+            .plan-name {
+                font-size: 24px;
             }
         }
     </style>
-</head>
-<body>
-    <!-- Header -->
-    <div class="page-header">
-        <h1 class="page-title">My Trainer</h1>
-    </div>
-
-    <!-- Container -->
-    <div class="container">
-        <!-- Stats Grid -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon">💪</div>
-                <div class="stat-value" id="totalWorkouts">0</div>
-                <div class="stat-label">Workouts</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon">⏱️</div>
-                <div class="stat-value" id="totalDuration">0h</div>
-                <div class="stat-label">Hours</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon">🔥</div>
-                <div class="stat-value" id="totalCalories">0</div>
-                <div class="stat-label">Calories</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon">📈</div>
-                <div class="stat-value" id="currentStreak">0</div>
-                <div class="stat-label">Day Streak</div>
-            </div>
-        </div>
-
-        <!-- Recent Workouts Section -->
-        <div class="section-header">
-            <h2 class="section-title">Recent Workouts</h2>
-            <button class="view-all-btn" onclick="viewAllWorkouts()">View All</button>
-        </div>
-
-        <!-- Workouts List -->
-        <div class="workouts-list" id="workoutsList">
-            <!-- Workouts will be loaded here -->
-        </div>
-
-        <!-- Empty State (if no workouts) -->
-        <div class="empty-state" id="emptyState" style="display: none;">
-            <div class="empty-icon">🏋️</div>
-            <h3 class="empty-title">No Workouts Yet</h3>
-            <p class="empty-text">Start your fitness journey today!</p>
-            <button class="start-workout-btn" onclick="startNewWorkout()">Start Workout</button>
-        </div>
-    </div>
-
-    <script>
-        // ==========================================
-        // DUMMY DATA - Backend dasturchi o'zgartiradi
-        // ==========================================
-        const DUMMY_USER_STATS = {
-            total_workouts: 12,
-            total_duration_hours: 8.5,
-            total_calories: 4250,
-            current_streak: 5
-        };
-
-        const DUMMY_RECENT_WORKOUTS = [
-            {
-                id: 1,
-                name: "Machine Focus - Edition 1",
-                date: "2025-11-20",
-                time: "14:30",
-                status: "completed",
-                duration_minutes: 45,
-                exercises_completed: 9,
-                total_calories: 420,
-                total_reps: 108
-            },
-            {
-                id: 2,
-                name: "Free Weights Emphasis",
-                date: "2025-11-19",
-                time: "10:15",
-                status: "completed",
-                duration_minutes: 52,
-                exercises_completed: 12,
-                total_calories: 485,
-                total_reps: 144
-            },
-            {
-                id: 3,
-                name: "Cardio & Strength Mix",
-                date: "2025-11-18",
-                time: "18:45",
-                status: "in-progress",
-                duration_minutes: 30,
-                exercises_completed: 5,
-                total_calories: 280,
-                total_reps: 60
-            }
-        ];
-
-        // ==========================================
-        // BACKEND INTEGRATION VARIABLES
-        // ==========================================
-        /*
-        Backend dasturchi context ga qo'yishi kerak:
-
-        const userStats = {
-            total_workouts: {{ user_stats.total_workouts }},
-            total_duration_hours: {{ user_stats.total_duration_hours }},
-            total_calories: {{ user_stats.total_calories }},
-            current_streak: {{ user_stats.current_streak }}
-        };
-
-        const recentWorkouts = [
-            {% for workout in recent_workouts %}
-            {
-                id: {{ workout.id }},
-                name: "{{ workout.name|escapejs }}",
-                date: "{{ workout.completed_at|date:'Y-m-d' }}",
-                time: "{{ workout.completed_at|date:'H:i' }}",
-                status: "{{ workout.status }}",  // 'completed' or 'in-progress'
-                duration_minutes: {{ workout.duration_minutes }},
-                exercises_completed: {{ workout.exercises_completed }},
-                total_calories: {{ workout.total_calories }},
-                total_reps: {{ workout.total_reps }}
-            }{% if not forloop.last %},{% endif %}
-            {% endfor %}
-        ];
-        */
-
-        // Hozircha dummy data
-        const userStats = DUMMY_USER_STATS;
-        const recentWorkouts = DUMMY_RECENT_WORKOUTS;
-
-        // ==========================================
-        // FUNCTIONS
-        // ==========================================
-
-        function displayStats() {
-            document.getElementById('totalWorkouts').textContent = userStats.total_workouts;
-            document.getElementById('totalDuration').textContent = userStats.total_duration_hours + 'h';
-            document.getElementById('totalCalories').textContent = userStats.total_calories;
-            document.getElementById('currentStreak').textContent = userStats.current_streak;
-        }
-
-        function formatDate(dateStr) {
-            const date = new Date(dateStr);
-            const today = new Date();
-            const yesterday = new Date(today);
-            yesterday.setDate(yesterday.getDate() - 1);
-
-            if (date.toDateString() === today.toDateString()) {
-                return 'Today';
-            } else if (date.toDateString() === yesterday.toDateString()) {
-                return 'Yesterday';
-            } else {
-                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-            }
-        }
-
-        function displayWorkouts() {
-            const workoutsList = document.getElementById('workoutsList');
-            const emptyState = document.getElementById('emptyState');
-
-            if (recentWorkouts.length === 0) {
-                workoutsList.style.display = 'none';
-                emptyState.style.display = 'block';
-                return;
-            }
-
-            workoutsList.innerHTML = '';
-
-            recentWorkouts.forEach(workout => {
-                const card = document.createElement('div');
-                card.className = 'workout-card';
-                card.onclick = () => viewWorkoutDetail(workout.id);
-
-                const statusClass = workout.status === 'completed' ? 'status-completed' : 'status-in-progress';
-                const statusText = workout.status === 'completed' ? 'Completed' : 'In Progress';
-
-                card.innerHTML = `
-                    <div class="workout-header">
-                        <div>
-                            <div class="workout-name">${workout.name}</div>
-                            <div class="workout-date">${formatDate(workout.date)} at ${workout.time}</div>
-                        </div>
-                        <div class="workout-status ${statusClass}">${statusText}</div>
-                    </div>
-                    <div class="workout-stats">
-                        <div class="workout-stat">
-                            <span class="workout-stat-icon">⏱️</span>
-                            <span class="workout-stat-value">${workout.duration_minutes} min</span>
-                        </div>
-                        <div class="workout-stat">
-                            <span class="workout-stat-icon">💪</span>
-                            <span class="workout-stat-value">${workout.exercises_completed} exercises</span>
-                        </div>
-                        <div class="workout-stat">
-                            <span class="workout-stat-icon">🔥</span>
-                            <span class="workout-stat-value">${workout.total_calories} cal</span>
-                        </div>
-                        <div class="workout-stat">
-                            <span class="workout-stat-icon">🔢</span>
-                            <span class="workout-stat-value">${workout.total_reps} reps</span>
-                        </div>
-                    </div>
-                `;
-
-                workoutsList.appendChild(card);
-            });
-        }
-
-        function viewWorkoutDetail(workoutId) {
-            window.location.href = `/workout/${workoutId}/detail/`;  // Backend URL
-        }
-
-        function viewAllWorkouts() {
-            window.location.href = '/my-trainer/history/';  // Backend URL
-        }
-
-        function startNewWorkout() {
-            window.location.href = '/workout/';  // Backend URL
-        }
-
-        // ==========================================
-        // INITIALIZATION
-        // ==========================================
-        document.addEventListener('DOMContentLoaded', function() {
-            displayStats();
-            displayWorkouts();
-        });
-    </script>
-</body>
 {% endblock %}
+
+{% block content %}
+    <div class="trainer-header">
+        <h1>{% trans 'MY TRAINER' %}</h1>
+        <div class="premium-badge">PREMIUM</div>
+    </div>
+
+    <div class="dashboard-container">
+        <div class="plan-section">
+            <div class="plan-label">{% trans 'Current Plan' %}</div>
+            <div>
+                <span class="plan-name">{# {{ current_plan.name }} #}GAIN MUSCLE</span>
+                <button class="plan-change-btn" onclick="changePlan()">↻</button>
+            </div>
+        </div>
+
+        <div class="progress-section">
+            <div class="stat-box">
+                <div class="stat-number">{# {{ workouts_this_week }} #}0</div>
+                <div class="stat-label">{% trans 'Workouts' %}<br>{% trans 'This Week' %}</div>
+            </div>
+
+            <div class="progress-circle">
+                <div class="circle-bg">
+                    <div class="circle-content">
+                        <div class="circle-main">{# {{ completed }}/{{ total }} #}0/16</div>
+                        <div class="circle-sub">{% trans 'Workouts' %}</div>
+                        <div class="circle-help">?</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-box">
+                <div class="stat-number">{# {{ active_weeks }} #}0</div>
+                <div class="stat-label">{% trans 'Active' %}<br>{% trans 'Weeks' %}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="go-btn-container">
+        <button class="go-btn" onclick="goToWorkouts()">
+            {% trans 'Go' %}
+        </button>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        function goToWorkouts() {
+            // Go button bosilganda workout_days pagega o'tadi
+            window.location.href = "{% url 'my_trainer_history' %}";
+        }
+
+        function changePlan() {
+            // Plan o'zgartirish uchun
+            window.location.href = "{# {% url 'plans_list' %} #}";
+        }
+    </script>
+{% endblock %}
+
+

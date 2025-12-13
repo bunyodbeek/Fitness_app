@@ -1,13 +1,11 @@
-{% load i18n %}
 
+{% extends 'base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workout History - My Trainer</title>
+{% block title %}Workout Days{% endblock %}
+{% load i18n %}
+
+{% block extra_css %}
     <style>
         * {
             margin: 0;
@@ -16,16 +14,14 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             color: white;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
-            padding-bottom: 20px;
         }
 
-        /* Animated background */
         body::before {
             content: '';
             position: fixed;
@@ -34,7 +30,8 @@
             right: 0;
             bottom: 0;
             background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%);
+                        radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 90%, rgba(78, 205, 196, 0.05) 0%, transparent 50%);
             animation: particleFloat 15s ease-in-out infinite;
             pointer-events: none;
             z-index: 0;
@@ -42,214 +39,261 @@
 
         @keyframes particleFloat {
             0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(20px, -20px) scale(1.05); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
         }
 
-        /* Header */
-        .page-header {
+        .edition-header {
             background: linear-gradient(135deg, rgba(15, 52, 96, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
             backdrop-filter: blur(10px);
-            padding: 18px 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
+            text-align: center;
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .back-btn {
-            background: transparent;
-            border: none;
+            background: rgba(255, 215, 0, 0.1);
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
             color: #ffd700;
-            font-size: 24px;
+            font-size: 20px;
             cursor: pointer;
-            padding: 5px;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.3s ease;
+            border-radius: 10px;
+            flex-shrink: 0;
         }
 
         .back-btn:hover {
-            transform: scale(1.1);
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
         }
 
-        .page-title {
+        .header-content {
             flex: 1;
-            font-size: 24px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            text-align: center;
+            margin-right: 32px;
+        }
+
+        .edition-header h1 {
+            font-size: 14px;
+            font-weight: 800;
             background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 2px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        /* Container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+        .edition-header p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .day-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 0;
             position: relative;
             z-index: 1;
         }
 
-        /* Filter Section */
-        .filter-section {
-            background: linear-gradient(135deg,
-                rgba(255, 215, 0, 0.15) 0%,
-                rgba(255, 215, 0, 0.08) 100%);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 25px;
-            border: 2px solid rgba(255, 215, 0, 0.3);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .filter-row {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .filter-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        .filter-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 215, 0, 0.3);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 700;
+        .day-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
-        .filter-btn:hover {
-            background: rgba(255, 215, 0, 0.2);
-            border-color: rgba(255, 215, 0, 0.6);
+        .day-dot.active {
+            width: 24px;
+            border-radius: 4px;
+            background: #ffd700;
         }
 
-        .filter-btn.active {
-            background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
-            border-color: #ffd700;
-            color: #1a1a2e;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-        }
-
-        /* Search Bar */
-        .search-bar {
-            flex: 1;
-            min-width: 250px;
+        .workout-days-container {
             position: relative;
+            overflow: hidden;
+            padding-bottom: 120px;
+            z-index: 1;
         }
 
-        .search-input {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 215, 0, 0.3);
-            color: white;
-            padding: 12px 45px 12px 20px;
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: 600;
-            outline: none;
-            transition: all 0.3s ease;
+        .workout-days-wrapper {
+            display: flex;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            touch-action: pan-y;
         }
 
-        .search-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .search-input:focus {
-            border-color: rgba(255, 215, 0, 0.6);
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .search-icon {
-            position: absolute;
-            right: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 18px;
+        .workout-day {
+            min-width: 100%;
+            padding: 14px 12px;
+            opacity: 0.3;
+            transition: opacity 0.4s ease;
             pointer-events: none;
         }
 
-        /* Stats Summary */
-        .stats-summary {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
+        .workout-day.active {
+            opacity: 1;
+            pointer-events: auto;
         }
 
-        .summary-card {
-            background: linear-gradient(135deg,
-                rgba(15, 52, 96, 0.8) 0%,
-                rgba(22, 33, 62, 0.8) 100%);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 18px;
-            border: 2px solid rgba(255, 215, 0, 0.2);
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .summary-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(255, 215, 0, 0.4);
-        }
-
-        .summary-label {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.6);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-
-        .summary-value {
-            font-size: 24px;
-            font-weight: 900;
-            color: #ffd700;
-        }
-
-        /* Workouts List */
-        .workouts-list {
+        .nav-arrows {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
             display: flex;
-            flex-direction: column;
-            gap: 15px;
+            justify-content: space-between;
+            padding: 0 8px;
+            pointer-events: none;
+            z-index: 10;
         }
 
-        .workout-card {
-            background: linear-gradient(135deg,
-                rgba(15, 52, 96, 0.8) 0%,
-                rgba(22, 33, 62, 0.8) 100%);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px;
-            border: 2px solid rgba(255, 215, 0, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
+        .nav-arrow {
+            background: rgba(255, 215, 0, 0.15);
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
+            color: #ffd700;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
             cursor: pointer;
-            animation: fadeInUp 0.6s ease backwards;
+            transition: all 0.3s ease;
+            pointer-events: auto;
         }
 
-        .workout-card:nth-child(1) { animation-delay: 0.05s; }
-        .workout-card:nth-child(2) { animation-delay: 0.1s; }
-        .workout-card:nth-child(3) { animation-delay: 0.15s; }
-        .workout-card:nth-child(4) { animation-delay: 0.2s; }
-        .workout-card:nth-child(5) { animation-delay: 0.25s; }
+        .nav-arrow:hover {
+            background: rgba(255, 215, 0, 0.25);
+            border-color: #ffd700;
+        }
+
+        .nav-arrow.disabled {
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        .exercise-card {
+            background: linear-gradient(135deg,
+                rgba(255, 215, 0, 0.12) 0%,
+                rgba(255, 215, 0, 0.06) 100%);
+            backdrop-filter: blur(10px);
+            margin-bottom: 10px;
+            padding: 12px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1.5px solid rgba(255, 215, 0, 0.25);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            color: white;
+            animation: fadeInUp 0.5s ease backwards;
+        }
+
+        .exercise-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 215, 0, 0.5);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
+        }
+
+        .exercise-img {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 1.5px solid rgba(255, 215, 0, 0.35);
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.2);
+            flex-shrink: 0;
+        }
+
+        .exercise-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .exercise-info h3 {
+            font-size: 13px;
+            font-weight: 700;
+            margin: 0 0 4px 0;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .exercise-info p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .exercise-info p strong {
+            color: #ffd700;
+            font-weight: 700;
+        }
+
+        .exercise-arrow {
+            color: rgba(255, 215, 0, 0.5);
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .start-workout-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 12px;
+            background: linear-gradient(to top, rgba(10, 14, 39, 0.98) 0%, transparent 100%);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        .start-workout-btn {
+            width: 100%;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
+            border: none;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #1a1a2e;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.4);
+            margin-bottom: 60px;
+        }
+
+        .start-workout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 35px rgba(255, 215, 0, 0.5);
+        }
 
         @keyframes fadeInUp {
             from {
@@ -262,388 +306,175 @@
             }
         }
 
-        .workout-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.3);
-            border-color: rgba(255, 215, 0, 0.5);
-        }
-
-        .workout-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-            gap: 15px;
-        }
-
-        .workout-info {
-            flex: 1;
-        }
-
-        .workout-name {
-            font-size: 18px;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 6px;
-        }
-
-        .workout-edition {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.6);
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .workout-date {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.5);
-            font-weight: 600;
-        }
-
-        .workout-status {
-            padding: 8px 18px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            white-space: nowrap;
-        }
-
-        .status-completed {
-            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
-        }
-
-        .status-in-progress {
-            background: linear-gradient(135deg, #ff9800 0%, #ffa726 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
-        }
-
-        .status-abandoned {
-            background: linear-gradient(135deg, #f44336 0%, #e57373 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
-        }
-
-        /* Workout Stats Grid */
-        .workout-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 12px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255, 215, 0, 0.2);
-        }
-
-        .workout-stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .workout-stat-icon {
-            font-size: 20px;
-        }
-
-        .workout-stat-value {
-            font-size: 18px;
-            font-weight: 800;
-            color: white;
-        }
-
-        .workout-stat-label {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.6);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 80px 20px;
-            animation: fadeIn 0.8s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .empty-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-            opacity: 0.3;
-        }
-
-        .empty-title {
-            font-size: 24px;
-            font-weight: 800;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 10px;
-        }
-
-        .empty-text {
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .page-title {
-                font-size: 20px;
+        @media (min-width: 768px) {
+            .workout-days-container {
+                max-width: 800px;
+                margin: 0 auto;
             }
 
-            .filter-row {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .filter-group {
-                flex-wrap: wrap;
-            }
-
-            .search-bar {
-                width: 100%;
-            }
-
-            .workout-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .workout-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .stats-summary {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .workout-name {
-                font-size: 16px;
-            }
-
-            .workout-stats {
-                gap: 10px;
+            .start-workout-btn {
+                max-width: 400px;
+                margin: 0 auto 70px;
+                display: block;
             }
         }
     </style>
-</head>
-<body>
-    <!-- Header -->
-    <div class="page-header">
-        <button class="back-btn" onclick="goBack()">←</button>
-        <h1 class="page-title">Workout History</h1>
-    </div>
+{% endblock %}
 
-    <!-- Container -->
-    <div class="container">
-        <!-- Filter Section -->
-        <div class="filter-section">
-            <div class="filter-row">
-                <div class="filter-group">
-                    <button class="filter-btn active" data-filter="all" onclick="filterWorkouts('all')">All</button>
-                    <button class="filter-btn" data-filter="completed" onclick="filterWorkouts('completed')">Completed</button>
-                    <button class="filter-btn" data-filter="in-progress" onclick="filterWorkouts('in-progress')">In Progress</button>
-                </div>
-
-                <div class="search-bar">
-                    <input
-                        type="text"
-                        class="search-input"
-                        placeholder="Search workouts..."
-                        id="searchInput"
-                        oninput="searchWorkouts()"
-                    >
-                    <span class="search-icon">🔍</span>
-                </div>
-            </div>
-        </div>
-
-     <!-- Stats Summary -->
-<div class="stats-summary">
-    <div class="summary-card">
-        <div class="summary-label">Total</div>
-        <div class="summary-value" id="totalCount">{{ all_workouts.count }}</div>
-    </div>
-    <div class="summary-card">
-        <div class="summary-label">Completed</div>
-        <div class="summary-value" id="completedCount">0</div>
-    </div>
-    <div class="summary-card">
-        <div class="summary-label">In Progress</div>
-        <div class="summary-value" id="progressCount">0</div>
-    </div>
-    <div class="summary-card">
-        <div class="summary-label">This Month</div>
-        <div class="summary-value" id="monthCount">0</div>
-    </div>
-</div>
-        <!-- Workouts List -->
-        <div class="workouts-list" id="workoutsList">
-            {% for session in all_workouts %}
-            <div class="workout-card"
-                 data-status="{{ session.status }}"
-                 data-name="{{ session.workout.name|lower }}"
-                 onclick="viewWorkoutDetail({{ session.id }})">
-
-                <div class="workout-header">
-                    <div class="workout-info">
-                        <div class="workout-name">{{ session.workout.name }}</div>
-                        {% if session.workout.edition %}
-                        <div class="workout-edition">{{ session.workout.edition.name }}</div>
-                        {% endif %}
-                        <div class="workout-date">
-                            {{ session.started_at|date:"F d, Y" }} at {{ session.started_at|date:"g:i A" }}
-                        </div>
-                    </div>
-
-                    <div class="workout-status status-{{ session.status }}">
-                        {% if session.status == 'completed' %}Completed
-                        {% elif session.status == 'in_progress' %}In Progress
-                        {% else %}{{ session.status|title }}
-                        {% endif %}
-                    </div>
-                </div>
-
-                <div class="workout-stats">
-                    <div class="workout-stat">
-                        <span class="workout-stat-icon">⏱️</span>
-                        <span class="workout-stat-value">{{ session.duration_minutes|floatformat:0 }}</span>
-                        <span class="workout-stat-label">Minutes</span>
-                    </div>
-
-                    <div class="workout-stat">
-                        <span class="workout-stat-icon">💪</span>
-                        <span class="workout-stat-value">{{ session.exercises_completed }}</span>
-                        <span class="workout-stat-label">Exercises</span>
-                    </div>
-
-                    <div class="workout-stat">
-                        <span class="workout-stat-icon">🔥</span>
-                        <span class="workout-stat-value">{{ session.total_calories|floatformat:0 }}</span>
-                        <span class="workout-stat-label">Calories</span>
-                    </div>
-
-                    <div class="workout-stat">
-                        <span class="workout-stat-icon">🔢</span>
-                        <span class="workout-stat-value">{{ session.total_reps }}</span>
-                        <span class="workout-stat-label">Reps</span>
-                    </div>
-                </div>
-            </div>
-            {% empty %}
-            <div class="empty-state">
-                <div class="empty-icon">📊</div>
-                <h3 class="empty-title">No Workout History</h3>
-                <p class="empty-text">Your completed workouts will appear here</p>
-            </div>
-            {% endfor %}
+{% block content %}
+    <div class="edition-header">
+        <button class="back-btn" onclick="window.history.back()">‹</button>
+        <div class="header-content">
+            <h1 id="dayTitle">{% trans 'DAY 1' %}</h1>
+            <p id="daySubtitle">{# {{ day.body_part }} #}{% trans 'Chest & Triceps' %}</p>
         </div>
     </div>
 
+    <div class="day-indicators" id="dayIndicators"></div>
+
+    <div class="workout-days-container">
+        <div class="nav-arrows">
+            <button class="nav-arrow" id="prevDay" onclick="previousDay()">‹</button>
+            <button class="nav-arrow" id="nextDay" onclick="nextDay()">›</button>
+        </div>
+
+        <div class="workout-days-wrapper" id="workoutDaysWrapper">
+            {# {% for day in workout_days %} #}
+            <div class="workout-day" data-day="1" data-title="{% trans 'DAY 1' %}" data-subtitle="{% trans 'Chest & Triceps' %}">
+                {# {% for workout in day.workouts %} #}
+                <a href="{# {% url 'exercise_detail' workout.exercise.id %} #}" class="exercise-card">
+                    <img src="{# {{ workout.exercise.thumbnail.url }} #}" class="exercise-img" alt="">
+                    <div class="exercise-info">
+                        <h3>{# {{ workout.exercise.name }} #}Bench Press</h3>
+                        <p><strong>{# {{ workout.sets }}×{{ workout.reps }} #}4×12</strong> • Chest</p>
+                    </div>
+                    <span class="exercise-arrow">›</span>
+                </a>
+                {# {% endfor %} #}
+            </div>
+
+            <div class="workout-day" data-day="2" data-title="{% trans 'DAY 2' %}" data-subtitle="{% trans 'Back & Biceps' %}">
+                <a href="#" class="exercise-card">
+                    <img src="" class="exercise-img" alt="">
+                    <div class="exercise-info">
+                        <h3>Deadlift</h3>
+                        <p><strong>4×10</strong> • Back</p>
+                    </div>
+                    <span class="exercise-arrow">›</span>
+                </a>
+            </div>
+            {# {% endfor %} #}
+        </div>
+    </div>
+
+    <div class="start-workout-container">
+        <button class="start-workout-btn" onclick="startWorkout()">
+            {% trans '▶ Start Workout' %}
+        </button>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
     <script>
-        // Current filter state
-        let currentFilter = 'all';
+        let currentDay = 0;
+        let totalDays = {# {{ workout_days|length }} #}16;
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
 
-        // Filter workouts
-        function filterWorkouts(filter) {
-            currentFilter = filter;
+        const wrapper = document.getElementById('workoutDaysWrapper');
+        const workoutDays = document.querySelectorAll('.workout-day');
+        const prevBtn = document.getElementById('prevDay');
+        const nextBtn = document.getElementById('nextDay');
+        const indicatorsContainer = document.getElementById('dayIndicators');
+        const dayTitle = document.getElementById('dayTitle');
+        const daySubtitle = document.getElementById('daySubtitle');
 
-            // Update button states
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.filter === filter) {
-                    btn.classList.add('active');
-                }
+        function initIndicators() {
+            indicatorsContainer.innerHTML = '';
+            for (let i = 0; i < totalDays; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'day-dot';
+                if (i === currentDay) dot.classList.add('active');
+                dot.addEventListener('click', () => goToDay(i));
+                indicatorsContainer.appendChild(dot);
+            }
+        }
+
+        function updateView() {
+            wrapper.style.transform = `translateX(-${currentDay * 100}%)`;
+
+            workoutDays.forEach((day, index) => {
+                day.classList.toggle('active', index === currentDay);
             });
 
-            // Filter cards
-            const cards = document.querySelectorAll('.workout-card');
-            cards.forEach(card => {
-                const status = card.dataset.status;
-
-                if (filter === 'all') {
-                    card.style.display = 'block';
-                } else if (filter === 'in-progress' && status === 'in_progress') {
-                    card.style.display = 'block';
-                } else if (status === filter) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+            document.querySelectorAll('.day-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentDay);
             });
 
-            // Update count
-            updateVisibleCount();
+            const activeDay = workoutDays[currentDay];
+            if (activeDay) {
+                dayTitle.textContent = activeDay.dataset.title;
+                daySubtitle.textContent = activeDay.dataset.subtitle;
+            }
+
+            prevBtn.classList.toggle('disabled', currentDay === 0);
+            nextBtn.classList.toggle('disabled', currentDay === totalDays - 1);
         }
 
-        // Search workouts
-        function searchWorkouts() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('.workout-card');
-
-            cards.forEach(card => {
-                const name = card.dataset.name;
-                const shouldShow = name.includes(searchTerm);
-
-                // Apply both search and filter
-                const status = card.dataset.status;
-                const matchesFilter =
-                    currentFilter === 'all' ||
-                    status === currentFilter ||
-                    (currentFilter === 'in-progress' && status === 'in_progress');
-
-                card.style.display = (shouldShow && matchesFilter) ? 'block' : 'none';
-            });
-
-            updateVisibleCount();
+        function previousDay() {
+            if (currentDay > 0) {
+                currentDay--;
+                updateView();
+            }
         }
 
-        // Update visible count
-        function updateVisibleCount() {
-            const visibleCards = document.querySelectorAll('.workout-card[style*="display: block"], .workout-card:not([style*="display: none"])').length;
-            // You can update a count display here if needed
+        function nextDay() {
+            if (currentDay < totalDays - 1) {
+                currentDay++;
+                updateView();
+            }
         }
 
-        // View workout detail
-        function viewWorkoutDetail(sessionId) {
-            window.location.href = `/workout/${sessionId}/detail/`;
+        function goToDay(dayIndex) {
+            currentDay = dayIndex;
+            updateView();
         }
 
-        // Go back
-        function goBack() {
-            window.location.href = '/my-trainer/';
+        // Touch/Swipe
+        wrapper.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            isDragging = true;
+        });
+
+        wrapper.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            currentX = e.touches[0].clientX;
+            const diff = startX - currentX;
+            if (Math.abs(diff) > 10) e.preventDefault();
+        });
+
+        wrapper.addEventListener('touchend', () => {
+            if (!isDragging) return;
+            isDragging = false;
+            const diff = startX - currentX;
+            const threshold = 50;
+
+            if (diff > threshold && currentDay < totalDays - 1) {
+                nextDay();
+            } else if (diff < -threshold && currentDay > 0) {
+                previousDay();
+            }
+        });
+
+        function startWorkout() {
+            const dayId = workoutDays[currentDay].getAttribute('data-day');
+            window.location.href = `{# {% url 'workout_start' %} #}` + dayId;
         }
 
-        // Calculate this month's count
-        document.addEventListener('DOMContentLoaded', function() {
-            const now = new Date();
-            const currentMonth = now.getMonth();
-            const currentYear = now.getFullYear();
-
-            const cards = document.querySelectorAll('.workout-card');
-            let monthCount = 0;
-
-            cards.forEach(card => {
-                const dateText = card.querySelector('.workout-date').textContent;
-                const cardDate = new Date(dateText);
-
-                if (cardDate.getMonth() === currentMonth &&
-                    cardDate.getFullYear() === currentYear) {
-                    monthCount++;
-                }
-            });
-
-            document.getElementById('monthCount').textContent = monthCount;
+        document.addEventListener('DOMContentLoaded', () => {
+            initIndicators();
+            updateView();
         });
     </script>
-</body>
-</html>
+{% endblock %}
