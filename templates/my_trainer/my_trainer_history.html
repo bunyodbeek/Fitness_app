@@ -1,4 +1,8 @@
 
+
+<!-- ============================================ -->
+<!-- FILE 2: workout_days.html (SWIPEABLE PAGES) -->
+<!-- ============================================ -->
 {% extends 'base.html' %}
 {% load static %}
 
@@ -57,6 +61,29 @@
             align-items: center;
             gap: 12px;
         }
+
+        .back-btn {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
+            color: #ffd700;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+        }
+
 
         .back-btn {
             background: rgba(255, 215, 0, 0.1);
@@ -391,13 +418,19 @@
         const daySubtitle = document.getElementById('daySubtitle');
 
         function initIndicators() {
+            // Faqat 2 ta indicator - current va next day
             indicatorsContainer.innerHTML = '';
-            for (let i = 0; i < totalDays; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'day-dot';
-                if (i === currentDay) dot.classList.add('active');
-                dot.addEventListener('click', () => goToDay(i));
-                indicatorsContainer.appendChild(dot);
+
+            // Current day indicator
+            const currentDot = document.createElement('div');
+            currentDot.className = 'day-dot active';
+            indicatorsContainer.appendChild(currentDot);
+
+            // Next day indicator (agar mavjud bo'lsa)
+            if (currentDay < totalDays - 1) {
+                const nextDot = document.createElement('div');
+                nextDot.className = 'day-dot';
+                indicatorsContainer.appendChild(nextDot);
             }
         }
 
@@ -408,9 +441,8 @@
                 day.classList.toggle('active', index === currentDay);
             });
 
-            document.querySelectorAll('.day-dot').forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentDay);
-            });
+            // Indicators ni yangilash
+            initIndicators();
 
             const activeDay = workoutDays[currentDay];
             if (activeDay) {
@@ -441,29 +473,36 @@
             updateView();
         }
 
-        // Touch/Swipe
+        // Touch/Swipe - telefon ekranida surganda ishlaydi
+        let touchStartTime = 0;
+
         wrapper.addEventListener('touchstart', (e) => {
             startX = e.touches[0].clientX;
+            touchStartTime = Date.now();
             isDragging = true;
-        });
+        }, { passive: true });
 
         wrapper.addEventListener('touchmove', (e) => {
             if (!isDragging) return;
             currentX = e.touches[0].clientX;
-            const diff = startX - currentX;
-            if (Math.abs(diff) > 10) e.preventDefault();
-        });
+        }, { passive: true });
 
         wrapper.addEventListener('touchend', () => {
             if (!isDragging) return;
             isDragging = false;
-            const diff = startX - currentX;
-            const threshold = 50;
 
-            if (diff > threshold && currentDay < totalDays - 1) {
-                nextDay();
-            } else if (diff < -threshold && currentDay > 0) {
-                previousDay();
+            const diff = startX - currentX;
+            const touchDuration = Date.now() - touchStartTime;
+            const threshold = 50; // minimum swipe distance
+            const velocityThreshold = 300; // ms for quick swipe
+
+            // Agar tez swipe qilsa yoki yetarli masofaga siljisa
+            if (Math.abs(diff) > threshold || touchDuration < velocityThreshold) {
+                if (diff > 30 && currentDay < totalDays - 1) {
+                    nextDay();
+                } else if (diff < -30 && currentDay > 0) {
+                    previousDay();
+                }
             }
         });
 
