@@ -2026,42 +2026,45 @@
             });
         });
 
-        // Collection yaratish (AJAX)
         function saveCollection() {
             const name = document.getElementById('collectionName').value.trim();
             if (!name) {
-                alert('Please enter a collection name.');
+                alert('Collection nomini kiriting');
                 return;
             }
 
             const selectedItems = document.querySelectorAll('.exercise-select-item.selected');
-            const exerciseIds = Array.from(selectedItems).map(item => item.dataset.exerciseId);
+            const exerciseIds = Array.from(selectedItems).map(i => i.dataset.exerciseId);
+
+            const formData = new FormData();
+            formData.append("name", name);
+
+            exerciseIds.forEach(id => {
+                formData.append("exercise_ids[]", id);
+            });
 
             fetch("/en/create/collection/", {
-                method: 'POST',
+                method: "POST",
                 headers: {
-                    'X-CSRFToken': csrfToken,
-                    'Content-Type': 'application/json',
+                    "X-CSRFToken": csrfToken
                 },
-                body: JSON.stringify({
-                    name: name,
-                    exercise_ids: exerciseIds
-                })
+                body: formData
             })
-                .then(response => response.json())
+                .then(r => r.json())
                 .then(data => {
                     if (data.success) {
                         closeCollectionModal();
                         location.reload();
                     } else {
-                        alert(data.error || 'Failed to create collection.');
+                        alert(data.error);
                     }
                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Something went wrong. Please try again.');
+                .catch(err => {
+                    console.error(err);
+                    alert("Xatolik yuz berdi");
                 });
         }
+
 
         // Sevimlilardan o'chirish
         function unfavorite(favId, btn) {
