@@ -80,3 +80,4 @@ class ExerciseDetailView(LoginRequiredMixin, DetailView):
         else:
             context['is_favorited'] = False
         return context
+

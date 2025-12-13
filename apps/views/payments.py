@@ -11,3 +11,6 @@ class PaymentHistoryListView(ListView):
 
 class ManageSubscriptionListView(TemplateView):
     template_name = 'users/manage_subscription.html'
+
+class PremiumPageView(TemplateView):
+    template_name = 'users/premium.html'

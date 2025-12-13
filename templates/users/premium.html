@@ -254,7 +254,7 @@
             </div>
 
             <div class="premium-footer">
-                <a href="#">Cancel anytime</a><br>
+                <a href="{% url 'program_list' %}">Cancel anytime</a><br>
                 Auto-renews unless canceled.
             </div>
 
@@ -283,8 +283,13 @@ function closePremium() {
     const modal = document.getElementById("premiumModal");
     modal.style.opacity = "0";
     modal.style.pointerEvents = "none";
-    setTimeout(() => modal.remove(), 300);
+
+    setTimeout(() => {
+        modal.remove();
+        window.history.back();
+    }, 300);
 }
+
 
 // close if click outside
 document.getElementById("premiumModal").addEventListener("click", function(e){
